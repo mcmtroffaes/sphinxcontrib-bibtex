@@ -8,7 +8,7 @@ This package contains the bibtex Sphinx extension.
 .. add description here ..
 '''
 
-requires = ['Sphinx>=0.6']
+requires = ['Sphinx>=0.6', 'pybtex>=0.15']
 
 setup(
     name='sphinxcontrib-bibtex',
