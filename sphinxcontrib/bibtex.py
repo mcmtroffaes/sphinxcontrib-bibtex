@@ -27,11 +27,21 @@ def parse_bibfiles(app, bibfiles):
              .format(len(parser.data.entries)))
     return parser.data
 
+def update_bibtex_cache(app, files, mtimes):
+    """Update the bibtex cache ``app.env.bibtex_cache``."""
+    app.env.bibtex_cache = {
+        "data": parse_bibfiles(app, files),
+        "files": files,
+        "mtimes": mtimes}
+    # TODO force the environment to be repickled
+    # see sphinx/builders/__init__.py lines 234-239, self.env.topickle(...)
+
 def process_bibfiles(app):
     """Check if ``app.env.bibtex_cache`` is still up-to-date. If not,
     parse all bibfiles, and store parsed data in the environment as
     ``app.env.bibtex_cache``.
-    """
+    """        
+
     # check bibfiles and their modification times
     # we store this list of files and their times in the bibtex_cache
     # this allows us to check whether things are still up to date or not
@@ -46,25 +56,17 @@ def process_bibfiles(app):
         else:
             files.append(bibfile)
     # check if bibtex_cache was loaded from pickled environment
+    # and if it is still up to date
     app.info(bold("checking bibtex cache... "), nonl=True)
     if not hasattr(app.env, "bibtex_cache"):
         app.info("not found")
-        update = True
+        update_bibtex_cache(app, files, mtimes)
     elif (app.env.bibtex_cache["files"] != files
           or app.env.bibtex_cache["mtimes"] != mtimes):
         app.info("out of date")
-        update = True
+        update_bibtex_cache(app, files, mtimes)
     else:
         app.info('up to date')
-        update = False
-    # update the cache if needed
-    if update:
-        app.env.bibtex_cache = {
-            "data": parse_bibfiles(app, files),
-            "files": files,
-            "mtimes": mtimes}
-        # TODO force the environment to be repickled
-        # see sphinx/builders/__init__.py lines 234-239, self.env.topickle(...)
 
 def setup(app):
     # register bibtex_bibfiles configuration value
