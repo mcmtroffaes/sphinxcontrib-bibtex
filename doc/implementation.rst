@@ -1,0 +1,2 @@
+.. automodule:: sphinxcontrib.bibtex
+   :members:
