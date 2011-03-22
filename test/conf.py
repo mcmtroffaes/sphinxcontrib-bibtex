@@ -27,8 +27,6 @@ import sys, os
 # coming with Sphinx (named 'sphinx.ext.*') or your custom ones.
 extensions = ['sphinxcontrib.bibtex']
 
-bibtex_bibfiles = ['test.bib', 'unknown.bib']
-
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 

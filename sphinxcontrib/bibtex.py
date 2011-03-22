@@ -10,6 +10,17 @@
 
     Inspired by ``bibstuff.sphinxext.bibref`` by Matthew Brett.
 
+    Usage
+    -----
+
+    .. rst:role:: cite
+
+       Create a citation to a bibliographic entry.
+
+    .. rst:directive:: .. bibliography:: refs.bib [...]
+
+       Create bibliography for all citations in the current document.
+
     Implementation notes
     --------------------
 
@@ -26,9 +37,44 @@
 """
 
 import os.path
+
+from docutils import nodes
+from sphinx.util.compat import Directive
 from sphinx.util.console import bold, standout
+from sphinx.util.nodes import split_explicit_title
+from sphinx.roles import XRefRole # for :cite:
 
 from pybtex.database.input import bibtex
+
+class bibliography(nodes.General, nodes.Element):
+    """Node for representing a bibliography. Replaced by a list of
+    citations on doctree-resolved.
+    """
+    pass
+
+class BibliographyDirective(Directive):
+    """Class for processing the bibliography directive."""
+
+    required_arguments = 1
+    optional_arguments = 0
+    final_argument_whitespace = True
+    has_content = False
+
+    def run(self):
+        """Process .bib files, set file dependencies, and create a
+        temporary node for the bibliography.
+        """
+
+        document = self.state.document
+        env = self.state.document.settings.env
+        for bibfile in self.arguments[0].split():
+            # convert to relative path to ensure that the same file
+            # only occurs once in the cache
+            bibfile = env.relfn2path(bibfile.strip())[0]
+            process_bibfile(env.app, bibfile)
+            env.note_dependency(bibfile)
+        ### for the time being we don't return anything
+        return [] #[bibliography("")]
 
 def parse_bibfile(app, bibfile):
     """Parse *bibfile*, and return parsed data.
@@ -80,7 +126,7 @@ def process_bibfile(app, bibfile):
         mtime = os.path.getmtime(bibfile)
     except OSError:
         app.warn(
-            standout('could not open bibtex file {0}.'.format(bibfile)))
+            standout("could not open bibtex file {0}.".format(bibfile)))
         return
     # get cache and check if it is still up to date
     # if it is not up to date, parse the bibtex file
@@ -100,30 +146,35 @@ def process_bibfile(app, bibfile):
             app.info('up to date')
 
 def init_bibtex_cache(app):
-    """Check if ``app.env.bibtex_cache`` is still up-to-date.
+    """Create ``app.env.bibtex_cache`` if it does not exist yet.
 
     :param app: The :mod:`sphinx application <sphinx.application>`.
     :type app: :class:`sphinx.application.Sphinx`
     """
     if not hasattr(app.env, "bibtex_cache"):
         app.env.bibtex_cache = {}
-    for bibfile in app.config.bibtex_bibfiles:
-        process_bibfile(app, bibfile)
 
 def setup(app):
     """Set up the bibtex extension.
 
-    * register configuration values
+    * register directives
 
-      **bibtex_bibfiles**
-          List of global bibliography files.
+      - :class:`BibliographyDirective` for :rst:dir:`bibliography`
+
+    * register nodes
+
+      - :class:`bibliography`
+
+    * register roles
+
+      - :rst:role:`cite`
 
     * connect events to functions
 
       **builder-inited**
-         :func:`init_bibtex_cache`
+          :func:`init_bibtex_cache`
     """
-    # register bibtex_bibfiles configuration value
-    # it is a list of bibliography files
-    app.add_config_value('bibtex_bibfiles', [], False)
-    app.connect('builder-inited', init_bibtex_cache)
+    app.add_directive("bibliography", BibliographyDirective)
+    app.add_node(bibliography)
+    app.add_role("cite", XRefRole())
+    app.connect("builder-inited", init_bibtex_cache)
