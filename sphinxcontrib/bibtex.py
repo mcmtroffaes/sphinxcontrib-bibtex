@@ -33,8 +33,8 @@ from pybtex.database.input import bibtex
 def parse_bibfile(app, bibfile):
     """Parse *bibfile*, and return parsed data.
 
-    :param app: The sphinx application.
-    :type app: :class:`Sphinx`
+    :param app: The :mod:`sphinx application <sphinx.application>`.
+    :type app: :class:`sphinx.application.Sphinx`
     :param bibfile: The bib file name.
     :type bibfile: ``str``
     :return: The parsed bibliography data.
@@ -48,11 +48,12 @@ def parse_bibfile(app, bibfile):
     return parser.data
 
 def update_bibfile_cache(app, bibfile, mtime):
-    """Parse *bibfile*, and store the parsed data, along with
-    modification time *mtime*, in the bibtex cache.
+    """Parse *bibfile* (see :func:`parse_bibfile`), and store the
+    parsed data, along with modification time *mtime*, in the bibtex
+    cache.
 
-    :param app: The sphinx application.
-    :type app: :class:`Sphinx`
+    :param app: The :mod:`sphinx application <sphinx.application>`.
+    :type app: :class:`sphinx.application.Sphinx`
     :param bibfile: The bib file name.
     :type bibfile: ``str``
     :param mtime: The bib file's modification time.
@@ -66,11 +67,11 @@ def update_bibfile_cache(app, bibfile, mtime):
 
 def process_bibfile(app, bibfile):
     """Check if ``app.env.bibtex_cache[bibfile]`` is still up-to-date.
-    If not, parse the *bibfile*, and store parsed data in the bibtex
-    cache.
+    If not, parse the *bibfile* (see :func:`update_bibfile_cache`),
+    and store parsed data in the bibtex cache.
 
-    :param app: The sphinx application.
-    :type app: :class:`Sphinx`
+    :param app: The :mod:`sphinx application <sphinx.application>`.
+    :type app: :class:`sphinx.application.Sphinx`
     :param bibfile: The bib file name.
     :type bibfile: ``str``
     """
@@ -99,13 +100,29 @@ def process_bibfile(app, bibfile):
             app.info('up to date')
 
 def init_bibtex_cache(app):
-    """Check if ``app.env.bibtex_cache`` is still up-to-date."""
+    """Check if ``app.env.bibtex_cache`` is still up-to-date.
+
+    :param app: The :mod:`sphinx application <sphinx.application>`.
+    :type app: :class:`sphinx.application.Sphinx`
+    """
     if not hasattr(app.env, "bibtex_cache"):
         app.env.bibtex_cache = {}
     for bibfile in app.config.bibtex_bibfiles:
         process_bibfile(app, bibfile)
 
 def setup(app):
+    """Set up the bibtex extension.
+
+    * register configuration values
+
+      **bibtex_bibfiles**
+          List of global bibliography files.
+
+    * connect events to functions
+
+      **builder-inited**
+         :func:`init_bibtex_cache`
+    """
     # register bibtex_bibfiles configuration value
     # it is a list of bibliography files
     app.add_config_value('bibtex_bibfiles', [], False)
