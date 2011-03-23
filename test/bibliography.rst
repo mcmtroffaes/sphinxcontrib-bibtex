@@ -10,4 +10,4 @@ probability theory.
 References
 ----------
 
-.. bibliography:: test.bib
+.. bibliography:: test.bib unknown.bib
