@@ -20,19 +20,32 @@ from sphinxcontrib.bibtex.directives import BibliographyDirective
 def init_bibtex_cache(app):
     """Create ``app.env.bibtex_cache`` if it does not exist yet.
 
-    :param app: The :mod:`sphinx application <sphinx.application>`.
+    :param app: The sphinx application.
     :type app: :class:`sphinx.application.Sphinx`
     """
     if not hasattr(app.env, "bibtex_cache"):
         app.env.bibtex_cache = Cache()
 
 def purge_bibtex_cache(app, env, docname):
-    """Remove all information related to *docname* from the cache."""
+    """Remove all information related to *docname* from the cache.
+
+    :param app: The sphinx application.
+    :type app: :class:`sphinx.application.Sphinx`
+    :param env: The sphinx build environment.
+    :type env: :class:`sphinx.environment.BuildEnvironment`
+    """
     env.bibtex_cache.purge(docname)
 
 def process_bibliography_nodes(app, doctree, docname):
-    """Replace bibliography nodes by list of references."""
+    """Replace bibliography nodes by list of references.
 
+    :param app: The sphinx application.
+    :type app: :class:`sphinx.application.Sphinx`
+    :param doctree: The document tree.
+    :type doctree: :class:`docutils.nodes.document`
+    :param docname: The document name.
+    :type docname: :class:`str`
+    """
     for bibnode in doctree.traverse(bibliography):
         # get the information of this bibliography node
         # by looking up its id in the bibliography cache
@@ -47,7 +60,15 @@ def process_bibliography_nodes(app, doctree, docname):
                 " ".join(info.bibfiles))])
 
 def process_cite_nodes(app, doctree, docname):
-    """Replace cite nodes by footnote or citation nodes."""
+    """Replace cite nodes by footnote or citation nodes.
+
+    :param app: The sphinx application.
+    :type app: :class:`sphinx.application.Sphinx`
+    :param doctree: The document tree.
+    :type doctree: :class:`docutils.nodes.document`
+    :param docname: The document name.
+    :type docname: :class:`str`
+    """
 
     for citenode in doctree.traverse(cite):
         # TODO handle the actual citations
@@ -60,6 +81,9 @@ def setup(app):
     * register nodes
     * register roles
     * connect events to functions
+
+    :param app: The sphinx application.
+    :type app: :class:`sphinx.application.Sphinx`
     """
 
     app.add_directive("bibliography", BibliographyDirective)

@@ -19,7 +19,7 @@ Contents:
    :maxdepth: 2
 
    usage
-   implementation
+   api
 
 Indices and tables
 ==================

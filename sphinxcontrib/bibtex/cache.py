@@ -34,7 +34,8 @@ class Cache:
         to information about the bibliography directive,
         :class:`BibliographyCache`. We need to store this extra
         information separately because it cannot be stored in the
-        :class:`bibliography` nodes themselves.
+        :class:`~sphinxcontrib.bibtex.nodes.bibliography` nodes
+        themselves.
 
     """
 
@@ -43,7 +44,11 @@ class Cache:
         self.bibliographies = {}
 
     def purge(self, docname):
-        """Remove  all information related to *docname*."""
+        """Remove  all information related to *docname*.
+
+        :param docname: The document name.
+        :type docname: :class:`str`
+        """
         ids = [id_ for id_, info in self.bibliographies.iteritems()
                if info.docname == docname]
         for id_ in ids:
@@ -74,9 +79,9 @@ class BibliographyCache:
 
     .. attribute:: docname
 
-        A :class:`str` containing the name of the document in
-        which the directive occurs. We need this information
-        during :ref:`sphinx:env-purge-doc`.
+        A :class:`str` containing the name of the document in which
+        the directive occurs. We need this information during the
+        Sphinx event *env-purge-doc*.
 
     .. attribute:: bibfiles
 

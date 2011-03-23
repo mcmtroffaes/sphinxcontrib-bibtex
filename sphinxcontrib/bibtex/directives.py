@@ -3,7 +3,11 @@
     ~~~~~~~~~~~~~~~~~~~~~~
 
     .. autoclass:: BibliographyDirective
-        :members:
+
+        .. automethod:: run
+        .. automethod:: process_bibfile
+        .. automethod:: update_bibfile_cache
+        .. automethod:: parse_bibfile
 """
 
 import os.path # getmtime()
@@ -18,7 +22,7 @@ from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
 from sphinxcontrib.bibtex.nodes import bibliography
 
 class BibliographyDirective(Directive):
-    """Class for processing the bibliography directive."""
+    """Class for processing the :rst:dir:`bibliography` directive."""
 
     required_arguments = 1
     optional_arguments = 0
