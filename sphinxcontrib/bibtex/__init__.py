@@ -53,11 +53,28 @@ def process_bibliography_nodes(app, doctree, docname):
         info = [info for other_id, info
                 in app.env.bibtex_cache.bibliographies.iteritems()
                 if other_id == id_][0]
-        # TODO handle the actual citations, for now just print .bib file names
-        bibnode.replace_self(
-            [docutils.nodes.inline(
-                " ".join(info.bibfiles),
-                " ".join(info.bibfiles))])
+        # TODO for now, simply generate *all* entries in the .bib files
+        citations = []
+        for bibfile in info.bibfiles:
+            data = app.env.bibtex_cache.bibfiles[bibfile].data
+            for key, entry in data.entries.iteritems():
+                # TODO use pybtex styles
+                # see pybtex.style.formatting
+                text = (
+                    ", ".join(unicode(person)
+                              for person in entry.persons.get("author", []))
+                    + ". "
+                    + entry.fields.get("title")
+                    )
+                node = docutils.nodes.paragraph()
+                node.children.append(docutils.nodes.inline(text, text))
+                citations.append(node)
+        # XXX this is a hack: docutils throws an exception if we
+        # XXX replace_self([]) for nodes that have an 'ids' attribute
+        # XXX (such as bibnode)
+        if not citations:
+            citations.append(docutils.nodes.inline("", ""))
+        bibnode.replace_self(citations)
 
 def process_cite_nodes(app, doctree, docname):
     """Replace cite nodes by footnote or citation nodes.

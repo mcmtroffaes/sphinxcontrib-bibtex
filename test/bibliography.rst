@@ -11,3 +11,5 @@ References
 ----------
 
 .. bibliography:: test.bib unknown.bib
+
+.. bibliography:: unknown2.bib
