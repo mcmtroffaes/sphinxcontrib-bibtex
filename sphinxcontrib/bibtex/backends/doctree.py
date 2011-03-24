@@ -14,9 +14,6 @@ class Backend(BaseBackend):
         'nbsp': docutils.nodes.inline(u'\u00a0', u'\u00a0')
     }
 
-    def __init__(self, *args, **kwargs):
-        BaseBackend.__init__(self, *args, **kwargs)
-
     def format_text(self, text):
         return docutils.nodes.inline(text, text)
 
