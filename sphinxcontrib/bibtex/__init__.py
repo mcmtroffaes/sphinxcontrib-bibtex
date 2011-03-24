@@ -14,14 +14,12 @@ import docutils.nodes
 from sphinx.roles import XRefRole # for :cite:
 
 from pybtex.backends.doctree import Backend as output_backend
+from pybtex.plugin import find_plugin
 
 from sphinxcontrib.bibtex.cache import Cache, BibfileCache, BibliographyCache
 from sphinxcontrib.bibtex.nodes import bibliography, cite
 from sphinxcontrib.bibtex.directives import BibliographyDirective
-import sphinxcontrib.bibtex.style.formatting.unsrt_
 
-# TODO plugin system not used at the moment
-#from pybtex.plugin import find_plugin
 
 def init_bibtex_cache(app):
     """Create ``app.env.bibtex_cache`` if it does not exist yet.
@@ -62,13 +60,8 @@ def process_bibliography_nodes(app, doctree, docname):
         # TODO for now, simply generate *all* entries in the .bib files
         citations = []
         # locate and instantiate style plugin
-        # (pybtex styles are rather incomplete, so we don't look there for now)
-        #style_cls = find_plugin(
-        #    'pybtex.style.formatting', info.style)
-        module = __import__(
-            'sphinxcontrib.bibtex.style.formatting.' + info.style,
-            globals(), locals(), ["Style"])
-        style_cls = module.Style
+        style_cls = find_plugin(
+            'pybtex.style.formatting', info.style)
         style = style_cls()
         for bibfile in info.bibfiles:
             # format all entries

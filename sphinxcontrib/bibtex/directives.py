@@ -53,7 +53,7 @@ class BibliographyDirective(Directive):
                     "notcited"
                     if "notcited" in self.options else (
                         "cited"))),
-            style=self.options.get("style", "unsrt_"))
+            style=self.options.get("style", "unsrt"))
         cache[id_] = info
         # get all bibfiles
         for bibfile in self.arguments[0].split():
