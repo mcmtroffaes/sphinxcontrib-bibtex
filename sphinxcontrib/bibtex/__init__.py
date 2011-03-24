@@ -16,6 +16,11 @@ from sphinx.roles import XRefRole # for :cite:
 from sphinxcontrib.bibtex.cache import Cache, BibfileCache, BibliographyCache
 from sphinxcontrib.bibtex.nodes import bibliography, cite
 from sphinxcontrib.bibtex.directives import BibliographyDirective
+from sphinxcontrib.bibtex.backends.doctree import Backend as output_backend
+import sphinxcontrib.bibtex.style.formatting.unsrt_
+
+# TODO plugin system not used at the moment
+#from pybtex.plugin import find_plugin
 
 def init_bibtex_cache(app):
     """Create ``app.env.bibtex_cache`` if it does not exist yet.
@@ -55,20 +60,21 @@ def process_bibliography_nodes(app, doctree, docname):
                 if other_id == id_][0]
         # TODO for now, simply generate *all* entries in the .bib files
         citations = []
+        # locate and instantiate style plugin
+        # (pybtex styles are rather incomplete, so we don't look there for now)
+        #style_cls = find_plugin(
+        #    'pybtex.style.formatting', info.style)
+        module = __import__(
+            'sphinxcontrib.bibtex.style.formatting.' + info.style,
+            globals(), locals(), ["Style"])
+        style_cls = module.Style
+        style = style_cls()
         for bibfile in info.bibfiles:
+            # format all entries
             data = app.env.bibtex_cache.bibfiles[bibfile].data
-            for key, entry in data.entries.iteritems():
-                # TODO use pybtex styles
-                # see pybtex.style.formatting
-                text = (
-                    ", ".join(unicode(person)
-                              for person in entry.persons.get("author", []))
-                    + ". "
-                    + entry.fields.get("title")
-                    )
-                node = docutils.nodes.paragraph()
-                node.children.append(docutils.nodes.inline(text, text))
-                citations.append(node)
+            formatted_entries = style.format_entries(data.entries.itervalues())
+            output_backend().write_to_doctree(
+                formatted_entries, citations)
         # XXX this is a hack: docutils throws an exception if we
         # XXX replace_self([]) for nodes that have an 'ids' attribute
         # XXX (such as bibnode)
@@ -87,9 +93,9 @@ def process_cite_nodes(app, doctree, docname):
     :type docname: :class:`str`
     """
 
-    for citenode in doctree.traverse(cite):
+    #for citenode in doctree.traverse(cite):
         # TODO handle the actual citations
-        citenode.replace_self([])
+        #citenode.replace_self([])
 
 def setup(app):
     """Set up the bibtex extension:
