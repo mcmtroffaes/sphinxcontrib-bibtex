@@ -13,10 +13,11 @@
 import docutils.nodes
 from sphinx.roles import XRefRole # for :cite:
 
+from pybtex.backends.doctree import Backend as output_backend
+
 from sphinxcontrib.bibtex.cache import Cache, BibfileCache, BibliographyCache
 from sphinxcontrib.bibtex.nodes import bibliography, cite
 from sphinxcontrib.bibtex.directives import BibliographyDirective
-from sphinxcontrib.bibtex.backends.doctree import Backend as output_backend
 import sphinxcontrib.bibtex.style.formatting.unsrt_
 
 # TODO plugin system not used at the moment
