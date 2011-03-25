@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """LaTeX.py
 
 Character translation utilities for LaTeX-formatted text.
@@ -39,6 +40,8 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 """
 
+from __future__ import print_function
+
 import codecs
 import re
 
@@ -47,57 +50,69 @@ def register():
     Unicode characters are translated to or from x when possible, otherwise
     expanded to latex.
     """
-    codecs.register(_registry)
+    codecs.register(find_latex)
 
-def getregentry():
-    """Encodings module API."""
-    return _registry('latex')
+class LatexCodec(codecs.Codec, object):
+    additional_encoding = None
+    """Any additional encoding."""
 
-def _registry(encoding):
+    def encode(self,input_,errors='strict'):
+        """Convert unicode string to latex."""
+        output = []
+        for c in input_:
+            if self.additional_encoding:
+                try:
+                    output.append(c.encode(self.additional_encoding))
+                    continue
+                except:
+                    pass
+            if ord(c) in latex_equivalents:
+                output.append(latex_equivalents[ord(c)])
+            else:
+                output += ['{\\char', str(ord(c)), '}']
+        return ''.join(output), len(input_)
+
+    def decode(self,input_,errors='strict'):
+        """Convert latex source string to unicode."""
+        if self.additional_encoding:
+            input_ = unicode(input_,self.additional_encoding,errors)
+
+        # Note: we may get buffer objects here.
+        # It is not permussable to call join on buffer objects
+        # but we can make them joinable by calling unicode.
+        # This should always be safe since we are supposed
+        # to be producing unicode output anyway.
+        x = map(unicode,_unlatex(input_))
+        return u''.join(x), len(input_)
+
+class LatexIncrementalEncoder(codecs.IncrementalEncoder):
+    def encode(self, input_, final=False):
+        raise NotImplementedError
+
+class LatexIncrementalDecoder(codecs.IncrementalDecoder):
+    def decode(self, input_, final=False):
+        raise NotImplementedError
+
+class LatexStreamWriter(LatexCodec, codecs.StreamWriter):
+    pass
+        
+class LatexStreamReader(LatexCodec, codecs.StreamReader):
+    pass
+
+def find_latex(encoding):
     if encoding == 'latex':
-        encoding = None
-    elif encoding.startswith('latex+'):
-        encoding = encoding[6:]
+        return codecs.CodecInfo(
+            encode=LatexCodec().encode,
+            decode=LatexCodec().decode,
+            incrementalencoder=None, #LatexIncrementalEncoder,
+            incrementaldecoder=None, #LatexIncrementalDecoder,
+            streamreader=LatexStreamReader,
+            streamwriter=LatexStreamWriter,
+            )
+    # TODO handle additional encodings
+    #elif encoding.startswith('latex+'):
     else:
         return None
-        
-    class Codec(codecs.Codec):
-        def encode(self,input_,errors='strict'):
-            """Convert unicode string to latex."""
-            output = []
-            for c in input_:
-                if encoding:
-                    try:
-                        output.append(c.encode(encoding))
-                        continue
-                    except:
-                        pass
-                if ord(c) in latex_equivalents:
-                    output.append(latex_equivalents[ord(c)])
-                else:
-                    output += ['{\\char', str(ord(c)), '}']
-            return ''.join(output), len(input_)
-            
-        def decode(self,input_,errors='strict'):
-            """Convert latex source string to unicode."""
-            if encoding:
-                input_ = unicode(input_,encoding,errors)
-
-            # Note: we may get buffer objects here.
-            # It is not permussable to call join on buffer objects
-            # but we can make them joinable by calling unicode.
-            # This should always be safe since we are supposed
-            # to be producing unicode output anyway.
-            x = map(unicode,_unlatex(input_))
-            return u''.join(x), len(input_)
-    
-    class StreamWriter(Codec,codecs.StreamWriter):
-        pass
-            
-    class StreamReader(Codec,codecs.StreamReader):
-        pass
-
-    return (Codec().encode,Codec().decode,StreamReader,StreamWriter)
 
 def _tokenize(tex):
     """Convert latex source into sequence of single-token substrings."""
@@ -592,3 +607,92 @@ for candidate in _l2u:
     else:
         firstchar = candidate[0]
     _blacklist.discard(firstchar)
+
+codecs.register(find_latex)
+
+if __name__ == '__main__':
+
+    from cStringIO import StringIO
+
+    def test_stateless_decoder(text_utf8, text_latex):
+        decoded, n = codecs.getdecoder('latex')(text_latex)
+        #print(u"decoded {0} into {1}".format(repr(text_latex), decoded))
+        assert (decoded, n) == (text_utf8, len(text_latex))
+
+    def test_stateless_encoder(text_utf8, text_latex):
+        encoded, n = codecs.getencoder('latex')(text_utf8)
+        #print(u"encoded {0} into {1}".format(text_utf8, repr(encoded)))
+        assert (encoded, n) == (text_latex, len(text_utf8))
+
+    def test_stream_encoder(text_utf8, text_latex):
+        stream = StringIO()
+        writer = codecs.getwriter('latex')(stream)
+        writer.write(text_utf8)
+        assert text_latex == stream.getvalue()
+
+    def test_stream_decoder(text_utf8, text_latex):
+        stream = StringIO(text_latex)
+        reader = codecs.getreader('latex')(stream)
+        assert text_utf8 == reader.read()
+
+    decoder_tests = (
+        (u"mælström", r'm\ae lstr\"om'),
+        (u"låren av björn", r'l\aa ren av bj\"orn'),
+        (
+        u"Même s'il a fait l'objet d'adaptations suite à l'évolution, "
+        u"la transformation sociale, économique et politique du pays, "
+        u"le code civil français est aujourd'hui encore le texte fondateur "
+        u"du droit civil français mais aussi du droit civil belge ainsi que "
+        u"de plusieurs autres droits civils.",
+        r"M\^eme s'il a fait l'objet d'adaptations suite "
+        r"\`a l'\'evolution, la transformation sociale, "
+        r"\'economique et politique du pays, le code civil "
+        r"fran\c{c}ais est aujourd'hui encore le texte fondateur "
+        r"du droit civil fran\c{c}ais mais aussi du droit civil "
+        r"belge ainsi que de plusieurs autres droits civils."
+        ),
+    )
+    encoder_tests = (
+        (u"mælström", r'm{\ae}lstr{\"o}m'),
+        (u"låren av björn", r'l{\aa}ren av bj{\"o}rn'),
+        (
+        u"Même s'il a fait l'objet d'adaptations suite à l'évolution, "
+        u"la transformation sociale, économique et politique du pays, "
+        u"le code civil français est aujourd'hui encore le texte fondateur "
+        u"du droit civil français mais aussi du droit civil belge ainsi que "
+        u"de plusieurs autres droits civils.",
+        r"M{\^e}me s'il a fait l'objet d'adaptations suite "
+        r"{\`a} l'{\'e}volution, la transformation sociale, "
+        r"{\'e}conomique et politique du pays, le code civil "
+        r"fran{\c{c}}ais est aujourd'hui encore le texte fondateur "
+        r"du droit civil fran{\c{c}}ais mais aussi du droit civil "
+        r"belge ainsi que de plusieurs autres droits civils."
+        ),
+    )
+
+    for text_utf8, text_latex in decoder_tests:
+        test_stateless_decoder(text_utf8, text_latex)
+        print('.', end='')
+        test_stream_decoder(text_utf8, text_latex)
+        print('.', end='')
+
+    for text_utf8, text_latex in encoder_tests:
+        test_stateless_encoder(text_utf8, text_latex)
+        print('.', end='')
+        test_stream_encoder(text_utf8, text_latex)
+        print('.', end='')
+
+    print()
+
+    exit()
+
+    # Incremental decoder; not yet implemented
+    decoder_factory = codecs.getincrementaldecoder('latex')
+    decoder = decoder_factory()
+    decoded_text_parts = []
+    for c in encoded_text:
+        decoded_text_parts.append(decoder.decode(c, final=False))
+    decoded_text_parts.append(decoder.decode('', final=True))
+    decoded_text = ''.join(decoded_text_parts)
+    print('IncrementalDecoder converted "{0}" to "{1}"'.format(
+        encoded_text, decoded_text))
