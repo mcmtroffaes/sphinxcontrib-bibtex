@@ -104,8 +104,8 @@ def find_latex(encoding):
         return codecs.CodecInfo(
             encode=LatexCodec().encode,
             decode=LatexCodec().decode,
-            incrementalencoder=None, #LatexIncrementalEncoder,
-            incrementaldecoder=None, #LatexIncrementalDecoder,
+            incrementalencoder=LatexIncrementalEncoder,
+            incrementaldecoder=LatexIncrementalDecoder,
             streamreader=LatexStreamReader,
             streamwriter=LatexStreamWriter,
             )
