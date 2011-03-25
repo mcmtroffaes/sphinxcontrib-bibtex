@@ -62,10 +62,10 @@ def _registry(encoding):
         return None
         
     class Codec(codecs.Codec):
-        def encode(self,input,errors='strict'):
+        def encode(self,input_,errors='strict'):
             """Convert unicode string to latex."""
             output = []
-            for c in input:
+            for c in input_:
                 if encoding:
                     try:
                         output.append(c.encode(encoding))
@@ -76,20 +76,20 @@ def _registry(encoding):
                     output.append(latex_equivalents[ord(c)])
                 else:
                     output += ['{\\char', str(ord(c)), '}']
-            return ''.join(output), len(input)
+            return ''.join(output), len(input_)
             
-        def decode(self,input,errors='strict'):
+        def decode(self,input_,errors='strict'):
             """Convert latex source string to unicode."""
             if encoding:
-                input = unicode(input,encoding,errors)
+                input_ = unicode(input_,encoding,errors)
 
             # Note: we may get buffer objects here.
             # It is not permussable to call join on buffer objects
             # but we can make them joinable by calling unicode.
             # This should always be safe since we are supposed
             # to be producing unicode output anyway.
-            x = map(unicode,_unlatex(input))
-            return u''.join(x), len(input)
+            x = map(unicode,_unlatex(input_))
+            return u''.join(x), len(input_)
     
     class StreamWriter(Codec,codecs.StreamWriter):
         pass
