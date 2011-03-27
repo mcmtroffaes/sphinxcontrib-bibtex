@@ -52,67 +52,105 @@ def register():
     """
     codecs.register(find_latex)
 
-class LatexCodec(codecs.Codec, object):
-    additional_encoding = None
+# returns the codec search function
+# this is used if latex_codec.py were to be placed in stdlib
+def getregentry():
+    """Encodings module API."""
+    return find_latex('latex')
+
+def latex_encode(input_, errors='strict', inputenc=None):
+    """Convert unicode string to latex bytes."""
+    # we convert character by character
+    output = []
+    for c in input_:
+        # attempt additional encoding first
+        # (these don't need a latex representation)
+        if inputenc:
+            try:
+                output.append(c.encode(inputenc, errors='strict'))
+            except UnicodeEncodeError:
+                pass
+            else:
+                continue
+        # inputenc failed; let's try the latex equivalents
+        # of common unicode characters
+        try:
+            output.append(latex_equivalents[ord(c)])
+        # that failed too, so simply use the \\char command
+        # this assumes
+        # \usepackage[T1]{fontenc}
+        # \usepackage[utf8]{inputenc}
+        except KeyError:
+            output += [b'{\\char', str(ord(c)).encode("ascii"), b'}']
+    return b''.join(output), len(input_)
+
+def latex_decode(input_, errors='strict', inputenc=None):
+    """Convert latex bytes into unicode string."""
+    # first decode input according to input encoding
+    # if no encoding is specified, assume ascii
+    input_ = input_.decode(inputenc if inputenc else "ascii", errors=errors)
+
+    # Note: we may get buffer objects here.
+    # It is not permussable to call join on buffer objects
+    # but we can make them joinable by calling unicode.
+    # This should always be safe since we are supposed
+    # to be producing unicode output anyway.
+    x = map(unicode, _unlatex(input_))
+    return u''.join(x), len(input_)
+
+class LatexCodec(codecs.Codec):
+    inputenc = None
     """Any additional encoding."""
 
-    def encode(self,input_,errors='strict'):
-        """Convert unicode string to latex."""
-        output = []
-        for c in input_:
-            if self.additional_encoding:
-                try:
-                    output.append(c.encode(self.additional_encoding))
-                    continue
-                except:
-                    pass
-            if ord(c) in latex_equivalents:
-                output.append(latex_equivalents[ord(c)])
-            else:
-                output += ['{\\char', str(ord(c)), '}']
-        return ''.join(output), len(input_)
+    def encode(self, input_, errors='strict'):
+        """Convert unicode string to latex bytes."""
+        return latex_encode(
+            input_, errors=errors,
+            inputenc=self.inputenc)
 
-    def decode(self,input_,errors='strict'):
-        """Convert latex source string to unicode."""
-        if self.additional_encoding:
-            input_ = unicode(input_,self.additional_encoding,errors)
+    def decode(self, input_, errors='strict'):
+        """Convert latex bytes to unicode string."""
+        return latex_decode(
+            input_, errors=errors,
+            inputenc=self.inputenc)
 
-        # Note: we may get buffer objects here.
-        # It is not permussable to call join on buffer objects
-        # but we can make them joinable by calling unicode.
-        # This should always be safe since we are supposed
-        # to be producing unicode output anyway.
-        x = map(unicode,_unlatex(input_))
-        return u''.join(x), len(input_)
+# incremental encoder does not need a buffer
+# but decoder does
 
 class LatexIncrementalEncoder(codecs.IncrementalEncoder):
     def encode(self, input_, final=False):
-        raise NotImplementedError
+        """Encode input and return an (output, length consumed) tuple."""
+        return latex_encode(input_, errors=self.errors)
 
-class LatexIncrementalDecoder(codecs.IncrementalDecoder):
-    def decode(self, input_, final=False):
+class LatexIncrementalDecoder(codecs.BufferedIncrementalDecoder):
+    def _buffer_decode(self, input_, final=False):
+        """Decode input and return an (output, length consumed) tuple."""
         raise NotImplementedError
-
-class LatexStreamWriter(LatexCodec, codecs.StreamWriter):
-    pass
-        
-class LatexStreamReader(LatexCodec, codecs.StreamReader):
-    pass
 
 def find_latex(encoding):
-    if encoding == 'latex':
-        return codecs.CodecInfo(
-            encode=LatexCodec().encode,
-            decode=LatexCodec().decode,
-            incrementalencoder=LatexIncrementalEncoder,
-            incrementaldecoder=LatexIncrementalDecoder,
-            streamreader=LatexStreamReader,
-            streamwriter=LatexStreamWriter,
-            )
-    # TODO handle additional encodings
-    #elif encoding.startswith('latex+'):
-    else:
+    # check if requested codec info is for latex encoding
+    if not encoding.startswith('latex'):
         return None
+    # set up all classes with correct latex input encoding
+    inputenc = encoding[6:] if encoding.startswith('latex+') else None
+    class Codec(LatexCodec):
+        inputenc = inputenc
+    class IncrementalEncoder(LatexIncrementalEncoder):
+        inputenc = inputenc
+    class IncrementalDecoder(LatexIncrementalDecoder):
+        inputenc = inputenc
+    class StreamWriter(Codec, codecs.StreamWriter):
+        pass
+    class StreamReader(Codec, codecs.StreamReader):
+        pass
+    return codecs.CodecInfo(
+        encode=Codec().encode,
+        decode=Codec().decode,
+        incrementalencoder=IncrementalEncoder,
+        incrementaldecoder=IncrementalDecoder,
+        streamreader=StreamReader,
+        streamwriter=StreamWriter,
+        )
 
 def _tokenize(tex):
     """Convert latex source into sequence of single-token substrings."""
@@ -614,72 +652,102 @@ if __name__ == '__main__':
 
     from cStringIO import StringIO
 
-    def test_stateless_decoder(text_utf8, text_latex):
-        decoded, n = codecs.getdecoder('latex')(text_latex)
+    def test_stateless_decoder(text_utf8, text_latex, inputenc=None):
+        encoding = 'latex+' + inputenc if inputenc else 'latex'
+        decoded, n = codecs.getdecoder(encoding)(text_latex)
         #print(u"decoded {0} into {1}".format(repr(text_latex), decoded))
         assert (decoded, n) == (text_utf8, len(text_latex))
 
-    def test_stateless_encoder(text_utf8, text_latex):
-        encoded, n = codecs.getencoder('latex')(text_utf8)
+    def test_stateless_encoder(text_utf8, text_latex, inputenc=None):
+        encoding = 'latex+' + inputenc if inputenc else 'latex'
+        encoded, n = codecs.getencoder(encoding)(text_utf8)
         #print(u"encoded {0} into {1}".format(text_utf8, repr(encoded)))
         assert (encoded, n) == (text_latex, len(text_utf8))
 
-    def test_stream_encoder(text_utf8, text_latex):
+    def test_stream_encoder(text_utf8, text_latex, inputenc=None):
+        encoding = 'latex+' + inputenc if inputenc else 'latex'
         stream = StringIO()
-        writer = codecs.getwriter('latex')(stream)
+        writer = codecs.getwriter(encoding)(stream)
         writer.write(text_utf8)
         assert text_latex == stream.getvalue()
 
-    def test_stream_decoder(text_utf8, text_latex):
+    def test_stream_decoder(text_utf8, text_latex, inputenc=None):
+        encoding = 'latex+' + inputenc if inputenc else 'latex'
         stream = StringIO(text_latex)
-        reader = codecs.getreader('latex')(stream)
+        reader = codecs.getreader(encoding)(stream)
         assert text_utf8 == reader.read()
 
     decoder_tests = (
-        (u"mælström", r'm\ae lstr\"om'),
-        (u"låren av björn", r'l\aa ren av bj\"orn'),
+        (u"mælström", br'm\ae lstr\"om', None),
+        (u"mælström", b'm\\ae lstr\xf6m', 'latin1'),
+        (u"© låren av björn", br'\copyright\ l{\aa}ren av bj{\"o}rn', None),
+        (u"© låren av björn", b'\\copyright\\ l\xe5ren av bj\xf6rn', 'latin1'),
         (
         u"Même s'il a fait l'objet d'adaptations suite à l'évolution, "
         u"la transformation sociale, économique et politique du pays, "
         u"le code civil français est aujourd'hui encore le texte fondateur "
         u"du droit civil français mais aussi du droit civil belge ainsi que "
         u"de plusieurs autres droits civils.",
-        r"M\^eme s'il a fait l'objet d'adaptations suite "
-        r"\`a l'\'evolution, la transformation sociale, "
-        r"\'economique et politique du pays, le code civil "
-        r"fran\c{c}ais est aujourd'hui encore le texte fondateur "
-        r"du droit civil fran\c{c}ais mais aussi du droit civil "
-        r"belge ainsi que de plusieurs autres droits civils."
+        br"M\^eme s'il a fait l'objet d'adaptations suite "
+        br"\`a l'\'evolution, la transformation sociale, "
+        br"\'economique et politique du pays, le code civil "
+        br"fran\c{c}ais est aujourd'hui encore le texte fondateur "
+        br"du droit civil fran\c{c}ais mais aussi du droit civil "
+        br"belge ainsi que de plusieurs autres droits civils.",
+        None
+        ),
+        (
+        u"D'un point de vue diététique, l'œuf apaise la faim.",
+        br"D'un point de vue di\'et\'etique, l'\oe uf apaise la faim.",
+        None
+        ),
+        (
+        u"D'un point de vue diététique, l'œuf apaise la faim.",
+        b"D'un point de vue di\xe9t\xe9tique, l'\\oe uf apaise la faim.",
+        'latin1'
         ),
     )
     encoder_tests = (
-        (u"mælström", r'm{\ae}lstr{\"o}m'),
-        (u"låren av björn", r'l{\aa}ren av bj{\"o}rn'),
+        (u"mælström", br'm{\ae}lstr{\"o}m', None),
+        (u"mælström", b'm\xe6lstr\xf6m', 'latin1'),
+        (u"© låren av björn", br'{\copyright} l{\aa}ren av bj{\"o}rn', None),
+        (u"© låren av björn", b'\xa9 l\xe5ren av bj\xf6rn', 'latin1'),
         (
         u"Même s'il a fait l'objet d'adaptations suite à l'évolution, "
         u"la transformation sociale, économique et politique du pays, "
         u"le code civil français est aujourd'hui encore le texte fondateur "
         u"du droit civil français mais aussi du droit civil belge ainsi que "
         u"de plusieurs autres droits civils.",
-        r"M{\^e}me s'il a fait l'objet d'adaptations suite "
-        r"{\`a} l'{\'e}volution, la transformation sociale, "
-        r"{\'e}conomique et politique du pays, le code civil "
-        r"fran{\c{c}}ais est aujourd'hui encore le texte fondateur "
-        r"du droit civil fran{\c{c}}ais mais aussi du droit civil "
-        r"belge ainsi que de plusieurs autres droits civils."
+        br"M{\^e}me s'il a fait l'objet d'adaptations suite "
+        br"{\`a} l'{\'e}volution, la transformation sociale, "
+        br"{\'e}conomique et politique du pays, le code civil "
+        br"fran{\c{c}}ais est aujourd'hui encore le texte fondateur "
+        br"du droit civil fran{\c{c}}ais mais aussi du droit civil "
+        br"belge ainsi que de plusieurs autres droits civils.",
+        None
+        ),
+        (
+        u"D'un point de vue diététique, l'œuf apaise la faim.",
+        br"D'un point de vue di{\'e}t{\'e}tique, l'{\oe}uf apaise la faim.",
+        None
+        ),
+        (
+        u"D'un point de vue diététique, l'œuf apaise la faim.",
+        b"D'un point de vue di\xe9t\xe9tique, l'{\\oe}uf apaise la faim.",
+        'latin1'
         ),
     )
 
-    for text_utf8, text_latex in decoder_tests:
-        test_stateless_decoder(text_utf8, text_latex)
+    for text_utf8, text_latex, inputenc in decoder_tests:
+        test_stateless_decoder(text_utf8, text_latex, inputenc)
         print('.', end='')
-        test_stream_decoder(text_utf8, text_latex)
+        test_stream_decoder(text_utf8, text_latex, inputenc)
         print('.', end='')
 
-    for text_utf8, text_latex in encoder_tests:
-        test_stateless_encoder(text_utf8, text_latex)
+    for text_utf8, text_latex, inputenc in encoder_tests:
+        test_stateless_encoder(text_utf8, text_latex, inputenc)
         print('.', end='')
-        test_stream_encoder(text_utf8, text_latex)
+        test_stream_encoder(text_utf8, text_latex, inputenc)
         print('.', end='')
 
     print()
