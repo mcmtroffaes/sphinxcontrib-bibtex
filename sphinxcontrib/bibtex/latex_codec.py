@@ -71,15 +71,15 @@ def latex_encode(input_, errors='strict', inputenc=None):
     # we convert character by character
     output = []
     for c in input_:
-        # attempt additional encoding first
-        # (these don't need a latex representation)
-        if inputenc:
-            try:
-                output.append(c.encode(inputenc, errors='strict'))
-            except UnicodeEncodeError:
-                pass
-            else:
-                continue
+        # attempt input encoding first
+        # if this succeeds, then we don't need a latex representation
+        try:
+            output.append(
+                c.encode(inputenc if inputenc else 'ascii', errors='strict'))
+        except UnicodeEncodeError:
+            pass
+        else:
+            continue
         # inputenc failed; let's try the latex equivalents
         # of common unicode characters
         try:
@@ -748,10 +748,8 @@ if __name__ == '__main__':
         decoded_parts = [
             decoder.decode(text_latex_part, final)
             for text_latex_part, final in split_input(text_latex)]
-        print(list(split_input(text_latex)))
-        print(decoded_parts)
-        print(text_utf8)
-        print(u''.join(decoded_parts))
+        #print(list(split_input(text_latex)))
+        #print(decoded_parts)
         assert text_utf8 == u''.join(decoded_parts)
 
     decoder_tests = (
@@ -792,17 +790,17 @@ if __name__ == '__main__':
         (u"© låren av björn", br'{\copyright} l{\aa}ren av bj{\"o}rn', None),
         (u"© låren av björn", b'\xa9 l\xe5ren av bj\xf6rn', 'latin1'),
         (
-        u"Même s'il a fait l'objet d'adaptations suite à l'évolution, "
-        u"la transformation sociale, économique et politique du pays, "
-        u"le code civil français est aujourd'hui encore le texte fondateur "
-        u"du droit civil français mais aussi du droit civil belge ainsi que "
+        u"Même s'il a fait l'objet d'adaptations suite à l'évolution, \n"
+        u"la transformation sociale, économique et politique du pays, \n"
+        u"le code civil français est aujourd'hui encore le texte fondateur \n"
+        u"du droit civil français mais aussi du droit civil belge ainsi que \n"
         u"de plusieurs autres droits civils.",
-        br"M{\^e}me s'il a fait l'objet d'adaptations suite "
-        br"{\`a} l'{\'e}volution, la transformation sociale, "
-        br"{\'e}conomique et politique du pays, le code civil "
-        br"fran{\c{c}}ais est aujourd'hui encore le texte fondateur "
-        br"du droit civil fran{\c{c}}ais mais aussi du droit civil "
-        br"belge ainsi que de plusieurs autres droits civils.",
+        b"M{\\^e}me s'il a fait l'objet d'adaptations suite "
+        b"{\\`a} l'{\\'e}volution, \nla transformation sociale, "
+        b"{\\'e}conomique et politique du pays, \nle code civil "
+        b"fran{\\c{c}}ais est aujourd'hui encore le texte fondateur \n"
+        b"du droit civil fran{\\c{c}}ais mais aussi du droit civil "
+        b"belge ainsi que \nde plusieurs autres droits civils.",
         None
         ),
         (
