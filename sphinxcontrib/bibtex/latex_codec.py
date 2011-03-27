@@ -782,6 +782,7 @@ if __name__ == '__main__':
         b"D'un point de vue di\xe9t\xe9tique, l'\\oe uf apaise la faim.",
         'latin1'
         ),
+        (u"α", "$\\alpha$", None)
     )
     encoder_tests = (
         (u'', b'', None),
@@ -813,6 +814,7 @@ if __name__ == '__main__':
         b"D'un point de vue di\xe9t\xe9tique, l'{\\oe}uf apaise la faim.",
         'latin1'
         ),
+        (u"α", "{\\mbox{$\\alpha$}}", None)
     )
 
     for text_utf8, text_latex, inputenc in decoder_tests:
