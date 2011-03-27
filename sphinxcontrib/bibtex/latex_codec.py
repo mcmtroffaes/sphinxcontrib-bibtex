@@ -60,6 +60,14 @@ def getregentry():
 
 def latex_encode(input_, errors='strict', inputenc=None):
     """Convert unicode string to latex bytes."""
+    # value and type checks
+    if errors not in {'strict', 'ignore', 'replace'}:
+        raise ValueError(
+            "latex codec does not support {0} errors".format(errors))
+    if not isinstance(input_, basestring):
+        raise TypeError(
+            "expected unicode for encode input, but got {0} instead"
+            .format(input_.__class__.__name__))
     # we convert character by character
     output = []
     for c in input_:
@@ -76,12 +84,20 @@ def latex_encode(input_, errors='strict', inputenc=None):
         # of common unicode characters
         try:
             output.append(latex_equivalents[ord(c)])
-        # that failed too, so simply use the \\char command
-        # this assumes
-        # \usepackage[T1]{fontenc}
-        # \usepackage[utf8]{inputenc}
+        # that failed too
         except KeyError:
-            output += [b'{\\char', str(ord(c)).encode("ascii"), b'}']
+            if errors == 'strict':
+                raise UnicodeEncodeError(
+                    "don't know how to translate {1} ({0}) into latex"
+                    .format(c, repr(c)))
+            elif errors == 'ignore':
+                pass
+            elif errors == 'replace':
+                # use the \\char command
+                # this assumes
+                # \usepackage[T1]{fontenc}
+                # \usepackage[utf8]{inputenc}
+                output += [b'{\\char', str(ord(c)).encode("ascii"), b'}']
     return b''.join(output), len(input_)
 
 def latex_decode(input_, errors='strict', inputenc=None):
@@ -95,6 +111,8 @@ def latex_decode(input_, errors='strict', inputenc=None):
     # but we can make them joinable by calling unicode.
     # This should always be safe since we are supposed
     # to be producing unicode output anyway.
+
+    # TODO support errors here
     x = map(unicode, _unlatex(input_))
     return u''.join(x), len(input_)
 
@@ -105,27 +123,43 @@ class LatexCodec(codecs.Codec):
     def encode(self, input_, errors='strict'):
         """Convert unicode string to latex bytes."""
         return latex_encode(
-            input_, errors=errors,
-            inputenc=self.inputenc)
+            input_, errors=errors, inputenc=self.inputenc)
 
     def decode(self, input_, errors='strict'):
         """Convert latex bytes to unicode string."""
         return latex_decode(
-            input_, errors=errors,
-            inputenc=self.inputenc)
+            input_, errors=errors, inputenc=self.inputenc)
 
 # incremental encoder does not need a buffer
 # but decoder does
 
+# TODO stream and incremental encoder/decoder should raise ValueError
+# in strict error mode (currently they raise UnicodeError)
+
 class LatexIncrementalEncoder(codecs.IncrementalEncoder):
     def encode(self, input_, final=False):
-        """Encode input and return an (output, length consumed) tuple."""
-        return latex_encode(input_, errors=self.errors)
+        """Encode input and return output."""
+        return latex_encode(
+            input_, errors=self.errors, inputenc=self.inputenc)[0]
 
 class LatexIncrementalDecoder(codecs.BufferedIncrementalDecoder):
-    def _buffer_decode(self, input_, final=False):
+    def _buffer_decode(self, input_, errors, final=False):
         """Decode input and return an (output, length consumed) tuple."""
-        raise NotImplementedError
+        if final:
+            # last bit of input: use stateless decoder
+            return latex_decode(
+                input_, errors=errors, inputenc=self.inputenc)
+        else:
+            # we can split the buffer at newlines
+            # so search for the last newline
+            last_newline_pos = input_.rfind(b"\n")
+            if last_newline_pos == -1:
+                # no newline, so no split is possible: consume nothing
+                return u"", 0
+            else:
+                return latex_decode(
+                    input_[:last_newline_pos],
+                    errors=errors, inputenc=self.inputenc)
 
 def find_latex(encoding):
     # check if requested codec info is for latex encoding
@@ -195,7 +229,9 @@ def _tokenize(tex):
                     pos += 1
 
 class _unlatex:
-    """Convert tokenized tex into sequence of unicode strings.  Helper for decode()."""
+    """Convert tokenized tex into sequence of unicode strings.
+    Helper for :func:latex_decode.
+    """
 
     def __iter__(self):
         """Turn self into an iterator.  It already is one, nothing to do."""
@@ -211,7 +247,7 @@ class _unlatex:
         """Return token at offset n from current pos."""
         p = self.pos + n
         t = self.tex
-        return p < len(t) and t[p] or None
+        return p < len(t) and t[p] or b''
 
     def next(self):
         """Find and return another piece of converted output."""
@@ -677,23 +713,65 @@ if __name__ == '__main__':
         reader = codecs.getreader(encoding)(stream)
         assert text_utf8 == reader.read()
 
+    def split_input(input_):
+        """Helper method for testing the incremental encoder and decoder."""
+        if isinstance(input_, unicode):
+            sep = u" "
+        elif isinstance(input_, bytes):
+            sep = b" "
+        else:
+            raise TypeError("expected unicode or bytes input")
+        part1, part2, part3 = input_.partition(sep)
+        if part3:
+            yield part1, False
+            yield part2, False
+            for part, final in split_input(part3):
+                yield part, final
+        else:
+            # last part
+            yield part1, True
+        
+
+    def test_incremental_encoder(text_utf8, text_latex, inputenc=None):
+        encoding = 'latex+' + inputenc if inputenc else 'latex'
+        encoder = codecs.getincrementalencoder(encoding)()
+        encoded_parts = [
+            encoder.encode(text_utf8_part, final)
+            for text_utf8_part, final in split_input(text_utf8)]
+        #print(list(split_input(text_utf8)))
+        #print(encoded_parts)
+        assert text_latex == b''.join(encoded_parts)
+
+    def test_incremental_decoder(text_utf8, text_latex, inputenc=None):
+        encoding = 'latex+' + inputenc if inputenc else 'latex'
+        decoder = codecs.getincrementaldecoder(encoding)()
+        decoded_parts = [
+            decoder.decode(text_latex_part, final)
+            for text_latex_part, final in split_input(text_latex)]
+        print(list(split_input(text_latex)))
+        print(decoded_parts)
+        print(text_utf8)
+        print(u''.join(decoded_parts))
+        assert text_utf8 == u''.join(decoded_parts)
+
     decoder_tests = (
+        (u'', b'', None),
         (u"mælström", br'm\ae lstr\"om', None),
         (u"mælström", b'm\\ae lstr\xf6m', 'latin1'),
         (u"© låren av björn", br'\copyright\ l{\aa}ren av bj{\"o}rn', None),
         (u"© låren av björn", b'\\copyright\\ l\xe5ren av bj\xf6rn', 'latin1'),
         (
-        u"Même s'il a fait l'objet d'adaptations suite à l'évolution, "
-        u"la transformation sociale, économique et politique du pays, "
-        u"le code civil français est aujourd'hui encore le texte fondateur "
-        u"du droit civil français mais aussi du droit civil belge ainsi que "
+        u"Même s'il a fait l'objet d'adaptations suite à l'évolution, \n"
+        u"la transformation sociale, économique et politique du pays, \n"
+        u"le code civil français est aujourd'hui encore le texte fondateur \n"
+        u"du droit civil français mais aussi du droit civil belge ainsi que \n"
         u"de plusieurs autres droits civils.",
-        br"M\^eme s'il a fait l'objet d'adaptations suite "
-        br"\`a l'\'evolution, la transformation sociale, "
-        br"\'economique et politique du pays, le code civil "
-        br"fran\c{c}ais est aujourd'hui encore le texte fondateur "
-        br"du droit civil fran\c{c}ais mais aussi du droit civil "
-        br"belge ainsi que de plusieurs autres droits civils.",
+        b"M\\^eme s'il a fait l'objet d'adaptations suite "
+        b"\\`a l'\\'evolution, \nla transformation sociale, "
+        b"\\'economique et politique du pays, \nle code civil "
+        b"fran\\c{c}ais est aujourd'hui encore le texte fondateur \n"
+        b"du droit civil fran\\c{c}ais mais aussi du droit civil "
+        b"belge ainsi que \nde plusieurs autres droits civils.",
         None
         ),
         (
@@ -708,6 +786,7 @@ if __name__ == '__main__':
         ),
     )
     encoder_tests = (
+        (u'', b'', None),
         (u"mælström", br'm{\ae}lstr{\"o}m', None),
         (u"mælström", b'm\xe6lstr\xf6m', 'latin1'),
         (u"© låren av björn", br'{\copyright} l{\aa}ren av bj{\"o}rn', None),
@@ -743,24 +822,15 @@ if __name__ == '__main__':
         print('.', end='')
         test_stream_decoder(text_utf8, text_latex, inputenc)
         print('.', end='')
+        test_incremental_decoder(text_utf8, text_latex, inputenc)
+        print('.', end='')
 
     for text_utf8, text_latex, inputenc in encoder_tests:
         test_stateless_encoder(text_utf8, text_latex, inputenc)
         print('.', end='')
         test_stream_encoder(text_utf8, text_latex, inputenc)
         print('.', end='')
+        test_incremental_encoder(text_utf8, text_latex, inputenc)
+        print('.', end='')
 
     print()
-
-    exit()
-
-    # Incremental decoder; not yet implemented
-    decoder_factory = codecs.getincrementaldecoder('latex')
-    decoder = decoder_factory()
-    decoded_text_parts = []
-    for c in encoded_text:
-        decoded_text_parts.append(decoder.decode(c, final=False))
-    decoded_text_parts.append(decoder.decode('', final=True))
-    decoded_text = ''.join(decoded_text_parts)
-    print('IncrementalDecoder converted "{0}" to "{1}"'.format(
-        encoded_text, decoded_text))
