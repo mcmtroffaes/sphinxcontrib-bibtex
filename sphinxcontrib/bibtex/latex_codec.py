@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-"""LaTeX.py
-
-Character translation utilities for LaTeX-formatted text.
+"""
+Character translation utilities for LaTeX-formatted text
+========================================================
 
 Usage:
  - unicode(string,'latex')
@@ -12,8 +12,8 @@ are both available just by letting "import latex" find this file.
 where latin1 can be replaced by any other known encoding, also
 become available by calling latex.register().
 
-We also make public a dictionary latex_equivalents,
-mapping ord(unicode char) to LaTeX code.
+There is also a public dictionary called ``latex_equivalents``,
+which maps ord(unicode char) to LaTeX code.
 
 
 Copyright (c) 2003,2008 David Eppstein
@@ -311,28 +311,28 @@ latex_equivalents = {
     ord(u'\N{RIGHT DOUBLE QUOTATION MARK}'): "{''}",
     ord(u'\N{DAGGER}'): '{\\dag}',
     ord(u'\N{DOUBLE DAGGER}'): '{\\ddag}',
-    ord(u'\N{BULLET}'): '{\\mbox{$\\bullet$}}',
+    ord(u'\N{BULLET}'): '{\\mbox{$\\bullet$}}', # '\\textbullet', 'textcomp'
     ord(u'\N{NUMBER SIGN}'): '{\\#}',
     ord(u'\N{AMPERSAND}'): '{\\&}',
     ord(u'\N{NO-BREAK SPACE}'): '{~}',
     ord(u'\N{INVERTED EXCLAMATION MARK}'): '{!`}',
     ord(u'\N{CENT SIGN}'): '{\\not{c}}',
-    ord(u'\N{POUND SIGN}'): '{\\pounds}',
+    ord(u'\N{POUND SIGN}'): '{\\pounds}', # '\\textsterling', 'textcomp'
     ord(u'\N{SECTION SIGN}'): '{\\S}',
     ord(u'\N{DIAERESIS}'): '{\\"{}}',
     ord(u'\N{NOT SIGN}'): '{\\neg}',
     ord(u'\N{SOFT HYPHEN}'): '{\\-}',
     ord(u'\N{MACRON}'): '{\\={}}',
-    ord(u'\N{DEGREE SIGN}'): '{\\mbox{$^\\circ$}}',
-    ord(u'\N{PLUS-MINUS SIGN}'): '{\\mbox{$\\pm$}}',
-    ord(u'\N{SUPERSCRIPT TWO}'): '{\\mbox{$^2$}}',
-    ord(u'\N{SUPERSCRIPT THREE}'): '{\\mbox{$^3$}}',
+    ord(u'\N{DEGREE SIGN}'): '{\\mbox{$^\\circ$}}', # '\\textdegree', 'textcomp'
+    ord(u'\N{PLUS-MINUS SIGN}'): '{\\mbox{$\\pm$}}', # '\\textpm', 'textcomp'
+    ord(u'\N{SUPERSCRIPT TWO}'): '{\\mbox{$^2$}}', # '\\texttwosuperior}', 'textcomp'
+    ord(u'\N{SUPERSCRIPT THREE}'): '{\\mbox{$^3$}}', # '\\textthreesuperior', 'textcomp'
     ord(u'\N{ACUTE ACCENT}'): "{\\'{}}",
-    ord(u'\N{MICRO SIGN}'): '{\\mbox{$\\mu$}}',
+    ord(u'\N{MICRO SIGN}'): '{\\mbox{$\\mu$}}', # '\\micro', 'gensymb'
     ord(u'\N{PILCROW SIGN}'): '{\\P}',
-    ord(u'\N{MIDDLE DOT}'): '{\\mbox{$\\cdot$}}',
+    ord(u'\N{MIDDLE DOT}'): '{\\mbox{$\\cdot$}}', # '\\textperiodcentered', 'textcomp'
     ord(u'\N{CEDILLA}'): '{\\c{}}',
-    ord(u'\N{SUPERSCRIPT ONE}'): '{\\mbox{$^1$}}',
+    ord(u'\N{SUPERSCRIPT ONE}'): '{\\mbox{$^1$}}', # '\\textonesuperior', 'textcomp'
     ord(u'\N{INVERTED QUESTION MARK}'): '{?`}',
     ord(u'\N{LATIN CAPITAL LETTER A WITH GRAVE}'): '{\\`A}',
     ord(u'\N{LATIN CAPITAL LETTER A WITH CIRCUMFLEX}'): '{\\^A}',
@@ -616,11 +616,11 @@ latex_equivalents = {
     ord(u'\N{GREEK CAPITAL LETTER CHI}'): '{\\mbox{$\\Chi$}}',
     ord(u'\N{GREEK CAPITAL LETTER PSI}'): '{\\mbox{$\\Psi$}}',
     ord(u'\N{GREEK CAPITAL LETTER OMEGA}'): '{\\mbox{$\\Omega$}}',
-    ord(u'\N{COPYRIGHT SIGN}'): '{\\copyright}',
+    ord(u'\N{COPYRIGHT SIGN}'): '{\\copyright}', # '\\textcopyright',
     ord(u'\N{LATIN CAPITAL LETTER A WITH ACUTE}'): "{\\'A}",
     ord(u'\N{LATIN CAPITAL LETTER I WITH ACUTE}'): "{\\'I}",
     ord(u'\N{HORIZONTAL ELLIPSIS}'): '{\\ldots}',
-    ord(u'\N{TRADE MARK SIGN}'): '{\\mbox{$^\\mbox{TM}$}}',
+    ord(u'\N{TRADE MARK SIGN}'): '{\\mbox{$^\\mbox{TM}$}}', # '\\texttrademark', 'textcomp'
 }
 for _i in range(0x0020):
     if _i not in latex_equivalents:
