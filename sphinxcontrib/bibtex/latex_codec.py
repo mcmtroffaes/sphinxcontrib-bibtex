@@ -166,13 +166,13 @@ def find_latex(encoding):
     if not encoding.startswith('latex'):
         return None
     # set up all classes with correct latex input encoding
-    inputenc = encoding[6:] if encoding.startswith('latex+') else None
+    inputenc_ = encoding[6:] if encoding.startswith('latex+') else None
     class Codec(LatexCodec):
-        inputenc = inputenc
+        inputenc = inputenc_
     class IncrementalEncoder(LatexIncrementalEncoder):
-        inputenc = inputenc
+        inputenc = inputenc_
     class IncrementalDecoder(LatexIncrementalDecoder):
-        inputenc = inputenc
+        inputenc = inputenc_
     class StreamWriter(Codec, codecs.StreamWriter):
         pass
     class StreamReader(Codec, codecs.StreamReader):

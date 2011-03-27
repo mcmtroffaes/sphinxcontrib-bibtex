@@ -74,7 +74,7 @@ class BibliographyDirective(Directive):
         :rtype: :class:`pybtex.database.BibliographyData`
         """
         app = self.state.document.settings.env.app
-        parser = bibtex.Parser()
+        parser = bibtex.Parser('latex') # TODO support inputenc
         app.info(
             bold("parsing bibtex file {0}... ".format(bibfile)), nonl=True)
         parser.parse_file(bibfile)
