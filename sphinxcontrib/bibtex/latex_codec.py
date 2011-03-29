@@ -61,7 +61,7 @@ def getregentry():
 def latex_encode(input_, errors='strict', inputenc=None):
     """Convert unicode string to latex bytes."""
     # value and type checks
-    if errors not in {'strict', 'ignore', 'replace'}:
+    if errors not in set(['strict', 'ignore', 'replace']):
         raise ValueError(
             "latex codec does not support {0} errors".format(errors))
     if not isinstance(input_, basestring):
