@@ -8,6 +8,11 @@ import re
 class TexLexer:
     """A very simple lexer for tex/latex code. Roughly follows the
     state machine descriped in Tex By Topic, Chapter 2.
+
+    The generated tokens satisfy:
+
+    * no newline characters: paragraphs are separated by '\\par'
+    * spaces following control tokens are compressed
     """
 
     tokens = [
@@ -59,7 +64,7 @@ class TexLexer:
             for name, regexp in self.tokens:
                 token = match.group(name)
                 if token is not None:
-                    yield (token, name, match.start(), match.end())
+                    yield (name, token, match.start(), match.end())
                     break
             else:
                 # should not happen
@@ -71,18 +76,18 @@ class TexLexer:
         Replaces newlines by spaces and \\par commands depending on
         the context.
         """
-        for token, name, start, end in self.get_raw_tokens(bytes_):
+        for name, token, start, end in self.get_raw_tokens(bytes_):
             if name == 'newline':
                 if self.state == 'N':
                     # if state was 'N', generate new paragraph
-                    yield b'\\par'
+                    yield 'control', b'\\par'
                 elif self.state == 'S':
                     # switch to 'N' state, do not generate a space
                     self.state = 'N'
                 elif self.state == 'M':
                     # switch to 'N' state, generate a space
                     self.state = 'N'
-                    yield b' '
+                    yield 'space', b' '
                 else:
                     raise AssertionError(
                         "unknown tex state '%s'" % self.state)
@@ -97,7 +102,7 @@ class TexLexer:
                     # in M mode, generate the space,
                     # but switch to space skip mode
                     self.state = 'S'
-                    yield b' '
+                    yield name, token
                 else:
                     raise AssertionError(
                         "unknown tex state '%s'" % self.state)
@@ -106,20 +111,19 @@ class TexLexer:
                 # detect math mode
                 if token == '$':
                     self.inline_math = not self.inline_math
-                yield token
+                yield name, token
             elif name == 'parameter':
                 self.state = 'M'
-                yield token
+                yield name, token
             elif name == 'control':
                 # go to space skip mode
                 self.state = 'S'
-                yield token
+                yield name, token
             elif name == 'controlx':
                 # don't skip following space, so go to M mode
                 self.state = 'M'
-                yield token
+                yield name, token
             elif name == 'comment':
                 # go to newline mode, no token is generated
                 # note: comment includes the newline
                 self.state = 'N'
-
