@@ -12,7 +12,7 @@ class TexLexerTest(TestCase):
     def lex_it(self, latex_code, latex_tokens):
         tokens = self.lexer.get_tokens(latex_code)
         self.assertEqual(
-            list(token for name, token in tokens),
+            list(token.text for token in tokens),
             latex_tokens)
 
     def test_null(self):
@@ -22,21 +22,21 @@ class TexLexerTest(TestCase):
         self.lex_it(
             b'hello!  [#1] This \\is\\   \\^ a \ntest.\n'
             b'    \nHey.\n\n\# x \#x',
-            br'h|e|l|l|o|!| |[|#1|]| |T|h|i|s| |\is|\ |\^|a| '
-            br'|t|e|s|t|.| |\par|H|e|y|.| '
+            br'hello!| |[|#1|]| |This| |\is|\ |\^|a| '
+            br'|test.| |\par|Hey.| '
             br'|\par|\#| |x| |\#|x'.split(b'|')
             )
 
     def test_comment(self):
         self.lex_it(
             b'test% some comment\ntest',
-            b't|e|s|t|t|e|s|t'.split(b'|')
+            b'test|test'.split(b'|')
             )
 
     def test_comment_newline(self):
         self.lex_it(
             b'test% some comment\n\ntest',
-            b't|e|s|t|\\par|t|e|s|t'.split(b'|')
+            b'test|\\par|test'.split(b'|')
             )
 
     def test_control(self):
