@@ -18,3 +18,17 @@ class TexLexerTest(TestCase):
             br'|t|e|s|t|.| |\par|H|e|y|.| '
             br'|\par|\#| |x| |\#|x'.split(b'|')
             )
+
+    def test_comment(self):
+        self.assertEqual(
+            list(self.lexer.get_tokens(
+                b'test% some comment\ntest')),
+            b't|e|s|t|t|e|s|t'.split(b'|')
+            )
+
+    def test_comment_newline(self):
+        self.assertEqual(
+            list(self.lexer.get_tokens(
+                b'test% some comment\n\ntest')),
+            b't|e|s|t|\\par|t|e|s|t'.split(b'|')
+            )

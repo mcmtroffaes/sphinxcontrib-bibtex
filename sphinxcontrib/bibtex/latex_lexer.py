@@ -16,6 +16,8 @@ class TexLexer:
         # control tokens
         # in latex, some control tokens skip following whitespace ('control')
         # others do not ('controlx')
+        # XXX TBT says no control symbols skip whitespace (except '\ ')
+        # XXX but tests reveal otherwise
         ('control', br'[\\]([a-zA-Z]+|[~' + br"'" + br'"` =^!])'),
         ('controlx', br'[\\][^a-zA-Z]'),
         # parameter tokens
@@ -41,8 +43,8 @@ class TexLexer:
         # regular expression used for matching
         self.regexp = re.compile(
             b"|".join(
-                "(?P<%s>%s)" % (name, part)
-                for name, part in self.tokens),
+                "(?P<%s>%s)" % (name, regexp)
+                for name, regexp in self.tokens),
             re.DOTALL)
 
     def get_raw_tokens(self, bytes_):
@@ -54,7 +56,7 @@ class TexLexer:
         - a single byte character
         """
         for match in self.regexp.finditer(bytes_):
-            for name, part in self.tokens:
+            for name, regexp in self.tokens:
                 token = match.group(name)
                 if token is not None:
                     yield (token, name, match.start(), match.end())
@@ -117,7 +119,7 @@ class TexLexer:
                 self.state = 'M'
                 yield token
             elif name == 'comment':
-                # go to space skip mode, no token is generated
+                # go to newline mode, no token is generated
                 # note: comment includes the newline
-                self.state = 'S'
+                self.state = 'N'
 
