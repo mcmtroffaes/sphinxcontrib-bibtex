@@ -29,21 +29,11 @@ class Token(collections.namedtuple("Token", "name text")):
         else:
             return self.text.decode(encoding)
 
-class LatexIncrementalDecoder(codecs.IncrementalDecoder):
-    """A very simple incremental lexer for tex/latex code. Roughly
-    follows the state machine descriped in Tex By Topic, Chapter 2.
-
-    The generated tokens satisfy:
-
-    * no newline characters: paragraphs are separated by '\\par'
-    * spaces following control tokens are compressed
-
-    The easiest way to customize decoding is to subclass and
-    overriding :meth:`get_unicode_tokens`.
-    """
-
-    inputenc = "ascii"
-    """Default input encoding. **Must** extend ascii."""
+# implementation note: we derive from IncrementalDecoder because this
+# class serves excellently as a base class for incremental decoders,
+# but of course we don't decode yet until later
+class LatexLexer(codecs.IncrementalDecoder):
+    """A very simple lexer for tex/latex code."""
 
     # implementation note: every token **must** be decodable by inputenc
     tokens = [
@@ -80,7 +70,7 @@ class LatexIncrementalDecoder(codecs.IncrementalDecoder):
 
     def __init__(self, errors='strict'):
         """Initialize the codec."""
-        codecs.IncrementalDecoder.__init__(self, errors)
+        self.errors = errors
         # regular expression used for matching
         self.regexp = re.compile(
             b"|".join(
@@ -91,16 +81,19 @@ class LatexIncrementalDecoder(codecs.IncrementalDecoder):
         self.reset()
 
     def reset(self):
-        """Reset state."""
-        # three possible states:
-        # newline (N), skipping spaces (S), and middle of line (M)
-        self.state = 'N'
-        # inline math mode?
-        self.inline_math = False
+        """Reset state (also called by __init__ to initialize the
+        state).
+        """
         # buffer for storing last (possibly incomplete) token
-        self.buffer_ = Token()
+        self.raw_buffer = Token()
         # keeps track of how many bytes have been consumed in total
         self.consumed = 0
+
+    def getstate(self):
+        return (self.raw_buffer.text, 0)
+
+    def setstate(self, state):
+        self.raw_buffer = Token('unknown', state[0])
 
     def get_raw_tokens(self, bytes_, final=False):
         """Yield tokens without any further processing. Tokens are one of:
@@ -110,9 +103,9 @@ class LatexIncrementalDecoder(codecs.IncrementalDecoder):
         - ``#<n>``: a parameter
         - a series of byte characters
         """
-        if self.buffer_:
-            bytes_ = self.buffer_.text + bytes_
-        self.buffer_ = Token()
+        if self.raw_buffer:
+            bytes_ = self.raw_buffer.text + bytes_
+        self.raw_buffer = Token()
         for match in self.regexp.finditer(bytes_):
             for name, regexp in self.tokens:
                 text = match.group(name)
@@ -121,7 +114,7 @@ class LatexIncrementalDecoder(codecs.IncrementalDecoder):
                     for token in self.flush_raw_tokens():
                         yield token
                     # fill buffer with next token
-                    self.buffer_ = Token(name, text)
+                    self.raw_buffer = Token(name, text)
                     break
             else:
                 # should not happen
@@ -134,10 +127,43 @@ class LatexIncrementalDecoder(codecs.IncrementalDecoder):
         """Flush the raw token buffer, and update number of consumed
         bytes.
         """
-        if self.buffer_:
-            self.consumed += len(self.buffer_)
-            yield self.buffer_
-            self.buffer_ = Token()
+        if self.raw_buffer:
+            self.consumed += len(self.raw_buffer)
+            yield self.raw_buffer
+            self.raw_buffer = Token()
+
+class LatexIncrementalLexer(LatexLexer):
+    """A very simple incremental lexer for tex/latex code. Roughly
+    follows the state machine descriped in Tex By Topic, Chapter 2.
+
+    The generated tokens satisfy:
+
+    * no newline characters: paragraphs are separated by '\\par'
+    * spaces following control tokens are compressed
+    """
+
+    def reset(self):
+        """Reset state (also called by __init__ to initialize the
+        state).
+        """
+        LatexLexer.reset(self)
+        # three possible states:
+        # newline (N), skipping spaces (S), and middle of line (M)
+        self.state = 'N'
+        # inline math mode?
+        self.inline_math = False
+
+    def getstate(self):
+        # TODO finish this
+        raise NotImplementedError
+        # state 'M' is most common, so let that be zero
+        return self.raw_buffer, ord(self.state) - ord('M')
+
+    def setstate(self, state):
+        # TODO finish this
+        raise NotImplementedError
+        self.raw_buffer = state[0]
+        self.state = chr(state[1] + ord('M'))
 
     def get_tokens(self, bytes_, final=False):
         """Yield tokens while maintaining a state. Also skip
@@ -147,7 +173,7 @@ class LatexIncrementalDecoder(codecs.IncrementalDecoder):
         """
         # mark the start of bytes_ in the sequence of all decoded bytes
         # so far (we need this when reporting errors)
-        start = self.consumed + len(self.buffer_)
+        start = self.consumed + len(self.raw_buffer)
         for token in self.get_raw_tokens(bytes_, final=final):
             if token.name == 'newline':
                 if self.state == 'N':
@@ -177,7 +203,7 @@ class LatexIncrementalDecoder(codecs.IncrementalDecoder):
                     yield token
                 else:
                     raise AssertionError(
-                        "unknown tex state '%s'" % self.state)
+                        "unknown state %s" % repr(self.state))
             elif token.name == 'char':
                 self.state = 'M'
                 yield token
@@ -216,7 +242,7 @@ class LatexIncrementalDecoder(codecs.IncrementalDecoder):
                         bytes_, # problematic input
                         pos - len(token), # start of problematic token
                         pos, # end of it
-                        "unknown token %s" % repr(self.buffer_.text))
+                        "unknown token %s" % repr(token.text))
                 elif self.errors == 'ignore':
                     # do nothing
                     pass
@@ -226,6 +252,25 @@ class LatexIncrementalDecoder(codecs.IncrementalDecoder):
                     raise NotImplementedError(
                         "error mode %s not supported" % repr(self.errors))
 
+class LatexIncrementalDecoder(LatexIncrementalLexer):
+    """Simple incremental decoder. Transforms lexed latex tokens into
+    unicode.
+
+    To customize decoding, subclass and override
+    :meth:`get_unicode_tokens`.
+    """
+
+    inputenc = "ascii"
+    """Default input encoding. **Must** extend ascii."""
+
+    # overriding to make sure that we call the right constructor
+    def __init__(self, errors='strict'):
+        LatexIncrementalLexer.__init__(self, errors=errors)
+
+    # overriding to make sure that we call the right reset method
+    def reset(self):
+        LatexIncrementalLexer.reset(self)
+
     def get_unicode_tokens(self, bytes_, final=False):
         """:meth:`decode` calls this function to produce the final
         sequence of unicode strings. This implementation simply
@@ -233,8 +278,8 @@ class LatexIncrementalDecoder(codecs.IncrementalDecoder):
         process the tokens in some other way (for example, for token
         translation).
         """
-        return (token.decode(self.inputenc)
-                for token in self.get_tokens(bytes_, final=final))
+        for token in self.get_tokens(bytes_, final=final):
+            yield token.decode(self.inputenc)
 
     def decode(self, bytes_, final=False):
         try:

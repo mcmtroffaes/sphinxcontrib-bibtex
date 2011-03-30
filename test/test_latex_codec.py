@@ -30,6 +30,7 @@ def split_input(input_):
 
 class TestDecoder(TestCase):
     """Stateless decoder tests."""
+    maxDiff = None
 
     def decode(self, text_utf8, text_latex, inputenc=None):
         """Main test function."""
@@ -62,14 +63,14 @@ class TestDecoder(TestCase):
         self.decode(
             u"Même s'il a fait l'objet d'adaptations suite à l'évolution, "
             u"la transformation sociale, économique et politique du pays, "
-            u"le code civil français est aujourd'hui encore le texte fondateur "
+            u"le code civil fran{ç}ais est aujourd'hui encore le texte fondateur "
             u"du droit civil français mais aussi du droit civil belge ainsi que "
             u"de plusieurs autres droits civils.",
             b"M\\^eme s'il a fait l'objet d'adaptations suite "
             b"\\`a l'\\'evolution, \nla transformation sociale, "
             b"\\'economique et politique du pays, \nle code civil "
             b"fran\\c{c}ais est aujourd'hui encore le texte fondateur \n"
-            b"du droit civil fran\\c{c}ais mais aussi du droit civil "
+            b"du droit civil fran\\c cais mais aussi du droit civil "
             b"belge ainsi que \nde plusieurs autres droits civils.",
             )
 
@@ -87,7 +88,7 @@ class TestDecoder(TestCase):
             )
 
     def test_alpha(self):
-        self.decode(u"$α$", "$\\alpha$")
+        self.decode(u"α", "$\\alpha$")
 
 class TestStreamDecoder(TestDecoder):
     """Stream decoder tests."""
