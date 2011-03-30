@@ -19,7 +19,6 @@ from pybtex.plugin import find_plugin
 from sphinxcontrib.bibtex.cache import Cache, BibfileCache, BibliographyCache
 from sphinxcontrib.bibtex.nodes import bibliography, cite
 from sphinxcontrib.bibtex.directives import BibliographyDirective
-import sphinxcontrib.bibtex.latex_codec # the import registers the "latex" codec
 
 def init_bibtex_cache(app):
     """Create ``app.env.bibtex_cache`` if it does not exist yet.

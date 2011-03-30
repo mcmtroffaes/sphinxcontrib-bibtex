@@ -65,13 +65,13 @@ class LatexIncrementalDecoder(codecs.IncrementalDecoder):
         ('space', br' '),
         ('newline', br'\n'),
         ('mathshift', br'[$]'),
-        # note: chars joined together for speed, and to ensure decodability
-        # symbols that have a special function (i.e. --, ---, etc.) are
-        # handled here too
+        # note: some chars joined together to make it easier to detect
+        # symbols that have a special function (i.e. --, ---, etc.)
         ('chars',
-         br'[a-zA-Z]+|---|--|[`][`]'
+         br'---|--|[`][`]'
          br"|['][']"
-         br'|[?][`]|[!][`]|[^ %#$\n\\]'),
+         br'|[?][`]|[!][`]'
+         br'|[^ %#$\n\\]'),
         # trailing garbage which we cannot decode otherwise
         # (such as a lone '\' at the end of a buffer)
         # is never emitted, but used internally by the buffer

@@ -59,8 +59,8 @@ class TexLexerTest(BaseTexLexerTest):
         self.lex_it(
             b'hello!  [#1] This \\is\\   \\^ a \ntest.\n'
             b'    \nHey.\n\n\# x \#x',
-            br'hello|!| |[|#1|]| |This| |\is|\ |\^|a| '
-            br'|test|.| |\par|Hey|.| '
+            br'h|e|l|l|o|!| |[|#1|]| |T|h|i|s| |\is|\ |\^|a| '
+            br'|t|e|s|t|.| |\par|H|e|y|.| '
             br'|\par|\#| |x| |\#|x'.split(b'|'),
             final=True
             )
@@ -68,14 +68,14 @@ class TexLexerTest(BaseTexLexerTest):
     def test_comment(self):
         self.lex_it(
             b'test% some comment\ntest',
-            b'test|test'.split(b'|'),
+            b't|e|s|t|t|e|s|t'.split(b'|'),
             final=True
             )
 
     def test_comment_newline(self):
         self.lex_it(
             b'test% some comment\n\ntest',
-            b'test|\\par|test'.split(b'|'),
+            b't|e|s|t|\\par|t|e|s|t'.split(b'|'),
             final=True
             )
 
@@ -110,7 +110,7 @@ class TexLexerTest(BaseTexLexerTest):
     def test_buffer(self):
         self.lex_it(
             b'hi\\t',
-            [b'hi'],
+            b'h|i'.split(b'|'),
             consumed=2,
             )
         self.lex_it(
@@ -159,7 +159,7 @@ class TexLexerReplaceTest(BaseTexLexerTest):
     def test_errors_replace(self):
         self.lex_it(
             b'hello%',
-            [b'hello', b'?'],
+            b'h|e|l|l|o|?'.split(b'|'),
             final=True
             )
         
@@ -170,7 +170,7 @@ class TexLexerIgnoreTest(BaseTexLexerTest):
     def test_errors_ignore(self):
         self.lex_it(
             b'hello%',
-            [b'hello'],
+            b'h|e|l|l|o'.split(b'|'),
             final=True
             )
         

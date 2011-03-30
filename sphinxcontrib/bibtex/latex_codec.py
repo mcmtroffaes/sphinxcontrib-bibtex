@@ -43,7 +43,10 @@ OTHER DEALINGS IN THE SOFTWARE.
 from __future__ import print_function
 
 import codecs
+import collections
 import re
+
+from sphinxcontrib.bibtex import latex_lexer
 
 def register():
     """Enable encodings of the form 'latex+x' where x describes another encoding.
@@ -58,7 +61,7 @@ def getregentry():
     """Encodings module API."""
     return find_latex('latex')
 
-def latex_encode(input_, errors='strict', inputenc=None):
+def latex_encode(input_, errors='strict', inputenc='ascii'):
     """Convert unicode string to latex bytes."""
     # value and type checks
     if errors not in set(['strict', 'ignore', 'replace']):
@@ -75,7 +78,7 @@ def latex_encode(input_, errors='strict', inputenc=None):
         # if this succeeds, then we don't need a latex representation
         try:
             output.append(
-                c.encode(inputenc if inputenc else 'ascii', 'strict'))
+                c.encode(inputenc, 'strict'))
         except UnicodeEncodeError:
             pass
         else:
@@ -100,11 +103,11 @@ def latex_encode(input_, errors='strict', inputenc=None):
                 output += [b'{\\char', str(ord(c)).encode("ascii"), b'}']
     return b''.join(output), len(input_)
 
-def latex_decode(input_, errors='strict', inputenc=None):
+def latex_decode(input_, errors='strict', inputenc='ascii'):
     """Convert latex bytes into unicode string."""
     # first decode input according to input encoding
     # if no encoding is specified, assume ascii
-    input_ = input_.decode(inputenc if inputenc else "ascii", errors)
+    input_ = input_.decode(inputenc, errors)
 
     # Note: we may get buffer objects here.
     # It is not permussable to call join on buffer objects
@@ -117,7 +120,7 @@ def latex_decode(input_, errors='strict', inputenc=None):
     return u''.join(x), len(input_)
 
 class LatexCodec(codecs.Codec):
-    inputenc = None
+    inputenc = 'ascii'
     """Any additional encoding."""
 
     def encode(self, input_, errors='strict'):
@@ -142,31 +145,92 @@ class LatexIncrementalEncoder(codecs.IncrementalEncoder):
         return latex_encode(
             input_, errors=self.errors, inputenc=self.inputenc)[0]
 
-class LatexIncrementalDecoder(codecs.BufferedIncrementalDecoder):
-    def _buffer_decode(self, input_, errors, final=False):
-        """Decode input and return an (output, length consumed) tuple."""
+class LatexUnicodeTable:
+    """Tabulates a translation between latex and unicode."""
+
+    def __init__(self, lexer):
+        self.lexer = lexer
+        self.unicode_map = {}
+        self.max_length = 0
+        self.register_all()
+
+    def register_all(self):
+        # TODO complete this list
+        self.register(u'\N{EN DASH}', b'--')
+        self.register(u'\N{EM DASH}', b'---')
+        self.register(u'\N{LATIN CAPITAL LIGATURE OE}', b'\\OE')
+        self.register(u'\N{LATIN SMALL LIGATURE OE}', b'\\oe')
+        self.register(u'\N{LATIN SMALL LETTER AE}', b'\\ae')
+        self.register(u'\N{COPYRIGHT SIGN}', '\\copyright')
+        self.register(u'\N{COPYRIGHT SIGN}', '\\textcopyright') # textcomp
+        self.register(u'\N{LATIN SMALL LETTER E WITH ACUTE}', b"\\'e")
+        self.register(u'\N{LATIN SMALL LETTER O WITH DIAERESIS}', '\\"o')
+        self.register(u'\N{LATIN SMALL LETTER A WITH RING ABOVE}', '\\aa')
+        self.register(u'\N{LATIN SMALL LETTER E WITH CIRCUMFLEX}', '\\^e')
+        self.register(u'\N{LATIN SMALL LETTER C WITH CEDILLA}', '\\c{c}')
+        self.register(u'\N{LATIN SMALL LETTER C WITH CEDILLA}', '\\c c')
+        self.register(u'\N{LATIN SMALL LETTER A WITH GRAVE}', '\\`a')
+        self.register(u'\N{GREEK SMALL LETTER ALPHA}', '\\alpha')
+
+    def register(self, unicode_text, latex_text):
+        # tokenize, and register unicode translation
+        tokens = tuple(self.lexer.get_tokens(latex_text, final=True))
+        length = len(tokens)
+        self.max_length = max(self.max_length, length)
+        if not tokens in self.unicode_map:
+            self.unicode_map[tokens] = unicode_text
+
+LATEX_UNICODE_TABLE = LatexUnicodeTable(latex_lexer.LatexIncrementalDecoder())
+
+class LatexIncrementalDecoder(latex_lexer.LatexIncrementalDecoder):
+
+    table = LATEX_UNICODE_TABLE
+
+    def __init__(self, errors='strict'):
+        latex_lexer.LatexIncrementalDecoder.__init__(self)
+        self.max_length = 0
+
+    def reset(self):
+        latex_lexer.LatexIncrementalDecoder.reset(self)
+        self.token_buffer = []
+
+    def get_unicode_tokens(self, bytes_, final=False):
+        for token in self.get_tokens(bytes_, final=final):
+            # at this point, token_buffer does not match anything
+            self.token_buffer.append(token)
+            # new token appended at the end, see if we have a match now
+            # note: match is only possible at the *end* of the buffer
+            # because all other positions have already been checked in
+            # earlier iterations
+            for i in xrange(1, len(self.token_buffer) + 1):
+                last_tokens = tuple(self.token_buffer[-i:]) # last i tokens
+                try:
+                    unicode_text = self.table.unicode_map[last_tokens]
+                except KeyError:
+                    # no match: continue
+                    continue
+                else:
+                    # match!! flush buffer, and translate last bit
+                    for token in self.token_buffer[:-i]: # exclude last i tokens
+                        yield token.decode(self.inputenc)
+                    yield unicode_text
+                    self.token_buffer = []
+                    break
+            # flush tokens that can no longer match
+            while len(self.token_buffer) >= self.table.max_length:
+                yield self.token_buffer.pop(0).decode(self.inputenc)
+        # also flush the buffer at the end
         if final:
-            # last bit of input: use stateless decoder
-            return latex_decode(
-                input_, errors=errors, inputenc=self.inputenc)
-        else:
-            # we can split the buffer at newlines
-            # so search for the last newline
-            last_newline_pos = input_.rfind(b"\n")
-            if last_newline_pos == -1:
-                # no newline, so no split is possible: consume nothing
-                return u"", 0
-            else:
-                return latex_decode(
-                    input_[:last_newline_pos],
-                    errors=errors, inputenc=self.inputenc)
+            for token in self.token_buffer:
+                yield token.decode(self.inputenc)
+            self.token_buffer = []
 
 def find_latex(encoding):
     # check if requested codec info is for latex encoding
     if not encoding.startswith('latex'):
         return None
     # set up all classes with correct latex input encoding
-    inputenc_ = encoding[6:] if encoding.startswith('latex+') else None
+    inputenc_ = encoding[6:] if encoding.startswith('latex+') else 'ascii'
     class Codec(LatexCodec):
         inputenc = inputenc_
     class IncrementalEncoder(LatexIncrementalEncoder):
