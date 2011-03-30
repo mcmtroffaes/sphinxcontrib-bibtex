@@ -4,14 +4,18 @@
 """
 
 import codecs
+import collections
 import re
 
-class Token:
+class Token(collections.namedtuple("Token", "name text")):
     """Stores information about a matched token."""
+    __slots__ = () # efficiency
 
-    def __init__(self, name=None, text=None):
-        self.name = name if name is not None else 'unknown'
-        self.text = text if text is not None else b''
+    def __new__(cls, name=None, text=None):
+        return tuple.__new__(
+            cls,
+            (name if name is not None else 'unknown',
+             text if text is not None else b''))
 
     def __nonzero__(self):
         return bool(self.text)
@@ -52,7 +56,7 @@ class LatexIncrementalDecoder(codecs.IncrementalDecoder):
         # XXX TBT says no control symbols skip whitespace (except '\ ')
         # XXX but tests reveal otherwise?
         ('control_word', br'[\\][a-zA-Z]+'),
-        ('control_symbol', br'[\\][~' + ur"'" + ur'"` =^!]'),
+        ('control_symbol', br'[\\][~' br"'" br'"` =^!]'),
         ('control_symbol_x', br'[\\][^a-zA-Z]'), # TODO should only match ascii
         # parameter tokens
         ('parameter', br'\#[0-9]'),
@@ -62,7 +66,12 @@ class LatexIncrementalDecoder(codecs.IncrementalDecoder):
         ('newline', br'\n'),
         ('mathshift', br'[$]'),
         # note: chars joined together for speed, and to ensure decodability
-        ('chars', br'([^ %#$\n\\])+'),
+        # symbols that have a special function (i.e. --, ---, etc.) are
+        # handled here too
+        ('chars',
+         br'[a-zA-Z]+|---|--|[`][`]'
+         br"|['][']"
+         br'|[?][`]|[!][`]|[^ %#$\n\\]'),
         # trailing garbage which we cannot decode otherwise
         # (such as a lone '\' at the end of a buffer)
         # is never emitted, but used internally by the buffer

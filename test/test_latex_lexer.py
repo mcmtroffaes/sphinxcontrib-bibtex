@@ -3,7 +3,32 @@
 import nose.tools
 from unittest import TestCase
 
-from sphinxcontrib.bibtex.latex_lexer import LatexIncrementalDecoder
+from sphinxcontrib.bibtex.latex_lexer import LatexIncrementalDecoder, Token
+
+def test_token_create():
+    t = Token()
+    nose.tools.assert_equal(t.name, 'unknown')
+    nose.tools.assert_equal(t.text, b'')
+
+def test_token_create_with_args():
+    t = Token('hello', b'world')
+    nose.tools.assert_equal(t.name, 'hello')
+    nose.tools.assert_equal(t.text, b'world')
+
+@nose.tools.raises(AttributeError)
+def test_token_assign_name():
+    t = Token()
+    t.name = 'test'
+
+@nose.tools.raises(AttributeError)
+def test_token_assign_text():
+    t = Token()
+    t.text = 'test'
+
+@nose.tools.raises(AttributeError)
+def test_token_assign_other():
+    t = Token()
+    t.blabla = 'test'
 
 class BaseTexLexerTest(TestCase):
     """Tex lexer fixture."""
@@ -34,8 +59,8 @@ class TexLexerTest(BaseTexLexerTest):
         self.lex_it(
             b'hello!  [#1] This \\is\\   \\^ a \ntest.\n'
             b'    \nHey.\n\n\# x \#x',
-            br'hello!| |[|#1|]| |This| |\is|\ |\^|a| '
-            br'|test.| |\par|Hey.| '
+            br'hello|!| |[|#1|]| |This| |\is|\ |\^|a| '
+            br'|test|.| |\par|Hey|.| '
             br'|\par|\#| |x| |\#|x'.split(b'|'),
             final=True
             )
