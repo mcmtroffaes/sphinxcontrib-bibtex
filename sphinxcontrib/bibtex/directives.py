@@ -20,6 +20,7 @@ from pybtex.database.input import bibtex
 
 from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
 from sphinxcontrib.bibtex.nodes import bibliography
+import sphinxcontrib.bibtex.latex_codec # registers the latex codec
 
 class BibliographyDirective(Directive):
     """Class for processing the :rst:dir:`bibliography` directive."""
