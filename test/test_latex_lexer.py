@@ -10,7 +10,7 @@ class TexLexerTest(TestCase):
         self.lexer = TexLexer()
 
     def lex_it(self, latex_code, latex_tokens):
-        tokens = self.lexer.get_tokens(latex_code)
+        tokens = self.lexer.get_tokens(latex_code, final=True)
         self.assertEqual(
             list(token.text for token in tokens),
             latex_tokens)

@@ -8,11 +8,12 @@ import re
 class Token:
     """Stores information about a matched token."""
 
-    def __init__(self, name, text, start, end):
-        self.name = name
-        self.text = text
-        self.start = start
-        self.end = end
+    def __init__(self, name=None, text=None):
+        self.name = name if name is not None else 'unknown'
+        self.text = text if text is not None else b''
+
+    def __nonzero__(self):
+        return bool(self.text)
 
 class TexLexer:
     """A very simple incremental lexer for tex/latex code. Roughly
@@ -41,6 +42,10 @@ class TexLexer:
         ('newline', br'\n'),
         ('mathshift', br'[$]'),
         ('chars', br'([^ %#$\n\\])+'),
+        # trailing garbage which we cannot decode otherwise
+        # (such as a lone '\' at the end of a buffer)
+        # is never emitted, but used internally by the buffer
+        ('unknown', br'.'),
         ]
 
     def __init__(self):
@@ -50,6 +55,8 @@ class TexLexer:
         self.state = 'N'
         # inline math mode?
         self.inline_math = False
+        # buffer for storing last (possibly incomplete) token
+        self.buffer_ = Token()
         # regular expression used for matching
         self.regexp = re.compile(
             b"|".join(
@@ -57,7 +64,7 @@ class TexLexer:
                 for name, regexp in self.tokens),
             re.DOTALL)
 
-    def get_raw_tokens(self, bytes_):
+    def get_raw_tokens(self, bytes_, final=False):
         """Yield tokens without any further processing. Tokens are one of:
 
         - ``\\<word>``: a control word (i.e. a command)
@@ -65,34 +72,52 @@ class TexLexer:
         - ``#<n>``: a parameter
         - a series of byte characters
         """
+        if self.buffer_:
+            bytes_ = self.buffer_.text + bytes_
+        self.buffer_ = Token()
         for match in self.regexp.finditer(bytes_):
             for name, regexp in self.tokens:
                 text = match.group(name)
                 if text is not None:
-                    yield Token(name, text, match.start(), match.end())
+                    # yield the buffer token(s)
+                    for token in self.flush_raw_tokens():
+                        yield token
+                    # fill buffer with next token
+                    self.buffer_ = Token(name, text)
                     break
             else:
                 # should not happen
-                raise AssertionError("lexer failed on '%s'" % text)
+                raise AssertionError("lexer failed on '%s'" % bytes_)
+        if final:
+            for token in self.flush_raw_tokens():
+                yield token
 
-    def get_tokens(self, bytes_):
+    def flush_raw_tokens(self):
+        """Flush the raw token buffer."""
+        if self.buffer_:
+            if self.buffer_.name == 'unknown':
+                raise AssertionError("unknown token: lexer bug?")
+            yield self.buffer_
+            self.buffer_ = Token()
+
+    def get_tokens(self, bytes_, final=False):
         """Yield tokens while maintaining a state. Also skip
         whitespace after control words and (some) control symbols.
         Replaces newlines by spaces and \\par commands depending on
         the context.
         """
-        for token in self.get_raw_tokens(bytes_):
+        for token in self.get_raw_tokens(bytes_, final=final):
             if token.name == 'newline':
                 if self.state == 'N':
                     # if state was 'N', generate new paragraph
-                    yield Token('control', '\\par', token.start, token.end)
+                    yield Token('control', '\\par')
                 elif self.state == 'S':
                     # switch to 'N' state, do not generate a space
                     self.state = 'N'
                 elif self.state == 'M':
                     # switch to 'N' state, generate a space
                     self.state = 'N'
-                    yield Token('space', b' ', token.start, token.end)
+                    yield Token('space', b' ')
                 else:
                     raise AssertionError(
                         "unknown tex state '%s'" % self.state)
