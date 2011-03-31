@@ -38,14 +38,11 @@ class BaseTexLexerTest(TestCase):
     def setUp(self):
         self.lexer = LatexIncrementalDecoder(self.errors)
 
-    def lex_it(self, latex_code, latex_tokens, consumed=None, final=False):
+    def lex_it(self, latex_code, latex_tokens, final=False):
         tokens = self.lexer.get_tokens(latex_code, final=final)
         self.assertEqual(
             list(token.text for token in tokens),
             latex_tokens)
-        if consumed is None:
-            consumed = len(latex_code)
-        self.assertEqual(self.lexer.consumed, consumed)
 
     def tearDown(self):
         del self.lexer
@@ -111,12 +108,10 @@ class TexLexerTest(BaseTexLexerTest):
         self.lex_it(
             b'hi\\t',
             b'h|i'.split(b'|'),
-            consumed=2,
             )
         self.lex_it(
             b'here',
             [b'\\there'],
-            consumed=8,
             final=True,
             )
 

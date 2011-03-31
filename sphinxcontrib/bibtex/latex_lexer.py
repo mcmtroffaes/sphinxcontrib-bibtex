@@ -86,8 +86,6 @@ class LatexLexer(codecs.IncrementalDecoder):
         """
         # buffer for storing last (possibly incomplete) token
         self.raw_buffer = Token()
-        # keeps track of how many bytes have been consumed in total
-        self.consumed = 0
 
     def getstate(self):
         return (self.raw_buffer.text, 0)
@@ -124,11 +122,8 @@ class LatexLexer(codecs.IncrementalDecoder):
                 yield token
 
     def flush_raw_tokens(self):
-        """Flush the raw token buffer, and update number of consumed
-        bytes.
-        """
+        """Flush the raw token buffer."""
         if self.raw_buffer:
-            self.consumed += len(self.raw_buffer)
             yield self.raw_buffer
             self.raw_buffer = Token()
 
@@ -171,10 +166,12 @@ class LatexIncrementalLexer(LatexLexer):
         Replaces newlines by spaces and \\par commands depending on
         the context.
         """
-        # mark the start of bytes_ in the sequence of all decoded bytes
-        # so far (we need this when reporting errors)
-        start = self.consumed + len(self.raw_buffer)
+        # current position relative to the start of bytes_ in the sequence
+        # of bytes that have been decoded
+        pos = -len(self.raw_buffer)
         for token in self.get_raw_tokens(bytes_, final=final):
+            pos = pos + len(token)
+            assert pos >= 0 # first token includes at least self.raw_buffer
             if token.name == 'newline':
                 if self.state == 'N':
                     # if state was 'N', generate new paragraph
@@ -236,7 +233,6 @@ class LatexIncrementalLexer(LatexLexer):
                 if self.errors == 'strict':
                     # current position within bytes_
                     # this is the position right after the unknown token
-                    pos = self.consumed - start
                     raise UnicodeDecodeError(
                         "latex", # codec
                         bytes_, # problematic input
