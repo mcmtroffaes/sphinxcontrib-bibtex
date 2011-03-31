@@ -158,16 +158,17 @@ class LatexIncrementalLexer(LatexLexer):
         self.inline_math = False
 
     def getstate(self):
-        # TODO finish this
-        raise NotImplementedError
         # state 'M' is most common, so let that be zero
-        return self.raw_buffer, ord(self.state) - ord('M')
+        return (
+            self.raw_buffer,
+            {'M': 0, 'N': 1, 'S': 2}[self.state]
+            | (4 if self.inline_math else 0)
+            )
 
     def setstate(self, state):
-        # TODO finish this
-        raise NotImplementedError
         self.raw_buffer = state[0]
-        self.state = chr(state[1] + ord('M'))
+        self.state = {0: 'M', 1: 'N', 2: 'S'}[state[1] & 3]
+        self.inline_math = bool(state[1] & 4)
 
     def get_tokens(self, bytes_, final=False):
         """Yield tokens while maintaining a state. Also skip

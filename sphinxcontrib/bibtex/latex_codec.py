@@ -152,6 +152,7 @@ class LatexUnicodeTable:
         self.lexer = lexer
         self.unicode_map = {}
         self.max_length = 0
+        self.latex_map = {}
         self.register_all()
 
     def register_all(self):
@@ -552,6 +553,14 @@ class LatexIncrementalDecoder(latex_lexer.LatexIncrementalDecoder):
     def reset(self):
         latex_lexer.LatexIncrementalDecoder.reset(self)
         self.token_buffer = []
+
+    # python codecs API does not support multibuffer incremental decoders
+
+    def getstate(self):
+        raise NotImplementedError
+
+    def setstate(self, state):
+        raise NotImplementedError
 
     def get_unicode_tokens(self, bytes_, final=False):
         for token in self.get_tokens(bytes_, final=final):
