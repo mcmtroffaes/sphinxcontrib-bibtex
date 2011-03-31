@@ -90,6 +90,9 @@ class TestDecoder(TestCase):
     def test_alpha(self):
         self.decode(u"α", "$\\alpha$")
 
+    def test_maelstrom_multibyte_encoding(self):
+        self.decode(u"\\c öké", b'\\c \xc3\xb6k\xc3\xa9', 'utf8')
+
 class TestStreamDecoder(TestDecoder):
     """Stream decoder tests."""
 
