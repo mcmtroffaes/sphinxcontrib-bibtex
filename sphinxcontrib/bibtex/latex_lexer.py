@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 """
     Simple incremental latex lexer
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -58,10 +59,18 @@ class LatexLexer(codecs.IncrementalDecoder):
         # note: some chars joined together to make it easier to detect
         # symbols that have a special function (i.e. --, ---, etc.)
         ('chars',
-         br'---|--|[`][`]'
+         br'---|--|-|[`][`]'
          br"|['][']"
          br'|[?][`]|[!][`]'
-         br'|[^ %#$\n\\]'),
+         # separate chars because brackets are optional
+         # e.g. fran\\c cais = fran\\c{c}ais in latex
+         # so only way to detect \\c acting on c only is this way
+         br'|[0-9a-zA-Z{}]'
+         # we have to join everything else together to support
+         # multibyte encodings: every token must be decodable!!
+         # this means for instance that \\c öké is NOT equivalent to
+         # \\c{ö}ké
+         br'|[^ %#$\n\\]+'),
         # trailing garbage which we cannot decode otherwise
         # (such as a lone '\' at the end of a buffer)
         # is never emitted, but used internally by the buffer
