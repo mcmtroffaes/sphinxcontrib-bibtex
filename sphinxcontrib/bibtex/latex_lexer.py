@@ -259,14 +259,6 @@ class LatexIncrementalDecoder(LatexIncrementalLexer):
     inputenc = "ascii"
     """Default input encoding. **Must** extend ascii."""
 
-    # overriding to make sure that we call the right constructor
-    def __init__(self, errors='strict'):
-        LatexIncrementalLexer.__init__(self, errors=errors)
-
-    # overriding to make sure that we call the right reset method
-    def reset(self):
-        LatexIncrementalLexer.reset(self)
-
     def get_unicode_tokens(self, bytes_, final=False):
         """:meth:`decode` calls this function to produce the final
         sequence of unicode strings. This implementation simply
