@@ -34,7 +34,6 @@ class TestDecoder(TestCase):
 
     def decode(self, text_utf8, text_latex, inputenc=None):
         """Main test function."""
-        raise SkipTest("broken for now")
         encoding = 'latex+' + inputenc if inputenc else 'latex'
         decoded, n = codecs.getdecoder(encoding)(text_latex)
         self.assertEqual((decoded, n), (text_utf8, len(text_latex)))
@@ -102,7 +101,6 @@ class TestStreamDecoder(TestDecoder):
     """Stream decoder tests."""
 
     def decode(self, text_utf8, text_latex, inputenc=None):
-        raise SkipTest("broken for now")
         encoding = 'latex+' + inputenc if inputenc else 'latex'
         stream = StringIO(text_latex)
         reader = codecs.getreader(encoding)(stream)
@@ -124,7 +122,6 @@ class TestEncoder(TestCase):
 
     def encode(self, text_utf8, text_latex, inputenc=None):
         """Main test function."""
-        raise SkipTest("broken for now")
         encoding = 'latex+' + inputenc if inputenc else 'latex'
         encoded, n = codecs.getencoder(encoding)(text_utf8)
         self.assertEqual((encoded, n), (text_latex, len(text_utf8)))
@@ -184,7 +181,6 @@ class TestStreamEncoder(TestEncoder):
     """Stream encoder tests."""
 
     def encode(self, text_utf8, text_latex, inputenc=None):
-        raise SkipTest("broken for now")
         encoding = 'latex+' + inputenc if inputenc else 'latex'
         stream = StringIO()
         writer = codecs.getwriter(encoding)(stream)
