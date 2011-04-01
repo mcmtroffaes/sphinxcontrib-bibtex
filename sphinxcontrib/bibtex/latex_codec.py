@@ -12,11 +12,10 @@ are both available just by letting "import latex" find this file.
 where latin1 can be replaced by any other known encoding, also
 become available by calling latex.register().
 
-There is also a public dictionary called ``latex_equivalents``,
-which maps ord(unicode char) to LaTeX code.
 
 
-Copyright (c) 2003,2008 David Eppstein
+Copyright (c) 2003, 2008 David Eppstein
+Copyright (c) 2011 Matthias C. M. Troffaes
 
 Permission is hereby granted, free of charge, to any person
 obtaining a copy of this software and associated documentation
@@ -456,7 +455,7 @@ class LatexUnicodeTable:
         if encode and unicode_text not in self.latex_map:
             self.latex_map[unicode_text] = (latex_text, tokens)
 
-LATEX_UNICODE_TABLE = LatexUnicodeTable(latex_lexer.LatexIncrementalDecoder())
+_LATEX_UNICODE_TABLE = LatexUnicodeTable(latex_lexer.LatexIncrementalDecoder())
 
 # incremental encoder does not need a buffer
 # but decoder does
@@ -466,7 +465,7 @@ class LatexIncrementalEncoder(latex_lexer.LatexIncrementalEncoder):
     determine whether control spaces etc. need to be inserted.
     """
 
-    table = LATEX_UNICODE_TABLE
+    table = _LATEX_UNICODE_TABLE
     """Translation table."""
 
     def __init__(self, errors='strict'):
@@ -560,7 +559,7 @@ class LatexIncrementalEncoder(latex_lexer.LatexIncrementalEncoder):
 class LatexIncrementalDecoder(latex_lexer.LatexIncrementalDecoder):
     """Translating incremental decoder for latex."""
 
-    table = LATEX_UNICODE_TABLE
+    table = _LATEX_UNICODE_TABLE
     """Translation table."""
 
     def __init__(self, errors='strict'):
