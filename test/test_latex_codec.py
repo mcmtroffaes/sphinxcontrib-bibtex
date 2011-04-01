@@ -50,6 +50,11 @@ class TestDecoder(TestCase):
 
     def test_laren(self):
         self.decode(
+            u"©\\ låren av björn",
+            br'\copyright\ l\aa ren av bj\"orn')
+
+    def test_laren_brackets(self):
+        self.decode(
             u"©\\ l{å}ren av bj{ö}rn",
             br'\copyright\ l{\aa}ren av bj{\"o}rn')
 
@@ -148,13 +153,13 @@ class TestEncoder(TestCase):
         self.encode(
             u"Même s'il a fait l'objet d'adaptations suite à l'évolution, \n"
             u"la transformation sociale, économique et politique du pays, \n"
-            u"le code civil français est aujourd'hui encore le texte fondateur \n"
+            u"le code civil fran{ç}ais est aujourd'hui encore le texte fondateur \n"
             u"du droit civil français mais aussi du droit civil belge ainsi que \n"
             u"de plusieurs autres droits civils.",
             b"M\\^eme s'il a fait l'objet d'adaptations suite "
             b"\\`a l'\\'evolution, \nla transformation sociale, "
             b"\\'economique et politique du pays, \nle code civil "
-            b"fran\\c cais est aujourd'hui encore le texte fondateur \n"
+            b"fran{\\c c}ais est aujourd'hui encore le texte fondateur \n"
             b"du droit civil fran\\c cais mais aussi du droit civil "
             b"belge ainsi que \nde plusieurs autres droits civils.",
             )
