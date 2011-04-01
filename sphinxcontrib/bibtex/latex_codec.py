@@ -133,18 +133,6 @@ class LatexCodec(codecs.Codec):
         return latex_decode(
             input_, errors=errors, inputenc=self.inputenc)
 
-# incremental encoder does not need a buffer
-# but decoder does
-
-# TODO stream and incremental encoder/decoder should raise ValueError
-# in strict error mode (currently they raise UnicodeError)
-
-class LatexIncrementalEncoder(codecs.IncrementalEncoder):
-    def encode(self, input_, final=False):
-        """Encode input and return output."""
-        return latex_encode(
-            input_, errors=self.errors, inputenc=self.inputenc)[0]
-
 class LatexUnicodeTable:
     """Tabulates a translation between latex and unicode."""
 
@@ -514,19 +502,20 @@ class LatexUnicodeTable:
             pass
         if mode == 'math':
             # also register text version
-            self.register(unicode_text, '$' + latex_text + '$', mode='text',
+            self.register(unicode_text, b'$' + latex_text + b'$', mode='text',
                           package=package, decode=decode, encode=encode)
             # XXX for the time being, we do not perform in-math substitutions
             return
         # tokenize, and register unicode translation
+        tokens = tuple(self.lexer.get_tokens(latex_text, final=True))
         if decode:
-            tokens = tuple(self.lexer.get_tokens(latex_text, final=True))
-            length = len(tokens)
-            self.max_length = max(self.max_length, length)
+            self.max_length = max(self.max_length, len(tokens))
             if not tokens in self.unicode_map:
                 self.unicode_map[tokens] = unicode_text
             # also register token variant with brackets, if appropriate
             # for instance, "\'{e}" for "\'e", "\c{c}" for "\c c", etc.
+            # note: we do not remove brackets (they sometimes matter,
+            # e.g. bibtex uses them to prevent lower case transformation)
             if (len(tokens) == 2
                 and tokens[0].name.startswith('control')
                 and tokens[1].name == 'chars'):
@@ -536,15 +525,115 @@ class LatexUnicodeTable:
                     )
                 if not alt_tokens in self.unicode_map:
                     self.unicode_map[alt_tokens] = u"{" + unicode_text + u"}"
-        if encode:
-            # TODO implement encoding
-            pass
+        if encode and unicode_text not in self.latex_map:
+            self.latex_map[unicode_text] = (latex_text, tokens)
 
 LATEX_UNICODE_TABLE = LatexUnicodeTable(latex_lexer.LatexIncrementalDecoder())
 
-class LatexIncrementalDecoder(latex_lexer.LatexIncrementalDecoder):
+# incremental encoder does not need a buffer
+# but decoder does
+
+class LatexIncrementalEncoder(latex_lexer.LatexIncrementalEncoder):
+    """Translating incremental encoder for latex. Maintains a state to
+    determine whether control spaces etc. need to be inserted.
+    """
 
     table = LATEX_UNICODE_TABLE
+    """Translation table."""
+
+    def __init__(self, errors='strict'):
+        latex_lexer.LatexIncrementalEncoder.__init__(self, errors=errors)
+        self.reset()
+
+    def reset(self):
+        self.state = 'M'
+
+    def get_space_bytes(self, bytes_):
+        """Inserts space bytes in space eating mode."""
+        if self.state == 'S':
+            # in space eating mode
+            # control space needed?
+            if bytes_.startswith(b' '):
+                # replace by control space
+                return b'\\ ', bytes_[1:]
+            else:
+                # insert space (it is eaten, but needed for separation)
+                return b' ', bytes_
+        else:
+            return b'', bytes_
+
+    def get_latex_bytes(self, unicode_, final=False):
+        """:meth:`encode` calls this function to produce the final
+        sequence of latex bytes. This implementation simply
+        encodes every sequence in *inputenc* encoding. Override to
+        process the bytes in some other way (for example, for token
+        translation).
+        """
+        if not isinstance(unicode_, basestring):
+            raise TypeError(
+                "expected unicode for encode input, but got {0} instead"
+                .format(unicode_.__class__.__name__))
+        # convert character by character
+        for pos, c in enumerate(unicode_):
+            # attempt input encoding first
+            # if this succeeds, then we don't need a latex representation
+            try:
+                bytes_ = c.encode(self.inputenc, 'strict')
+            except UnicodeEncodeError:
+                pass
+            else:
+                space, bytes_ = self.get_space_bytes(bytes_)
+                self.state = 'M'
+                if space:
+                    yield space
+                yield bytes_
+                continue
+            # inputenc failed; let's try the latex equivalents
+            # of common unicode characters
+            try:
+                bytes_, tokens = self.table.latex_map[c]
+            except KeyError:
+                # translation failed
+                if errors == 'strict':
+                    raise UnicodeEncodeError(
+                        "latex", # codec
+                        unicode_, # problematic input
+                        pos, pos + 1, # location of problematic character
+                        "don't know how to translate {1} ({0}) into latex"
+                        .format(c, repr(c)))
+                elif errors == 'ignore':
+                    pass
+                elif errors == 'replace':
+                    # use the \\char command
+                    # this assumes
+                    # \usepackage[T1]{fontenc}
+                    # \usepackage[utf8]{inputenc}
+                    yield b'{\\char'
+                    yield str(ord(c)).encode("ascii")
+                    yield b'}'
+                    self.state = 'M'
+                else:
+                    raise ValueError(
+                        "latex codec does not support {0} errors"
+                        .format(errors))
+            else:
+                # translation succeeded
+                space, bytes_ = self.get_space_bytes(bytes_)
+                # update state
+                if tokens[-1].name == 'control_word':
+                    # we're eating spaces
+                    self.state = 'S'
+                else:
+                    self.state = 'M'
+                if space:
+                    yield space
+                yield bytes_
+
+class LatexIncrementalDecoder(latex_lexer.LatexIncrementalDecoder):
+    """Translating incremental decoder for latex."""
+
+    table = LATEX_UNICODE_TABLE
+    """Translation table."""
 
     def __init__(self, errors='strict'):
         latex_lexer.LatexIncrementalDecoder.__init__(self)

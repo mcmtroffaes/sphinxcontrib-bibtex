@@ -110,6 +110,10 @@ class LatexLexer(codecs.IncrementalDecoder):
         - ``#<n>``: a parameter
         - a series of byte characters
         """
+        if not isinstance(bytes_, bytes):
+            raise TypeError(
+                'expected bytes but got %s'
+                % bytes_.__class__.__name__)
         if self.raw_buffer:
             bytes_ = self.raw_buffer.text + bytes_
         self.raw_buffer = Token()
@@ -267,7 +271,7 @@ class LatexIncrementalDecoder(LatexIncrementalLexer):
     """
 
     inputenc = "ascii"
-    """Default input encoding. **Must** extend ascii."""
+    """Input encoding. **Must** extend ascii."""
 
     def get_unicode_tokens(self, bytes_, final=False):
         """:meth:`decode` calls this function to produce the final
@@ -282,6 +286,35 @@ class LatexIncrementalDecoder(LatexIncrementalLexer):
     def decode(self, bytes_, final=False):
         try:
             return u''.join(self.get_unicode_tokens(bytes_, final=final))
+        except UnicodeDecodeError, e:
+            # API requires that the encode method raises a ValueError
+            # in this case
+            raise ValueError(e)
+
+class LatexIncrementalEncoder(codecs.IncrementalEncoder):
+    """Simple incremental encoder for latex."""
+
+    inputenc = "ascii"
+    """Input encoding. **Must** extend ascii."""
+
+    def get_latex_bytes(self, unicode_):
+        """:meth:`encode` calls this function to produce the final
+        sequence of latex bytes. This implementation simply
+        encodes every sequence in *inputenc* encoding. Override to
+        process the unicode in some other way (for example, for character
+        translation).
+        """
+        if not isinstance(unicode_, basestring):
+            raise TypeError(
+                "expected unicode for encode input, but got {0} instead"
+                .format(unicode_.__class__.__name__))
+        for c in unicode_:
+            yield c.encode(inputenc, self.errors)
+
+    def encode(self, unicode_, final=False):
+        """Encode unicode string into a latex byte sequence."""
+        try:
+            return b''.join(self.get_latex_bytes(unicode_, final=final))
         except UnicodeDecodeError, e:
             # API requires that the encode method raises a ValueError
             # in this case
