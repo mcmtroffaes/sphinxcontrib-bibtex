@@ -17,7 +17,7 @@ from sphinx.util.console import standout
 from pybtex.backends.doctree import Backend as output_backend
 from pybtex.plugin import find_plugin
 
-from sphinxcontrib.bibtex.cache import Cache, BibfileCache, BibliographyCache
+from sphinxcontrib.bibtex.cache import Cache
 from sphinxcontrib.bibtex.nodes import bibliography, cite
 from sphinxcontrib.bibtex.directives import BibliographyDirective
 
