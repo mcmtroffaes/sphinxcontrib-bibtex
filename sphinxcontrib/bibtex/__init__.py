@@ -76,7 +76,8 @@ def process_bibliography_nodes(app, doctree, docname):
         bibnode.replace_self(citations)
 
 def process_cite_nodes(app, doctree, docname):
-    """Replace cite nodes by footnote or citation nodes.
+    """Process cite nodes by replacing them with their label and
+    updating their footnote_reference parent refid.
 
     :param app: The sphinx application.
     :type app: :class:`sphinx.application.Sphinx`
@@ -85,10 +86,12 @@ def process_cite_nodes(app, doctree, docname):
     :param docname: The document name.
     :type docname: :class:`str`
     """
-
-    #for citenode in doctree.traverse(cite):
-        # TODO handle the actual citations
-        #citenode.replace_self([])
+    for citenode in doctree.traverse(cite):
+        refid = docutils.nodes.make_id("bibtex-cite-%s" % citenode.astext())
+        refnode = citenode.parent
+        refnode['refid'] = refid
+        # TODO find the reference label
+        citenode.replace_self([docutils.nodes.literal("X", "X")])
 
 def setup(app):
     """Set up the bibtex extension:
@@ -105,7 +108,10 @@ def setup(app):
     app.add_directive("bibliography", BibliographyDirective)
     app.add_node(bibliography)
     app.add_node(cite)
-    app.add_role("cite", XRefRole())
+    app.add_role("cite",
+        XRefRole(
+            nodeclass=docutils.nodes.footnote_reference,
+            innernodeclass=cite))
     app.connect("builder-inited", init_bibtex_cache)
     app.connect("doctree-resolved", process_bibliography_nodes)
     app.connect("doctree-resolved", process_cite_nodes)

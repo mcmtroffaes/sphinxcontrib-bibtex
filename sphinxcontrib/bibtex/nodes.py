@@ -15,9 +15,8 @@ class bibliography(nodes.General, nodes.Element):
     """
     pass
 
-class cite(nodes.General, nodes.Element):
+class cite(nodes.General, nodes.TextElement):
     """Node for representing a citation with the :rst:role:`cite`
     role.
     """
     pass
-
