@@ -6,6 +6,8 @@
 Welcome to Sphinx bibtex extension test's documentation!
 ========================================================
 
+A citation :cite:`1996:fukuda`.
+
 Contents:
 
 .. toctree::
