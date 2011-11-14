@@ -12,6 +12,7 @@
 
 import docutils.nodes
 from sphinx.roles import XRefRole # for :cite:
+from sphinx.util.console import standout
 
 from pybtex.backends.doctree import Backend as output_backend
 from pybtex.plugin import find_plugin
@@ -87,11 +88,41 @@ def process_cite_nodes(app, doctree, docname):
     :type docname: :class:`str`
     """
     for citenode in doctree.traverse(cite):
-        refid = docutils.nodes.make_id("bibtex-cite-%s" % citenode.astext())
-        refnode = citenode.parent
-        refnode['refid'] = refid
-        # TODO find the reference label
-        citenode.replace_self([docutils.nodes.literal("X", "X")])
+        # citation key occurs as contents (text) of the citenode
+        key = citenode.astext()
+        # create reference id (using the same method as in pybtex)
+        refid = docutils.nodes.make_id("bibtex-cite-%s" % key)
+        # cite nodes always have a footnote_reference as parent
+        # (as defined by their role, see the setup function,
+        # the add_role("cite", ...) call)
+        footnote_reference_node = citenode.parent
+        footnote_reference_node['refid'] = refid
+        # find the reference label and set the label text
+        # by inspecting all bibliography directives
+        # and all bibfiles contained in them
+        label = None
+        for info in app.env.bibtex_cache.bibliographies.itervalues():
+            for bibfile in info.bibfiles:
+                data = app.env.bibtex_cache.bibfiles[bibfile].data
+                if key in data.entries:
+                    # key found!
+                    if label is None:
+                        entry = data.entries[key]
+                        # locate and instantiate style plugin
+                        style_cls = find_plugin(
+                            'pybtex.style.formatting', info.style)
+                        style = style_cls()
+                        label = style.format_label(entry)
+                    else:
+                        app.warn(
+                            standout("multiple entries for bibtex key {0}."
+                                     .format(key)))
+        if label is None:
+            app.warn(
+                standout("bibtex key {0} not found in any bibtex file."
+                         .format(key)))
+            label = '?'
+        citenode.replace_self([docutils.nodes.inline(label, label)])
 
 def setup(app):
     """Set up the bibtex extension:
