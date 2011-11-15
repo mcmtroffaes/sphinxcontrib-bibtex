@@ -6,7 +6,9 @@
 Welcome to Sphinx bibtex extension test's documentation!
 ========================================================
 
-A citation :cite:`1996:fukuda`.
+A citation :cite:`1996:fukuda` to other document.
+Footnote test [#note2]_ to other document (does not resolve).
+Regular citation test [Test01]_ to other document (resolves).
 
 Contents:
 
