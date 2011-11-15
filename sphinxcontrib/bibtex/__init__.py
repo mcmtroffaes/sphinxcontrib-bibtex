@@ -7,7 +7,6 @@
     .. autofunction:: init_bibtex_cache
     .. autofunction:: purge_bibtex_cache
     .. autofunction:: process_bibliography_nodes
-    .. autofunction:: process_cite_nodes
 """
 
 import docutils.nodes
@@ -18,7 +17,7 @@ from pybtex.backends.doctree import Backend as output_backend
 from pybtex.plugin import find_plugin
 
 from sphinxcontrib.bibtex.cache import Cache
-from sphinxcontrib.bibtex.nodes import bibliography, cite
+from sphinxcontrib.bibtex.nodes import bibliography
 from sphinxcontrib.bibtex.directives import BibliographyDirective
 
 def init_bibtex_cache(app):
@@ -76,53 +75,13 @@ def process_bibliography_nodes(app, doctree, docname):
             citations.append(docutils.nodes.inline("", ""))
         bibnode.replace_self(citations)
 
-def process_cite_nodes(app, doctree, docname):
-    """Process cite nodes by replacing them with their label and
-    updating their footnote_reference parent refid.
+class CiteRole(XRefRole):
+    nodeclass = docutils.nodes.citation_reference
 
-    :param app: The sphinx application.
-    :type app: :class:`sphinx.application.Sphinx`
-    :param doctree: The document tree.
-    :type doctree: :class:`docutils.nodes.document`
-    :param docname: The document name.
-    :type docname: :class:`str`
-    """
-    for citenode in doctree.traverse(cite):
-        # citation key occurs as contents (text) of the citenode
-        key = citenode.astext()
-        # create reference id (using the same method as in pybtex)
-        refid = docutils.nodes.make_id("bibtex-cite-%s" % key)
-        # cite nodes always have a footnote_reference as parent
-        # (as defined by their role, see the setup function,
-        # the add_role("cite", ...) call)
-        footnote_reference_node = citenode.parent
-        footnote_reference_node['refid'] = refid
-        # find the reference label and set the label text
-        # by inspecting all bibliography directives
-        # and all bibfiles contained in them
-        label = None
-        for info in app.env.bibtex_cache.bibliographies.itervalues():
-            for bibfile in info.bibfiles:
-                data = app.env.bibtex_cache.bibfiles[bibfile].data
-                if key in data.entries:
-                    # key found!
-                    if label is None:
-                        entry = data.entries[key]
-                        # locate and instantiate style plugin
-                        style_cls = find_plugin(
-                            'pybtex.style.formatting', info.style)
-                        style = style_cls()
-                        label = style.format_label(entry)
-                    else:
-                        app.warn(
-                            standout("multiple entries for bibtex key {0}."
-                                     .format(key)))
-        if label is None:
-            app.warn(
-                standout("bibtex key {0} not found in any bibtex file."
-                         .format(key)))
-            label = '?'
-        citenode.replace_self([docutils.nodes.inline(label, label)])
+    def result_nodes(self, document, env, node, is_ref):
+        node['refname'] = "bibtex-cite-%s" % node['reftarget']
+        node['refid'] = docutils.nodes.make_id(node['refname'])
+        return [node], []
 
 def setup(app):
     """Set up the bibtex extension:
@@ -138,12 +97,7 @@ def setup(app):
 
     app.add_directive("bibliography", BibliographyDirective)
     app.add_node(bibliography)
-    app.add_node(cite)
-    app.add_role("cite",
-        XRefRole(
-            nodeclass=docutils.nodes.footnote_reference,
-            innernodeclass=cite))
+    app.add_role("cite", CiteRole())
     app.connect("builder-inited", init_bibtex_cache)
     app.connect("doctree-resolved", process_bibliography_nodes)
-    app.connect("doctree-resolved", process_cite_nodes)
     app.connect("env-purge-doc", purge_bibtex_cache)

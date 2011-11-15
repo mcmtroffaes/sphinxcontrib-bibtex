@@ -14,9 +14,3 @@ class bibliography(nodes.General, nodes.Element):
     doctree-resolved.
     """
     pass
-
-class cite(nodes.General, nodes.TextElement):
-    """Node for representing a citation with the :rst:role:`cite`
-    role.
-    """
-    pass

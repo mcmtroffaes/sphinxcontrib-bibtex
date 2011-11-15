@@ -16,7 +16,9 @@ from docutils.parsers.rst import directives # for Directive.option_spec
 from sphinx.util.compat import Directive
 from sphinx.util.console import bold, standout
 
+from pybtex.backends.doctree import Backend as output_backend
 from pybtex.database.input import bibtex
+from pybtex.plugin import find_plugin
 
 from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
 from sphinxcontrib.bibtex.nodes import bibliography
@@ -38,7 +40,7 @@ class BibliographyDirective(Directive):
 
     def run(self):
         """Process .bib files, set file dependencies, and create a
-        temporary node for the bibliography.
+        nodes for all entries of the bibliography.
         """
         env = self.state.document.settings.env
         cache = env.bibtex_cache.bibliographies
@@ -92,11 +94,15 @@ class BibliographyDirective(Directive):
         :type bibfile: ``str``
         :param mtime: The bib file's modification time.
         :type mtime: ``float``
+        :return: The parsed bibliography data.
+        :rtype: :class:`pybtex.database.BibliographyData`
         """
+        data = self.parse_bibfile(bibfile)
         env = self.state.document.settings.env
         env.bibtex_cache.bibfiles[bibfile] = BibfileCache(
             mtime=mtime,
-            data=self.parse_bibfile(bibfile))
+            data=data)
+        return data
 
     def process_bibfile(self, bibfile):
         """Check if ``env.bibtex_cache.bibfiles[bibfile]`` is still
@@ -106,6 +112,8 @@ class BibliographyDirective(Directive):
 
         :param bibfile: The bib file name.
         :type bibfile: ``str``
+        :return: The parsed bibliography data.
+        :rtype: :class:`pybtex.database.BibliographyData`
         """
         env = self.state.document.settings.env
         cache = env.bibtex_cache.bibfiles
@@ -116,7 +124,7 @@ class BibliographyDirective(Directive):
             env.app.warn(
                 standout("could not open bibtex file {0}.".format(bibfile)))
             cache[bibfile] = BibfileCache() # dummy cache
-            return
+            return cache[bibfile].data
         # get cache and check if it is still up to date
         # if it is not up to date, parse the bibtex file
         # and store it in the cache
@@ -134,3 +142,4 @@ class BibliographyDirective(Directive):
                 self.update_bibfile_cache(bibfile, mtime)
             else:
                 env.app.info('up to date')
+        return cache[bibfile].data
