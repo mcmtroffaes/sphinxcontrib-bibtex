@@ -147,6 +147,9 @@ class TexLexerTest(BaseTexLexerTest):
             final=True
             )
 
+    def test_hash(self):
+        self.lex_it(b'#', [b'#'], final=True)
+
 class TexLexerReplaceTest(BaseTexLexerTest):
 
     errors = 'replace'
