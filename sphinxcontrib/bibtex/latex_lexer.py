@@ -50,7 +50,8 @@ class LatexLexer(codecs.IncrementalDecoder):
         ('control_symbol', br'[\\][~' br"'" br'"` =^!]'),
         ('control_symbol_x', br'[\\][^a-zA-Z]'), # TODO should only match ascii
         # parameter tokens
-        ('parameter', br'\#[0-9]'),
+        # also support a lone hash so we can lex things like b'#a'
+        ('parameter', br'\#[0-9]|\#'),
         # any remaining characters; for ease we also handle space and
         # newline as tokens
         ('space', br' '),
