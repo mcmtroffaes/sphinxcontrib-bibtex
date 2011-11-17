@@ -12,6 +12,7 @@
 
 import os.path # getmtime()
 
+import copy # deepcopy
 from docutils.parsers.rst import directives # for Directive.option_spec
 from sphinx.util.compat import Directive
 from sphinx.util.console import bold, standout
@@ -58,15 +59,30 @@ class BibliographyDirective(Directive):
                         "cited"))),
             style=self.options.get("style", "unsrt"))
         cache[id_] = info
-        # get all bibfiles
+        # get all bibfiles, and generate entries
+        entries = []
         for bibfile in self.arguments[0].split():
             # convert to relative path to ensure that the same file
             # only occurs once in the cache
             bibfile = env.relfn2path(bibfile.strip())[0]
-            self.process_bibfile(bibfile)
+            data = self.process_bibfile(bibfile)
+            # XXX entries are modified below in an unpickable way
+            # XXX so fetch a deep copy
+            entries += copy.deepcopy(list(data.entries.itervalues()))
             env.note_dependency(bibfile)
             info.bibfiles.append(bibfile)
-        return [bibliography('', ids=[id_])]
+        # locate and instantiate style plugin
+        style_cls = find_plugin(
+            'pybtex.style.formatting', info.style)
+        style = style_cls()
+        # create citation nodes for all references
+        nodes = []
+        backend = output_backend()
+        # XXX style.format_entries modifies entries in unpickable way
+        for entry in style.format_entries(entries):
+            nodes.append(
+                backend.citation(entry, self.state.document))
+        return nodes
 
     def parse_bibfile(self, bibfile):
         """Parse *bibfile*, and return parsed data.

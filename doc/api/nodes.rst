@@ -1,1 +1,0 @@
-.. automodule:: sphinxcontrib.bibtex.nodes
