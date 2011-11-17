@@ -5,6 +5,6 @@ Extension API
     :maxdepth: 2
 
     api/interface
-    api/nodes
+    api/roles
     api/directives
     api/cache
