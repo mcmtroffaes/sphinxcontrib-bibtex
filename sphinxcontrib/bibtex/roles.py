@@ -3,6 +3,8 @@
     ~~~~~~~~~~~~~~~~~
 
     .. autoclass:: CiteRole
+
+        .. automethod:: result_nodes
 """
 
 from pybtex.backends.doctree import Backend as output_backend
@@ -11,7 +13,6 @@ from sphinx.roles import XRefRole # for :cite:
 
 class CiteRole(XRefRole):
     """Class for processing the :rst:role:`cite` role."""
-    #nodeclass = docutils.nodes.citation_reference
     backend = output_backend()
 
     def result_nodes(self, document, env, node, is_ref):

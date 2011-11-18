@@ -6,6 +6,8 @@
     .. autofunction:: setup
     .. autofunction:: init_bibtex_cache
     .. autofunction:: purge_bibtex_cache
+    .. autofunction:: process_citations
+    .. autofunction:: process_citation_references
 """
 
 import docutils.nodes
