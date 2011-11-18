@@ -16,21 +16,30 @@ Another citation :cite:`dreze:2000`.
 Another reference to footnotes [#note]_ and [#note2]_.
 More regular citations [Test01]_ and [Test02]_.
 
-References
-----------
+Extra reference to a footnote [#footnote-walley2004]_.
+
+Extra reference to a citation [Wa04]_.
+
+.. rubric:: References
 
 .. bibliography:: test.bib unknown.bib subfolder/test.bib
 
 .. bibliography:: unknown2.bib
 
-Notes
------
+.. rubric:: Footnotes
 
 .. [#note] A footnote.
 .. [#note2] Another footnote.
+.. [#footnote-walley2004]
 
-Regular Citations
------------------
+    Peter Walley, Renato Pelessoni, and Paolo Vicig. Journal of
+    Statistical Planning and Inference, 126(1):119-151, November 2004.
+
+.. rubric:: Citations
 
 .. [Test01] A regular citation.
 .. [Test02] Another regular citation.
+.. [Wa04]
+
+    Peter Walley, Renato Pelessoni, and Paolo Vicig. Journal of
+    Statistical Planning and Inference, 126(1):119-151, November 2004.
