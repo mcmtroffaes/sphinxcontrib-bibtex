@@ -22,7 +22,6 @@ from pybtex.database.input import bibtex
 from pybtex.plugin import find_plugin
 
 from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
-from sphinxcontrib.bibtex.nodes import bibliography
 import sphinxcontrib.bibtex.latex_codec # registers the latex codec
 
 class BibliographyDirective(Directive):
