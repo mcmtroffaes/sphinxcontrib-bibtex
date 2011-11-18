@@ -3,6 +3,7 @@
     ~~~~~~~~~~~~~~~~~
 
     .. autoclass:: CiteRole
+        :show-inheritance:
 
         .. automethod:: result_nodes
 """
