@@ -109,9 +109,10 @@ class BibliographyCache:
     """
 
     def __init__(self, docname=None, bibfiles=None,
-                 cite="cited", style=None):
+                 cite="cited", style=None, encoding=None):
         self.docname = docname
         self.bibfiles = bibfiles if bibfiles is not None else []
         self.cite = cite
         self.style = style
+        self.encoding = encoding
 

@@ -22,6 +22,7 @@ References
 .. bibliography:: test.bib unknown.bib subfolder/test.bib
 
 .. bibliography:: unknown2.bib
+   :encoding: utf8
 
 Notes
 -----

@@ -37,6 +37,7 @@ class BibliographyDirective(Directive):
         'notcited': directives.flag,
         'all': directives.flag,
         'style': directives.unchanged,
+        'encoding': directives.encoding,
     }
 
     def run(self):
@@ -57,7 +58,10 @@ class BibliographyDirective(Directive):
                     "notcited"
                     if "notcited" in self.options else (
                         "cited"))),
-            style=self.options.get("style", "unsrt"))
+            style=self.options.get("style", "unsrt"),
+            encoding=self.options.get(
+                'encoding', self.state.document.settings.input_encoding),
+            )
         cache[id_] = info
         # get all bibfiles, and generate entries
         entries = []
@@ -65,7 +69,7 @@ class BibliographyDirective(Directive):
             # convert to relative path to ensure that the same file
             # only occurs once in the cache
             bibfile = env.relfn2path(bibfile.strip())[0]
-            data = self.process_bibfile(bibfile)
+            data = self.process_bibfile(bibfile, info.encoding)
             # XXX entries are modified below in an unpickable way
             # XXX so fetch a deep copy
             entries += copy.deepcopy(list(data.entries.itervalues()))
@@ -84,7 +88,7 @@ class BibliographyDirective(Directive):
                 backend.citation(entry, self.state.document))
         return nodes
 
-    def parse_bibfile(self, bibfile):
+    def parse_bibfile(self, bibfile, encoding):
         """Parse *bibfile*, and return parsed data.
 
         :param bibfile: The bib file name.
@@ -93,7 +97,7 @@ class BibliographyDirective(Directive):
         :rtype: :class:`pybtex.database.BibliographyData`
         """
         app = self.state.document.settings.env.app
-        parser = bibtex.Parser('latex') # TODO support inputenc
+        parser = bibtex.Parser(encoding)
         app.info(
             bold("parsing bibtex file {0}... ".format(bibfile)), nonl=True)
         parser.parse_file(bibfile)
@@ -101,7 +105,7 @@ class BibliographyDirective(Directive):
                  .format(len(parser.data.entries)))
         return parser.data
 
-    def update_bibfile_cache(self, bibfile, mtime):
+    def update_bibfile_cache(self, bibfile, mtime, encoding):
         """Parse *bibfile* (see :meth:`parse_bibfile`), and store the
         parsed data, along with modification time *mtime*, in the
         bibtex cache.
@@ -113,14 +117,14 @@ class BibliographyDirective(Directive):
         :return: The parsed bibliography data.
         :rtype: :class:`pybtex.database.BibliographyData`
         """
-        data = self.parse_bibfile(bibfile)
+        data = self.parse_bibfile(bibfile, encoding)
         env = self.state.document.settings.env
         env.bibtex_cache.bibfiles[bibfile] = BibfileCache(
             mtime=mtime,
             data=data)
         return data
 
-    def process_bibfile(self, bibfile):
+    def process_bibfile(self, bibfile, encoding):
         """Check if ``env.bibtex_cache.bibfiles[bibfile]`` is still
         up to date. If not, parse the *bibfile* (see
         :meth:`update_bibfile_cache`), and store parsed data in the
@@ -151,11 +155,11 @@ class BibliographyDirective(Directive):
             bibfile_cache = cache[bibfile]
         except KeyError:
             env.app.info("not found")
-            self.update_bibfile_cache(bibfile, mtime)
+            self.update_bibfile_cache(bibfile, mtime, encoding)
         else:
             if mtime != bibfile_cache.mtime:
                 env.app.info("out of date")
-                self.update_bibfile_cache(bibfile, mtime)
+                self.update_bibfile_cache(bibfile, mtime, encoding)
             else:
                 env.app.info('up to date')
         return cache[bibfile].data
