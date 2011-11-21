@@ -13,6 +13,7 @@
 import os.path # getmtime()
 
 import copy # deepcopy
+import docutils.nodes
 from docutils.parsers.rst import directives # for Directive.option_spec
 from sphinx.util.compat import Directive
 from sphinx.util.console import bold, standout
@@ -23,6 +24,15 @@ from pybtex.plugin import find_plugin
 
 from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
 import sphinxcontrib.bibtex.latex_codec # registers the latex codec
+
+def strip_curly_brackets(node):
+    """Strip curly brackets from all Text nodes within node."""
+    for child in node.children:
+        if isinstance(child, docutils.nodes.Text):
+            text = child.astext().replace('{', '').replace('}', '')
+            node.replace(child, docutils.nodes.Text(text))
+        else:
+            strip_curly_brackets(child)    
 
 class BibliographyDirective(Directive):
     """Class for processing the :rst:dir:`bibliography` directive."""
@@ -87,8 +97,10 @@ class BibliographyDirective(Directive):
         backend = output_backend()
         # XXX style.format_entries modifies entries in unpickable way
         for entry in style.format_entries(entries):
-            nodes.append(
-                backend.citation(entry, self.state.document))
+            citation = backend.citation(entry, self.state.document)
+            if info.curly_bracket_strip:
+                strip_curly_brackets(citation)
+            nodes.append(citation)
         return nodes
 
     def parse_bibfile(self, bibfile, encoding):
