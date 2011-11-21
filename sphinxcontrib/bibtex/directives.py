@@ -37,6 +37,7 @@ class BibliographyDirective(Directive):
         'all': directives.flag,
         'style': directives.unchanged,
         'encoding': directives.encoding,
+        'disable-strip-curly-brackets': directives.flag,
     }
 
     def run(self):
@@ -59,7 +60,10 @@ class BibliographyDirective(Directive):
                         "cited"))),
             style=self.options.get("style", "unsrt"),
             encoding=self.options.get(
-                'encoding', self.state.document.settings.input_encoding),
+                'encoding',
+                'latex+' + self.state.document.settings.input_encoding),
+            curly_bracket_strip=(
+                'disable-strip-curly-brackets' not in self.options),
             )
         cache[id_] = info
         # get all bibfiles, and generate entries
