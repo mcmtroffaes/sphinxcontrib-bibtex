@@ -25,14 +25,18 @@ from pybtex.plugin import find_plugin
 from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
 import sphinxcontrib.bibtex.latex_codec # registers the latex codec
 
-def strip_curly_brackets(node):
-    """Strip curly brackets from all Text nodes within node."""
+def text_transform(node, transform):
+    """Apply transformation to all Text nodes within node."""
     for child in node.children:
         if isinstance(child, docutils.nodes.Text):
-            text = child.astext().replace('{', '').replace('}', '')
+            text = transform(child.astext())
             node.replace(child, docutils.nodes.Text(text))
         else:
-            strip_curly_brackets(child)    
+            text_transform(child, transform)
+
+def text_curly_bracket_strip(node):
+    """Strip curly brackets from text."""
+    text_transform(node, lambda text: text.replace('{', '').replace('}', ''))
 
 class BibliographyDirective(Directive):
     """Class for processing the :rst:dir:`bibliography` directive."""
@@ -47,7 +51,7 @@ class BibliographyDirective(Directive):
         'all': directives.flag,
         'style': directives.unchanged,
         'encoding': directives.encoding,
-        'disable-strip-curly-brackets': directives.flag,
+        'disable-curly-bracket-strip': directives.flag,
     }
 
     def run(self):
@@ -73,7 +77,7 @@ class BibliographyDirective(Directive):
                 'encoding',
                 'latex+' + self.state.document.settings.input_encoding),
             curly_bracket_strip=(
-                'disable-strip-curly-brackets' not in self.options),
+                'disable-curly-bracket-strip' not in self.options),
             )
         cache[id_] = info
         # get all bibfiles, and generate entries
@@ -99,7 +103,7 @@ class BibliographyDirective(Directive):
         for entry in style.format_entries(entries):
             citation = backend.citation(entry, self.state.document)
             if info.curly_bracket_strip:
-                strip_curly_brackets(citation)
+                text_curly_bracket_strip(citation)
             nodes.append(citation)
         return nodes
 
