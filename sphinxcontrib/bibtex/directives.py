@@ -36,8 +36,11 @@ def node_text_transform(node, transform):
 def transform_curly_bracket_strip(textnode):
     """Strip curly brackets from text."""
     text = textnode.astext()
-    text.replace('{', '').replace('}', '')
-    return docutils.nodes.Text(text)
+    if '{' in text or '}' in text:
+        text = text.replace('{', '').replace('}', '')
+        return docutils.nodes.Text(text)
+    else:
+        return textnode
 
 def transform_url_command(textnode):
     """Convert '\url{...}' into a proper docutils hyperlink."""
