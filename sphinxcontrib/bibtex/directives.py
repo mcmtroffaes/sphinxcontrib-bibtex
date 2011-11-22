@@ -44,8 +44,6 @@ def transform_curly_bracket_strip(textnode):
 
 def transform_url_command(textnode):
     """Convert '\url{...}' into a proper docutils hyperlink."""
-    # XXX for now, this just converts a single \url command
-    # XXX should use re.finditer or something similar
     text = textnode.astext()
     if '\url' in text:
         text1, _, text = text.partition('\url')
@@ -54,9 +52,9 @@ def transform_url_command(textnode):
         ref = docutils.nodes.reference(refuri=text2)
         ref += docutils.nodes.Text(text2)
         node = docutils.nodes.inline()
-        node += docutils.nodes.Text(text1)
+        node += transform_url_command(docutils.nodes.Text(text1))
         node += ref
-        node += docutils.nodes.Text(text3)
+        node += transform_url_command(docutils.nodes.Text(text3))
         return node
     else:
         return textnode
