@@ -25,18 +25,38 @@ from pybtex.plugin import find_plugin
 from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
 import sphinxcontrib.bibtex.latex_codec # registers the latex codec
 
-def text_transform(node, transform):
+def node_text_transform(node, transform):
     """Apply transformation to all Text nodes within node."""
     for child in node.children:
         if isinstance(child, docutils.nodes.Text):
-            text = transform(child.astext())
-            node.replace(child, docutils.nodes.Text(text))
+            node.replace(child, transform(child))
         else:
-            text_transform(child, transform)
+            node_text_transform(child, transform)
 
-def text_curly_bracket_strip(node):
+def transform_curly_bracket_strip(textnode):
     """Strip curly brackets from text."""
-    text_transform(node, lambda text: text.replace('{', '').replace('}', ''))
+    text = textnode.astext()
+    text.replace('{', '').replace('}', '')
+    return docutils.nodes.Text(text)
+
+def transform_url_command(textnode):
+    """Convert '\url{...}' into a proper docutils hyperlink."""
+    # XXX for now, this just converts a single \url command
+    # XXX should use re.finditer or something similar
+    text = textnode.astext()
+    if '\url' in text:
+        text1, _, text = text.partition('\url')
+        text2, _, text3 = text.partition('}')
+        text2 = text2.lstrip(' {')
+        ref = docutils.nodes.reference(refuri=text2)
+        ref += docutils.nodes.Text(text2)
+        node = docutils.nodes.inline()
+        node += docutils.nodes.Text(text1)
+        node += ref
+        node += docutils.nodes.Text(text3)
+        return node
+    else:
+        return textnode
 
 class BibliographyDirective(Directive):
     """Class for processing the :rst:dir:`bibliography` directive."""
@@ -102,8 +122,9 @@ class BibliographyDirective(Directive):
         # XXX style.format_entries modifies entries in unpickable way
         for entry in style.format_entries(entries):
             citation = backend.citation(entry, self.state.document)
+            node_text_transform(citation, transform_url_command)
             if info.curly_bracket_strip:
-                text_curly_bracket_strip(citation)
+                node_text_transform(citation, transform_curly_bracket_strip)
             nodes.append(citation)
         return nodes
 
