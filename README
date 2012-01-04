@@ -1,4 +1,3 @@
-Needs a patched version of pybtex (which will hopefully be merged into
-upstream):
+Needs the development version of pybtex:
 
-https://code.launchpad.net/~matthias-troffaes/pybtex/doctree/
+https://launchpad.net/pybtex
