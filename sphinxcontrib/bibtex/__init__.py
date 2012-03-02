@@ -12,8 +12,10 @@
 
 import docutils.nodes
 from sphinxcontrib.bibtex.cache import Cache
+from sphinxcontrib.bibtex.nodes import bibliography
 from sphinxcontrib.bibtex.roles import CiteRole
 from sphinxcontrib.bibtex.directives import BibliographyDirective
+from sphinxcontrib.bibtex.transforms import BibliographyTransform
 
 def init_bibtex_cache(app):
     """Create ``app.env.bibtex_cache`` if it does not exist yet.
@@ -89,6 +91,8 @@ def setup(app):
 
     app.add_directive("bibliography", BibliographyDirective)
     app.add_role("cite", CiteRole())
+    app.add_node(bibliography)
+    app.add_transform(BibliographyTransform)
     app.connect("builder-inited", init_bibtex_cache)
     app.connect("doctree-resolved", process_citations)
     app.connect("doctree-resolved", process_citation_references)

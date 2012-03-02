@@ -18,49 +18,18 @@ from docutils.parsers.rst import directives # for Directive.option_spec
 from sphinx.util.compat import Directive
 from sphinx.util.console import bold, standout
 
-from pybtex.backends.doctree import Backend as output_backend
 from pybtex.database.input import bibtex
-from pybtex.plugin import find_plugin
 
 from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
 import sphinxcontrib.bibtex.latex_codec # registers the latex codec
-
-def node_text_transform(node, transform):
-    """Apply transformation to all Text nodes within node."""
-    for child in node.children:
-        if isinstance(child, docutils.nodes.Text):
-            node.replace(child, transform(child))
-        else:
-            node_text_transform(child, transform)
-
-def transform_curly_bracket_strip(textnode):
-    """Strip curly brackets from text."""
-    text = textnode.astext()
-    if '{' in text or '}' in text:
-        text = text.replace('{', '').replace('}', '')
-        return docutils.nodes.Text(text)
-    else:
-        return textnode
-
-def transform_url_command(textnode):
-    """Convert '\url{...}' into a proper docutils hyperlink."""
-    text = textnode.astext()
-    if '\url' in text:
-        text1, _, text = text.partition('\url')
-        text2, _, text3 = text.partition('}')
-        text2 = text2.lstrip(' {')
-        ref = docutils.nodes.reference(refuri=text2)
-        ref += docutils.nodes.Text(text2)
-        node = docutils.nodes.inline()
-        node += transform_url_command(docutils.nodes.Text(text1))
-        node += ref
-        node += transform_url_command(docutils.nodes.Text(text3))
-        return node
-    else:
-        return textnode
+from sphinxcontrib.bibtex.nodes import bibliography
 
 class BibliographyDirective(Directive):
-    """Class for processing the :rst:dir:`bibliography` directive."""
+    """Class for processing the :rst:dir:`bibliography` directive.
+
+    Parses the bibliography files, and replaces the directive by a
+    :class:`bibliography` node.
+    """
 
     required_arguments = 1
     optional_arguments = 0
@@ -100,34 +69,15 @@ class BibliographyDirective(Directive):
             curly_bracket_strip=(
                 'disable-curly-bracket-strip' not in self.options),
             )
-        cache[id_] = info
-        # get all bibfiles, and generate entries
-        entries = []
         for bibfile in self.arguments[0].split():
             # convert to relative path to ensure that the same file
             # only occurs once in the cache
             bibfile = env.relfn2path(bibfile.strip())[0]
-            data = self.process_bibfile(bibfile, info.encoding)
-            # XXX entries are modified below in an unpickable way
-            # XXX so fetch a deep copy
-            entries += copy.deepcopy(list(data.entries.itervalues()))
+            self.process_bibfile(bibfile, info.encoding)
             env.note_dependency(bibfile)
             info.bibfiles.append(bibfile)
-        # locate and instantiate style plugin
-        style_cls = find_plugin(
-            'pybtex.style.formatting', info.style)
-        style = style_cls()
-        # create citation nodes for all references
-        nodes = []
-        backend = output_backend()
-        # XXX style.format_entries modifies entries in unpickable way
-        for entry in style.format_entries(entries):
-            citation = backend.citation(entry, self.state.document)
-            node_text_transform(citation, transform_url_command)
-            if info.curly_bracket_strip:
-                node_text_transform(citation, transform_curly_bracket_strip)
-            nodes.append(citation)
-        return nodes
+        cache[id_] = info
+        return [bibliography('', ids=[id_])]
 
     def parse_bibfile(self, bibfile, encoding):
         """Parse *bibfile*, and return parsed data.
