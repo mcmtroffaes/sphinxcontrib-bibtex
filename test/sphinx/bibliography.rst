@@ -20,12 +20,28 @@ Extra reference to a footnote [#footnote-walley2004]_.
 
 Extra reference to a citation [Wa04]_.
 
+Another few citations: :cite:`rockafellar:1970` and :cite:`1972:savage`.
+
+More citations: 
+
 .. rubric:: References
 
 .. bibliography:: test.bib unknown.bib subfolder/test.bib
+   :all:
 
 .. bibliography:: unknown2.bib
+   :all:
    :encoding: utf8
+
+.. rubric:: References (Cited Test)
+
+.. bibliography:: test2.bib
+   :cited:
+
+.. rubric:: References (Not Cited Test)
+
+.. bibliography:: test2.bib
+   :notcited:
 
 .. rubric:: Footnotes
 
