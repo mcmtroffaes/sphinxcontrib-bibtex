@@ -83,6 +83,7 @@ def setup(app):
     * register directives
     * register nodes
     * register roles
+    * register transforms
     * connect events to functions
 
     :param app: The sphinx application.

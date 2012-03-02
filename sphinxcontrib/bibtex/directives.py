@@ -27,8 +27,15 @@ from sphinxcontrib.bibtex.nodes import bibliography
 class BibliographyDirective(Directive):
     """Class for processing the :rst:dir:`bibliography` directive.
 
-    Parses the bibliography files, and replaces the directive by a
-    :class:`bibliography` node.
+    Parses the bibliography files, and produces a
+    :class:`~sphinxcontrib.bibtex.nodes.bibliography` node.
+
+    .. seealso::
+
+       Further processing of the resulting
+       :class:`~sphinxcontrib.bibtex.nodes.bibliography` node is done
+       by
+       :class:`~sphinxcontrib.bibtex.transforms.BibliographyTransform`.
     """
 
     required_arguments = 1

@@ -51,8 +51,9 @@ def transform_url_command(textnode):
         return textnode
 
 class BibliographyTransform(docutils.transforms.Transform):
-    """Transform each :class:`bibliography` node into a list of
-    citations.
+    """Transform each
+    :class:`~sphinxcontrib.bibtex.nodes.bibliography` node into a list
+    of citations.
     """
 
     # transform must be applied before references are resolved
