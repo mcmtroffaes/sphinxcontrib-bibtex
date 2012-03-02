@@ -4,6 +4,7 @@
 
     .. autoclass:: BibliographyTransform
 
+        .. autoattribute:: default_priority
         .. automethod:: apply
 """
 
@@ -51,15 +52,18 @@ def transform_url_command(textnode):
         return textnode
 
 class BibliographyTransform(docutils.transforms.Transform):
-    """Transform each
-    :class:`~sphinxcontrib.bibtex.nodes.bibliography` node into a list
-    of citations.
-    """
 
     # transform must be applied before references are resolved
     default_priority = 10
+    """Priority of the transform. See
+    http://docutils.sourceforge.net/docs/ref/transforms.html
+    """
 
     def apply(self):
+        """Transform each
+        :class:`~sphinxcontrib.bibtex.nodes.bibliography` node into a
+        list of citations.
+        """
         env = self.document.settings.env
         for bibnode in self.document.traverse(bibliography):
             # get the information of this bibliography node
