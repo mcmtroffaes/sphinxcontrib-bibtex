@@ -17,7 +17,9 @@ class CiteRole(XRefRole):
     backend = output_backend()
 
     def result_nodes(self, document, env, node, is_ref):
-        """Transform reference node into a citation reference."""
+        """Transform reference node into a citation reference,
+        and note that the reference was cited.
+        """
         key = node['reftarget']
         # find entry corresponding to key
         for cache in env.bibtex_cache.bibfiles.itervalues():
@@ -28,4 +30,5 @@ class CiteRole(XRefRole):
             entry = pybtex.database.Entry(type_=None)
             entry.key = key
         refnode = self.backend.citation_reference(entry, document)
+        env.bibtex_cited.add(key)
         return [refnode], []

@@ -78,7 +78,19 @@ class BibliographyTransform(docutils.transforms.Transform):
                 # XXX entries are modified below in an unpickable way
                 # XXX so fetch a deep copy
                 data = env.bibtex_cache.bibfiles[bibfile].data
-                entries += copy.deepcopy(list(data.entries.itervalues()))
+                if info.cite == "all":
+                    bibfile_entries = data.entries.itervalues()
+                elif info.cite == "cited":
+                    bibfile_entries = (
+                        entry for entry in data.entries.itervalues()
+                        if entry.key in env.bibtex_cited)
+                elif info.cite == "notcited":
+                    bibfile_entries = (
+                        entry for entry in data.entries.itervalues()
+                        if entry.key not in env.bibtex_cited)
+                else:
+                    raise RuntimeError("invalid cite option (%s)" % info.cite)
+                entries += copy.deepcopy(list(bibfile_entries))
             # locate and instantiate style plugin
             style_cls = find_plugin(
                 'pybtex.style.formatting', info.style)

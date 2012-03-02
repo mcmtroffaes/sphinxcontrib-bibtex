@@ -28,6 +28,8 @@ def init_bibtex_cache(app):
         app.env.bibtex_cache = Cache()
     # XXX labels are currently not cached, always calculated on the fly
     app.env.bibtex_citation_label = {}
+    # XXX same for list of cited references
+    app.env.bibtex_cited = set()
 
 def purge_bibtex_cache(app, env, docname):
     """Remove all information related to *docname* from the cache.
