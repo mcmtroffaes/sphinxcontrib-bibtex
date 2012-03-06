@@ -143,7 +143,7 @@ class LatexLexer(codecs.IncrementalDecoder):
 
 class LatexIncrementalLexer(LatexLexer):
     """A very simple incremental lexer for tex/latex code. Roughly
-    follows the state machine descriped in Tex By Topic, Chapter 2.
+    follows the state machine described in Tex By Topic, Chapter 2.
 
     The generated tokens satisfy:
 
