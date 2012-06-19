@@ -19,7 +19,7 @@ setup(
     license='BSD',
     author='Matthias C. M. Troffaes',
     author_email='matthias.troffaes@gmail.com',
-    description='Sphinx "bibtex" extension',
+    description=long_desc[0],
     long_description=long_desc,
     zip_safe=False,
     classifiers=[

@@ -1,4 +1,4 @@
-Sphinx bibtex extension.
+Sphinx extension for bibtex style references.
 
 :author: Matthias C. M. Troffaes <matthias.troffaes@gmail.com>
 :license: BSD, see LICENSE.rst for details
