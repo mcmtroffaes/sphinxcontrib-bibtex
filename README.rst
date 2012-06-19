@@ -1,7 +1,7 @@
 Sphinx bibtex extension.
 
 :author: Matthias C. M. Troffaes <matthias.troffaes@gmail.com>
-:license: BSD, see LICENSE for details
+:license: BSD, see LICENSE.rst for details
 
 Inspired by ``bibstuff.sphinxext.bibref`` by Matthew Brett.
 
