@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-with open("README", "rb") as readme_file:
+with open("README.rst", "rb") as readme_file:
     long_desc = readme_file.read()
 
 with open("requirements.txt", "rb") as requires_file:
