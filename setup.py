@@ -2,13 +2,11 @@
 
 from setuptools import setup, find_packages
 
-long_desc = '''
-This package contains the bibtex Sphinx extension.
+with open("README", "rb") as readme_file:
+    long_desc = readme_file.read()
 
-.. add description here ..
-'''
-
-requires = ['Sphinx>=0.6', 'pybtex>=0.15']
+with open("requirements.txt", "rb") as requires_file:
+    requires = requires_file.read().split()
 
 setup(
     name='sphinxcontrib-bibtex',
