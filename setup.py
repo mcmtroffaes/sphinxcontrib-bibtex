@@ -8,9 +8,12 @@ with open("README", "rb") as readme_file:
 with open("requirements.txt", "rb") as requires_file:
     requires = requires_file.read().split()
 
+with open("VERSION", "rb") as version_file:
+    version = version_file.read().strip()
+
 setup(
     name='sphinxcontrib-bibtex',
-    version='0.1',
+    version=version,
     url='http://bitbucket.org/birkenfeld/sphinx-contrib',
     download_url='http://pypi.python.org/pypi/sphinxcontrib-bibtex',
     license='BSD',
