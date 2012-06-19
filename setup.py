@@ -19,7 +19,7 @@ setup(
     license='BSD',
     author='Matthias C. M. Troffaes',
     author_email='matthias.troffaes@gmail.com',
-    description=long_desc[0],
+    description=long_desc.split("\n")[0],
     long_description=long_desc,
     zip_safe=False,
     classifiers=[
