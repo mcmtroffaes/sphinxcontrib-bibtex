@@ -6,20 +6,17 @@
 Welcome to sphinxcontrib-bibtex's documentation!
 ================================================
 
-Allows bibtex references to be inserted into your documentation.
+.. include:: ../README.rst
 
-:author: Matthias C. M. Troffaes <matthias.troffaes@gmail.com>
-:license: BSD, see LICENSE for details
-
-Inspired by ``bibstuff.sphinxext.bibref`` by Matthew Brett.
-
-Contents:
+Contents
+--------
 
 .. toctree::
    :maxdepth: 2
 
    usage
    api
+   license
 
 Indices and tables
 ==================
