@@ -41,7 +41,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'sphinxcontrib-bibtex'
-copyright = u'2011, Matthias C. M. Troffaes'
+copyright = u'2011-2012, Matthias C. M. Troffaes'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
