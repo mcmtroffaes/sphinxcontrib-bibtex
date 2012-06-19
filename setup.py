@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 with open("README.rst", "rb") as readme_file:
-    long_desc = readme_file.read()
+    doclines = readme_file.read().split("\n")
 
 with open("requirements.txt", "rb") as requires_file:
     requires = requires_file.read().split()
@@ -19,8 +19,8 @@ setup(
     license='BSD',
     author='Matthias C. M. Troffaes',
     author_email='matthias.troffaes@gmail.com',
-    description=long_desc.split("\n")[0],
-    long_description=long_desc,
+    description=doclines[0],
+    long_description="\n".join(doclines[2:]),
     zip_safe=False,
     classifiers=[
         'Development Status :: 4 - Beta',
