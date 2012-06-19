@@ -14,7 +14,7 @@ with open("VERSION", "rb") as version_file:
 setup(
     name='sphinxcontrib-bibtex',
     version=version,
-    url='http://bitbucket.org/birkenfeld/sphinx-contrib',
+    url='https://github.com/mcmtroffaes/sphinxcontrib-bibtex',
     download_url='http://pypi.python.org/pypi/sphinxcontrib-bibtex',
     license='BSD',
     author='Matthias C. M. Troffaes',
