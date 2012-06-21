@@ -4,8 +4,6 @@ Welcome to sphinxcontrib-bibtex's documentation!
 :Release: |release|
 :Date:    |today|
 
-.. include:: ../README.rst
-
 Contents
 --------
 
