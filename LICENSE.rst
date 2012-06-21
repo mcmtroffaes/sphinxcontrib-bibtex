@@ -1,3 +1,4 @@
+| sphinxcontrib-bibtex is a Sphinx extension for BibTeX style citations
 | Copyright (c) 2011-2012 by Matthias C. M. Troffaes
 | All rights reserved.
 
