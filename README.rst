@@ -7,10 +7,9 @@ The extension adds a
 ``bibliography`` directive, and a ``cite`` role, which
 work similarly to LaTeX's ``\bibliography`` and ``\cite`` commands.
 
-:author: Matthias C. M. Troffaes <matthias.troffaes@gmail.com>
-:license: BSD, see LICENSE.rst for details
-
-Inspired by ``bibstuff.sphinxext.bibref`` by Matthew Brett.
+ Inspired by
+`bibstuff.sphinxext.bibref <https://github.com/matthew-brett/bibstuff>`_
+by Matthew Brett.
 
 * Download: http://pypi.python.org/pypi/sphinxcontrib-bibtex/#downloads
 
