@@ -1,6 +1,9 @@
 Usage
 =====
 
+Roles and Directives
+--------------------
+
 .. rst:role:: cite
 
    Create a citation to a bibliographic entry. For example:
@@ -72,3 +75,14 @@ Usage
 
      .. bibliography:: refs.bib
         :disable-curly-bracket-strip:
+
+Known Issues and Workarounds
+----------------------------
+
+Tinkerer
+~~~~~~~~
+
+To use the bibtex extension with `Tinkerer <http://www.tinkerer.me/>`_,
+be sure to specify the bibtex extension first in your ``conf.py`` file::
+
+    extensions = ['sphinxcontrib.bibtex', 'tinkerer.ext.blog', 'tinkerer.ext.disqus']
