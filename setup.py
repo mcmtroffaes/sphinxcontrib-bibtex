@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 
 from setuptools import setup, find_packages
+import codecs
 
-with open("README.rst", "rb") as readme_file:
-    doclines = readme_file.read().split("\n")
+def readfile(filename):
+    with codecs.open(filename, encoding="utf-8") as stream:
+        return stream.read().split("\n")
 
-with open("requirements.txt", "rb") as requires_file:
-    requires = requires_file.read().split()
-
-with open("VERSION", "rb") as version_file:
-    version = version_file.read().strip()
+doclines = readfile("README.rst")
+requires = readfile("requirements.txt")
+version = readfile("VERSION")[0].strip()
 
 setup(
     name='sphinxcontrib-bibtex',
