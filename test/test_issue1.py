@@ -6,6 +6,7 @@
     Test Tinkerer and check output.
 """
 
+import nose.tools
 from StringIO import StringIO
 
 from util import *
@@ -18,3 +19,6 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_tinker(app):
     app.builder.build_all()
+    nose.tools.assert_equal(app.env.bibtex_cited, {u"2011:BabikerIPv6"})
+    nose.tools.assert_equal(
+        app.env.bibtex_citation_label, {u"2011:BabikerIPv6": "1"})
