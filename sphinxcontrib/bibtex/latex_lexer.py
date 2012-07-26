@@ -190,7 +190,7 @@ class LatexIncrementalLexer(LatexLexer):
             if token.name == 'newline':
                 if self.state == 'N':
                     # if state was 'N', generate new paragraph
-                    yield Token('control_word', '\\par')
+                    yield Token('control_word', b'\\par')
                 elif self.state == 'S':
                     # switch to 'N' state, do not generate a space
                     self.state = 'N'
