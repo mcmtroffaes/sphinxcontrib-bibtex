@@ -84,7 +84,7 @@ class LatexLexer(codecs.IncrementalDecoder):
         # regular expression used for matching
         self.regexp = re.compile(
             b"|".join(
-                b"(?P<%s>%s)" % (name, regexp)
+                b"(?P<" + name.encode() + b">" + regexp + b")"
                 for name, regexp in self.tokens),
             re.DOTALL)
         # reset state
