@@ -106,13 +106,13 @@ class LatexUnicodeTable:
         self.register(u'\N{DEGREE SIGN}', b'\\textdegree', package='textcomp')
         
         self.register(u'\N{PLUS-MINUS SIGN}', b'\\pm', mode='math')
-        self.register(u'\N{PLUS-MINUS SIGN}', '\\textpm', package='textcomp')
+        self.register(u'\N{PLUS-MINUS SIGN}', b'\\textpm', package='textcomp')
 
         self.register(u'\N{SUPERSCRIPT TWO}', b'^2', mode='math')
-        self.register(u'\N{SUPERSCRIPT TWO}', '\\texttwosuperior', package='textcomp')
+        self.register(u'\N{SUPERSCRIPT TWO}', b'\\texttwosuperior', package='textcomp')
 
         self.register(u'\N{SUPERSCRIPT THREE}', b'^3', mode='math')
-        self.register(u'\N{SUPERSCRIPT THREE}', '\\textthreesuperior', package='textcomp')
+        self.register(u'\N{SUPERSCRIPT THREE}', b'\\textthreesuperior', package='textcomp')
 
         self.register(u'\N{ACUTE ACCENT}', b"\\'{}")
 

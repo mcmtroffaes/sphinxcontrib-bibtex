@@ -4,7 +4,11 @@
 from __future__ import print_function
 
 import codecs
-from cStringIO import StringIO
+import sys
+if sys.version_info >= (3, 0):
+    from io import BytesIO
+else:
+    from cStringIO import StringIO as BytesIO
 from nose.exc import SkipTest
 from unittest import TestCase
 
@@ -92,7 +96,7 @@ class TestDecoder(TestCase):
             )
 
     def test_alpha(self):
-        self.decode(u"α", "$\\alpha$")
+        self.decode(u"α", b"$\\alpha$")
 
     def test_maelstrom_multibyte_encoding(self):
         self.decode(u"\\c öké", b'\\c \xc3\xb6k\xc3\xa9', 'utf8')
@@ -102,7 +106,7 @@ class TestStreamDecoder(TestDecoder):
 
     def decode(self, text_utf8, text_latex, inputenc=None):
         encoding = 'latex+' + inputenc if inputenc else 'latex'
-        stream = StringIO(text_latex)
+        stream = BytesIO(text_latex)
         reader = codecs.getreader(encoding)(stream)
         self.assertEqual(text_utf8, reader.read())
 
@@ -175,14 +179,14 @@ class TestEncoder(TestCase):
             )
 
     def test_alpha(self):
-        self.encode(u"α", "$\\alpha$")
+        self.encode(u"α", b"$\\alpha$")
 
 class TestStreamEncoder(TestEncoder):
     """Stream encoder tests."""
 
     def encode(self, text_utf8, text_latex, inputenc=None):
         encoding = 'latex+' + inputenc if inputenc else 'latex'
-        stream = StringIO()
+        stream = BytesIO()
         writer = codecs.getwriter(encoding)(stream)
         writer.write(text_utf8)
         self.assertEqual(text_latex, stream.getvalue())

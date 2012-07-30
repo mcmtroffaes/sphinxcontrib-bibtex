@@ -13,6 +13,7 @@ Contents
    quickstart
    usage
    api
+   changes
    license
 
 Indices and tables

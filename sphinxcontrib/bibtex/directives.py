@@ -77,9 +77,9 @@ class BibliographyDirective(Directive):
                 'disable-curly-bracket-strip' not in self.options),
             )
         for bibfile in self.arguments[0].split():
-            # convert to relative path to ensure that the same file
+            # convert to normalized absolute path to ensure that the same file
             # only occurs once in the cache
-            bibfile = env.relfn2path(bibfile.strip())[0]
+            bibfile = os.path.normpath(env.relfn2path(bibfile.strip())[1])
             self.process_bibfile(bibfile, info.encoding)
             env.note_dependency(bibfile)
             info.bibfiles.append(bibfile)

@@ -35,10 +35,10 @@ def transform_curly_bracket_strip(textnode):
         return textnode
 
 def transform_url_command(textnode):
-    """Convert '\url{...}' into a proper docutils hyperlink."""
+    """Convert '\\url{...}' into a proper docutils hyperlink."""
     text = textnode.astext()
-    if '\url' in text:
-        text1, _, text = text.partition('\url')
+    if '\\url' in text:
+        text1, _, text = text.partition('\\url')
         text2, _, text3 = text.partition('}')
         text2 = text2.lstrip(' {')
         ref = docutils.nodes.reference(refuri=text2)

@@ -1,5 +1,12 @@
 include VERSION
 include README.rst
 include INSTALL.rst
+include CHANGELOG.rst
 include LICENSE.rst
 include requirements.txt
+recursive-include doc *
+recursive-include test *
+global-exclude *.pyc
+global-exclude .gitignore
+prune doc/_build
+

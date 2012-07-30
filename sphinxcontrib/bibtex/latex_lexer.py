@@ -84,7 +84,7 @@ class LatexLexer(codecs.IncrementalDecoder):
         # regular expression used for matching
         self.regexp = re.compile(
             b"|".join(
-                b"(?P<%s>%s)" % (name, regexp)
+                b"(?P<" + name.encode() + b">" + regexp + b")"
                 for name, regexp in self.tokens),
             re.DOTALL)
         # reset state
@@ -190,7 +190,7 @@ class LatexIncrementalLexer(LatexLexer):
             if token.name == 'newline':
                 if self.state == 'N':
                     # if state was 'N', generate new paragraph
-                    yield Token('control_word', '\\par')
+                    yield Token('control_word', b'\\par')
                 elif self.state == 'S':
                     # switch to 'N' state, do not generate a space
                     self.state = 'N'
