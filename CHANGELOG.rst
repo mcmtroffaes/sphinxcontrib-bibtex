@@ -1,5 +1,5 @@
-0.2.3 (in development)
-----------------------
+0.2.3 (30 July 2012)
+--------------------
 
 * Document workaround for Tinkerer (issue #1).
 
