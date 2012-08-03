@@ -22,5 +22,4 @@ def teardown_module():
 def test_citationnotfound(app):
     app.builder.build_all()
     warnings = warnfile.getvalue()
-    nose.tools.assert_is_not_none(re.search(
-        'citation not found: nosuchkey', warnings))
+    assert re.search('citation not found: nosuchkey', warnings)

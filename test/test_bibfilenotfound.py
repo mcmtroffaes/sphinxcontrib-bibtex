@@ -22,5 +22,4 @@ def teardown_module():
 def test_bibfilenotfound(app):
     app.builder.build_all()
     warnings = warnfile.getvalue()
-    nose.tools.assert_is_not_none(re.search(
-        'could not open bibtex file .*unknown[.]bib', warnings))
+    assert re.search('could not open bibtex file .*unknown[.]bib', warnings)
