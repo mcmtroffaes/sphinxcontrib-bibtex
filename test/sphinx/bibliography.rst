@@ -26,12 +26,8 @@ More citations:
 
 .. rubric:: References
 
-.. bibliography:: test.bib unknown.bib subfolder/test.bib
+.. bibliography:: test.bib subfolder/test.bib
    :all:
-
-.. bibliography:: unknown2.bib
-   :all:
-   :encoding: utf8
 
 .. rubric:: References (Cited Test)
 

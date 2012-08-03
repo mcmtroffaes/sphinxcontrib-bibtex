@@ -17,5 +17,5 @@ def teardown_module():
     (srcdir / '_build').rmtree(True)
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_tinker(app):
+def test_sphinx(app):
     app.builder.build_all()
