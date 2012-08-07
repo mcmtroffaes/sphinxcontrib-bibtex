@@ -100,7 +100,11 @@ class BibliographyTransform(docutils.transforms.Transform):
             if info.list_ == "enumerated":
                 nodes = docutils.nodes.enumerated_list()
                 nodes['enumtype'] = info.enumtype
-                nodes['start'] = info.start
+                if info.start >= 1:
+                    nodes['start'] = info.start
+                    env.bibtex_enum_count = info.start
+                else:
+                    nodes['start'] = env.bibtex_enum_count
             elif info.list_ == "bullet":
                 nodes = docutils.nodes.bullet_list()
             else: # "citation"
@@ -116,4 +120,6 @@ class BibliographyTransform(docutils.transforms.Transform):
                 if info.curly_bracket_strip:
                     node_text_transform(citation, transform_curly_bracket_strip)
                 nodes += citation
+                if info.list_ == "enumerated":
+                    env.bibtex_enum_count += 1
             bibnode.replace_self(nodes)

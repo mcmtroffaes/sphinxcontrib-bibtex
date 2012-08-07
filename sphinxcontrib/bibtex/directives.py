@@ -24,6 +24,12 @@ from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
 import sphinxcontrib.bibtex.latex_codec # registers the latex codec
 from sphinxcontrib.bibtex.nodes import bibliography
 
+def process_start_option(value):
+    if value == "continue":
+        return -1
+    else:
+        return directives.positive_int(value)
+
 class BibliographyDirective(Directive):
     """Class for processing the :rst:dir:`bibliography` directive.
 
@@ -49,7 +55,7 @@ class BibliographyDirective(Directive):
         'style': directives.unchanged,
         'list': directives.unchanged,
         'enumtype': directives.unchanged,
-        'start': directives.positive_int,
+        'start': process_start_option,
         'encoding': directives.encoding,
         'disable-curly-bracket-strip': directives.flag,
     }

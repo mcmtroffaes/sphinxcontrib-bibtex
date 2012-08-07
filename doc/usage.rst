@@ -94,12 +94,17 @@ Roles and Directives
         :start: 3
         :all:
 
-   The sequence type can be any of
-    ``arabic`` (1, 2, 3, ...),
-    ``loweralpha`` (a, b, c, ...),
-    ``upperalpha`` (A, B, C, ...),
-    ``lowerroman`` (i, ii, iii, ...), or
-    ``upperroman`` (I, II, III, ...).
+   The enumtype can be any of
+   ``arabic`` (1, 2, 3, ...),
+   ``loweralpha`` (a, b, c, ...),
+   ``upperalpha`` (A, B, C, ...),
+   ``lowerroman`` (i, ii, iii, ...), or
+   ``upperroman`` (I, II, III, ...).
+
+   The start can be any positive integer (1, 2, 3, ...) or
+   ``continue`` if you wish the enumeration to continue from the last
+   bibliography. This is helpful if you split up your bibliography but
+   still want to enumerate the entries continuously.
 
 .. XXX not documenting disable-curly-bracket-strip for now; might remove it
 
