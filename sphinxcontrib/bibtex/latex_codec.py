@@ -319,7 +319,7 @@ class LatexUnicodeTable:
         self.register(u'\N{LATIN SMALL LETTER LJ}', b'lj', decode=False)
         self.register(u'\N{LATIN CAPITAL LETTER NJ}', b'NJ', decode=False)
         self.register(u'\N{LATIN CAPITAL LETTER N WITH SMALL LETTER J}', b'Nj', decode=False)
-        self.register(u'\N{LATIN SMALL LETTER NJ}', b'nj')
+        self.register(u'\N{LATIN SMALL LETTER NJ}', b'nj', decode=False)
         self.register(u'\N{LATIN CAPITAL LETTER A WITH CARON}', b'\\v A')
         self.register(u'\N{LATIN SMALL LETTER A WITH CARON}', b'\\v a')
         self.register(u'\N{LATIN CAPITAL LETTER I WITH CARON}', b'\\v I')
