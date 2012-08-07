@@ -48,13 +48,16 @@ class BibliographyDirective(Directive):
         'all': directives.flag,
         'style': directives.unchanged,
         'list': directives.unchanged,
+        'enumtype': directives.unchanged,
+        'start': directives.positive_int,
         'encoding': directives.encoding,
         'disable-curly-bracket-strip': directives.flag,
     }
 
     def run(self):
         """Process .bib files, set file dependencies, and create a
-        nodes for all entries of the bibliography.
+        node that is to be transformed to the entries of the
+        bibliography.
         """
         env = self.state.document.settings.env
         cache = env.bibtex_cache.bibliographies
@@ -71,6 +74,8 @@ class BibliographyDirective(Directive):
                     if "notcited" in self.options else (
                         "cited"))),
             list_=self.options.get("list", "citation"),
+            enumtype=self.options.get("enumtype", "arabic"),
+            start=self.options.get("start", 1),
             style=self.options.get("style", "unsrt"),
             encoding=self.options.get(
                 'encoding',

@@ -83,6 +83,24 @@ Roles and Directives
    Note that citations to these types of bibliography lists will not
    be resolved.
 
+   For enumerated lists, you can also specify the type (default is
+   ``arabic``), and the start of the sequence (default is ``1``).
+
+   .. code-block:: rest
+
+     .. bibliography:: refs2.bib
+        :list: enumerated
+        :enumtype: upperroman
+        :start: 3
+        :all:
+
+   The sequence type can be any of
+    ``arabic`` (1, 2, 3, ...),
+    ``loweralpha`` (a, b, c, ...),
+    ``upperalpha`` (A, B, C, ...),
+    ``lowerroman`` (i, ii, iii, ...), or
+    ``upperroman`` (I, II, III, ...).
+
 .. XXX not documenting disable-curly-bracket-strip for now; might remove it
 
    Finally, curly brackets are automatically removed when the bib file

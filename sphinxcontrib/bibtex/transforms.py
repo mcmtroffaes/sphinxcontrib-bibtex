@@ -99,6 +99,8 @@ class BibliographyTransform(docutils.transforms.Transform):
             backend = output_backend()
             if info.list_ == "enumerated":
                 nodes = docutils.nodes.enumerated_list()
+                nodes['enumtype'] = info.enumtype
+                nodes['start'] = info.start
             elif info.list_ == "bullet":
                 nodes = docutils.nodes.bullet_list()
             else: # "citation"
