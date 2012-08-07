@@ -1,6 +1,10 @@
 0.2.4 (in development)
 ----------------------
 
+* New options for the bibliography directive for rendering the
+  bibliography as bullet lists or enumerated lists: ``:list:``,
+  ``:enumtype:``, and ``:start:``.
+
 0.2.3 (30 July 2012)
 --------------------
 
