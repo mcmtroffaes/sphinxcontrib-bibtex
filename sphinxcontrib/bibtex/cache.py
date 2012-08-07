@@ -106,15 +106,31 @@ class BibliographyCache:
 
         The bibtex style.
 
+    .. attribute:: list_
+
+        The list type.
+
+    .. attribute:: enumtype
+
+        The sequence type (only used for enumerated lists).
+
+    .. attribute:: start
+
+        The first ordinal of the sequence (only used for enumerated lists).
+
     """
 
     def __init__(self, docname=None, bibfiles=None,
-                 cite="cited", style=None, encoding=None,
+                 cite="cited", style=None,
+                 list_="citation", enumtype="arabic", start=1,
+                 encoding=None,
                  curly_bracket_strip=True):
         self.docname = docname
         self.bibfiles = bibfiles if bibfiles is not None else []
         self.cite = cite
         self.style = style
+        self.list_ = list_
+        self.enumtype = enumtype
+        self.start = start
         self.encoding = encoding
         self.curly_bracket_strip = curly_bracket_strip
-

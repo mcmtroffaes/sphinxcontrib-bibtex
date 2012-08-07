@@ -30,6 +30,8 @@ def init_bibtex_cache(app):
     app.env.bibtex_citation_label = {}
     # XXX same for list of cited references
     app.env.bibtex_cited = set()
+    # XXX same for enum counter
+    app.env.bibtex_enum_count = 1
 
 def purge_bibtex_cache(app, env, docname):
     """Remove all information related to *docname* from the cache.

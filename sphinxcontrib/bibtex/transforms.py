@@ -96,13 +96,30 @@ class BibliographyTransform(docutils.transforms.Transform):
                 'pybtex.style.formatting', info.style)
             style = style_cls()
             # create citation nodes for all references
-            nodes = docutils.nodes.paragraph()
             backend = output_backend()
+            if info.list_ == "enumerated":
+                nodes = docutils.nodes.enumerated_list()
+                nodes['enumtype'] = info.enumtype
+                if info.start >= 1:
+                    nodes['start'] = info.start
+                    env.bibtex_enum_count = info.start
+                else:
+                    nodes['start'] = env.bibtex_enum_count
+            elif info.list_ == "bullet":
+                nodes = docutils.nodes.bullet_list()
+            else: # "citation"
+                nodes = docutils.nodes.paragraph()
             # XXX style.format_entries modifies entries in unpickable way
             for entry in style.format_entries(entries):
-                citation = backend.citation(entry, self.document)
+                if info.list_ == "enumerated" or info.list_ == "bullet":
+                    citation = docutils.nodes.list_item()
+                    citation += entry.text.render(backend)
+                else: # "citation"
+                    citation = backend.citation(entry, self.document)
                 node_text_transform(citation, transform_url_command)
                 if info.curly_bracket_strip:
                     node_text_transform(citation, transform_curly_bracket_strip)
                 nodes += citation
+                if info.list_ == "enumerated":
+                    env.bibtex_enum_count += 1
             bibnode.replace_self(nodes)
