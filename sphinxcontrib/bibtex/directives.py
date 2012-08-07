@@ -47,6 +47,7 @@ class BibliographyDirective(Directive):
         'notcited': directives.flag,
         'all': directives.flag,
         'style': directives.unchanged,
+        'list': directives.unchanged,
         'encoding': directives.encoding,
         'disable-curly-bracket-strip': directives.flag,
     }
@@ -69,6 +70,7 @@ class BibliographyDirective(Directive):
                     "notcited"
                     if "notcited" in self.options else (
                         "cited"))),
+            list_=self.options.get("list", "citation"),
             style=self.options.get("style", "unsrt"),
             encoding=self.options.get(
                 'encoding',

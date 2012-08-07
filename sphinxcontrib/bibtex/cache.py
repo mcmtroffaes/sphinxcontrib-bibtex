@@ -106,15 +106,20 @@ class BibliographyCache:
 
         The bibtex style.
 
+    .. attribute:: list
+
+        The list type.
+
     """
 
     def __init__(self, docname=None, bibfiles=None,
-                 cite="cited", style=None, encoding=None,
+                 cite="cited", style=None, list_="citation", encoding=None,
                  curly_bracket_strip=True):
         self.docname = docname
         self.bibfiles = bibfiles if bibfiles is not None else []
         self.cite = cite
         self.style = style
+        self.list_ = list_
         self.encoding = encoding
         self.curly_bracket_strip = curly_bracket_strip
 
