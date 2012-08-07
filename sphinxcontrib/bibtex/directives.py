@@ -89,7 +89,7 @@ class BibliographyDirective(Directive):
             curly_bracket_strip=(
                 'disable-curly-bracket-strip' not in self.options),
             )
-        if (info.list_ not in set({"bullet", "enumerated", "citation"})):
+        if (info.list_ not in set(["bullet", "enumerated", "citation"])):
             env.app.warn(
                 "unknown bibliography list type '{0}'.".format(info.list_))
         for bibfile in self.arguments[0].split():
