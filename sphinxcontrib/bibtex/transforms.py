@@ -97,7 +97,7 @@ class BibliographyTransform(docutils.transforms.Transform):
             style = style_cls()
             # create citation nodes for all references
             backend = output_backend()
-            if info.list_ == "enum":
+            if info.list_ == "enumerated":
                 nodes = docutils.nodes.enumerated_list()
             elif info.list_ == "bullet":
                 nodes = docutils.nodes.bullet_list()
@@ -105,7 +105,7 @@ class BibliographyTransform(docutils.transforms.Transform):
                 nodes = docutils.nodes.paragraph()
             # XXX style.format_entries modifies entries in unpickable way
             for entry in style.format_entries(entries):
-                if info.list_ == "enum" or info.list_ == "bullet":
+                if info.list_ == "enumerated" or info.list_ == "bullet":
                     citation = docutils.nodes.list_item()
                     citation += entry.text.render(backend)
                 else: # "citation"

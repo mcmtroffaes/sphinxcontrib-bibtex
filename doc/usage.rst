@@ -65,6 +65,24 @@ Roles and Directives
      .. bibliography:: refs.bib
         :encoding: latin
 
+   You can also change the type of list used for rendering the
+   bibliography. By default, a paragraph of standard citations will be
+   generated. However, instead, you can also generate a bullet list,
+   or an enumerated list.
+
+   .. code-block:: rest
+
+     .. bibliography:: refs1.bib
+        :list: bullet
+        :all:
+
+     .. bibliography:: refs2.bib
+        :list: enumerated
+        :all:
+
+   Note that citations to these types of bibliography lists will not
+   be resolved.
+
 .. XXX not documenting disable-curly-bracket-strip for now; might remove it
 
    Finally, curly brackets are automatically removed when the bib file
