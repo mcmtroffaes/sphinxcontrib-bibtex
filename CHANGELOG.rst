@@ -5,6 +5,8 @@
   bibliography as bullet lists or enumerated lists: ``:list:``,
   ``:enumtype:``, and ``:start:``.
 
+* Minor latex codec fixes.
+
 0.2.3 (30 July 2012)
 --------------------
 
