@@ -101,6 +101,9 @@ class TestDecoder(TestCase):
     def test_maelstrom_multibyte_encoding(self):
         self.decode(u"\\c öké", b'\\c \xc3\xb6k\xc3\xa9', 'utf8')
 
+    def test_serafin(self):
+        self.decode(u"Seraf{\xed}n", b"Seraf{\\'i}n")
+
 class TestStreamDecoder(TestDecoder):
     """Stream decoder tests."""
 
@@ -180,6 +183,9 @@ class TestEncoder(TestCase):
 
     def test_alpha(self):
         self.encode(u"α", b"$\\alpha$")
+
+    def test_serafin(self):
+        self.encode(u"Seraf{\xed}n", b"Seraf{\\'\\i }n")
 
 class TestStreamEncoder(TestEncoder):
     """Stream encoder tests."""
