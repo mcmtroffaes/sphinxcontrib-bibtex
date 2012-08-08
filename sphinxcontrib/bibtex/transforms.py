@@ -116,6 +116,12 @@ class BibliographyTransform(docutils.transforms.Transform):
                     citation += entry.text.render(backend)
                 else: # "citation"
                     citation = backend.citation(entry, self.document)
+                    label = citation[0].astext()
+                    try:
+                        num = env.bibtex_citation_label[label]
+                    except KeyError:
+                        num = str(len(env.bibtex_citation_label) + 1)
+                        env.bibtex_citation_label[label] = num
                 node_text_transform(citation, transform_url_command)
                 if info.curly_bracket_strip:
                     node_text_transform(citation, transform_curly_bracket_strip)
