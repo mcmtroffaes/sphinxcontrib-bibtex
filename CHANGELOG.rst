@@ -7,6 +7,9 @@
 
 * Minor latex codec fixes.
 
+* Turn exception into warning when a citation cannot be relabeled
+  (fixes issue #2).
+
 0.2.3 (30 July 2012)
 --------------------
 
