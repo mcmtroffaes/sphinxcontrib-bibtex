@@ -26,11 +26,9 @@ def init_bibtex_cache(app):
     """
     if not hasattr(app.env, "bibtex_cache"):
         app.env.bibtex_cache = Cache()
-    # XXX labels are currently not cached, always calculated on the fly
+    # things that are not cached
     app.env.bibtex_citation_label = {}
-    # XXX same for list of cited references
     app.env.bibtex_cited = set()
-    # XXX same for enum counter
     app.env.bibtex_enum_count = 1
 
 def purge_bibtex_cache(app, env, docname):
@@ -58,8 +56,7 @@ def process_citations(app, doctree, docname):
         try:
             num = app.env.bibtex_citation_label[label]
         except KeyError:
-            num = str(len(app.env.bibtex_citation_label) + 1)
-            app.env.bibtex_citation_label[label] = num
+            app.warn("could not relabel citation [%s]" % label)
         node[0] = docutils.nodes.label('', num)
 
 def process_citation_references(app, doctree, docname):
@@ -81,7 +78,7 @@ def process_citation_references(app, doctree, docname):
             try:
                 num = app.env.bibtex_citation_label[label]
             except KeyError:
-                app.warn("could not relabel [%s]" % label)
+                app.warn("could not relabel citation reference [%s]" % label)
             else:
                 node[0] = docutils.nodes.Text(
                     '[' + num + ']')
