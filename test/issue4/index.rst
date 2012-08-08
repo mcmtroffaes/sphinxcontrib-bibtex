@@ -1,3 +1,3 @@
 .. bibliography:: test.bib
    :all:
-   :encoding: utf
+   :encoding: latex+utf

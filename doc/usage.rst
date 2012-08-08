@@ -63,7 +63,13 @@ Roles and Directives
    .. code-block:: rest
 
      .. bibliography:: refs.bib
-        :encoding: latin
+        :encoding: latex+latin
+
+   Note that, usually, you want to prepend your encoding with
+   ``latex+``, in order to convert LaTeX control characters to unicode
+   characters (for instance, to convert ``\'e`` into ``é``). The latex
+   codec is invoked by default, for your convenience. Be sure to write
+   ``\%`` when you intend to format a percent sign.
 
    You can also change the type of list used for rendering the
    bibliography. By default, a paragraph of standard citations will be
@@ -127,3 +133,14 @@ To use the bibtex extension with `Tinkerer <http://www.tinkerer.me/>`_,
 be sure to specify the bibtex extension first in your ``conf.py`` file::
 
     extensions = ['sphinxcontrib.bibtex', 'tinkerer.ext.blog', 'tinkerer.ext.disqus']
+
+Encoding: Percent Signs
+~~~~~~~~~~~~~~~~~~~~~~~
+
+When using the LaTeX codec (which is by default), be sure to write
+``\%`` for percent signs at all times (unless your file contains a
+genuine comment), otherwise the bibtex lexer will ignore the remainder
+of the line.
+
+If you don't want any LaTeX symbols to be reinterpreted as unicode,
+use the option ``:encoding: utf`` (without the ``latex+`` prefix).
