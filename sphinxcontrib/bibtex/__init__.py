@@ -78,8 +78,13 @@ def process_citation_references(app, doctree, docname):
         text = node[0].astext()
         if text.startswith('[') and text.endswith(']'):
             label = text[1:-1]
-            node[0] = docutils.nodes.Text(
-                '[' + app.env.bibtex_citation_label[label] + ']')
+            try:
+                num = app.env.bibtex_citation_label[label]
+            except KeyError:
+                app.warn("could not relabel [%s]" % label)
+            else:
+                node[0] = docutils.nodes.Text(
+                    '[' + app.env.bibtex_citation_label[label] + ']')
 
 def setup(app):
     """Set up the bibtex extension:
