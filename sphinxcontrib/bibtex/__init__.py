@@ -84,7 +84,7 @@ def process_citation_references(app, doctree, docname):
                 app.warn("could not relabel [%s]" % label)
             else:
                 node[0] = docutils.nodes.Text(
-                    '[' + app.env.bibtex_citation_label[label] + ']')
+                    '[' + num + ']')
 
 def setup(app):
     """Set up the bibtex extension:
