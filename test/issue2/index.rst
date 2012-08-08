@@ -1,3 +1,6 @@
+Contents
+========
+
 .. toctree::
 
    doc1
