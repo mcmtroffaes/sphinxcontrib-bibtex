@@ -10,6 +10,10 @@
 * Turn exception into warning when a citation cannot be relabeled
   (fixes issue #2).
 
+* Document LaTeX encoding, and how to turn it off (issue #4).
+
+* Use pybtex labels (fixes issue #6 and issue #7).
+
 0.2.3 (30 July 2012)
 --------------------
 
