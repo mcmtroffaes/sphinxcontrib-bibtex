@@ -144,3 +144,17 @@ of the line.
 
 If you don't want any LaTeX symbols to be reinterpreted as unicode,
 use the option ``:encoding: utf`` (without the ``latex+`` prefix).
+
+Unresolved Citations Across Documents
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you cite something that has its bibliography in another document,
+then, at the moment, the extension may, or may not, realise that it
+has to add this citation. The way to work around this problem is to
+either use the option ``:all:`` in the :rst:dir:`bibliography`
+directive (which will simply cause all entries to be included), or to
+somehow ensure that the :rst:dir:`bibliography` directive is processed
+after all :rst:role:`:cite:`\ s. (Sphinx appears to process files in
+an alphabetical manner.)
+
+Hopefully, this limitation can be lifted in a future release.
