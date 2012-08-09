@@ -42,7 +42,7 @@ def purge_bibtex_cache(app, env, docname):
     env.bibtex_cache.purge(docname)
 
 def process_citations(app, doctree, docname):
-    """Replace labels of citation nodes by numbers.
+    """Replace labels of citation nodes by actual labels.
 
     :param app: The sphinx application.
     :type app: :class:`sphinx.application.Sphinx`
@@ -54,13 +54,14 @@ def process_citations(app, doctree, docname):
     for node in doctree.traverse(docutils.nodes.citation):
         label = node[0].astext()
         try:
-            num = app.env.bibtex_citation_label[label]
+            citation_label = app.env.bibtex_citation_label[label]
         except KeyError:
             app.warn("could not relabel citation [%s]" % label)
-        node[0] = docutils.nodes.label('', num)
+        else:
+            node[0] = docutils.nodes.label('', citation_label)
 
 def process_citation_references(app, doctree, docname):
-    """Replace text of citation reference nodes by numbers.
+    """Replace text of citation reference nodes by actual labels.
 
     :param app: The sphinx application.
     :type app: :class:`sphinx.application.Sphinx`
@@ -76,13 +77,11 @@ def process_citation_references(app, doctree, docname):
         if text.startswith('[') and text.endswith(']'):
             label = text[1:-1]
             try:
-                num = app.env.bibtex_citation_label[label]
+                citation_label = app.env.bibtex_citation_label[label]
             except KeyError:
                 app.warn("could not relabel citation reference [%s]" % label)
             else:
-                node[0] = docutils.nodes.Text(
-                    '[' + num + ']')
-
+                node[0] = docutils.nodes.Text('[' + citation_label + ']')
 def setup(app):
     """Set up the bibtex extension:
 
