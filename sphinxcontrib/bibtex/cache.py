@@ -38,7 +38,7 @@ class Cache:
         :class:`~sphinxcontrib.bibtex.nodes.bibliography` nodes
         themselves.
 
-    .. attribute:: cited
+    .. attribute:: _cited
 
         A :class:`dict` mapping each docname to a :class:`set` of
         citation keys.
@@ -53,7 +53,7 @@ class Cache:
     def __init__(self):
         self.bibfiles = {}
         self.bibliographies = {}
-        self.cited = collections.defaultdict(set)
+        self._cited = collections.defaultdict(set)
         self._enum_count = {}
 
     def purge(self, docname):
@@ -66,7 +66,7 @@ class Cache:
                if info.docname == docname]
         for id_ in ids:
             del self.bibliographies[id_]
-        self.cited.pop(docname, None)
+        self._cited.pop(docname, None)
         self._enum_count.pop(docname, None)
 
     def inc_enum_count(self, docname):
@@ -93,7 +93,7 @@ class Cache:
         :param docname: The document name.
         :type docname: :class:`str`
         """
-        self.cited[docname].add(key)
+        self._cited[docname].add(key)
 
     def is_cited(self, key):
         """Return whether the given key is cited in any document.
@@ -101,7 +101,7 @@ class Cache:
         :param key: The citation key.
         :type key: :class:`str`
         """
-        for docname, keys in self.cited.iteritems():
+        for docname, keys in self._cited.iteritems():
             if key in keys:
                 return True
         return False
