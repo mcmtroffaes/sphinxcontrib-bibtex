@@ -69,9 +69,18 @@ class BibliographyTransform(docutils.transforms.Transform):
             # get the information of this bibliography node
             # by looking up its id in the bibliography cache
             id_ = bibnode['ids'][0]
-            info = [info for other_id, info
-                    in env.bibtex_cache.bibliographies.iteritems()
-                    if other_id == id_][0]
+            infos = [info for other_id, info
+                     in env.bibtex_cache.bibliographies.iteritems()
+                     if other_id == id_ and info.docname == env.docname]
+            if not infos:
+                raise RuntimeError(
+                    "document %s has no bibliography nodes with id '%s'"
+                    % (env.docname, id_))
+            elif len(infos) >= 2:
+                raise RuntimeError(
+                    "document %s has multiple bibliography nodes with id '%s'"
+                    % (env.docname, id_))
+            info = infos[0]
             # generate entries
             entries = []
             for bibfile in info.bibfiles:
