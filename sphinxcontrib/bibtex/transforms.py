@@ -116,9 +116,11 @@ class BibliographyTransform(docutils.transforms.Transform):
                     citation += entry.text.render(backend)
                 else: # "citation"
                     citation = backend.citation(entry, self.document)
-                    label = citation[0].astext()
-                    if label not in env.bibtex_citation_label:
-                        env.bibtex_citation_label[label] = entry.label
+                    # backend.citation(...) uses entry.key as citation label
+                    # we change it to entry.label later onwards
+                    # but we must note the entry.label now
+                    key = citation[0].astext()
+                    info.labels[key] = entry.label
                 node_text_transform(citation, transform_url_command)
                 if info.curly_bracket_strip:
                     node_text_transform(citation, transform_curly_bracket_strip)

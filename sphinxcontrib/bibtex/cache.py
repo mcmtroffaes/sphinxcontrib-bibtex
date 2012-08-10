@@ -84,6 +84,14 @@ class Cache:
                 return True
         return False
 
+    def get_label_from_key(self, key):
+        """Return label for the given key."""
+        for info in self.bibliographies.itervalues():
+            if key in info.labels:
+                return info.labels[key]
+        else:
+            raise KeyError("%s not found" % key)
+
 class BibfileCache:
     """Contains information about a parsed .bib file.
 
@@ -148,13 +156,18 @@ class BibliographyCache:
 
         The first ordinal of the sequence (only used for enumerated lists).
 
+    .. attribute:: labels
+
+        Maps citation keys to their final labels.
     """
 
     def __init__(self, docname=None, bibfiles=None,
                  cite="cited", style=None,
                  list_="citation", enumtype="arabic", start=1,
+                 labels=None,
                  encoding=None,
-                 curly_bracket_strip=True):
+                 curly_bracket_strip=True,
+                 ):
         self.docname = docname
         self.bibfiles = bibfiles if bibfiles is not None else []
         self.cite = cite
@@ -164,3 +177,4 @@ class BibliographyCache:
         self.start = start
         self.encoding = encoding
         self.curly_bracket_strip = curly_bracket_strip
+        self.labels = labels if labels is not None else {}
