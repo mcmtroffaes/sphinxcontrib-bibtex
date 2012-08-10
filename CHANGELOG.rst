@@ -17,6 +17,9 @@
 * Cache tracked citation keys and labels, and bibliography enumeration
   counts (fixes issues with citations in repeated Sphinx runs).
 
+* Bibliography ids are now unique across documents (fixes issue that
+  could cause the wrong bibliography to be inserted).
+
 0.2.3 (30 July 2012)
 --------------------
 
