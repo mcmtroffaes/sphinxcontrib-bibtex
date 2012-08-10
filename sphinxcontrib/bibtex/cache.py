@@ -43,12 +43,18 @@ class Cache:
         A :class:`dict` mapping each docname to a :class:`set` of
         citation keys.
 
+    .. attribute:: _enum_count
+
+        A :class:`dict` mapping each docname to an :class:`int`
+        representing the current bibliography enumeration counter.
+
     """
 
     def __init__(self):
         self.bibfiles = {}
         self.bibliographies = {}
         self.cited = collections.defaultdict(set)
+        self._enum_count = {}
 
     def purge(self, docname):
         """Remove  all information related to *docname*.
@@ -61,6 +67,22 @@ class Cache:
         for id_ in ids:
             del self.bibliographies[id_]
         self.cited.pop(docname, None)
+        self._enum_count.pop(docname, None)
+
+    def inc_enum_count(self, docname):
+        if docname in self._enum_count:
+            self._enum_count[docname] += 1
+        else:
+            self._enum_count[docname] = 2
+
+    def set_enum_count(self, docname, value):
+        self._enum_count[docname] = value
+
+    def get_enum_count(self, docname):
+        if docname in self._enum_count:
+            return self._enum_count[docname]
+        else:
+            return 1
 
     def add_cited(self, key, docname):
         """Add the given *key* to the set of cited keys for
