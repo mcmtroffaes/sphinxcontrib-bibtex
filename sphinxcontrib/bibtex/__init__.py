@@ -27,7 +27,6 @@ def init_bibtex_cache(app):
     if not hasattr(app.env, "bibtex_cache"):
         app.env.bibtex_cache = Cache()
     # things that are not cached
-    app.env.bibtex_citation_label = {}
     app.env.bibtex_enum_count = 1
 
 def purge_bibtex_cache(app, env, docname):
@@ -51,13 +50,13 @@ def process_citations(app, doctree, docname):
     :type docname: :class:`str`
     """
     for node in doctree.traverse(docutils.nodes.citation):
-        label = node[0].astext()
+        key = node[0].astext()
         try:
-            citation_label = app.env.bibtex_citation_label[label]
+            label = app.env.bibtex_cache.get_label_from_key(key)
         except KeyError:
-            app.warn("could not relabel citation [%s]" % label)
+            app.warn("could not relabel citation [%s]" % key)
         else:
-            node[0] = docutils.nodes.label('', citation_label)
+            node[0] = docutils.nodes.label('', label)
 
 def process_citation_references(app, doctree, docname):
     """Replace text of citation reference nodes by actual labels.
@@ -74,13 +73,14 @@ def process_citation_references(app, doctree, docname):
     for node in doctree.traverse(docutils.nodes.reference):
         text = node[0].astext()
         if text.startswith('[') and text.endswith(']'):
-            label = text[1:-1]
+            key = text[1:-1]
             try:
-                citation_label = app.env.bibtex_citation_label[label]
+                label = app.env.bibtex_cache.get_label_from_key(key)
             except KeyError:
-                app.warn("could not relabel citation reference [%s]" % label)
+                app.warn("could not relabel citation reference [%s]" % key)
             else:
-                node[0] = docutils.nodes.Text('[' + citation_label + ']')
+                node[0] = docutils.nodes.Text('[' + label + ']')
+
 def setup(app):
     """Set up the bibtex extension:
 

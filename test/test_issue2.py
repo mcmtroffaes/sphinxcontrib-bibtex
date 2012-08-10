@@ -22,5 +22,5 @@ def test_mixing_citation_styles(app):
     nose.tools.assert_equal(
         app.env.bibtex_cache.cited, {u'doc1': set([u"Test"])})
     nose.tools.assert_equal(
-        app.env.bibtex_citation_label, {u"Test": "1"})
-
+        app.env.bibtex_cache.bibliographies['bibtex-bibliography-0'].labels,
+        {u"Test": "1"})
