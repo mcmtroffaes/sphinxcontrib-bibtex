@@ -20,6 +20,7 @@ def teardown_module():
 def test_tinker(app):
     app.builder.build_all()
     nose.tools.assert_equal(
-        app.env.bibtex_cited, set([u"2011:BabikerIPv6"]))
+        app.env.bibtex_cache.cited,
+        {u'2012/07/24/hello_world_': set([u"2011:BabikerIPv6"])})
     nose.tools.assert_equal(
         app.env.bibtex_citation_label, {u"2011:BabikerIPv6": "1"})
