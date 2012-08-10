@@ -70,7 +70,12 @@ class BibliographyDirective(Directive):
         # create id and cache for this node
         # this id will be stored with the node
         # and is used to look up additional data in env.bibtex_cache
-        id_ = 'bibtex-bibliography-%s' % env.new_serialno('bibtex')
+        # (implementation note: new_serialno only guarantees unique
+        # ids within a single document, but we need the id to be
+        # unique across all documents, so we also include the docname
+        # in the id)
+        id_ = 'bibtex-bibliography-%s-%s' % (
+            env.docname, env.new_serialno('bibtex'))
         info = BibliographyCache(
             docname=env.docname,
             cite=(
