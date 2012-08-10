@@ -26,8 +26,6 @@ def init_bibtex_cache(app):
     """
     if not hasattr(app.env, "bibtex_cache"):
         app.env.bibtex_cache = Cache()
-    # things that are not cached
-    app.env.bibtex_enum_count = 1
 
 def purge_bibtex_cache(app, env, docname):
     """Remove all information related to *docname* from the cache.
