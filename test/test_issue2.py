@@ -20,7 +20,7 @@ def teardown_module():
 def test_mixing_citation_styles(app):
     app.builder.build_all()
     nose.tools.assert_equal(
-        app.env.bibtex_cited, set([u"Test"]))
+        app.env.bibtex_cache.cited, {u'doc1': set([u"Test"])})
     nose.tools.assert_equal(
         app.env.bibtex_citation_label, {u"Test": "1"})
 

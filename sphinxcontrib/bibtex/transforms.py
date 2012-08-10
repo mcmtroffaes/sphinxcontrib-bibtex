@@ -83,11 +83,11 @@ class BibliographyTransform(docutils.transforms.Transform):
                 elif info.cite == "cited":
                     bibfile_entries = (
                         entry for entry in data.entries.itervalues()
-                        if entry.key in env.bibtex_cited)
+                        if env.bibtex_cache.is_cited(entry.key))
                 elif info.cite == "notcited":
                     bibfile_entries = (
                         entry for entry in data.entries.itervalues()
-                        if entry.key not in env.bibtex_cited)
+                        if not env.bibtex_cache.is_cited(entry.key))
                 else:
                     raise RuntimeError("invalid cite option (%s)" % info.cite)
                 entries += copy.deepcopy(list(bibfile_entries))

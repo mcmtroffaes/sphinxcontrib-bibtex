@@ -16,6 +16,7 @@
         :members:
 """
 
+import collections
 import pybtex.database
 
 class Cache:
@@ -37,11 +38,17 @@ class Cache:
         :class:`~sphinxcontrib.bibtex.nodes.bibliography` nodes
         themselves.
 
+    .. attribute:: cited
+
+        A :class:`dict` mapping each docname to a :class:`set` of
+        citation keys.
+
     """
 
     def __init__(self):
         self.bibfiles = {}
         self.bibliographies = {}
+        self.cited = collections.defaultdict(set)
 
     def purge(self, docname):
         """Remove  all information related to *docname*.
@@ -53,6 +60,29 @@ class Cache:
                if info.docname == docname]
         for id_ in ids:
             del self.bibliographies[id_]
+        self.cited.pop(docname, None)
+
+    def add_cited(self, key, docname):
+        """Add the given *key* to the set of cited keys for
+        *docname*.
+
+        :param key: The citation key.
+        :type key: :class:`str`
+        :param docname: The document name.
+        :type docname: :class:`str`
+        """
+        self.cited[docname].add(key)
+
+    def is_cited(self, key):
+        """Return whether the given key is cited in any document.
+
+        :param key: The citation key.
+        :type key: :class:`str`
+        """
+        for docname, keys in self.cited.iteritems():
+            if key in keys:
+                return True
+        return False
 
 class BibfileCache:
     """Contains information about a parsed .bib file.
