@@ -14,6 +14,9 @@
 
 * Use pybtex labels (fixes issue #6 and issue #7).
 
+* Cache tracked citation keys (fixes issues with citations in repeated
+  Sphinx runs).
+
 0.2.3 (30 July 2012)
 --------------------
 
