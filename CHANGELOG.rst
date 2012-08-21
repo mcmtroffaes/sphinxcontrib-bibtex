@@ -20,6 +20,8 @@
 * Bibliography ids are now unique across documents (fixes issue that
   could cause the wrong bibliography to be inserted).
 
+* The plain style is now the default.
+
 0.2.3 (30 July 2012)
 --------------------
 
