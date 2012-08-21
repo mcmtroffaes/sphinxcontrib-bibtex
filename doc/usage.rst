@@ -45,8 +45,9 @@ Roles and Directives
       is included more than once.
 
    You can also pick a bibliography style, using the ``style`` option.
-   This is not yet quite as useful, as only ``unsrt`` is supported,
-   which is also the default.
+   This is not yet quite as useful, as only ``plain`` and ``unsrt``
+   are supported.
+   The ``plain`` style is the default.
 
    .. code-block:: rest
 
@@ -158,3 +159,12 @@ after all :rst:role:`:cite:`\ s. (Sphinx appears to process files in
 an alphabetical manner.)
 
 Hopefully, this limitation can be lifted in a future release.
+
+KeyError When Using ``:style: plain``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When using the plain style, or any style that sorts entries, pybtex
+may raise ``KeyError: 'author'`` for entries that have no author. A
+patch has been submitted upstream:
+
+https://code.launchpad.net/~matthias-troffaes/pybtex/sorting-bugfix
