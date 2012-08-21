@@ -45,8 +45,9 @@ Roles and Directives
       is included more than once.
 
    You can also pick a bibliography style, using the ``style`` option.
-   This is not yet quite as useful, as only ``unsrt`` is supported,
-   which is also the default.
+   This is not yet quite as useful, as only ``plain`` and ``unsrt``
+   are supported.
+   The ``plain`` style is the default.
 
    .. code-block:: rest
 
