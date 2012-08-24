@@ -1,4 +1,4 @@
-0.2.4 (in development)
+0.2.4 (24 August 2012)
 ----------------------
 
 * New options for the bibliography directive for rendering the
@@ -20,7 +20,7 @@
 * Bibliography ids are now unique across documents (fixes issue that
   could cause the wrong bibliography to be inserted).
 
-* The plain style is now the default.
+* The plain style is now the default (addresses issue #9).
 
 0.2.3 (30 July 2012)
 --------------------
