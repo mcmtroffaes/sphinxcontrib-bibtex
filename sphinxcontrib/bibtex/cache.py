@@ -16,6 +16,7 @@
         :members:
 """
 
+import collections
 import pybtex.database
 
 class Cache:
@@ -37,11 +38,23 @@ class Cache:
         :class:`~sphinxcontrib.bibtex.nodes.bibliography` nodes
         themselves.
 
+    .. attribute:: _cited
+
+        A :class:`dict` mapping each docname to a :class:`set` of
+        citation keys.
+
+    .. attribute:: _enum_count
+
+        A :class:`dict` mapping each docname to an :class:`int`
+        representing the current bibliography enumeration counter.
+
     """
 
     def __init__(self):
         self.bibfiles = {}
         self.bibliographies = {}
+        self._cited = collections.defaultdict(set)
+        self._enum_count = {}
 
     def purge(self, docname):
         """Remove  all information related to *docname*.
@@ -53,6 +66,53 @@ class Cache:
                if info.docname == docname]
         for id_ in ids:
             del self.bibliographies[id_]
+        self._cited.pop(docname, None)
+        self._enum_count.pop(docname, None)
+
+    def inc_enum_count(self, docname):
+        if docname in self._enum_count:
+            self._enum_count[docname] += 1
+        else:
+            self._enum_count[docname] = 2
+
+    def set_enum_count(self, docname, value):
+        self._enum_count[docname] = value
+
+    def get_enum_count(self, docname):
+        if docname in self._enum_count:
+            return self._enum_count[docname]
+        else:
+            return 1
+
+    def add_cited(self, key, docname):
+        """Add the given *key* to the set of cited keys for
+        *docname*.
+
+        :param key: The citation key.
+        :type key: :class:`str`
+        :param docname: The document name.
+        :type docname: :class:`str`
+        """
+        self._cited[docname].add(key)
+
+    def is_cited(self, key):
+        """Return whether the given key is cited in any document.
+
+        :param key: The citation key.
+        :type key: :class:`str`
+        """
+        for docname, keys in self._cited.iteritems():
+            if key in keys:
+                return True
+        return False
+
+    def get_label_from_key(self, key):
+        """Return label for the given key."""
+        for info in self.bibliographies.itervalues():
+            if key in info.labels:
+                return info.labels[key]
+        else:
+            raise KeyError("%s not found" % key)
 
 class BibfileCache:
     """Contains information about a parsed .bib file.
@@ -106,15 +166,37 @@ class BibliographyCache:
 
         The bibtex style.
 
+    .. attribute:: list_
+
+        The list type.
+
+    .. attribute:: enumtype
+
+        The sequence type (only used for enumerated lists).
+
+    .. attribute:: start
+
+        The first ordinal of the sequence (only used for enumerated lists).
+
+    .. attribute:: labels
+
+        Maps citation keys to their final labels.
     """
 
     def __init__(self, docname=None, bibfiles=None,
-                 cite="cited", style=None, encoding=None,
-                 curly_bracket_strip=True):
+                 cite="cited", style=None,
+                 list_="citation", enumtype="arabic", start=1,
+                 labels=None,
+                 encoding=None,
+                 curly_bracket_strip=True,
+                 ):
         self.docname = docname
         self.bibfiles = bibfiles if bibfiles is not None else []
         self.cite = cite
         self.style = style
+        self.list_ = list_
+        self.enumtype = enumtype
+        self.start = start
         self.encoding = encoding
         self.curly_bracket_strip = curly_bracket_strip
-
+        self.labels = labels if labels is not None else {}

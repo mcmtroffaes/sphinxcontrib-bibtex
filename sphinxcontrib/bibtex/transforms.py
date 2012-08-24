@@ -69,9 +69,18 @@ class BibliographyTransform(docutils.transforms.Transform):
             # get the information of this bibliography node
             # by looking up its id in the bibliography cache
             id_ = bibnode['ids'][0]
-            info = [info for other_id, info
-                    in env.bibtex_cache.bibliographies.iteritems()
-                    if other_id == id_][0]
+            infos = [info for other_id, info
+                     in env.bibtex_cache.bibliographies.iteritems()
+                     if other_id == id_ and info.docname == env.docname]
+            if not infos:
+                raise RuntimeError(
+                    "document %s has no bibliography nodes with id '%s'"
+                    % (env.docname, id_))
+            elif len(infos) >= 2:
+                raise RuntimeError(
+                    "document %s has multiple bibliography nodes with id '%s'"
+                    % (env.docname, id_))
+            info = infos[0]
             # generate entries
             entries = []
             for bibfile in info.bibfiles:
@@ -83,11 +92,11 @@ class BibliographyTransform(docutils.transforms.Transform):
                 elif info.cite == "cited":
                     bibfile_entries = (
                         entry for entry in data.entries.itervalues()
-                        if entry.key in env.bibtex_cited)
+                        if env.bibtex_cache.is_cited(entry.key))
                 elif info.cite == "notcited":
                     bibfile_entries = (
                         entry for entry in data.entries.itervalues()
-                        if entry.key not in env.bibtex_cited)
+                        if not env.bibtex_cache.is_cited(entry.key))
                 else:
                     raise RuntimeError("invalid cite option (%s)" % info.cite)
                 entries += copy.deepcopy(list(bibfile_entries))
@@ -96,13 +105,35 @@ class BibliographyTransform(docutils.transforms.Transform):
                 'pybtex.style.formatting', info.style)
             style = style_cls()
             # create citation nodes for all references
-            nodes = docutils.nodes.paragraph()
             backend = output_backend()
+            if info.list_ == "enumerated":
+                nodes = docutils.nodes.enumerated_list()
+                nodes['enumtype'] = info.enumtype
+                if info.start >= 1:
+                    nodes['start'] = info.start
+                    env.bibtex_cache.set_enum_count(env.docname, info.start)
+                else:
+                    nodes['start'] = env.bibtex_cache.get_enum_count(env.docname)
+            elif info.list_ == "bullet":
+                nodes = docutils.nodes.bullet_list()
+            else: # "citation"
+                nodes = docutils.nodes.paragraph()
             # XXX style.format_entries modifies entries in unpickable way
             for entry in style.format_entries(entries):
-                citation = backend.citation(entry, self.document)
+                if info.list_ == "enumerated" or info.list_ == "bullet":
+                    citation = docutils.nodes.list_item()
+                    citation += entry.text.render(backend)
+                else: # "citation"
+                    citation = backend.citation(entry, self.document)
+                    # backend.citation(...) uses entry.key as citation label
+                    # we change it to entry.label later onwards
+                    # but we must note the entry.label now
+                    key = citation[0].astext()
+                    info.labels[key] = entry.label
                 node_text_transform(citation, transform_url_command)
                 if info.curly_bracket_strip:
                     node_text_transform(citation, transform_curly_bracket_strip)
                 nodes += citation
+                if info.list_ == "enumerated":
+                    env.bibtex_cache.inc_enum_count(env.docname)
             bibnode.replace_self(nodes)

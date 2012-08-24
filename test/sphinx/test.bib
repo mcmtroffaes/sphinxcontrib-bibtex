@@ -57,22 +57,22 @@
   OPTannote =    {}
 }
 
-@Proceedings{2010:coolen:oberguggenberger:troffaes::jrr,
-  title =        {Proceedings of the Institution of Mechanical Engineers, Part O: Journal of Risk and Reliability},
-  year =         {2010},
-  OPTkey =       {},
-  OPTbooktitle = {},
-  editor =    {Frank P. A. Coolen and Michael Oberguggenberger and Matthias C. M. Troffaes},
-  volume =    {224},
-  number =    {4},
-  OPTseries =    {},
-  OPTaddress =   {},
-  OPTmonth =     {},
-  OPTorganization = {},
-  OPTpublisher = {},
-  note =      {Special Issue on Uncertainty in Engineering and Risk Reliability},
-  OPTannote =    {}
-}
+%@Proceedings{2010:coolen:oberguggenberger:troffaes::jrr,
+%  title =        {Proceedings of the Institution of Mechanical Engineers, Part O: Journal of Risk and Reliability},
+%  year =         {2010},
+%  OPTkey =       {},
+%  OPTbooktitle = {},
+%  editor =    {Frank P. A. Coolen and Michael Oberguggenberger and Matthias C. M. Troffaes},
+%  volume =    {224},
+%  number =    {4},
+%  OPTseries =    {},
+%  OPTaddress =   {},
+%  OPTmonth =     {},
+%  OPTorganization = {},
+%  OPTpublisher = {},
+%  note =      {Special Issue on Uncertainty in Engineering and Risk Reliability},
+%  OPTannote =    {}
+%}
 
 @Article{1996:fukuda,
   author =       {K. Fukuda and A. Prodon},
@@ -203,4 +203,73 @@ year=2001,
   OPTmonth = 	 {},
   OPTnote = 	 {},
   OPTannote = 	 {}
+}
+
+%%% taken from Jason K. Moore's thesis; it is a good complex long entry for testing
+@ARTICLE{Astrom2005,
+  author = {{\AA}str{\"o}m, Karl J. and Klein, Richard E. and Lennartsson, Anders},
+  title = {Bicycle Dynamics and Control},
+  journal = {IEEE Control Systems Magazine},
+  year = {2005},
+  volume = {25},
+  pages = {26--47},
+  number = {4},
+  month = {August},
+  abstract = {This article analyzes the dynamics of bicycles from the perspective
+	of control. Models of different complexity are presented, starting
+	with simple ones and ending with more realistic models generated
+	from multibody software. We consider models that capture essential
+	behavior such as self-stabilization as well as models that demonstrate
+	difficulties with rear wheel steering. We relate our experiences
+	using bicycles in control education along with suggestions for fun
+	and thought-provoking experiments with proven student attraction.
+	Finally, we describe bicycles and clinical programs designed for
+	children with disabilities.},
+  bib = {bibtex-keys#Astrom2005},
+  bibpr = {private-bibtex-keys#Astrom2005},
+  doi = {10.1109/MCS.2005.1499389},
+  file = {Astrom2005.pdf:Astrom2005.pdf:PDF},
+  keywords = {bicycles, control engineering computing, control engineering education,design,
+	handicapped aids, nonlinear control systems, nonlinear dynamicalsystems,
+	position control, stability bicycle control, bicycle dynamics, clinical
+	programs, computer simulation, control education, disabled children,
+	dynamic behavior, inverted pendulum, modelling, multibody software,
+	nonminimum phase steering behavior, rear wheel steering difficulties,
+	self-stabilization},
+  owner = {moorepants},
+  review = {Shows a steer torque measurement system constructed for the UCSB instrumented
+	bicycle but with little extra information. They use a linear force
+	transducer of some sort mounted on the handlebars.
+	
+	
+	They first show the point mass model like Karnopp's 2004 model (older
+	ones are referenced in Meijaard2007). They stablize the steer angel
+	to roll angle transfer function with a negative feedback gain which
+	has dependence on the forward velocity.
+	
+	
+	He adds a basic model of the front fork geometry to the point mass
+	model, giving a relationship between steer torque input and steer
+	angle which is speed dependent. The roll angle to steer angle now
+	has a builtin negative feedback law due to the front fork geometry
+	and if the k2 gain is large enough (with steer torque = 0) the system
+	is stable. He uses this to calculat a critical velocity for stability.
+	
+	
+	Klein says you should grip the handlebars lightly to take advantage
+	of the bicycle self stability. This corresponds to the differences
+	in the Whipple model and one with arms.
+	
+	
+	Cites Wier1972 as giving 0.1s and 0.3s of nueromuscular delay in steer
+	torque and upper body lean, respectively.
+	
+	
+	The gyroscopic effects give rise to derivative feedback.
+	
+	
+	Claims that riders use variation in forward speed as an additional
+	control variable.},
+  timestamp = {2008.10.16},
+  webpdf = {references-folder/Astrom2005.pdf}
 }

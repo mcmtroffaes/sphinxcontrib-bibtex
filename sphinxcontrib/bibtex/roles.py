@@ -30,5 +30,5 @@ class CiteRole(XRefRole):
             entry = pybtex.database.Entry(type_=None)
             entry.key = key
         refnode = self.backend.citation_reference(entry, document)
-        env.bibtex_cited.add(key)
+        env.bibtex_cache.add_cited(key, env.docname)
         return [refnode], []

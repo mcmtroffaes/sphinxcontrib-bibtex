@@ -45,8 +45,9 @@ Roles and Directives
       is included more than once.
 
    You can also pick a bibliography style, using the ``style`` option.
-   This is not yet quite as useful, as only ``unsrt`` is supported,
-   which is also the default.
+   This is not yet quite as useful, as only ``plain`` and ``unsrt``
+   are supported.
+   The ``plain`` style is the default.
 
    .. code-block:: rest
 
@@ -63,7 +64,54 @@ Roles and Directives
    .. code-block:: rest
 
      .. bibliography:: refs.bib
-        :encoding: latin
+        :encoding: latex+latin
+
+   Note that, usually, you want to prepend your encoding with
+   ``latex+``, in order to convert LaTeX control characters to unicode
+   characters (for instance, to convert ``\'e`` into ``é``). The latex
+   codec is invoked by default, for your convenience. Be sure to write
+   ``\%`` when you intend to format a percent sign.
+
+   You can also change the type of list used for rendering the
+   bibliography. By default, a paragraph of standard citations will be
+   generated. However, instead, you can also generate a bullet list,
+   or an enumerated list.
+
+   .. code-block:: rest
+
+     .. bibliography:: refs1.bib
+        :list: bullet
+        :all:
+
+     .. bibliography:: refs2.bib
+        :list: enumerated
+        :all:
+
+   Note that citations to these types of bibliography lists will not
+   be resolved.
+
+   For enumerated lists, you can also specify the type (default is
+   ``arabic``), and the start of the sequence (default is ``1``).
+
+   .. code-block:: rest
+
+     .. bibliography:: refs2.bib
+        :list: enumerated
+        :enumtype: upperroman
+        :start: 3
+        :all:
+
+   The enumtype can be any of
+   ``arabic`` (1, 2, 3, ...),
+   ``loweralpha`` (a, b, c, ...),
+   ``upperalpha`` (A, B, C, ...),
+   ``lowerroman`` (i, ii, iii, ...), or
+   ``upperroman`` (I, II, III, ...).
+
+   The start can be any positive integer (1, 2, 3, ...) or
+   ``continue`` if you wish the enumeration to continue from the last
+   bibliography. This is helpful if you split up your bibliography but
+   still want to enumerate the entries continuously.
 
 .. XXX not documenting disable-curly-bracket-strip for now; might remove it
 
@@ -86,3 +134,37 @@ To use the bibtex extension with `Tinkerer <http://www.tinkerer.me/>`_,
 be sure to specify the bibtex extension first in your ``conf.py`` file::
 
     extensions = ['sphinxcontrib.bibtex', 'tinkerer.ext.blog', 'tinkerer.ext.disqus']
+
+Encoding: Percent Signs
+~~~~~~~~~~~~~~~~~~~~~~~
+
+When using the LaTeX codec (which is by default), be sure to write
+``\%`` for percent signs at all times (unless your file contains a
+genuine comment), otherwise the bibtex lexer will ignore the remainder
+of the line.
+
+If you don't want any LaTeX symbols to be reinterpreted as unicode,
+use the option ``:encoding: utf`` (without the ``latex+`` prefix).
+
+Unresolved Citations Across Documents
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you cite something that has its bibliography in another document,
+then, at the moment, the extension may, or may not, realise that it
+has to add this citation. The way to work around this problem is to
+either use the option ``:all:`` in the :rst:dir:`bibliography`
+directive (which will simply cause all entries to be included), or to
+somehow ensure that the :rst:dir:`bibliography` directive is processed
+after all :rst:role:`:cite:`\ s. (Sphinx appears to process files in
+an alphabetical manner.)
+
+Hopefully, this limitation can be lifted in a future release.
+
+KeyError When Using ``:style: plain``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When using the plain style, or any style that sorts entries, pybtex
+may raise ``KeyError: 'author'`` for entries that have no author. A
+patch has been submitted upstream:
+
+https://code.launchpad.net/~matthias-troffaes/pybtex/sorting-bugfix

@@ -24,6 +24,12 @@ from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
 import sphinxcontrib.bibtex.latex_codec # registers the latex codec
 from sphinxcontrib.bibtex.nodes import bibliography
 
+def process_start_option(value):
+    if value == "continue":
+        return -1
+    else:
+        return directives.positive_int(value)
+
 class BibliographyDirective(Directive):
     """Class for processing the :rst:dir:`bibliography` directive.
 
@@ -47,20 +53,29 @@ class BibliographyDirective(Directive):
         'notcited': directives.flag,
         'all': directives.flag,
         'style': directives.unchanged,
+        'list': directives.unchanged,
+        'enumtype': directives.unchanged,
+        'start': process_start_option,
         'encoding': directives.encoding,
         'disable-curly-bracket-strip': directives.flag,
     }
 
     def run(self):
         """Process .bib files, set file dependencies, and create a
-        nodes for all entries of the bibliography.
+        node that is to be transformed to the entries of the
+        bibliography.
         """
         env = self.state.document.settings.env
         cache = env.bibtex_cache.bibliographies
         # create id and cache for this node
         # this id will be stored with the node
         # and is used to look up additional data in env.bibtex_cache
-        id_ = 'bibtex-bibliography-%s' % env.new_serialno('bibtex')
+        # (implementation note: new_serialno only guarantees unique
+        # ids within a single document, but we need the id to be
+        # unique across all documents, so we also include the docname
+        # in the id)
+        id_ = 'bibtex-bibliography-%s-%s' % (
+            env.docname, env.new_serialno('bibtex'))
         info = BibliographyCache(
             docname=env.docname,
             cite=(
@@ -69,13 +84,19 @@ class BibliographyDirective(Directive):
                     "notcited"
                     if "notcited" in self.options else (
                         "cited"))),
-            style=self.options.get("style", "unsrt"),
+            list_=self.options.get("list", "citation"),
+            enumtype=self.options.get("enumtype", "arabic"),
+            start=self.options.get("start", 1),
+            style=self.options.get("style", "plain"),
             encoding=self.options.get(
                 'encoding',
                 'latex+' + self.state.document.settings.input_encoding),
             curly_bracket_strip=(
                 'disable-curly-bracket-strip' not in self.options),
             )
+        if (info.list_ not in set(["bullet", "enumerated", "citation"])):
+            env.app.warn(
+                "unknown bibliography list type '{0}'.".format(info.list_))
         for bibfile in self.arguments[0].split():
             # convert to normalized absolute path to ensure that the same file
             # only occurs once in the cache

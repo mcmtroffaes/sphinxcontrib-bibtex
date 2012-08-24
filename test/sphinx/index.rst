@@ -7,8 +7,7 @@ Welcome to Sphinx bibtex extension test's documentation!
 ========================================================
 
 Citation :cite:`1996:fukuda` :cite:`dreze:2000` to other document.
-Footnote test [#note2]_ to other document (does not resolve).
-Regular citation test [Test01]_ to other document (resolves).
+Regular citation test [Test01]_ to other document.
 
 Contents:
 
