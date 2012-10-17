@@ -58,6 +58,7 @@ class BibliographyDirective(Directive):
         'start': process_start_option,
         'encoding': directives.encoding,
         'disable-curly-bracket-strip': directives.flag,
+        'labelprefix': directives.unchanged,
     }
 
     def run(self):
@@ -93,6 +94,7 @@ class BibliographyDirective(Directive):
                 'latex+' + self.state.document.settings.input_encoding),
             curly_bracket_strip=(
                 'disable-curly-bracket-strip' not in self.options),
+            labelprefix=self.options.get("labelprefix", ""),
             )
         if (info.list_ not in set(["bullet", "enumerated", "citation"])):
             env.app.warn(

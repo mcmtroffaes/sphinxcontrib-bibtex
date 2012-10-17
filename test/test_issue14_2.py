@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-    test_issue14
-    ~~~~~~~~~~~~
+    test_issue14_2
+    ~~~~~~~~~~~~~~
 
-    Test duplicate label issue.
+    Test labelprefix option.
 """
 
 import nose.tools
@@ -13,13 +13,13 @@ import re
 
 from util import *
 
-srcdir = path(__file__).parent.joinpath('issue14').abspath()
+srcdir = path(__file__).parent.joinpath('issue14_2').abspath()
 
 def teardown_module():
     (srcdir / '_build').rmtree(True)
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_duplicate_label(app):
+def test_label_prefix(app):
     app.builder.build_all()
     with open(os.path.join(app.outdir, "doc1.html")) as stream:
         assert re.search('<td class="label">\\[A1\\]</td>', stream.read())
