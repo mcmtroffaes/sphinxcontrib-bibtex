@@ -58,6 +58,17 @@ Roles and Directives
    bibliography style, regardless of the style chosen. This limitation
    might be lifted in a future version.
 
+   If you have multiple bibliographies, and experience duplicate labels,
+   use the ``labelprefix`` option.
+
+   .. code-block:: rest
+
+     .. bibliography:: refs1.bib
+        :labelprefix: A
+
+     .. bibliography:: refs2.bib
+        :labelprefix: B
+
    You can also set the encoding of the bibliography files, using the
    ``encoding`` option.
 
