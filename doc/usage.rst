@@ -168,3 +168,25 @@ may raise ``KeyError: 'author'`` for entries that have no author. A
 patch has been submitted upstream:
 
 https://code.launchpad.net/~matthias-troffaes/pybtex/sorting-bugfix
+
+Duplicate Labels When Using ``:style: plain``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The plain style labels entries numerically, per bibliography command.
+Consequently, when inserting multiple bibliography directives,
+you are bound to get duplicate labels for entries.
+The following workarounds are suggested:
+
+* Use a single bibliography directive for all your references.
+
+* Use a style that has non-numerical labelling.
+  Unfortunately, pybtex does not yet support such styles.
+  A patch for non-numerical styles, such as ``:style: alpha``,
+  has been submitted upstream:
+
+  https://code.launchpad.net/~matthias-troffaes/pybtex/label-alpha
+
+  When this becomes part of pybtex,
+  the plan is to change the default citation style to ``:style: alpha``,
+  as this style is also more in line with
+  how citations are usually labelled in Sphinx.
