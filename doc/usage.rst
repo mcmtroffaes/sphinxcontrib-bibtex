@@ -190,6 +190,8 @@ The following workarounds are suggested:
 
 * Use a single bibliography directive for all your references.
 
+* Use the ``labelprefix`` option, as documented above.
+
 * Use a style that has non-numerical labelling.
   Unfortunately, pybtex does not yet support such styles.
   A patch for non-numerical styles, such as ``:style: alpha``,
