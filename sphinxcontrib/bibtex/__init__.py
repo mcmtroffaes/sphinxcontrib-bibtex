@@ -80,6 +80,13 @@ def process_citation_references(app, doctree, docname):
                 node[0] = docutils.nodes.Text('[' + label + ']')
 
 def check_duplicate_labels(app, env):
+    """Check and warn about duplicate citation labels.
+
+    :param app: The sphinx application.
+    :type app: :class:`sphinx.application.Sphinx`
+    :param env: The sphinx build environment.
+    :type env: :class:`sphinx.environment.BuildEnvironment`
+    """
     label_to_key = {}
     for info in env.bibtex_cache.bibliographies.itervalues():
         for key, label in info.labels.iteritems():
