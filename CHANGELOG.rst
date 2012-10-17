@@ -1,6 +1,12 @@
 0.2.5 (in development)
 ----------------------
 
+* Duplicate label detection (issue #14).
+
+* New ``:labelprefix:`` option to avoid duplicate labels when having
+  multiple bibliographies with a numerical label style (addresses
+  issue #14).
+
 0.2.4 (24 August 2012)
 ----------------------
 
