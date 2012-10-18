@@ -41,7 +41,7 @@ Roles and Directives
         \bibitem{1987:nelson}
         Edward~Nelson
         \newblock {\em Radically Elementary Probability Theory}.
-        \newblock Princeton University Press, 1977.
+        \newblock Princeton University Press, 1987.
       \end{thebibliography}
 
    Note that, unlike LaTeX, the :rst:dir:`bibliography` directive does
