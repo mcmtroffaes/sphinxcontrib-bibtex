@@ -33,16 +33,13 @@ Roles and Directives
      .. bibliography:: refs.bib
         :cited:
 
-     .. rubric:: Further reading
-
-     .. bibliography:: refs.bib
-        :notcited:
-
    .. warning::
 
-      Sphinx will attempt to resolve references to the bibliography
-      across all documents, so you must take care that no citation key
-      is included more than once.
+      Sphinx may not be able to create an entry for :rst:role:`cite` keys
+      when your :rst:dir:`bibliography` directive
+      resides in a different document;
+      see :ref:`issue-unresolved-citations`
+      for more information and workarounds.
 
    You can also pick a bibliography style, using the ``style`` option.
    This is not yet quite as useful, as only ``plain`` and ``unsrt``
@@ -63,11 +60,23 @@ Roles and Directives
 
    .. code-block:: rest
 
-     .. bibliography:: refs1.bib
+     .. rubric:: References
+
+     .. bibliography:: refs.bib
+        :cited:
         :labelprefix: A
 
-     .. bibliography:: refs2.bib
+     .. rubric:: Further reading
+
+     .. bibliography:: refs.bib
+        :notcited:
         :labelprefix: B
+
+   .. warning::
+
+      Sphinx will attempt to resolve references to the bibliography
+      across all documents, so you must take care that no citation key
+      is included more than once.
 
    You can also set the encoding of the bibliography files, using the
    ``encoding`` option.
@@ -84,7 +93,7 @@ Roles and Directives
    ``\%`` when you intend to format a percent sign.
 
    You can also change the type of list used for rendering the
-   bibliography. By default, a paragraph of standard citations will be
+   bibliography. By default, a paragraph of standard citations is
    generated. However, instead, you can also generate a bullet list,
    or an enumerated list.
 
@@ -157,6 +166,8 @@ of the line.
 
 If you don't want any LaTeX symbols to be reinterpreted as unicode,
 use the option ``:encoding: utf`` (without the ``latex+`` prefix).
+
+.. _issue-unresolved-citations:
 
 Unresolved Citations Across Documents
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
