@@ -33,6 +33,20 @@ Roles and Directives
      .. bibliography:: refs.bib
         :cited:
 
+   which would be roughly equivalent to the following LaTeX code:
+
+   .. code-block:: latex
+
+      \begin{thebibliography}{1}
+        \bibitem{1987:nelson}
+        Edward~Nelson
+        \newblock {\em Radically Elementary Probability Theory}.
+        \newblock Princeton University Press, 1977.
+      \end{thebibliography}
+
+   Note that, unlike LaTeX, the :rst:dir:`bibliography` directive does
+   not generate a default section title.
+
    .. warning::
 
       Sphinx may not be able to create an entry for :rst:role:`cite` keys
@@ -174,12 +188,17 @@ Unresolved Citations Across Documents
 
 If you cite something that has its bibliography in another document,
 then, at the moment, the extension may, or may not, realise that it
-has to add this citation. The way to work around this problem is to
-either use the option ``:all:`` in the :rst:dir:`bibliography`
-directive (which will simply cause all entries to be included), or to
-somehow ensure that the :rst:dir:`bibliography` directive is processed
-after all :rst:role:`:cite:`\ s. (Sphinx appears to process files in
-an alphabetical manner.)
+has to add this citation.
+There are a few ways to work around this problem:
+
+* Use the option ``:all:`` in the :rst:dir:`bibliography`
+  directive (which will simply cause all entries to be included).
+
+* Ensure that the :rst:dir:`bibliography` directive is processed after
+  all :rst:role:`cite`\ s. Sphinx appears to process files in an
+  alphabetical manner. For instance, in case you have only one file
+  containing a :rst:dir:`bibliography` directive, simply name that
+  file :file:`zreferences.rst`.
 
 Hopefully, this limitation can be lifted in a future release.
 
