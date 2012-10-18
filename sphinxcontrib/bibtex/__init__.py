@@ -8,6 +8,7 @@
     .. autofunction:: purge_bibtex_cache
     .. autofunction:: process_citations
     .. autofunction:: process_citation_references
+    .. autofunction:: check_duplicate_labels
 """
 
 import docutils.nodes
