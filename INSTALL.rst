@@ -24,6 +24,5 @@ where refs.bib would contain an entry::
      author = {Edward Nelson},
      title = {Radically Elementary Probability Theory},
      publisher = {Princeton University Press},
-     year = {1977},
-     series = {Annals of Mathematical Studies}
+     year = {1987}
    }

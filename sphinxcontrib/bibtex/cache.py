@@ -181,6 +181,10 @@ class BibliographyCache:
     .. attribute:: labels
 
         Maps citation keys to their final labels.
+
+    .. attribute:: labelprefix
+
+        This bibliography's string prefix for pybtex generated labels.
     """
 
     def __init__(self, docname=None, bibfiles=None,
@@ -189,6 +193,7 @@ class BibliographyCache:
                  labels=None,
                  encoding=None,
                  curly_bracket_strip=True,
+                 labelprefix="",
                  ):
         self.docname = docname
         self.bibfiles = bibfiles if bibfiles is not None else []
@@ -200,3 +205,4 @@ class BibliographyCache:
         self.encoding = encoding
         self.curly_bracket_strip = curly_bracket_strip
         self.labels = labels if labels is not None else {}
+        self.labelprefix = labelprefix

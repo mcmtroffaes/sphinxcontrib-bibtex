@@ -33,16 +33,27 @@ Roles and Directives
      .. bibliography:: refs.bib
         :cited:
 
-     .. rubric:: Further reading
+   which would be roughly equivalent to the following LaTeX code:
 
-     .. bibliography:: refs.bib
-        :notcited:
+   .. code-block:: latex
+
+      \begin{thebibliography}{1}
+        \bibitem{1987:nelson}
+        Edward~Nelson
+        \newblock {\em Radically Elementary Probability Theory}.
+        \newblock Princeton University Press, 1987.
+      \end{thebibliography}
+
+   Note that, unlike LaTeX, the :rst:dir:`bibliography` directive does
+   not generate a default section title.
 
    .. warning::
 
-      Sphinx will attempt to resolve references to the bibliography
-      across all documents, so you must take care that no citation key
-      is included more than once.
+      Sphinx may not be able to create an entry for :rst:role:`cite` keys
+      when your :rst:dir:`bibliography` directive
+      resides in a different document;
+      see :ref:`issue-unresolved-citations`
+      for more information and workarounds.
 
    You can also pick a bibliography style, using the ``style`` option.
    This is not yet quite as useful, as only ``plain`` and ``unsrt``
@@ -57,6 +68,29 @@ Roles and Directives
    All citations have numbered labels, as in the ``plain`` LaTeX
    bibliography style, regardless of the style chosen. This limitation
    might be lifted in a future version.
+
+   If you have multiple bibliographies, and experience duplicate labels,
+   use the ``labelprefix`` option.
+
+   .. code-block:: rest
+
+     .. rubric:: References
+
+     .. bibliography:: refs.bib
+        :cited:
+        :labelprefix: A
+
+     .. rubric:: Further reading
+
+     .. bibliography:: refs.bib
+        :notcited:
+        :labelprefix: B
+
+   .. warning::
+
+      Sphinx will attempt to resolve references to the bibliography
+      across all documents, so you must take care that no citation key
+      is included more than once.
 
    You can also set the encoding of the bibliography files, using the
    ``encoding`` option.
@@ -73,7 +107,7 @@ Roles and Directives
    ``\%`` when you intend to format a percent sign.
 
    You can also change the type of list used for rendering the
-   bibliography. By default, a paragraph of standard citations will be
+   bibliography. By default, a paragraph of standard citations is
    generated. However, instead, you can also generate a bullet list,
    or an enumerated list.
 
@@ -110,7 +144,8 @@ Roles and Directives
 
    The start can be any positive integer (1, 2, 3, ...) or
    ``continue`` if you wish the enumeration to continue from the last
-   bibliography. This is helpful if you split up your bibliography but
+   :rst:dir:`bibliography` directive.
+   This is helpful if you split up your bibliography but
    still want to enumerate the entries continuously.
 
 .. XXX not documenting disable-curly-bracket-strip for now; might remove it
@@ -146,25 +181,58 @@ of the line.
 If you don't want any LaTeX symbols to be reinterpreted as unicode,
 use the option ``:encoding: utf`` (without the ``latex+`` prefix).
 
+.. _issue-unresolved-citations:
+
 Unresolved Citations Across Documents
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you cite something that has its bibliography in another document,
 then, at the moment, the extension may, or may not, realise that it
-has to add this citation. The way to work around this problem is to
-either use the option ``:all:`` in the :rst:dir:`bibliography`
-directive (which will simply cause all entries to be included), or to
-somehow ensure that the :rst:dir:`bibliography` directive is processed
-after all :rst:role:`:cite:`\ s. (Sphinx appears to process files in
-an alphabetical manner.)
+has to add this citation.
+There are a few ways to work around this problem:
+
+* Use the option ``:all:`` in the :rst:dir:`bibliography`
+  directive (which will simply cause all entries to be included).
+
+* Ensure that the :rst:dir:`bibliography` directive is processed after
+  all :rst:role:`cite`\ s. Sphinx appears to process files in an
+  alphabetical manner. For instance, in case you have only one file
+  containing a :rst:dir:`bibliography` directive, simply name that
+  file :file:`zreferences.rst`.
 
 Hopefully, this limitation can be lifted in a future release.
 
 KeyError When Using ``:style: plain``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When using the plain style, or any style that sorts entries, pybtex
+When using the ``plain`` style, or any style that sorts entries, pybtex
 may raise ``KeyError: 'author'`` for entries that have no author. A
 patch has been submitted upstream:
 
 https://code.launchpad.net/~matthias-troffaes/pybtex/sorting-bugfix
+
+Duplicate Labels When Using ``:style: plain``
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+With ``:style: plain``, label are numerical,
+restarting at ``[1]`` for each :rst:dir:`bibliography` directive.
+Consequently, when inserting multiple :rst:dir:`bibliography` directives
+with ``:style: plain``,
+you are bound to get duplicate labels for entries.
+There are a few ways to work around this problem:
+
+* Use a single bibliography directive for all your references.
+
+* Use the ``labelprefix`` option, as documented above.
+
+* Use a style that has non-numerical labelling.
+  Unfortunately, pybtex does not yet support such styles.
+  A patch for non-numerical styles, such as ``:style: alpha``,
+  has been submitted upstream:
+
+  https://code.launchpad.net/~matthias-troffaes/pybtex/label-alpha
+
+  When this becomes part of pybtex,
+  the plan is to change the default citation style to ``:style: alpha``,
+  as this style is also more in line with
+  how citations are usually labelled in Sphinx.
