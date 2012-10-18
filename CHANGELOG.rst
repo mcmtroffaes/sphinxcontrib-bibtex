@@ -1,5 +1,5 @@
-0.2.5 (in development)
-----------------------
+0.2.5 (18 October 2012)
+-----------------------
 
 * Duplicate label detection (issue #14).
 
