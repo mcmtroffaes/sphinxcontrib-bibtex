@@ -121,7 +121,8 @@ Roles and Directives
 
    The start can be any positive integer (1, 2, 3, ...) or
    ``continue`` if you wish the enumeration to continue from the last
-   bibliography. This is helpful if you split up your bibliography but
+   :rst:dir:`bibliography` directive.
+   This is helpful if you split up your bibliography but
    still want to enumerate the entries continuously.
 
 .. XXX not documenting disable-curly-bracket-strip for now; might remove it
@@ -174,7 +175,7 @@ Hopefully, this limitation can be lifted in a future release.
 KeyError When Using ``:style: plain``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-When using the plain style, or any style that sorts entries, pybtex
+When using the ``plain`` style, or any style that sorts entries, pybtex
 may raise ``KeyError: 'author'`` for entries that have no author. A
 patch has been submitted upstream:
 
@@ -183,10 +184,12 @@ https://code.launchpad.net/~matthias-troffaes/pybtex/sorting-bugfix
 Duplicate Labels When Using ``:style: plain``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The plain style labels entries numerically, per bibliography command.
-Consequently, when inserting multiple bibliography directives,
+With ``:style: plain``, label are numerical,
+restarting at ``[1]`` for each :rst:dir:`bibliography` directive.
+Consequently, when inserting multiple :rst:dir:`bibliography` directives
+with ``:style: plain``,
 you are bound to get duplicate labels for entries.
-The following workarounds are suggested:
+There are a few ways to work around this problem:
 
 * Use a single bibliography directive for all your references.
 
