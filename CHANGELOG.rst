@@ -1,3 +1,11 @@
+0.2.6 (in development)
+----------------------
+
+* For unsorted styles, citation entries are now sorted in the order
+  they are cited, instead of following the order in the bib file, to
+  reflect more closely the way LaTeX handles unsorted styles
+  (addresses issue #15).
+
 0.2.5 (18 October 2012)
 -----------------------
 
