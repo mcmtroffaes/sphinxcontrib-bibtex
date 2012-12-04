@@ -17,6 +17,7 @@
 """
 
 import collections
+from oset import oset
 import pybtex.database
 
 class Cache:
@@ -53,7 +54,7 @@ class Cache:
     def __init__(self):
         self.bibfiles = {}
         self.bibliographies = {}
-        self._cited = collections.defaultdict(set)
+        self._cited = collections.defaultdict(oset)
         self._enum_count = {}
 
     def purge(self, docname):
@@ -113,6 +114,14 @@ class Cache:
                 return info.labels[key]
         else:
             raise KeyError("%s not found" % key)
+
+    def get_all_cited_keys(self):
+        """Yield all citation keys, sorted first by document
+        (alphabetical), then by citation order in the document.
+        """
+        for docname in sorted(self._cited):
+            for key in self._cited[docname]:
+                yield key
 
 class BibfileCache:
     """Contains information about a parsed .bib file.

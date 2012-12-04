@@ -8,6 +8,12 @@
         .. automethod:: apply
 """
 
+import sys
+if sys.version_info < (2, 7):
+    from ordereddict import OrderedDict
+else:
+    from collections import OrderedDict
+
 import copy
 import docutils.nodes
 import docutils.transforms
@@ -82,7 +88,7 @@ class BibliographyTransform(docutils.transforms.Transform):
                     % (env.docname, id_))
             info = infos[0]
             # generate entries
-            entries = []
+            entries = OrderedDict()
             for bibfile in info.bibfiles:
                 # XXX entries are modified below in an unpickable way
                 # XXX so fetch a deep copy
@@ -99,7 +105,20 @@ class BibliographyTransform(docutils.transforms.Transform):
                         if not env.bibtex_cache.is_cited(entry.key))
                 else:
                     raise RuntimeError("invalid cite option (%s)" % info.cite)
-                entries += copy.deepcopy(list(bibfile_entries))
+                for entry in bibfile_entries:
+                    entries[entry.key] = copy.deepcopy(entry)
+            # order entries according to which were cited first
+            # first, we add all keys that were cited
+            # then, we add all remaining keys
+            sorted_entries = []
+            for key in env.bibtex_cache.get_all_cited_keys():
+                try:
+                    entry = entries.pop(key)
+                except KeyError:
+                    pass
+                else:
+                    sorted_entries.append(entry)
+            sorted_entries += entries.itervalues()
             # locate and instantiate style plugin
             style_cls = find_plugin(
                 'pybtex.style.formatting', info.style)
@@ -119,7 +138,7 @@ class BibliographyTransform(docutils.transforms.Transform):
             else: # "citation"
                 nodes = docutils.nodes.paragraph()
             # XXX style.format_entries modifies entries in unpickable way
-            for entry in style.format_entries(entries):
+            for entry in style.format_entries(sorted_entries):
                 if info.list_ == "enumerated" or info.list_ == "bullet":
                     citation = docutils.nodes.list_item()
                     citation += entry.text.render(backend)
