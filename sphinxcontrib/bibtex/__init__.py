@@ -76,7 +76,9 @@ def process_citation_references(app, doctree, docname):
             try:
                 label = app.env.bibtex_cache.get_label_from_key(key)
             except KeyError:
-                app.warn("could not relabel citation reference [%s]" % key)
+                # exclude sphinx [source] labels when producing warnings.
+                if key != "source":
+                    app.warn("could not relabel citation reference [%s]" % key)
             else:
                 node[0] = docutils.nodes.Text('[' + label + ']')
 
