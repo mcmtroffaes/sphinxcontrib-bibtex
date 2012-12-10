@@ -6,6 +6,9 @@
   reflect more closely the way LaTeX handles unsorted styles
   (addresses issue #15).
 
+* Skip citation label warnings on Sphinx [source] links (issue #17,
+  contributed by Simon Clift).
+
 0.2.5 (18 October 2012)
 -----------------------
 
