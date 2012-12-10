@@ -66,6 +66,12 @@ def process_citation_references(app, doctree, docname):
     :type doctree: :class:`docutils.nodes.document`
     :param docname: The document name.
     :type docname: :class:`str`
+
+    Sphinx generates entries in the web pages that look like ``[source]`` to
+    link from documentation to source files.  It might make more sense to add a
+    set attribute to the ``app.bibtex_cache`` to track labels that have already
+    generated warnings so that warnings get produced only one time per label.
+    This solves the immediate problem.
     """
     # XXX sphinx has already turned citation_reference nodes
     # XXX into reference nodes
@@ -76,7 +82,9 @@ def process_citation_references(app, doctree, docname):
             try:
                 label = app.env.bibtex_cache.get_label_from_key(key)
             except KeyError:
-                app.warn("could not relabel citation reference [%s]" % key)
+                # Exclude Sphinx [source] labels when producing warnings.
+                if key != "source":
+                    app.warn("could not relabel citation reference [%s]" % key)
             else:
                 node[0] = docutils.nodes.Text('[' + label + ']')
 
