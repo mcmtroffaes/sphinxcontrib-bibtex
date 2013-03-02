@@ -70,6 +70,10 @@ def process_citation_references(app, doctree, docname):
     # XXX sphinx has already turned citation_reference nodes
     # XXX into reference nodes
     for node in doctree.traverse(docutils.nodes.reference):
+        # exclude sphinx [source] labels
+        if isinstance(node[0], docutils.nodes.Element):
+            if 'viewcode-link' in node[0]['classes']:
+                continue
         text = node[0].astext()
         if text.startswith('[') and text.endswith(']'):
             key = text[1:-1]
