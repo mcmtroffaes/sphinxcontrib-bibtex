@@ -1,5 +1,5 @@
-0.2.6 (in development)
-----------------------
+0.2.6 (2 March 2013)
+--------------------
 
 * For unsorted styles, citation entries are now sorted in the order
   they are cited, instead of following the order in the bib file, to
