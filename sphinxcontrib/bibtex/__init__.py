@@ -70,15 +70,17 @@ def process_citation_references(app, doctree, docname):
     # XXX sphinx has already turned citation_reference nodes
     # XXX into reference nodes
     for node in doctree.traverse(docutils.nodes.reference):
+        # exclude sphinx [source] labels when producing warnings.
+        if isinstance(node[0], docutils.nodes.Element):
+            if 'viewcode-link' in node[0]['classes']:
+                continue
         text = node[0].astext()
         if text.startswith('[') and text.endswith(']'):
             key = text[1:-1]
             try:
                 label = app.env.bibtex_cache.get_label_from_key(key)
             except KeyError:
-                # exclude sphinx [source] labels when producing warnings.
-                if key != "source":
-                    app.warn("could not relabel citation reference [%s]" % key)
+                app.warn("could not relabel citation reference [%s]" % key)
             else:
                 node[0] = docutils.nodes.Text('[' + label + ']')
 
