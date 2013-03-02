@@ -5,7 +5,12 @@ python:
   - "2.7"
   - "2.6"
 install:
-  - "pip install -r requirements.txt --use-mirrors"
-  - "pip install Tinkerer"
-script: nosetests
+  - "pip install . --use-mirrors"
+  - "pip install Tinkerer --use-mirrors"
+before_script:
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.1' ]]; then 2to3 -w -n test; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then 2to3 -w -n test; fi"
+script:
+  - "cd test"
+  - "nosetests"
 
