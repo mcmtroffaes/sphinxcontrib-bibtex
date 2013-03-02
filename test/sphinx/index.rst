@@ -14,7 +14,7 @@ Contents:
 .. toctree::
    :maxdepth: 2
 
-   bibliography
+   zbibliography
 
 Indices and tables
 ==================

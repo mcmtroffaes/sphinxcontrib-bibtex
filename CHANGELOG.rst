@@ -1,3 +1,14 @@
+0.2.6 (2 March 2013)
+--------------------
+
+* For unsorted styles, citation entries are now sorted in the order
+  they are cited, instead of following the order in the bib file, to
+  reflect more closely the way LaTeX handles unsorted styles
+  (addresses issue #15).
+
+* Skip citation label warnings on Sphinx [source] links (issue #17,
+  contributed by Simon Clift).
+
 0.2.5 (18 October 2012)
 -----------------------
 

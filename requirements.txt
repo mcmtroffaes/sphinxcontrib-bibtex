@@ -1,2 +1,4 @@
 pybtex>=0.16
 Sphinx>=1.0
+oset>=0.1.3
+ordereddict>=1.1

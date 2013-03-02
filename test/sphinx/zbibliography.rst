@@ -26,16 +26,19 @@ More citations:
 
 .. bibliography:: test.bib subfolder/test.bib
    :all:
+   :labelprefix: A
 
 .. rubric:: References (Cited Test)
 
 .. bibliography:: test2.bib
    :cited:
+   :labelprefix: B
 
 .. rubric:: References (Not Cited Test)
 
 .. bibliography:: test2.bib
    :notcited:
+   :labelprefix: C
 
 .. rubric:: Footnotes
 
