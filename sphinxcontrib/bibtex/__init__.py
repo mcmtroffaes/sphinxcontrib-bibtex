@@ -70,7 +70,7 @@ def process_citation_references(app, doctree, docname):
     # XXX sphinx has already turned citation_reference nodes
     # XXX into reference nodes
     for node in doctree.traverse(docutils.nodes.reference):
-        # exclude sphinx [source] labels when producing warnings.
+        # exclude sphinx [source] labels
         if isinstance(node[0], docutils.nodes.Element):
             if 'viewcode-link' in node[0]['classes']:
                 continue
