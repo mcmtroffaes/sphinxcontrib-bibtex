@@ -7,3 +7,4 @@ Contents
    adoc2
 
 .. bibliography:: test.bib
+   :style: plain
