@@ -44,6 +44,10 @@ class TestDecoder(TestCase):
         decoded, n = codecs.getdecoder(encoding)(text_latex)
         self.assertEqual((decoded, n), (text_utf8, len(text_latex)))
 
+    @nose.tools.raises(TypeError)
+    def test_invalid_type(self):
+        self.decode(object(), object())
+
     def test_null(self):
         self.decode(u'', b'')
 
@@ -137,6 +141,10 @@ class TestEncoder(TestCase):
         encoding = 'latex+' + inputenc if inputenc else 'latex'
         encoded, n = codecs.getencoder(encoding)(text_utf8)
         self.assertEqual((encoded, n), (text_latex, len(text_utf8)))
+
+    @nose.tools.raises(TypeError)
+    def test_invalid_type(self):
+        self.encode(object(), object())
 
     def test_null(self):
         self.encode(u'', b'')
