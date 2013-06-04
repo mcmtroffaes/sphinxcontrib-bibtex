@@ -48,6 +48,11 @@ class TestDecoder(TestCase):
     def test_invalid_type(self):
         self.decode(object(), object())
 
+    @nose.tools.raises(ValueError)
+    def test_invalid_code(self):
+        # b'\xe9' is invalid utf-8 code
+        self.decode(u'', b'\xe9  ', 'utf-8')
+
     def test_null(self):
         self.decode(u'', b'')
 
@@ -145,6 +150,11 @@ class TestEncoder(TestCase):
     @nose.tools.raises(TypeError)
     def test_invalid_type(self):
         self.encode(object(), object())
+
+    def test_invalid_code(self):
+        # u'\u2328' is unicode for keyboard symbol
+        # we currently provide no translation for this into LaTeX code
+        self.encode(u'\u2328', b'', 'ascii')
 
     def test_null(self):
         self.encode(u'', b'')
