@@ -661,4 +661,4 @@ def find_latex(encoding):
         streamwriter=StreamWriter,
         )
 
-codecs.register(find_latex)
+register()

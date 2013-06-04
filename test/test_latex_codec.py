@@ -4,6 +4,7 @@
 from __future__ import print_function
 
 import codecs
+import nose.tools
 import sys
 if sys.version_info >= (3, 0):
     from io import BytesIO
@@ -14,23 +15,24 @@ from unittest import TestCase
 
 import sphinxcontrib.bibtex.latex_codec # registers automatically
 
+def test_getregentry():
+    nose.tools.assert_is_not_none(
+        sphinxcontrib.bibtex.latex_codec.getregentry())
+
+def test_find_latex():
+    nose.tools.assert_is_none(
+        sphinxcontrib.bibtex.latex_codec.find_latex('hello'))
+
 def split_input(input_):
     """Helper function for testing the incremental encoder and decoder."""
-    if isinstance(input_, unicode):
-        sep = u" "
-    elif isinstance(input_, bytes):
-        sep = b" "
-    else:
+    if not isinstance(input_, (unicode, bytes)):
         raise TypeError("expected unicode or bytes input")
-    part1, part2, part3 = input_.partition(sep)
-    if part3:
-        yield part1, False
-        yield part2, False
-        for part, final in split_input(part3):
-            yield part, final
+    if input_:
+        for part in input_[:-1]:
+            yield part, False
+        yield input_[-1], True
     else:
-        # last part
-        yield part1, True
+        yield input_, True
 
 class TestDecoder(TestCase):
     """Stateless decoder tests."""
