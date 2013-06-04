@@ -151,6 +151,7 @@ class TestEncoder(TestCase):
     def test_invalid_type(self):
         self.encode(object(), object())
 
+    @nose.tools.raises(UnicodeEncodeError)
     def test_invalid_code(self):
         # u'\u2328' is unicode for keyboard symbol
         # we currently provide no translation for this into LaTeX code

@@ -529,16 +529,16 @@ class LatexIncrementalEncoder(latex_lexer.LatexIncrementalEncoder):
                 bytes_, tokens = self.table.latex_map[c]
             except KeyError:
                 # translation failed
-                if errors == 'strict':
+                if self.errors == 'strict':
                     raise UnicodeEncodeError(
                         "latex", # codec
                         unicode_, # problematic input
                         pos, pos + 1, # location of problematic character
-                        "don't know how to translate {1} ({0}) into latex"
-                        .format(c, repr(c)))
-                elif errors == 'ignore':
+                        "don't know how to translate {0} into latex"
+                        .format(repr(c)))
+                elif self.errors == 'ignore':
                     pass
-                elif errors == 'replace':
+                elif self.errors == 'replace':
                     # use the \\char command
                     # this assumes
                     # \usepackage[T1]{fontenc}
@@ -550,7 +550,7 @@ class LatexIncrementalEncoder(latex_lexer.LatexIncrementalEncoder):
                 else:
                     raise ValueError(
                         "latex codec does not support {0} errors"
-                        .format(errors))
+                        .format(self.errors))
             else:
                 # translation succeeded
                 space, bytes_ = self.get_space_bytes(bytes_)
