@@ -15,7 +15,7 @@ before_script:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then 2to3 -w -n test; fi"
 script:
   - "cd test"
-  - "coverage run --source=sphinxcontrib.bibtex /usr/bin/nosetests"
+  - "coverage run --source=sphinxcontrib.bibtex `type -p nosetests`"
 after_success:
   - "coveralls"
 
