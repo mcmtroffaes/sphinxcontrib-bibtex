@@ -150,21 +150,29 @@ class TestIncrementalDecoder(TestDecoder):
 class TestEncoder(TestCase):
     """Stateless encoder tests."""
 
-    def encode(self, text_utf8, text_latex, inputenc=None):
+    def encode(self, text_utf8, text_latex, inputenc=None, errors='strict'):
         """Main test function."""
         encoding = 'latex+' + inputenc if inputenc else 'latex'
-        encoded, n = codecs.getencoder(encoding)(text_utf8)
+        encoded, n = codecs.getencoder(encoding)(text_utf8, errors=errors)
         self.assertEqual((encoded, n), (text_latex, len(text_utf8)))
 
     @nose.tools.raises(TypeError)
     def test_invalid_type(self):
         self.encode(object(), object())
 
+    # note concerning test_invalid_code_* methods:
+    # u'\u2328' (0x2328 = 9000) is unicode for keyboard symbol
+    # we currently provide no translation for this into LaTeX code
+
     @nose.tools.raises(UnicodeEncodeError)
-    def test_invalid_code(self):
-        # u'\u2328' is unicode for keyboard symbol
-        # we currently provide no translation for this into LaTeX code
-        self.encode(u'\u2328', b'', 'ascii')
+    def test_invalid_code_strict(self):
+        self.encode(u'\u2328', b'', 'ascii', 'strict')
+
+    def test_invalid_code_ignore(self):
+        self.encode(u'\u2328', b'', 'ascii', 'ignore')
+
+    def test_invalid_code_replace(self):
+        self.encode(u'\u2328', b'{\\char9000}', 'ascii', 'replace')
 
     def test_null(self):
         self.encode(u'', b'')
@@ -223,19 +231,19 @@ class TestEncoder(TestCase):
 class TestStreamEncoder(TestEncoder):
     """Stream encoder tests."""
 
-    def encode(self, text_utf8, text_latex, inputenc=None):
+    def encode(self, text_utf8, text_latex, inputenc=None, errors='strict'):
         encoding = 'latex+' + inputenc if inputenc else 'latex'
         stream = BytesIO()
-        writer = codecs.getwriter(encoding)(stream)
+        writer = codecs.getwriter(encoding)(stream, errors=errors)
         writer.write(text_utf8)
         self.assertEqual(text_latex, stream.getvalue())
 
 class TestIncrementalEncoder(TestEncoder):
     """Incremental encoder tests."""
 
-    def encode(self, text_utf8, text_latex, inputenc=None):
+    def encode(self, text_utf8, text_latex, inputenc=None, errors='strict'):
         encoding = 'latex+' + inputenc if inputenc else 'latex'
-        encoder = codecs.getincrementalencoder(encoding)()
+        encoder = codecs.getincrementalencoder(encoding)(errors=errors)
         encoded_parts = (
             encoder.encode(text_utf8_part, final)
             for text_utf8_part, final in split_input(text_utf8))
