@@ -16,12 +16,10 @@ from unittest import TestCase
 import sphinxcontrib.bibtex.latex_codec # registers automatically
 
 def test_getregentry():
-    nose.tools.assert_is_not_none(
-        sphinxcontrib.bibtex.latex_codec.getregentry())
+    assert sphinxcontrib.bibtex.latex_codec.getregentry() is not None
 
 def test_find_latex():
-    nose.tools.assert_is_none(
-        sphinxcontrib.bibtex.latex_codec.find_latex('hello'))
+    assert sphinxcontrib.bibtex.latex_codec.find_latex('hello') is None
 
 def split_input(input_):
     """Helper function for testing the incremental encoder and decoder."""
