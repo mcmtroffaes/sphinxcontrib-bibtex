@@ -571,7 +571,7 @@ class LatexIncrementalDecoder(latex_lexer.LatexIncrementalDecoder):
     """Translation table."""
 
     def __init__(self, errors='strict'):
-        latex_lexer.LatexIncrementalDecoder.__init__(self)
+        latex_lexer.LatexIncrementalDecoder.__init__(self, errors=errors)
         self.max_length = 0
 
     def reset(self):
