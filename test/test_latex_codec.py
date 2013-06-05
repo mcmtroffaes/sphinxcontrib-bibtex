@@ -21,6 +21,15 @@ def test_getregentry():
 def test_find_latex():
     assert sphinxcontrib.bibtex.latex_codec.find_latex('hello') is None
 
+def test_latex_incremental_decoder_getstate():
+    encoder = codecs.getincrementaldecoder('latex')()
+    nose.tools.assert_raises(NotImplementedError, lambda: encoder.getstate())
+
+def test_latex_incremental_decoder_setstate():
+    encoder = codecs.getincrementaldecoder('latex')()
+    state = (u'', 0)
+    nose.tools.assert_raises(NotImplementedError, lambda: encoder.setstate(state))
+
 def split_input(input_):
     """Helper function for testing the incremental encoder and decoder."""
     if not isinstance(input_, (unicode, bytes)):
