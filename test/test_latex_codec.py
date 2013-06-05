@@ -174,6 +174,10 @@ class TestEncoder(TestCase):
     def test_invalid_code_replace(self):
         self.encode(u'\u2328', b'{\\char9000}', 'ascii', 'replace')
 
+    @nose.tools.raises(ValueError)
+    def test_invalid_code_baderror(self):
+        self.encode(u'\u2328', b'', 'ascii', '**baderror**')
+
     def test_null(self):
         self.encode(u'', b'')
 
