@@ -4,6 +4,7 @@
 from __future__ import print_function
 
 import codecs
+import nose.tools
 import sys
 if sys.version_info >= (3, 0):
     from io import BytesIO
@@ -14,23 +15,33 @@ from unittest import TestCase
 
 import sphinxcontrib.bibtex.latex_codec # registers automatically
 
+def test_getregentry():
+    assert sphinxcontrib.bibtex.latex_codec.getregentry() is not None
+
+def test_find_latex():
+    assert sphinxcontrib.bibtex.latex_codec.find_latex('hello') is None
+
+def test_latex_incremental_decoder_getstate():
+    encoder = codecs.getincrementaldecoder('latex')()
+    nose.tools.assert_raises(NotImplementedError, lambda: encoder.getstate())
+
+def test_latex_incremental_decoder_setstate():
+    encoder = codecs.getincrementaldecoder('latex')()
+    state = (u'', 0)
+    nose.tools.assert_raises(NotImplementedError, lambda: encoder.setstate(state))
+
 def split_input(input_):
     """Helper function for testing the incremental encoder and decoder."""
-    if isinstance(input_, unicode):
-        sep = u" "
-    elif isinstance(input_, bytes):
-        sep = b" "
-    else:
+    if not isinstance(input_, (unicode, bytes)):
         raise TypeError("expected unicode or bytes input")
-    part1, part2, part3 = input_.partition(sep)
-    if part3:
-        yield part1, False
-        yield part2, False
-        for part, final in split_input(part3):
-            yield part, final
+    if input_:
+        for i in xrange(len(input_)):
+            if i + 1 < len(input_):
+                yield input_[i:i+1], False
+            else:
+                yield input_[i:i+1], True
     else:
-        # last part
-        yield part1, True
+        yield input_, True
 
 class TestDecoder(TestCase):
     """Stateless decoder tests."""
@@ -41,6 +52,15 @@ class TestDecoder(TestCase):
         encoding = 'latex+' + inputenc if inputenc else 'latex'
         decoded, n = codecs.getdecoder(encoding)(text_latex)
         self.assertEqual((decoded, n), (text_utf8, len(text_latex)))
+
+    @nose.tools.raises(TypeError)
+    def test_invalid_type(self):
+        self.decode(object(), object())
+
+    @nose.tools.raises(ValueError)
+    def test_invalid_code(self):
+        # b'\xe9' is invalid utf-8 code
+        self.decode(u'', b'\xe9  ', 'utf-8')
 
     def test_null(self):
         self.decode(u'', b'')
@@ -130,11 +150,33 @@ class TestIncrementalDecoder(TestDecoder):
 class TestEncoder(TestCase):
     """Stateless encoder tests."""
 
-    def encode(self, text_utf8, text_latex, inputenc=None):
+    def encode(self, text_utf8, text_latex, inputenc=None, errors='strict'):
         """Main test function."""
         encoding = 'latex+' + inputenc if inputenc else 'latex'
-        encoded, n = codecs.getencoder(encoding)(text_utf8)
+        encoded, n = codecs.getencoder(encoding)(text_utf8, errors=errors)
         self.assertEqual((encoded, n), (text_latex, len(text_utf8)))
+
+    @nose.tools.raises(TypeError)
+    def test_invalid_type(self):
+        self.encode(object(), object())
+
+    # note concerning test_invalid_code_* methods:
+    # u'\u2328' (0x2328 = 9000) is unicode for keyboard symbol
+    # we currently provide no translation for this into LaTeX code
+
+    @nose.tools.raises(UnicodeEncodeError)
+    def test_invalid_code_strict(self):
+        self.encode(u'\u2328', b'', 'ascii', 'strict')
+
+    def test_invalid_code_ignore(self):
+        self.encode(u'\u2328', b'', 'ascii', 'ignore')
+
+    def test_invalid_code_replace(self):
+        self.encode(u'\u2328', b'{\\char9000}', 'ascii', 'replace')
+
+    @nose.tools.raises(ValueError)
+    def test_invalid_code_baderror(self):
+        self.encode(u'\u2328', b'', 'ascii', '**baderror**')
 
     def test_null(self):
         self.encode(u'', b'')
@@ -193,19 +235,19 @@ class TestEncoder(TestCase):
 class TestStreamEncoder(TestEncoder):
     """Stream encoder tests."""
 
-    def encode(self, text_utf8, text_latex, inputenc=None):
+    def encode(self, text_utf8, text_latex, inputenc=None, errors='strict'):
         encoding = 'latex+' + inputenc if inputenc else 'latex'
         stream = BytesIO()
-        writer = codecs.getwriter(encoding)(stream)
+        writer = codecs.getwriter(encoding)(stream, errors=errors)
         writer.write(text_utf8)
         self.assertEqual(text_latex, stream.getvalue())
 
 class TestIncrementalEncoder(TestEncoder):
     """Incremental encoder tests."""
 
-    def encode(self, text_utf8, text_latex, inputenc=None):
+    def encode(self, text_utf8, text_latex, inputenc=None, errors='strict'):
         encoding = 'latex+' + inputenc if inputenc else 'latex'
-        encoder = codecs.getincrementalencoder(encoding)()
+        encoder = codecs.getincrementalencoder(encoding)(errors=errors)
         encoded_parts = (
             encoder.encode(text_utf8_part, final)
             for text_utf8_part, final in split_input(text_utf8))
