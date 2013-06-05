@@ -28,14 +28,11 @@ def split_input(input_):
     if not isinstance(input_, (unicode, bytes)):
         raise TypeError("expected unicode or bytes input")
     if input_:
-        if sys.version_info < (3, 0):
-            for part in input_[:-1]:
-                yield part, False
-            yield input_[-1], True
-        else:
-            for part in input_[:-1]:
-                yield part.to_bytes(1, 'big'), False
-            yield input_[-1].to_bytes(1, 'big'), True
+        for i in xrange(len(input_)):
+            if i + 1 < len(input_):
+                yield input_[i:i+1], False
+            else:
+                yield input_[i:i+1], True
     else:
         yield input_, True
 
