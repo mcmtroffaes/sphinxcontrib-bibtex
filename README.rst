@@ -16,3 +16,9 @@ by Matthew Brett.
 * Documentation: http://sphinxcontrib-bibtex.readthedocs.org/
 
 * Development: http://github.com/mcmtroffaes/sphinxcontrib-bibtex/
+
+.. image:: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex.png?branch=develop
+       :target: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex
+
+.. image:: https://coveralls.io/repos/mcmtroffaes/sphinxcontrib-bibtex/badge.png?branch=develop
+       :target: https://coveralls.io/r/mcmtroffaes/sphinxcontrib-bibtex
