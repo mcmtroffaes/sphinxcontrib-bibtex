@@ -128,9 +128,6 @@ class LatexLexer(codecs.IncrementalDecoder):
                     # fill buffer with next token
                     self.raw_buffer = Token(name, text)
                     break
-            else:
-                # should not happen
-                raise AssertionError("lexer failed on '%s'" % bytes_)
         if final:
             for token in self.flush_raw_tokens():
                 yield token
