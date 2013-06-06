@@ -325,7 +325,7 @@ class TexLexerReplaceTest(BaseTexLexerTest):
             b'h|e|l|l|o|?'.split(b'|'),
             final=True
             )
-        
+
 class TexLexerIgnoreTest(BaseTexLexerTest):
 
     errors = 'ignore'
@@ -337,6 +337,18 @@ class TexLexerIgnoreTest(BaseTexLexerTest):
             final=True
             )
         
+class TexLexerInvalidErrorTest(BaseTexLexerTest):
+
+    errors = '**baderror**'
+
+    @nose.tools.raises(NotImplementedError)
+    def test_errors_invalid(self):
+        self.lex_it(
+            b'hello%',
+            b'h|e|l|l|o'.split(b'|'),
+            final=True
+            )
+
 class LatexIncrementalEncoderTest(TestCase):
     """Encoder test fixture."""
 
