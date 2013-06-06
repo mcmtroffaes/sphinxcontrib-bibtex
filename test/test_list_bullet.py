@@ -1,0 +1,32 @@
+# -*- coding: utf-8 -*-
+"""
+    test_list_bullet
+    ~~~~~~~~~~~~~~~~
+
+    Test the ``:list: bullet`` option.
+"""
+
+import nose.tools
+from StringIO import StringIO
+import os.path
+import re
+
+from util import *
+
+srcdir = path(__file__).parent.joinpath('list_bullet').abspath()
+
+def teardown_module():
+    (srcdir / '_build').rmtree(True)
+
+@with_app(srcdir=srcdir, warningiserror=True)
+def test_encoding(app):
+    app.builder.build_all()
+    with open(os.path.join(app.outdir, "index.html")) as stream:
+        assert re.search(
+            '<ul id="bibtex-bibliography-index-0">'
+            '.*<li>.*Akkerdju.*</li>'
+            '.*<li>.*Bro.*</li>'
+            '.*<li>.*Chap.*</li>'
+            '.*<li>.*Dude.*</li>'
+            '.*</ul>',
+            stream.read(), re.MULTILINE | re.DOTALL)
