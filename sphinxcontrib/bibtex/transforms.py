@@ -93,12 +93,11 @@ class BibliographyTransform(docutils.transforms.Transform):
                     bibfile_entries = (
                         entry for entry in data.entries.itervalues()
                         if env.bibtex_cache.is_cited(entry.key))
-                elif info.cite == "notcited":
+                else:
+                    assert info.cite == "notcited", "invalid cite option (%s)" % info.cite
                     bibfile_entries = (
                         entry for entry in data.entries.itervalues()
                         if not env.bibtex_cache.is_cited(entry.key))
-                else:
-                    raise RuntimeError("invalid cite option (%s)" % info.cite)
                 for entry in bibfile_entries:
                     entries[entry.key] = copy.deepcopy(entry)
             # order entries according to which were cited first
