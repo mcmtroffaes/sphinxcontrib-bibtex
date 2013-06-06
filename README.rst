@@ -15,10 +15,12 @@ by Matthew Brett.
 
 * Documentation: http://sphinxcontrib-bibtex.readthedocs.org/
 
-* Development: http://github.com/mcmtroffaes/sphinxcontrib-bibtex/
+* Development: http://github.com/mcmtroffaes/sphinxcontrib-bibtex/ |imagetravis| |imagecoveralls|
 
-.. image:: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex.png?branch=develop
+.. |imagetravis| image:: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex.png?branch=develop
        :target: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex
+       :alt: travis-ci
 
-.. image:: https://coveralls.io/repos/mcmtroffaes/sphinxcontrib-bibtex/badge.png?branch=develop
+.. |imagecoveralls| image:: https://coveralls.io/repos/mcmtroffaes/sphinxcontrib-bibtex/badge.png?branch=develop
        :target: https://coveralls.io/r/mcmtroffaes/sphinxcontrib-bibtex?branch=develop
+       :alt: coveralls.io
