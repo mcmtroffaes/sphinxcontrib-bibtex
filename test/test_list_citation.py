@@ -1,0 +1,32 @@
+# -*- coding: utf-8 -*-
+"""
+    test_list_citation
+    ~~~~~~~~~~~~~~~~~~
+
+    Test the ``:list: citation`` option.
+"""
+
+import nose.tools
+from StringIO import StringIO
+import os.path
+import re
+
+from util import *
+
+srcdir = path(__file__).parent.joinpath('list_citation').abspath()
+
+def teardown_module():
+    (srcdir / '_build').rmtree(True)
+
+@with_app(srcdir=srcdir, warningiserror=True)
+def test_encoding(app):
+    app.builder.build_all()
+    with open(os.path.join(app.outdir, "index.html")) as stream:
+        assert re.search(
+            '<p id="bibtex-bibliography-index-0">'
+            '.*<tr><td class="label">\\[1\\]</td><td>.*Akkerdju.*</td></tr>'
+            '.*<tr><td class="label">\\[2\\]</td><td>.*Bro.*</td></tr>'
+            '.*<tr><td class="label">\\[3\\]</td><td>.*Chap.*</td></tr>'
+            '.*<tr><td class="label">\\[4\\]</td><td>.*Dude.*</td></tr>'
+            '.*</p>',
+            stream.read(), re.MULTILINE | re.DOTALL)
