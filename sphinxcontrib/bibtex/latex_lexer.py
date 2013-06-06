@@ -216,9 +216,6 @@ class LatexIncrementalLexer(LatexLexer):
                 else:
                     raise AssertionError(
                         "unknown state %s" % repr(self.state))
-            elif token.name == 'char':
-                self.state = 'M'
-                yield token
             elif token.name == 'mathshift':
                 self.inline_math = not self.inline_math
                 yield token
