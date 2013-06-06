@@ -128,9 +128,6 @@ class LatexLexer(codecs.IncrementalDecoder):
                     # fill buffer with next token
                     self.raw_buffer = Token(name, text)
                     break
-            else:
-                # should not happen
-                raise AssertionError("lexer failed on '%s'" % bytes_)
         if final:
             for token in self.flush_raw_tokens():
                 yield token
@@ -216,9 +213,6 @@ class LatexIncrementalLexer(LatexLexer):
                 else:
                     raise AssertionError(
                         "unknown state %s" % repr(self.state))
-            elif token.name == 'char':
-                self.state = 'M'
-                yield token
             elif token.name == 'mathshift':
                 self.inline_math = not self.inline_math
                 yield token
@@ -262,6 +256,9 @@ class LatexIncrementalLexer(LatexLexer):
                 else:
                     raise NotImplementedError(
                         "error mode %s not supported" % repr(self.errors))
+            else:
+                raise AssertionError(
+                    "unknown token name %s" % repr(token.name))
 
 class LatexIncrementalDecoder(LatexIncrementalLexer):
     """Simple incremental decoder. Transforms lexed latex tokens into
@@ -298,7 +295,7 @@ class LatexIncrementalEncoder(codecs.IncrementalEncoder):
     inputenc = "ascii"
     """Input encoding. **Must** extend ascii."""
 
-    def get_latex_bytes(self, unicode_):
+    def get_latex_bytes(self, unicode_, final=False):
         """:meth:`encode` calls this function to produce the final
         sequence of latex bytes. This implementation simply
         encodes every sequence in *inputenc* encoding. Override to
@@ -310,13 +307,13 @@ class LatexIncrementalEncoder(codecs.IncrementalEncoder):
                 "expected unicode for encode input, but got {0} instead"
                 .format(unicode_.__class__.__name__))
         for c in unicode_:
-            yield c.encode(inputenc, self.errors)
+            yield c.encode(self.inputenc, self.errors)
 
     def encode(self, unicode_, final=False):
         """Encode unicode string into a latex byte sequence."""
         try:
             return b''.join(self.get_latex_bytes(unicode_, final=final))
-        except UnicodeDecodeError, e:
+        except UnicodeEncodeError, e:
             # API requires that the encode method raises a ValueError
             # in this case
             raise ValueError(e)
