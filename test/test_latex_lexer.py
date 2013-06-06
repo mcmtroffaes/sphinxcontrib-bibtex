@@ -355,6 +355,18 @@ def invalid_token_test():
     lexer.get_raw_tokens = lambda bytes_, final: [Token('**invalid**', bytes_)]
     nose.tools.assert_raises(AssertionError, lambda: lexer.decode(b'hello'))
 
+def invalid_state_test_1():
+    lexer = LatexIncrementalDecoder()
+    # piggyback invalid state
+    lexer.state = '**invalid**'
+    nose.tools.assert_raises(AssertionError, lambda: lexer.decode(b'\n\n\n'))
+
+def invalid_state_test_2():
+    lexer = LatexIncrementalDecoder()
+    # piggyback invalid state
+    lexer.state = '**invalid**'
+    nose.tools.assert_raises(AssertionError, lambda: lexer.decode(b'   '))
+
 class LatexIncrementalEncoderTest(TestCase):
     """Encoder test fixture."""
 
