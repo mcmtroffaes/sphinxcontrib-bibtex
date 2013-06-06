@@ -259,6 +259,9 @@ class LatexIncrementalLexer(LatexLexer):
                 else:
                     raise NotImplementedError(
                         "error mode %s not supported" % repr(self.errors))
+            else:
+                raise AssertionError(
+                    "unknown token name %s" % repr(token.name))
 
 class LatexIncrementalDecoder(LatexIncrementalLexer):
     """Simple incremental decoder. Transforms lexed latex tokens into
