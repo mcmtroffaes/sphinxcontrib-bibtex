@@ -164,7 +164,7 @@ class TestEncoder(TestCase):
     # u'\u2328' (0x2328 = 9000) is unicode for keyboard symbol
     # we currently provide no translation for this into LaTeX code
 
-    @nose.tools.raises(UnicodeEncodeError)
+    @nose.tools.raises(ValueError)
     def test_invalid_code_strict(self):
         self.encode(u'\u2328', b'', 'ascii', 'strict')
 

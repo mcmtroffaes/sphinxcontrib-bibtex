@@ -3,7 +3,7 @@
 import nose.tools
 from unittest import TestCase
 
-from sphinxcontrib.bibtex.latex_lexer import LatexLexer, LatexIncrementalDecoder, Token
+from sphinxcontrib.bibtex.latex_lexer import LatexLexer, LatexIncrementalDecoder, LatexIncrementalEncoder, Token
 
 def test_token_create():
     t = Token()
@@ -337,3 +337,29 @@ class TexLexerIgnoreTest(BaseTexLexerTest):
             final=True
             )
         
+class LatexIncrementalEncoderTest(TestCase):
+    """Encoder test fixture."""
+
+    errors = 'strict'
+
+    def setUp(self):
+        self.encoder = LatexIncrementalEncoder(self.errors)
+
+    def encode(self, latex_code, latex_bytes, final=False):
+        result = self.encoder.encode(latex_code, final=final)
+        self.assertEqual(result, latex_bytes)
+
+    def tearDown(self):
+        del self.encoder
+
+    @nose.tools.raises(TypeError)
+    def test_invalid_type(self):
+        self.encoder.encode(object())
+
+    @nose.tools.raises(ValueError)
+    def test_invalid_code(self):
+        # default encoding is ascii, \u00ff is not ascii translatable
+        self.encoder.encode(u"\u00ff")
+
+    def test_hello(self):
+        self.encode(u'hello', b'hello')
