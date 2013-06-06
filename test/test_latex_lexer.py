@@ -253,6 +253,47 @@ class TexLexerTest(BaseTexLexerTest):
             u' \\par Hey. \\par \\# x \\#x',
             )
 
+    def test_state_middle(self):
+        self.lex_it(
+            b'hi\\t',
+            b'h|i'.split(b'|'),
+            )
+        state = self.lexer.getstate()
+        self.assertEqual(self.lexer.state, 'M')
+        self.assertEqual(self.lexer.raw_buffer.name, 'control_word')
+        self.assertEqual(self.lexer.raw_buffer.text, b'\\t')
+        self.lexer.reset()
+        self.assertEqual(self.lexer.state, 'N')
+        self.assertEqual(self.lexer.raw_buffer.name, 'unknown')
+        self.assertEqual(self.lexer.raw_buffer.text, b'')
+        self.lex_it(
+            b'here',
+            b'h|e|r|e'.split(b'|'),
+            final=True,
+            )
+        self.lexer.setstate(state)
+        self.assertEqual(self.lexer.state, 'M')
+        self.assertEqual(self.lexer.raw_buffer.name, 'control_word')
+        self.assertEqual(self.lexer.raw_buffer.text, b'\\t')
+        self.lex_it(
+            b'here',
+            [b'\\there'],
+            final=True,
+            )
+
+    def test_state_inline_math(self):
+        self.lex_it(
+            b'hi$t',
+            b'h|i|$'.split(b'|'),
+            )
+        assert self.lexer.inline_math
+        self.lex_it(
+            b'here$',
+            b't|h|e|r|e|$'.split(b'|'),
+            final=True,
+            )
+        assert not self.lexer.inline_math
+
     # counterintuitive?
     @nose.tools.raises(UnicodeDecodeError)
     def test_final_backslash(self):
