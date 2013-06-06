@@ -298,7 +298,7 @@ class LatexIncrementalEncoder(codecs.IncrementalEncoder):
     inputenc = "ascii"
     """Input encoding. **Must** extend ascii."""
 
-    def get_latex_bytes(self, unicode_):
+    def get_latex_bytes(self, unicode_, final=False):
         """:meth:`encode` calls this function to produce the final
         sequence of latex bytes. This implementation simply
         encodes every sequence in *inputenc* encoding. Override to
@@ -310,13 +310,13 @@ class LatexIncrementalEncoder(codecs.IncrementalEncoder):
                 "expected unicode for encode input, but got {0} instead"
                 .format(unicode_.__class__.__name__))
         for c in unicode_:
-            yield c.encode(inputenc, self.errors)
+            yield c.encode(self.inputenc, self.errors)
 
     def encode(self, unicode_, final=False):
         """Encode unicode string into a latex byte sequence."""
         try:
             return b''.join(self.get_latex_bytes(unicode_, final=final))
-        except UnicodeDecodeError, e:
+        except UnicodeEncodeError, e:
             # API requires that the encode method raises a ValueError
             # in this case
             raise ValueError(e)
