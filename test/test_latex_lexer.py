@@ -349,6 +349,12 @@ class TexLexerInvalidErrorTest(BaseTexLexerTest):
             final=True
             )
 
+def invalid_token_test():
+    lexer = LatexIncrementalDecoder()
+    # piggyback an implementation which results in invalid tokens
+    lexer.get_raw_tokens = lambda bytes_, final: [Token('**invalid**', bytes_)]
+    nose.tools.assert_raises(AssertionError, lambda: lexer.decode(b'hello'))
+
 class LatexIncrementalEncoderTest(TestCase):
     """Encoder test fixture."""
 
