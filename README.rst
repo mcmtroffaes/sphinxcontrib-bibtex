@@ -21,4 +21,4 @@ by Matthew Brett.
        :target: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex
 
 .. image:: https://coveralls.io/repos/mcmtroffaes/sphinxcontrib-bibtex/badge.png?branch=develop
-       :target: https://coveralls.io/r/mcmtroffaes/sphinxcontrib-bibtex
+       :target: https://coveralls.io/r/mcmtroffaes/sphinxcontrib-bibtex?branch=develop
