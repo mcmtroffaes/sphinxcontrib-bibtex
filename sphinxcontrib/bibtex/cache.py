@@ -20,11 +20,6 @@ import collections
 from oset import oset
 import pybtex.database
 
-# "lambda: 1" used for _enum_count is not picklable
-# so we define an equivalent module-level function, which is picklable
-def _int_one():
-    return 1
-
 class Cache:
     """Global bibtex extension information cache. Stored in
     ``app.env.bibtex_cache``, so must be picklable.
@@ -61,7 +56,7 @@ class Cache:
         self.bibfiles = {}
         self.bibliographies = {}
         self._cited = collections.defaultdict(oset)
-        self._enum_count = collections.defaultdict(_int_one)
+        self._enum_count = {}
 
     def purge(self, docname):
         """Remove  all information related to *docname*.
