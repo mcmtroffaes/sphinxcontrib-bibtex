@@ -1,6 +1,10 @@
 0.2.7 (in development)
 ----------------------
 
+* Integrate with coveralls.io, first release with 100% test coverage.
+
+* Minor bug fixes and code improvements.
+
 0.2.6 (2 March 2013)
 --------------------
 
