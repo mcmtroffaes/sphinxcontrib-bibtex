@@ -9,9 +9,9 @@
 """
 
 import sys
-if sys.version_info < (2, 7):
+if sys.version_info < (2, 7): # pragma: no cover
     from ordereddict import OrderedDict
-else:
+else:                         # pragma: no cover
     from collections import OrderedDict
 
 import copy
@@ -78,14 +78,8 @@ class BibliographyTransform(docutils.transforms.Transform):
             infos = [info for other_id, info
                      in env.bibtex_cache.bibliographies.iteritems()
                      if other_id == id_ and info.docname == env.docname]
-            if not infos:
-                raise RuntimeError(
-                    "document %s has no bibliography nodes with id '%s'"
-                    % (env.docname, id_))
-            elif len(infos) >= 2:
-                raise RuntimeError(
-                    "document %s has multiple bibliography nodes with id '%s'"
-                    % (env.docname, id_))
+            assert infos, "document %s has no bibliography nodes with id '%s'" % (env.docname, id_)
+            assert len(infos) == 1, "document %s has multiple bibliography nodes with id '%s'" % (env.docname, id_)
             info = infos[0]
             # generate entries
             entries = OrderedDict()
@@ -99,12 +93,11 @@ class BibliographyTransform(docutils.transforms.Transform):
                     bibfile_entries = (
                         entry for entry in data.entries.itervalues()
                         if env.bibtex_cache.is_cited(entry.key))
-                elif info.cite == "notcited":
+                else:
+                    assert info.cite == "notcited", "invalid cite option (%s)" % info.cite
                     bibfile_entries = (
                         entry for entry in data.entries.itervalues()
                         if not env.bibtex_cache.is_cited(entry.key))
-                else:
-                    raise RuntimeError("invalid cite option (%s)" % info.cite)
                 for entry in bibfile_entries:
                     entries[entry.key] = copy.deepcopy(entry)
             # order entries according to which were cited first
