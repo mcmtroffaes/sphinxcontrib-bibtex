@@ -55,7 +55,7 @@ class Cache:
         self.bibfiles = {}
         self.bibliographies = {}
         self._cited = collections.defaultdict(oset)
-        self._enum_count = {}
+        self._enum_count = collections.defaultdict(lambda: 1)
 
     def purge(self, docname):
         """Remove  all information related to *docname*.
@@ -71,19 +71,13 @@ class Cache:
         self._enum_count.pop(docname, None)
 
     def inc_enum_count(self, docname):
-        if docname in self._enum_count:
-            self._enum_count[docname] += 1
-        else:
-            self._enum_count[docname] = 2
+        self._enum_count[docname] += 1
 
     def set_enum_count(self, docname, value):
         self._enum_count[docname] = value
 
     def get_enum_count(self, docname):
-        if docname in self._enum_count:
-            return self._enum_count[docname]
-        else:
-            return 1
+        return self._enum_count[docname]
 
     def add_cited(self, key, docname):
         """Add the given *key* to the set of cited keys for
