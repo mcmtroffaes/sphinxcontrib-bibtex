@@ -127,6 +127,9 @@ class TestDecoder(TestCase):
     def test_astrom(self):
         self.decode(u"{\xc5}str{\xf6}m", b'{\\AA}str{\\"o}m')
 
+    def test_space(self):
+        self.decode(u"ææ", br'\ae \ae')
+
 class TestStreamDecoder(TestDecoder):
     """Stream decoder tests."""
 
@@ -231,6 +234,9 @@ class TestEncoder(TestCase):
 
     def test_serafin(self):
         self.encode(u"Seraf{\xed}n", b"Seraf{\\'\\i }n")
+
+    def test_space(self):
+        self.encode(u"ææ", br'\ae \ae')
 
 class TestStreamEncoder(TestEncoder):
     """Stream encoder tests."""
