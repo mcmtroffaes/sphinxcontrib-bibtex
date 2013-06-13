@@ -72,12 +72,15 @@ class Cache:
         self._enum_count.pop(docname, None)
 
     def inc_enum_count(self, docname):
+        """Increment enumeration list counter for document *docname*."""
         self._enum_count[docname] += 1
 
     def set_enum_count(self, docname, value):
+        """Set enumeration list counter for document *docname* to *value*."""
         self._enum_count[docname] = value
 
     def get_enum_count(self, docname):
+        """Get enumeration list counter for document *docname*."""
         return self._enum_count[docname]
 
     def add_cited(self, key, docname):
