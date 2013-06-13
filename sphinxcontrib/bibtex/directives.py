@@ -8,6 +8,8 @@
         .. automethod:: process_bibfile
         .. automethod:: update_bibfile_cache
         .. automethod:: parse_bibfile
+
+    .. autofunction:: process_start_option
 """
 
 import os.path # getmtime()
@@ -25,9 +27,10 @@ import sphinxcontrib.bibtex.latex_codec # registers the latex codec
 from sphinxcontrib.bibtex.nodes import bibliography
 
 def process_start_option(value):
-    """Process and validate the start option value. If *value* is
-    ``continue`` then this function returns -1, otherwise *value* is
-    converted into a positive integer.
+    """Process and validate the start option value
+    of a :rst:dir:`bibliography` directive.
+    If *value* is ``continue`` then this function returns -1,
+    otherwise *value* is converted into a positive integer.
     """
     if value == "continue":
         return -1
