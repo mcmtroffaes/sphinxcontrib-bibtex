@@ -6,6 +6,12 @@
 
         .. autoattribute:: default_priority
         .. automethod:: apply
+
+    .. autofunction:: node_text_transform
+
+    .. autofunction:: transform_curly_bracket_strip
+
+    .. autofunction:: transform_url_command
 """
 
 import sys
@@ -41,7 +47,7 @@ def transform_curly_bracket_strip(textnode):
         return textnode
 
 def transform_url_command(textnode):
-    """Convert '\\url{...}' into a proper docutils hyperlink."""
+    """Convert '\\\\url{...}' into a proper docutils hyperlink."""
     text = textnode.astext()
     if '\\url' in text:
         text1, _, text = text.partition('\\url')
