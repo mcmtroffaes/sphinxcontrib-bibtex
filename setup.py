@@ -12,8 +12,8 @@ doclines = readfile("README.rst")
 requires = readfile("requirements.txt")
 version = readfile("VERSION")[0].strip()
 
-if sys.version_info >= (2, 7):
-    requires.remove('ordereddict>=1.1')
+if sys.version_info < (2, 7):
+    requires.append('ordereddict>=1.1')
 
 setup(
     name='sphinxcontrib-bibtex',
