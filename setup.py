@@ -2,6 +2,7 @@
 
 from setuptools import setup, find_packages
 import codecs
+import sys
 
 def readfile(filename):
     with codecs.open(filename, encoding="utf-8") as stream:
@@ -10,6 +11,9 @@ def readfile(filename):
 doclines = readfile("README.rst")
 requires = readfile("requirements.txt")
 version = readfile("VERSION")[0].strip()
+
+if sys.version_info < (2, 7):
+    requires.append('ordereddict>=1.1')
 
 setup(
     name='sphinxcontrib-bibtex',
