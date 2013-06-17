@@ -214,7 +214,7 @@ https://code.launchpad.net/~matthias-troffaes/pybtex/sorting-bugfix
 Duplicate Labels When Using ``:style: plain``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-With ``:style: plain``, label are numerical,
+With ``:style: plain``, labels are numerical,
 restarting at ``[1]`` for each :rst:dir:`bibliography` directive.
 Consequently, when inserting multiple :rst:dir:`bibliography` directives
 with ``:style: plain``,
