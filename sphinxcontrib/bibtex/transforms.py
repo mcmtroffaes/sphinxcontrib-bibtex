@@ -95,6 +95,10 @@ class BibliographyTransform(docutils.transforms.Transform):
                 data = env.bibtex_cache.bibfiles[bibfile].data
                 if info.cite == "all":
                     bibfile_entries = data.entries.itervalues()
+                elif info.cite.startswith("type:"):
+                    types = set(info.cite[5:].split())
+                    bibfile_entries = (entry for entry in data.entries.itervalues()
+                        if entry.type in types)
                 elif info.cite == "cited":
                     bibfile_entries = (
                         entry for entry in data.entries.itervalues()
