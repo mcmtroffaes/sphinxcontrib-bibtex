@@ -26,6 +26,7 @@ from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
 import sphinxcontrib.bibtex.latex_codec # registers the latex codec
 from sphinxcontrib.bibtex.nodes import bibliography
 
+
 def process_start_option(value):
     """Process and validate the start option value
     of a :rst:dir:`bibliography` directive.
@@ -36,6 +37,7 @@ def process_start_option(value):
         return -1
     else:
         return directives.positive_int(value)
+
 
 class BibliographyDirective(Directive):
     """Class for processing the :rst:dir:`bibliography` directive.
@@ -59,6 +61,7 @@ class BibliographyDirective(Directive):
         'cited': directives.flag,
         'notcited': directives.flag,
         'all': directives.flag,
+        'filter': directives.unchanged,
         'style': directives.unchanged,
         'list': directives.unchanged,
         'enumtype': directives.unchanged,
@@ -86,23 +89,19 @@ class BibliographyDirective(Directive):
             env.docname, env.new_serialno('bibtex'))
         info = BibliographyCache(
             docname=env.docname,
-            cite=(
-                "all"
-                if "all" in self.options else (
-                    "notcited"
-                    if "notcited" in self.options else (
-                        "cited"))),
+            cite=("all" if "all" in self.options else ("notcited" if "notcited" in self.options else "cited")),
             list_=self.options.get("list", "citation"),
             enumtype=self.options.get("enumtype", "arabic"),
             start=self.options.get("start", 1),
             style=self.options.get("style", "plain"),
+            filter=self.options.get("filter", None),
             encoding=self.options.get(
                 'encoding',
                 'latex+' + self.state.document.settings.input_encoding),
             curly_bracket_strip=(
                 'disable-curly-bracket-strip' not in self.options),
             labelprefix=self.options.get("labelprefix", ""),
-            )
+        )
         if (info.list_ not in set(["bullet", "enumerated", "citation"])):
             env.app.warn(
                 "unknown bibliography list type '{0}'.".format(info.list_))
@@ -130,7 +129,7 @@ class BibliographyDirective(Directive):
             bold("parsing bibtex file {0}... ".format(bibfile)), nonl=True)
         parser.parse_file(bibfile)
         app.info("parsed {0} entries"
-                 .format(len(parser.data.entries)))
+        .format(len(parser.data.entries)))
         return parser.data
 
     def update_bibfile_cache(self, bibfile, mtime, encoding):
@@ -173,7 +172,7 @@ class BibliographyDirective(Directive):
                 standout("could not open bibtex file {0}.".format(bibfile)))
             cache[bibfile] = BibfileCache() # dummy cache
             return cache[bibfile].data
-        # get cache and check if it is still up to date
+            # get cache and check if it is still up to date
         # if it is not up to date, parse the bibtex file
         # and store it in the cache
         env.app.info(
