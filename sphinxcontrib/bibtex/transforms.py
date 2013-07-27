@@ -14,6 +14,8 @@
     .. autofunction:: transform_url_command
 """
 
+import ast
+import re
 import sys
 if sys.version_info < (2, 7): # pragma: no cover
     from ordereddict import OrderedDict
@@ -28,6 +30,55 @@ from pybtex.backends.doctree import Backend as output_backend
 from pybtex.plugin import find_plugin
 
 from sphinxcontrib.bibtex.nodes import bibliography
+
+COMPARATORS = {'Eq': ' == ', 'Lt': ' < ', 'GtE': ' >= ', 'Le': ' <= ', 'Gt': ' > '}
+
+
+def filter_parser(node):
+    """
+    Take an ast.AST node and returns a valid Python string, which will be transformed into a valid Python function.1
+    :param node:
+     :type node: ast.AST
+    :return: :raise:
+    """
+    if node.__class__.__name__ in COMPARATORS:
+        return COMPARATORS[node.__class__.__name__]
+    elif isinstance(node, ast.Expr):
+        return 'bibtex_filter = lambda(arg): (' + filter_parser(node.value) + ')'
+    elif isinstance(node, ast.BoolOp):
+        values = [filter_parser(x) for x in node.values]
+        if isinstance(node.op, ast.And):
+            return '(' + ') and ('.join(values) + ')'
+        elif isinstance(node.op, ast.Or):
+            return '(' + ') or ('.join(values) + ')'
+    elif isinstance(node, ast.Compare):
+        result = filter_parser(node.left)
+        for op, cmp in zip(node.ops, node.comparators):
+            result += filter_parser(op)
+            result += filter_parser(cmp)
+        return result
+    elif isinstance(node, ast.Num):
+        return '"' + str(node.n) + '"'
+    elif isinstance(node, ast.Name):
+        if node.id == 'type':
+            return 'arg.type'
+        return 'arg.fields.get("' + node.id + '")'
+    elif isinstance(node, ast.Str):
+        return '"""' + node.s.replace('"""', '\"\"\"') + '"""'
+    elif isinstance(node, ast.BinOp) and isinstance(node.op, ast.Mod):
+        return 're.match(' + filter_parser(node.right) + ', ' + filter_parser(node.left) + ')'
+    elif isinstance(node, ast.UnaryOp) and isinstance(node.op, ast.Not):
+        return ' not (' + filter_parser(node.operand) + ')'
+    raise SyntaxError
+
+
+def get_parsed_filter(user_filter):
+    """Transform argument string into a Python function"""
+    bibtex_filter = None
+    parsed_line = filter_parser(ast.parse(user_filter).body[0])
+    exec(parsed_line)
+    return bibtex_filter
+
 
 def node_text_transform(node, transform):
     """Apply transformation to all Text nodes within node."""
@@ -95,19 +146,18 @@ class BibliographyTransform(docutils.transforms.Transform):
                 data = env.bibtex_cache.bibfiles[bibfile].data
                 if info.cite == "all":
                     bibfile_entries = data.entries.itervalues()
-                elif info.cite.startswith("type:"):
-                    types = set(info.cite[5:].split())
-                    bibfile_entries = (entry for entry in data.entries.itervalues()
-                        if entry.type in types)
                 elif info.cite == "cited":
-                    bibfile_entries = (
+                    bibfile_entries = [
                         entry for entry in data.entries.itervalues()
-                        if env.bibtex_cache.is_cited(entry.key))
+                        if env.bibtex_cache.is_cited(entry.key)]
                 else:
                     assert info.cite == "notcited", "invalid cite option (%s)" % info.cite
-                    bibfile_entries = (
+                    bibfile_entries = [
                         entry for entry in data.entries.itervalues()
-                        if not env.bibtex_cache.is_cited(entry.key))
+                        if not env.bibtex_cache.is_cited(entry.key)]
+                if info.filter:
+                    bib_filter = get_parsed_filter(info.filter)
+                    bibfile_entries = filter(bib_filter, bibfile_entries)
                 for entry in bibfile_entries:
                     entries[entry.key] = copy.deepcopy(entry)
             # order entries according to which were cited first
