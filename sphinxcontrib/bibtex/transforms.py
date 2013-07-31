@@ -91,7 +91,6 @@ class FilterVisitor(ast.NodeVisitor):
         return self.visit(node.body[0])
 
     def visit_Expr(self, node):
-        #assert False, node._fields
         return self.visit(node.value)
 
     def visit_BoolOp(self, node):
