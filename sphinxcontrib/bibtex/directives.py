@@ -59,6 +59,7 @@ class BibliographyDirective(Directive):
         'cited': directives.flag,
         'notcited': directives.flag,
         'all': directives.flag,
+        'filter': directives.unchanged,
         'style': directives.unchanged,
         'list': directives.unchanged,
         'enumtype': directives.unchanged,
@@ -96,6 +97,7 @@ class BibliographyDirective(Directive):
             enumtype=self.options.get("enumtype", "arabic"),
             start=self.options.get("start", 1),
             style=self.options.get("style", "plain"),
+            filter=self.options.get("filter", None),
             encoding=self.options.get(
                 'encoding',
                 'latex+' + self.state.document.settings.input_encoding),
