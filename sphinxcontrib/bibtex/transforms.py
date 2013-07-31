@@ -162,9 +162,9 @@ class FilterVisitor(ast.NodeVisitor):
             return self.entry.key.lower()
         elif id_ == 'cited':
             return self.is_cited
-        elif id_ == 'True':
+        elif id_ == 'true':
             return True
-        elif id_ == 'False':
+        elif id_ == 'false':
             return False
         elif id_ == 'author' or id_ == 'editor':
             return u' and '.join(
