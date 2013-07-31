@@ -23,6 +23,5 @@ def test_filter(app):
     with open(os.path.join(app.outdir, "index.html")) as stream:
         output = stream.read()
         assert re.search('Tralalala', output)
-        # TODO uncomment when implemented
-        #assert not re.search('ideetje', output)
-        #assert not re.search('Jakkamakka', output)
+        assert not re.search('ideetje', output)
+        assert not re.search('Jakkamakka', output)
