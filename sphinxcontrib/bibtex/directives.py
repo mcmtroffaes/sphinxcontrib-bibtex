@@ -88,16 +88,21 @@ class BibliographyDirective(Directive):
             env.docname, env.new_serialno('bibtex'))
         if "filter" in self.options:
             filter_ = ast.parse(self.options["filter"])
+            if "all" in self.options:
+                env.app.warn(standout(":filter: overrides :all:"))
+            if "notcited" in self.options:
+                env.app.warn(standout(":filter: overrides :notcited:"))
+            if "cited" in self.options:
+                env.app.warn(standout(":filter: overrides :cited:"))
+        elif "all" in self.options:
+            filter_ = ast.parse("True")
+        elif "notcited" in self.options:
+            filter_ = ast.parse("not cited")
         else:
-            filter_ = None
+            # the default filter: include only cited entries
+            filter_ = ast.parse("cited")
         info = BibliographyCache(
             docname=env.docname,
-            cite=(
-                "all"
-                if "all" in self.options else (
-                    "notcited"
-                    if "notcited" in self.options else (
-                        "cited"))),
             list_=self.options.get("list", "citation"),
             enumtype=self.options.get("enumtype", "arabic"),
             start=self.options.get("start", 1),

@@ -1,6 +1,3 @@
-:cite:`first`
-:cite:`second`
-:cite:`third`
-
 .. bibliography:: test.bib
-   :filter: author % "Second" and type == "MISC"
+   :list: bullet
+   :filter: author % "Second" and type == "misc"

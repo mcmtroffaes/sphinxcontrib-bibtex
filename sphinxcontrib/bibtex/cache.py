@@ -195,7 +195,7 @@ class BibliographyCache:
     """
 
     def __init__(self, docname=None, bibfiles=None,
-                 cite="cited", style=None,
+                 style=None,
                  list_="citation", enumtype="arabic", start=1,
                  labels=None,
                  encoding=None,
@@ -205,7 +205,6 @@ class BibliographyCache:
                  ):
         self.docname = docname
         self.bibfiles = bibfiles if bibfiles is not None else []
-        self.cite = cite
         self.filter_ = filter_
         self.style = style
         self.list_ = list_
