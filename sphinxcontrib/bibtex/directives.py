@@ -12,6 +12,7 @@
     .. autofunction:: process_start_option
 """
 
+import ast # parse(), used for filter
 import os.path # getmtime()
 
 import copy # deepcopy
@@ -85,6 +86,10 @@ class BibliographyDirective(Directive):
         # in the id)
         id_ = 'bibtex-bibliography-%s-%s' % (
             env.docname, env.new_serialno('bibtex'))
+        if "filter" in self.options:
+            filter_ = ast.parse(self.options["filter"])
+        else:
+            filter_ = None
         info = BibliographyCache(
             docname=env.docname,
             cite=(
@@ -97,7 +102,7 @@ class BibliographyDirective(Directive):
             enumtype=self.options.get("enumtype", "arabic"),
             start=self.options.get("start", 1),
             style=self.options.get("style", "plain"),
-            filter=self.options.get("filter", None),
+            filter_=filter_,
             encoding=self.options.get(
                 'encoding',
                 'latex+' + self.state.document.settings.input_encoding),

@@ -201,12 +201,12 @@ class BibliographyCache:
                  encoding=None,
                  curly_bracket_strip=True,
                  labelprefix="",
-                 filter=None
+                 filter_=None,
                  ):
         self.docname = docname
         self.bibfiles = bibfiles if bibfiles is not None else []
         self.cite = cite
-        self.filter = filter
+        self.filter_ = filter_
         self.style = style
         self.list_ = list_
         self.enumtype = enumtype
