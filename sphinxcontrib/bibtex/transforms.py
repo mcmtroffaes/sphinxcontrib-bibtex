@@ -103,10 +103,9 @@ class FilterVisitor(ast.NodeVisitor):
             return all(outcomes)
         elif isinstance(node.op, ast.Or):
             return any(outcomes)
-        else:
+        else: # pragma: no cover
             # there are no other boolean operators
             # so this code should never execute
-            # pragma: no cover
             assert False, "unexpected boolean operator %s in filter expression" % node.op
 
     def visit_UnaryOp(self, node):
