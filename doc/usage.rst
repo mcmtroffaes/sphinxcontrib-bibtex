@@ -69,23 +69,6 @@ Roles and Directives
    bibliography style, regardless of the style chosen. This limitation
    might be lifted in a future version.
 
-   If you have multiple bibliographies, and experience duplicate labels,
-   use the ``labelprefix`` option.
-
-   .. code-block:: rest
-
-     .. rubric:: References
-
-     .. bibliography:: refs.bib
-        :cited:
-        :labelprefix: A
-
-     .. rubric:: Further reading
-
-     .. bibliography:: refs.bib
-        :notcited:
-        :labelprefix: B
-
    .. warning::
 
       Sphinx will attempt to resolve references to the bibliography
@@ -106,48 +89,6 @@ Roles and Directives
    codec is invoked by default, for your convenience. Be sure to write
    ``\%`` when you intend to format a percent sign.
 
-   You can also change the type of list used for rendering the
-   bibliography. By default, a paragraph of standard citations is
-   generated. However, instead, you can also generate a bullet list,
-   or an enumerated list.
-
-   .. code-block:: rest
-
-     .. bibliography:: refs1.bib
-        :list: bullet
-        :all:
-
-     .. bibliography:: refs2.bib
-        :list: enumerated
-        :all:
-
-   Note that citations to these types of bibliography lists will not
-   be resolved.
-
-   For enumerated lists, you can also specify the type (default is
-   ``arabic``), and the start of the sequence (default is ``1``).
-
-   .. code-block:: rest
-
-     .. bibliography:: refs2.bib
-        :list: enumerated
-        :enumtype: upperroman
-        :start: 3
-        :all:
-
-   The enumtype can be any of
-   ``arabic`` (1, 2, 3, ...),
-   ``loweralpha`` (a, b, c, ...),
-   ``upperalpha`` (A, B, C, ...),
-   ``lowerroman`` (i, ii, iii, ...), or
-   ``upperroman`` (I, II, III, ...).
-
-   The start can be any positive integer (1, 2, 3, ...) or
-   ``continue`` if you wish the enumeration to continue from the last
-   :rst:dir:`bibliography` directive.
-   This is helpful if you split up your bibliography but
-   still want to enumerate the entries continuously.
-
 .. XXX not documenting disable-curly-bracket-strip for now; might remove it
 
    Finally, curly brackets are automatically removed when the bib file
@@ -161,6 +102,75 @@ Roles and Directives
 
 Advanced Features
 -----------------
+
+Bullet Lists and Enumerated Lists
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 0.2.4
+
+You can change the type of list used for rendering the
+bibliography. By default, a paragraph of standard citations is
+generated. However, instead, you can also generate a bullet list,
+or an enumerated list.
+
+.. code-block:: rest
+
+   .. bibliography:: refs1.bib
+      :list: bullet
+      :all:
+
+   .. bibliography:: refs2.bib
+      :list: enumerated
+      :all:
+
+Note that citations to these types of bibliography lists will not
+be resolved.
+
+For enumerated lists, you can also specify the type (default is
+``arabic``), and the start of the sequence (default is ``1``).
+
+.. code-block:: rest
+
+   .. bibliography:: refs2.bib
+      :list: enumerated
+      :enumtype: upperroman
+      :start: 3
+      :all:
+
+The enumtype can be any of
+``arabic`` (1, 2, 3, ...),
+``loweralpha`` (a, b, c, ...),
+``upperalpha`` (A, B, C, ...),
+``lowerroman`` (i, ii, iii, ...), or
+``upperroman`` (I, II, III, ...).
+
+The start can be any positive integer (1, 2, 3, ...) or
+``continue`` if you wish the enumeration to continue from the last
+:rst:dir:`bibliography` directive.
+This is helpful if you split up your bibliography but
+still want to enumerate the entries continuously.
+
+Label Prefixing
+~~~~~~~~~~~~~~~
+
+.. versionadded:: 0.2.5
+
+If you have multiple bibliographies, and experience duplicate labels,
+use the ``labelprefix`` option.
+
+.. code-block:: rest
+
+   .. rubric:: References
+
+   .. bibliography:: refs.bib
+      :cited:
+      :labelprefix: A
+
+   .. rubric:: Further reading
+
+   .. bibliography:: refs.bib
+      :notcited:
+      :labelprefix: B
 
 Filtering
 ~~~~~~~~~

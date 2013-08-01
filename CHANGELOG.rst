@@ -11,6 +11,8 @@
 * New ``:filter:`` option for advanced filtering (contributed by
   d9pouces, see pull requests #30 and #31).
 
+* Refactor documentation of advanced features.
+
 0.2.6 (2 March 2013)
 --------------------
 
