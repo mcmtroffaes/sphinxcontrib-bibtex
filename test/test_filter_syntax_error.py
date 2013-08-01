@@ -23,4 +23,5 @@ def teardown_module():
 def test_filter_syntax_error(app):
     app.builder.build_all()
     warnings = warnfile.getvalue()
-    assert re.search('syntax error in :filter: expression', warnings)
+    nose.tools.assert_equal(
+        len(re.findall('syntax error in :filter: expression', warnings)), 7)
