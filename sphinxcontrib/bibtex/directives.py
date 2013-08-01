@@ -87,13 +87,21 @@ class BibliographyDirective(Directive):
         id_ = 'bibtex-bibliography-%s-%s' % (
             env.docname, env.new_serialno('bibtex'))
         if "filter" in self.options:
-            filter_ = ast.parse(self.options["filter"])
             if "all" in self.options:
                 env.app.warn(standout(":filter: overrides :all:"))
             if "notcited" in self.options:
                 env.app.warn(standout(":filter: overrides :notcited:"))
             if "cited" in self.options:
                 env.app.warn(standout(":filter: overrides :cited:"))
+            try:
+                filter_ = ast.parse(self.options["filter"])
+            except SyntaxError:
+                env.app.warn(
+                    standout("syntax error in :filter: expression")
+                    + " (" + self.options["filter"] + "); "
+                    "the option will be ignored"
+                    )
+                filter_ = ast.parse("cited")
         elif "all" in self.options:
             filter_ = ast.parse("True")
         elif "notcited" in self.options:
