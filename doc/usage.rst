@@ -106,48 +106,6 @@ Roles and Directives
    codec is invoked by default, for your convenience. Be sure to write
    ``\%`` when you intend to format a percent sign.
 
-   You can also change the type of list used for rendering the
-   bibliography. By default, a paragraph of standard citations is
-   generated. However, instead, you can also generate a bullet list,
-   or an enumerated list.
-
-   .. code-block:: rest
-
-     .. bibliography:: refs1.bib
-        :list: bullet
-        :all:
-
-     .. bibliography:: refs2.bib
-        :list: enumerated
-        :all:
-
-   Note that citations to these types of bibliography lists will not
-   be resolved.
-
-   For enumerated lists, you can also specify the type (default is
-   ``arabic``), and the start of the sequence (default is ``1``).
-
-   .. code-block:: rest
-
-     .. bibliography:: refs2.bib
-        :list: enumerated
-        :enumtype: upperroman
-        :start: 3
-        :all:
-
-   The enumtype can be any of
-   ``arabic`` (1, 2, 3, ...),
-   ``loweralpha`` (a, b, c, ...),
-   ``upperalpha`` (A, B, C, ...),
-   ``lowerroman`` (i, ii, iii, ...), or
-   ``upperroman`` (I, II, III, ...).
-
-   The start can be any positive integer (1, 2, 3, ...) or
-   ``continue`` if you wish the enumeration to continue from the last
-   :rst:dir:`bibliography` directive.
-   This is helpful if you split up your bibliography but
-   still want to enumerate the entries continuously.
-
 .. XXX not documenting disable-curly-bracket-strip for now; might remove it
 
    Finally, curly brackets are automatically removed when the bib file
@@ -161,6 +119,51 @@ Roles and Directives
 
 Advanced Features
 -----------------
+
+Bullet Lists and Enumerated Lists
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+You can also change the type of list used for rendering the
+bibliography. By default, a paragraph of standard citations is
+generated. However, instead, you can also generate a bullet list,
+or an enumerated list.
+
+.. code-block:: rest
+
+   .. bibliography:: refs1.bib
+      :list: bullet
+      :all:
+
+   .. bibliography:: refs2.bib
+      :list: enumerated
+      :all:
+
+Note that citations to these types of bibliography lists will not
+be resolved.
+
+For enumerated lists, you can also specify the type (default is
+``arabic``), and the start of the sequence (default is ``1``).
+
+.. code-block:: rest
+
+   .. bibliography:: refs2.bib
+      :list: enumerated
+      :enumtype: upperroman
+      :start: 3
+      :all:
+
+The enumtype can be any of
+``arabic`` (1, 2, 3, ...),
+``loweralpha`` (a, b, c, ...),
+``upperalpha`` (A, B, C, ...),
+``lowerroman`` (i, ii, iii, ...), or
+``upperroman`` (I, II, III, ...).
+
+The start can be any positive integer (1, 2, 3, ...) or
+``continue`` if you wish the enumeration to continue from the last
+:rst:dir:`bibliography` directive.
+This is helpful if you split up your bibliography but
+still want to enumerate the entries continuously.
 
 Filtering
 ~~~~~~~~~
