@@ -165,7 +165,10 @@ Advanced Features
 Filtering
 ~~~~~~~~~
 
-Whilst ``all`` and ``notcited`` options will cover many use cases,
+.. versionadded:: 0.2.7
+
+Whilst the ``cited``, ``all``, and ``notcited`` options
+will cover many use cases,
 sometimes more advanced selection of bibliographic entries is desired.
 For this purpose, you can use the ``filter`` option:
 
@@ -180,8 +183,8 @@ expression.
 
 .. note::
 
-   The expression is parsed using `ast.parse`
-   and then evaluated using an `ast.NodeVisitor`,
+   The expression is parsed using :func:`ast.parse`
+   and then evaluated using an :class:`ast.NodeVisitor`,
    so it should be reasonably safe against malicious code.
 
 The filter expression supports:
@@ -202,7 +205,7 @@ The filter expression supports:
           :list: bullet
           :filter: title % "relativity"
 
-  would include all entries that have the word ``relativity'' in the title.
+  would include all entries that have the word "relativity" in the title.
 
 * Double quoted strings, such as ``"this is a string"``.
 
@@ -220,7 +223,7 @@ The filter expression supports:
   - ``True`` and ``False``.
 
   - ``author`` is the entry string of authors
-    in standard format (last, first), separated by ``and''.
+    in standard format (last, first), separated by "and".
 
   - ``editor`` is similar to ``author`` but for editors.
 

@@ -3,9 +3,14 @@
     ~~~~~~~~~~~~~~~~~~~~~~
 
     .. autoclass:: BibliographyTransform
+        :show-inheritance:
 
         .. autoattribute:: default_priority
         .. automethod:: apply
+
+    .. autoclass:: FilterVisitor
+        :members: entry, is_cited
+        :show-inheritance:
 
     .. autofunction:: node_text_transform
 
@@ -85,7 +90,6 @@ class FilterVisitor(ast.NodeVisitor):
         self.is_cited = is_cited
 
     def visit_Module(self, node):
-        """Visit the module node."""
         # exactly one child, and visit it
         assert len(node.body) == 1
         return self.visit(node.body[0])
