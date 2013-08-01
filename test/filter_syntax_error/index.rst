@@ -21,3 +21,6 @@
 
 .. bibliography:: test.bib
    :filter: author + title
+
+.. bibliography:: test.bib
+   :filter: author; title

@@ -24,4 +24,4 @@ def test_filter_syntax_error(app):
     app.builder.build_all()
     warnings = warnfile.getvalue()
     nose.tools.assert_equal(
-        len(re.findall('syntax error in :filter: expression', warnings)), 8)
+        len(re.findall('syntax error in :filter: expression', warnings)), 9)
