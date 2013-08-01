@@ -120,16 +120,13 @@ class FilterVisitor(ast.NodeVisitor):
             # modulo operator is used for regular expression matching
             name = self.visit(node.left)
             regexp = self.visit(node.right)
-            if name is None:
-                return False
-            else:
-                if not isinstance(name, basestring):
-                    raise ValueError(
-                        "expected a string on left side of %s" % node.op)
-                if not isinstance(regexp, basestring):
-                    raise ValueError(
-                        "expected a string on right side of %s" % node.op)
-                return re.match(regexp, name, re.IGNORECASE)
+            if not isinstance(name, basestring):
+                raise ValueError(
+                    "expected a string on left side of %s" % node.op)
+            if not isinstance(regexp, basestring):
+                raise ValueError(
+                    "expected a string on right side of %s" % node.op)
+            return re.match(regexp, name, re.IGNORECASE)
         else:
             self.raise_invalid_node(node)
 
