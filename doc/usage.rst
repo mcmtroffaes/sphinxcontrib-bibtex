@@ -221,7 +221,7 @@ The filter expression supports:
 
      The implementation uses :func:`re.search`.
 
-* Double quoted strings, such as ``"this is a string"``.
+* Single and double quoted strings, such as ``'hello'`` or ``"world"``.
 
 * Various identifiers, such as:
 
