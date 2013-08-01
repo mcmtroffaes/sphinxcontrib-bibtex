@@ -8,6 +8,9 @@
 * Remove ordereddict dependency for Python 2.7 and higher (contributed
   by Paul Romano, see pull requests #27 and #28).
 
+* New ``:filter:`` option for advanced filtering (contributed by
+  d9pouces, see pull requests #30 and #31).
+
 0.2.6 (2 March 2013)
 --------------------
 

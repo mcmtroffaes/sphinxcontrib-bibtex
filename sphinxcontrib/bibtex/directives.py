@@ -12,6 +12,7 @@
     .. autofunction:: process_start_option
 """
 
+import ast # parse(), used for filter
 import os.path # getmtime()
 
 import copy # deepcopy
@@ -59,6 +60,7 @@ class BibliographyDirective(Directive):
         'cited': directives.flag,
         'notcited': directives.flag,
         'all': directives.flag,
+        'filter': directives.unchanged,
         'style': directives.unchanged,
         'list': directives.unchanged,
         'enumtype': directives.unchanged,
@@ -84,18 +86,36 @@ class BibliographyDirective(Directive):
         # in the id)
         id_ = 'bibtex-bibliography-%s-%s' % (
             env.docname, env.new_serialno('bibtex'))
+        if "filter" in self.options:
+            if "all" in self.options:
+                env.app.warn(standout(":filter: overrides :all:"))
+            if "notcited" in self.options:
+                env.app.warn(standout(":filter: overrides :notcited:"))
+            if "cited" in self.options:
+                env.app.warn(standout(":filter: overrides :cited:"))
+            try:
+                filter_ = ast.parse(self.options["filter"])
+            except SyntaxError:
+                env.app.warn(
+                    standout("syntax error in :filter: expression")
+                    + " (" + self.options["filter"] + "); "
+                    "the option will be ignored"
+                    )
+                filter_ = ast.parse("cited")
+        elif "all" in self.options:
+            filter_ = ast.parse("True")
+        elif "notcited" in self.options:
+            filter_ = ast.parse("not cited")
+        else:
+            # the default filter: include only cited entries
+            filter_ = ast.parse("cited")
         info = BibliographyCache(
             docname=env.docname,
-            cite=(
-                "all"
-                if "all" in self.options else (
-                    "notcited"
-                    if "notcited" in self.options else (
-                        "cited"))),
             list_=self.options.get("list", "citation"),
             enumtype=self.options.get("enumtype", "arabic"),
             start=self.options.get("start", 1),
             style=self.options.get("style", "plain"),
+            filter_=filter_,
             encoding=self.options.get(
                 'encoding',
                 'latex+' + self.state.document.settings.input_encoding),
