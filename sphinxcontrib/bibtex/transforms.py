@@ -167,8 +167,11 @@ class FilterVisitor(ast.NodeVisitor):
         elif id_ == 'False':
             return False
         elif id_ == 'author' or id_ == 'editor':
-            return u' and '.join(
-                unicode(person) for person in self.entry.persons[id_])
+            if id_ in self.entry.persons:
+                return u' and '.join(
+                    unicode(person) for person in self.entry.persons[id_])
+            else:
+                return u''
         else:
             return self.entry.fields.get(id_, "")
 
