@@ -69,23 +69,6 @@ Roles and Directives
    bibliography style, regardless of the style chosen. This limitation
    might be lifted in a future version.
 
-   If you have multiple bibliographies, and experience duplicate labels,
-   use the ``labelprefix`` option.
-
-   .. code-block:: rest
-
-     .. rubric:: References
-
-     .. bibliography:: refs.bib
-        :cited:
-        :labelprefix: A
-
-     .. rubric:: Further reading
-
-     .. bibliography:: refs.bib
-        :notcited:
-        :labelprefix: B
-
    .. warning::
 
       Sphinx will attempt to resolve references to the bibliography
@@ -166,6 +149,28 @@ The start can be any positive integer (1, 2, 3, ...) or
 :rst:dir:`bibliography` directive.
 This is helpful if you split up your bibliography but
 still want to enumerate the entries continuously.
+
+Label Prefixing
+~~~~~~~~~~~~~~~
+
+.. versionadded:: 0.2.5
+
+If you have multiple bibliographies, and experience duplicate labels,
+use the ``labelprefix`` option.
+
+.. code-block:: rest
+
+   .. rubric:: References
+
+   .. bibliography:: refs.bib
+      :cited:
+      :labelprefix: A
+
+   .. rubric:: Further reading
+
+   .. bibliography:: refs.bib
+      :notcited:
+      :labelprefix: B
 
 Filtering
 ~~~~~~~~~
