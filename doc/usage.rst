@@ -123,7 +123,9 @@ Advanced Features
 Bullet Lists and Enumerated Lists
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-You can also change the type of list used for rendering the
+.. versionadded:: 0.2.4
+
+You can change the type of list used for rendering the
 bibliography. By default, a paragraph of standard citations is
 generated. However, instead, you can also generate a bullet list,
 or an enumerated list.
