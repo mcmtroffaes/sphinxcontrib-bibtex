@@ -126,7 +126,7 @@ class FilterVisitor(ast.NodeVisitor):
             if not isinstance(regexp, basestring):
                 raise ValueError(
                     "expected a string on right side of %s" % node.op)
-            return re.match(regexp, name, re.IGNORECASE)
+            return re.search(regexp, name, re.IGNORECASE)
         else:
             self.raise_invalid_node(node)
 

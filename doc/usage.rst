@@ -217,6 +217,10 @@ The filter expression supports:
 
   would include all entries that have the word "relativity" in the title.
 
+  .. note::
+
+     The implementation uses :func:`re.search`.
+
 * Double quoted strings, such as ``"this is a string"``.
 
 * Various identifiers, such as:
