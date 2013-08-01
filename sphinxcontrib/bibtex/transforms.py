@@ -90,8 +90,9 @@ class FilterVisitor(ast.NodeVisitor):
         self.is_cited = is_cited
 
     def visit_Module(self, node):
-        # exactly one child, and visit it
-        assert len(node.body) == 1
+        if len(node.body) != 1:
+            raise ValueError(
+                "filter expression cannot contain multiple expressions")
         return self.visit(node.body[0])
 
     def visit_Expr(self, node):
