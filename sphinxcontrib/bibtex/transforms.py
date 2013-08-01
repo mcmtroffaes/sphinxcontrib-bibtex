@@ -154,22 +154,22 @@ class FilterVisitor(ast.NodeVisitor):
 
     def visit_Name(self, node):
         """Calculate the value of the given identifier."""
-        id_ = node.id.lower()
+        id_ = node.id
         if id_ == 'type':
             return self.entry.type.lower()
         elif id_ == 'key':
             return self.entry.key.lower()
         elif id_ == 'cited':
             return self.is_cited
-        elif id_ == 'true':
+        elif id_ == 'True':
             return True
-        elif id_ == 'false':
+        elif id_ == 'False':
             return False
         elif id_ == 'author' or id_ == 'editor':
             return u' and '.join(
                 unicode(person) for person in self.entry.persons[id_])
         else:
-            return self.entry.fields.get(id_, None)
+            return self.entry.fields.get(id_, "")
 
     def visit_Str(self, node):
         return node.s

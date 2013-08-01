@@ -159,6 +159,90 @@ Roles and Directives
      .. bibliography:: refs.bib
         :disable-curly-bracket-strip:
 
+Advanced Features
+-----------------
+
+Filtering
+~~~~~~~~~
+
+Whilst ``all`` and ``notcited`` options will cover many use cases,
+sometimes more advanced selection of bibliographic entries is desired.
+For this purpose, you can use the ``filter`` option:
+
+.. code-block:: rest
+
+   .. bibliography:: refs.bib
+      :list: bullet
+      :filter: author % "Einstein"
+
+The string specified in the filter option must be a valid Python
+expression.
+
+.. note::
+
+   The expression is parsed using `ast.parse`
+   and then evaluated using an `ast.NodeVisitor`,
+   so it should be reasonably safe against malicious code.
+
+The filter expression supports:
+
+* The boolean operators ``and`` and ``or``.
+
+* The unary operator ``not``.
+
+* Binary comparison ``==``, ``<=``, ``<``, ``>=``, and ``>``.
+
+* Regular expression matching using the ``%`` operator, where the left
+  hand side is the string to be matched, and the right hand side is
+  the regular expression. Matching is case insensitive. For example:
+
+    .. code-block:: rest
+
+       .. bibliography:: refs.bib
+          :list: bullet
+          :filter: title % "relativity"
+
+  would include all entries that have the word ``relativity'' in the title.
+
+* Double quoted strings, such as ``"this is a string"``.
+
+* Various identifiers, such as:
+
+  - ``type`` is the entry type, as a lower case string
+    (i.e. ``"inproceedings"``).
+
+  - ``key`` is the entry key, as a lower case string
+    (this is because keys are considered case insensitive).
+
+  - ``cited`` evaluates to ``True`` if the entry was cited in the document,
+    and to ``False`` otherwise.
+
+  - ``True`` and ``False``.
+
+  - ``author`` is the entry string of authors
+    in standard format (last, first), separated by ``and''.
+
+  - ``editor`` is similar to ``author`` but for editors.
+
+  - Any other (lower case) identifier evaluates to a string
+    containing the value of
+    the correspondingly named field, such as
+    ``title``, ``publisher``, ``year``, and so on.
+    If the item is missing in the entry
+    then it evaluates to the empty string.
+    Here is an example of how one would typically write an expression
+    to filter on an optional field:
+
+    .. code-block:: rest
+
+       .. bibliography:: refs.bib
+          :list: bullet
+          :filter: cited and year and (year <= "2003")
+
+    which would include all cited entries that have a year
+    that is less or equal than 2003; any entries that do not
+    specify a year would be omitted.
+
 Known Issues and Workarounds
 ----------------------------
 
