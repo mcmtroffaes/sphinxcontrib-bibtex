@@ -154,7 +154,7 @@ class FilterVisitor(ast.NodeVisitor):
             return left >= right
         else:
             # not used currently: ast.Is | ast.IsNot | ast.In | ast.NotIn
-            self.raise_invalid_node(node.op)
+            self.raise_invalid_node(op)
 
     def visit_Name(self, node):
         """Calculate the value of the given identifier."""
@@ -215,7 +215,13 @@ class BibliographyTransform(docutils.transforms.Transform):
                     visitor = FilterVisitor(
                             entry=entry,
                             is_cited=env.bibtex_cache.is_cited(entry.key))
-                    if visitor.visit(info.filter_):
+                    try:
+                        ok = visitor.visit(info.filter_)
+                    except ValueError, e:
+                        env.app.warn("syntax error in :filter: expression; %s" % e)
+                        # recover by falling back to the default
+                        ok = env.bibtex_cache.is_cited(entry.key)
+                    if ok:
                         entries[entry.key] = copy.deepcopy(entry)
             # order entries according to which were cited first
             # first, we add all keys that were cited
