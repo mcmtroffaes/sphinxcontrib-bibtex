@@ -18,3 +18,6 @@
 
 .. bibliography:: test.bib
    :filter: "2000" <= year <= "2005"
+
+.. bibliography:: test.bib
+   :filter: author + title
