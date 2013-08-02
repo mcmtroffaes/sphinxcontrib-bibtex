@@ -3,7 +3,8 @@
 import nose.tools
 from unittest import TestCase
 
-from sphinxcontrib.bibtex.latex_lexer import LatexLexer, LatexIncrementalDecoder, LatexIncrementalEncoder, Token
+from sphinxcontrib.bibtex.latex_lexer import (
+    LatexLexer, LatexIncrementalDecoder, LatexIncrementalEncoder, Token)
 
 
 def test_token_create():

@@ -175,7 +175,8 @@ class TestApp(application.Sphinx):
             warningiserror = False
 
         application.Sphinx.__init__(self, srcdir, confdir, outdir, doctreedir,
-                                    buildername, confoverrides, status, warning,
+                                    buildername, confoverrides, status,
+                                    warning,
                                     freshenv, warningiserror, tags)
 
     def cleanup(self, doctrees=False):
