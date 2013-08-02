@@ -112,7 +112,7 @@ class FilterVisitor(ast.NodeVisitor):
         else:  # pragma: no cover
             # there are no other boolean operators
             # so this code should never execute
-            assert False, "unexpected boolean operator %s in filter expression" % node.op
+            assert False, "unexpected boolean operator %s" % node.op
 
     def visit_UnaryOp(self, node):
         if isinstance(node.op, ast.Not):
