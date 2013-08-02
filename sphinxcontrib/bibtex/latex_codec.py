@@ -723,7 +723,7 @@ class LatexCodec(codecs.Codec):
         return (
             encoder.encode(unicode_, final=True),
             len(unicode_),
-            )
+        )
 
     def decode(self, bytes_, errors='strict'):
         """Convert latex bytes to unicode string."""
@@ -731,7 +731,7 @@ class LatexCodec(codecs.Codec):
         return (
             decoder.decode(bytes_, final=True),
             len(bytes_),
-            )
+        )
 
 
 def find_latex(encoding):
@@ -763,6 +763,6 @@ def find_latex(encoding):
         incrementaldecoder=IncrementalDecoder_,
         streamreader=StreamReader,
         streamwriter=StreamWriter,
-        )
+    )
 
 register()
