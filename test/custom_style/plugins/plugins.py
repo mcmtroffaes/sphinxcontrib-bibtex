@@ -6,7 +6,7 @@ from pybtex.style.template import words
 class NoWebRefStyle(UnsrtStyle):
     name = 'nowebref'
     default_name_style = 'lastfirst' # 'lastfirst' or 'plain'
-    default_label_style = 'alpha' # 'number' or 'alpha'
+    default_label_style = 'number' # 'number' or 'alpha'
     default_sorting_style = 'author_year_title' # 'none' or 'author_year_title'
 
     def format_web_refs(self, e):
