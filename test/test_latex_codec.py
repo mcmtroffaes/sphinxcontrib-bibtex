@@ -100,8 +100,10 @@ class TestDecoder(TestCase):
         self.decode(
             u"Même s'il a fait l'objet d'adaptations suite à l'évolution, "
             u"la transformation sociale, économique et politique du pays, "
-            u"le code civil fran{ç}ais est aujourd'hui encore le texte fondateur "
-            u"du droit civil français mais aussi du droit civil belge ainsi que "
+            u"le code civil fran{ç}ais est aujourd'hui encore le texte "
+            u"fondateur "
+            u"du droit civil français mais aussi du droit civil belge "
+            u"ainsi que "
             u"de plusieurs autres droits civils.",
             b"M\\^eme s'il a fait l'objet d'adaptations suite "
             b"\\`a l'\\'evolution, \nla transformation sociale, "
@@ -220,8 +222,10 @@ class TestEncoder(TestCase):
         self.encode(
             u"Même s'il a fait l'objet d'adaptations suite à l'évolution, \n"
             u"la transformation sociale, économique et politique du pays, \n"
-            u"le code civil fran{ç}ais est aujourd'hui encore le texte fondateur \n"
-            u"du droit civil français mais aussi du droit civil belge ainsi que \n"
+            u"le code civil fran{ç}ais est aujourd'hui encore le texte "
+            u"fondateur \n"
+            u"du droit civil français mais aussi du droit civil belge "
+            u"ainsi que \n"
             u"de plusieurs autres droits civils.",
             b"M\\^eme s'il a fait l'objet d'adaptations suite "
             b"\\`a l'\\'evolution, \nla transformation sociale, "
