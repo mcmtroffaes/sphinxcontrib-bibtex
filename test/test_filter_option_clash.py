@@ -16,8 +16,10 @@ from util import *
 srcdir = path(__file__).parent.joinpath('filter_option_clash').abspath()
 warnfile = StringIO()
 
+
 def teardown_module():
     (srcdir / '_build').rmtree(True)
+
 
 @with_app(srcdir=srcdir, warning=warnfile)
 def test_filter_option_clash(app):

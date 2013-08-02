@@ -1,4 +1,5 @@
-import sys, os
+import sys
+import os
 extensions = ['sphinxcontrib.bibtex']
 templates_path = ['_templates']
 source_suffix = '.rst'
@@ -12,8 +13,8 @@ pygments_style = 'sphinx'
 html_theme = 'default'
 htmlhelp_basename = 'Sphinxbibtexextensiontestdoc'
 latex_documents = [
-  ('index', 'Sphinxbibtexextensiontest.tex', u'Sphinx bibtex extension test Documentation',
-   u'Matthias C. M. Troffaes', 'manual'),
+    ('index', 'Sphinxbibtexextensiontest.tex', u'Sphinx bibtex extension test Documentation',
+     u'Matthias C. M. Troffaes', 'manual'),
 ]
 man_pages = [
     ('index', 'sphinxbibtexextensiontest', u'Sphinx bibtex extension test Documentation',

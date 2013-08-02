@@ -13,22 +13,29 @@ else:
 from nose.exc import SkipTest
 from unittest import TestCase
 
-import sphinxcontrib.bibtex.latex_codec # registers automatically
+import sphinxcontrib.bibtex.latex_codec  # registers automatically
+
 
 def test_getregentry():
     assert sphinxcontrib.bibtex.latex_codec.getregentry() is not None
 
+
 def test_find_latex():
     assert sphinxcontrib.bibtex.latex_codec.find_latex('hello') is None
+
 
 def test_latex_incremental_decoder_getstate():
     encoder = codecs.getincrementaldecoder('latex')()
     nose.tools.assert_raises(NotImplementedError, lambda: encoder.getstate())
 
+
 def test_latex_incremental_decoder_setstate():
     encoder = codecs.getincrementaldecoder('latex')()
     state = (u'', 0)
-    nose.tools.assert_raises(NotImplementedError, lambda: encoder.setstate(state))
+    nose.tools.assert_raises(
+        NotImplementedError,
+        lambda: encoder.setstate(state))
+
 
 def split_input(input_):
     """Helper function for testing the incremental encoder and decoder."""
@@ -37,13 +44,15 @@ def split_input(input_):
     if input_:
         for i in xrange(len(input_)):
             if i + 1 < len(input_):
-                yield input_[i:i+1], False
+                yield input_[i:i + 1], False
             else:
-                yield input_[i:i+1], True
+                yield input_[i:i + 1], True
     else:
         yield input_, True
 
+
 class TestDecoder(TestCase):
+
     """Stateless decoder tests."""
     maxDiff = None
 
@@ -100,20 +109,20 @@ class TestDecoder(TestCase):
             b"fran\\c{c}ais est aujourd'hui encore le texte fondateur \n"
             b"du droit civil fran\\c cais mais aussi du droit civil "
             b"belge ainsi que \nde plusieurs autres droits civils.",
-            )
+        )
 
     def test_oeuf(self):
         self.decode(
             u"D'un point de vue diététique, l'œuf apaise la faim.",
             br"D'un point de vue di\'et\'etique, l'\oe uf apaise la faim.",
-            )
+        )
 
     def test_oeuf_latin1(self):
         self.decode(
             u"D'un point de vue diététique, l'œuf apaise la faim.",
             b"D'un point de vue di\xe9t\xe9tique, l'\\oe uf apaise la faim.",
             'latin1'
-            )
+        )
 
     def test_alpha(self):
         self.decode(u"α", b"$\\alpha$")
@@ -130,7 +139,9 @@ class TestDecoder(TestCase):
     def test_space(self):
         self.decode(u"ææ", br'\ae \ae')
 
+
 class TestStreamDecoder(TestDecoder):
+
     """Stream decoder tests."""
 
     def decode(self, text_utf8, text_latex, inputenc=None):
@@ -139,7 +150,9 @@ class TestStreamDecoder(TestDecoder):
         reader = codecs.getreader(encoding)(stream)
         self.assertEqual(text_utf8, reader.read())
 
+
 class TestIncrementalDecoder(TestDecoder):
+
     """Incremental decoder tests."""
 
     def decode(self, text_utf8, text_latex, inputenc=None):
@@ -150,7 +163,9 @@ class TestIncrementalDecoder(TestDecoder):
             for text_latex_part, final in split_input(text_latex))
         self.assertEqual(text_utf8, u''.join(decoded_parts))
 
+
 class TestEncoder(TestCase):
+
     """Stateless encoder tests."""
 
     def encode(self, text_utf8, text_latex, inputenc=None, errors='strict'):
@@ -214,20 +229,20 @@ class TestEncoder(TestCase):
             b"fran{\\c c}ais est aujourd'hui encore le texte fondateur \n"
             b"du droit civil fran\\c cais mais aussi du droit civil "
             b"belge ainsi que \nde plusieurs autres droits civils.",
-            )
+        )
 
     def test_oeuf(self):
         self.encode(
             u"D'un point de vue diététique, l'œuf apaise la faim.",
             br"D'un point de vue di\'et\'etique, l'\oe uf apaise la faim.",
-            )
+        )
 
     def test_oeuf_latin1(self):
         self.encode(
             u"D'un point de vue diététique, l'œuf apaise la faim.",
             b"D'un point de vue di\xe9t\xe9tique, l'\\oe uf apaise la faim.",
             'latin1'
-            )
+        )
 
     def test_alpha(self):
         self.encode(u"α", b"$\\alpha$")
@@ -238,7 +253,9 @@ class TestEncoder(TestCase):
     def test_space(self):
         self.encode(u"ææ", br'\ae \ae')
 
+
 class TestStreamEncoder(TestEncoder):
+
     """Stream encoder tests."""
 
     def encode(self, text_utf8, text_latex, inputenc=None, errors='strict'):
@@ -248,7 +265,9 @@ class TestStreamEncoder(TestEncoder):
         writer.write(text_utf8)
         self.assertEqual(text_latex, stream.getvalue())
 
+
 class TestIncrementalEncoder(TestEncoder):
+
     """Incremental encoder tests."""
 
     def encode(self, text_utf8, text_latex, inputenc=None, errors='strict'):

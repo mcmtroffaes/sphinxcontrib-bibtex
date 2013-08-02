@@ -12,20 +12,21 @@
     .. autofunction:: process_start_option
 """
 
-import ast # parse(), used for filter
-import os.path # getmtime()
+import ast  # parse(), used for filter
+import os.path  # getmtime()
 
-import copy # deepcopy
+import copy  # deepcopy
 import docutils.nodes
-from docutils.parsers.rst import directives # for Directive.option_spec
+from docutils.parsers.rst import directives  # for Directive.option_spec
 from sphinx.util.compat import Directive
 from sphinx.util.console import bold, standout
 
 from pybtex.database.input import bibtex
 
 from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
-import sphinxcontrib.bibtex.latex_codec # registers the latex codec
+import sphinxcontrib.bibtex.latex_codec  # registers the latex codec
 from sphinxcontrib.bibtex.nodes import bibliography
+
 
 def process_start_option(value):
     """Process and validate the start option value
@@ -38,7 +39,9 @@ def process_start_option(value):
     else:
         return directives.positive_int(value)
 
+
 class BibliographyDirective(Directive):
+
     """Class for processing the :rst:dir:`bibliography` directive.
 
     Parses the bibliography files, and produces a
@@ -100,7 +103,7 @@ class BibliographyDirective(Directive):
                     standout("syntax error in :filter: expression")
                     + " (" + self.options["filter"] + "); "
                     "the option will be ignored"
-                    )
+                )
                 filter_ = ast.parse("cited")
         elif "all" in self.options:
             filter_ = ast.parse("True")
@@ -122,7 +125,7 @@ class BibliographyDirective(Directive):
             curly_bracket_strip=(
                 'disable-curly-bracket-strip' not in self.options),
             labelprefix=self.options.get("labelprefix", ""),
-            )
+        )
         if (info.list_ not in set(["bullet", "enumerated", "citation"])):
             env.app.warn(
                 "unknown bibliography list type '{0}'.".format(info.list_))
@@ -191,7 +194,7 @@ class BibliographyDirective(Directive):
         except OSError:
             env.app.warn(
                 standout("could not open bibtex file {0}.".format(bibfile)))
-            cache[bibfile] = BibfileCache() # dummy cache
+            cache[bibfile] = BibfileCache()  # dummy cache
             return cache[bibfile].data
         # get cache and check if it is still up to date
         # if it is not up to date, parse the bibtex file

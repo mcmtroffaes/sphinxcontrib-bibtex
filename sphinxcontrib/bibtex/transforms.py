@@ -20,7 +20,7 @@
 """
 
 import sys
-if sys.version_info < (2, 7): # pragma: no cover
+if sys.version_info < (2, 7):  # pragma: no cover
     from ordereddict import OrderedDict
 else:                         # pragma: no cover
     from collections import OrderedDict
@@ -36,6 +36,7 @@ from pybtex.plugin import find_plugin
 
 from sphinxcontrib.bibtex.nodes import bibliography
 
+
 def node_text_transform(node, transform):
     """Apply transformation to all Text nodes within node."""
     for child in node.children:
@@ -43,6 +44,7 @@ def node_text_transform(node, transform):
             node.replace(child, transform(child))
         else:
             node_text_transform(child, transform)
+
 
 def transform_curly_bracket_strip(textnode):
     """Strip curly brackets from text."""
@@ -52,6 +54,7 @@ def transform_curly_bracket_strip(textnode):
         return docutils.nodes.Text(text)
     else:
         return textnode
+
 
 def transform_url_command(textnode):
     """Convert '\\\\url{...}' into a proper docutils hyperlink."""
@@ -70,7 +73,9 @@ def transform_url_command(textnode):
     else:
         return textnode
 
+
 class FilterVisitor(ast.NodeVisitor):
+
     """Visit the abstract syntax tree of a parsed filter expression."""
 
     entry = None
@@ -104,7 +109,7 @@ class FilterVisitor(ast.NodeVisitor):
             return all(outcomes)
         elif isinstance(node.op, ast.Or):
             return any(outcomes)
-        else: # pragma: no cover
+        else:  # pragma: no cover
             # there are no other boolean operators
             # so this code should never execute
             assert False, "unexpected boolean operator %s in filter expression" % node.op
@@ -181,6 +186,7 @@ class FilterVisitor(ast.NodeVisitor):
     def generic_visit(self, node):
         self._raise_invalid_node(node)
 
+
 class BibliographyTransform(docutils.transforms.Transform):
 
     # transform must be applied before references are resolved
@@ -202,8 +208,10 @@ class BibliographyTransform(docutils.transforms.Transform):
             infos = [info for other_id, info
                      in env.bibtex_cache.bibliographies.iteritems()
                      if other_id == id_ and info.docname == env.docname]
-            assert infos, "document %s has no bibliography nodes with id '%s'" % (env.docname, id_)
-            assert len(infos) == 1, "document %s has multiple bibliography nodes with id '%s'" % (env.docname, id_)
+            assert infos, "document %s has no bibliography nodes with id '%s'" % (
+                env.docname, id_)
+            assert len(infos) == 1, "document %s has multiple bibliography nodes with id '%s'" % (
+                env.docname, id_)
             info = infos[0]
             # generate entries
             entries = OrderedDict()
@@ -213,12 +221,14 @@ class BibliographyTransform(docutils.transforms.Transform):
                 data = env.bibtex_cache.bibfiles[bibfile].data
                 for entry in data.entries.itervalues():
                     visitor = FilterVisitor(
-                            entry=entry,
-                            is_cited=env.bibtex_cache.is_cited(entry.key))
+                        entry=entry,
+                        is_cited=env.bibtex_cache.is_cited(entry.key))
                     try:
                         ok = visitor.visit(info.filter_)
-                    except ValueError, e:
-                        env.app.warn("syntax error in :filter: expression; %s" % e)
+                    except ValueError as e:
+                        env.app.warn(
+                            "syntax error in :filter: expression; %s" %
+                            e)
                         # recover by falling back to the default
                         ok = env.bibtex_cache.is_cited(entry.key)
                     if ok:
@@ -248,17 +258,18 @@ class BibliographyTransform(docutils.transforms.Transform):
                     nodes['start'] = info.start
                     env.bibtex_cache.set_enum_count(env.docname, info.start)
                 else:
-                    nodes['start'] = env.bibtex_cache.get_enum_count(env.docname)
+                    nodes['start'] = env.bibtex_cache.get_enum_count(
+                        env.docname)
             elif info.list_ == "bullet":
                 nodes = docutils.nodes.bullet_list()
-            else: # "citation"
+            else:  # "citation"
                 nodes = docutils.nodes.paragraph()
             # XXX style.format_entries modifies entries in unpickable way
             for entry in style.format_entries(sorted_entries):
                 if info.list_ == "enumerated" or info.list_ == "bullet":
                     citation = docutils.nodes.list_item()
                     citation += entry.text.render(backend)
-                else: # "citation"
+                else:  # "citation"
                     citation = backend.citation(entry, self.document)
                     # backend.citation(...) uses entry.key as citation label
                     # we change it to entry.label later onwards
@@ -268,7 +279,9 @@ class BibliographyTransform(docutils.transforms.Transform):
                     info.labels[key] = info.labelprefix + entry.label
                 node_text_transform(citation, transform_url_command)
                 if info.curly_bracket_strip:
-                    node_text_transform(citation, transform_curly_bracket_strip)
+                    node_text_transform(
+                        citation,
+                        transform_curly_bracket_strip)
                 nodes += citation
                 if info.list_ == "enumerated":
                     env.bibtex_cache.inc_enum_count(env.docname)

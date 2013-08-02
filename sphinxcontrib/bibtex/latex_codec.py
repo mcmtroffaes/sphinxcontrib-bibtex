@@ -47,6 +47,7 @@ import re
 
 from sphinxcontrib.bibtex import latex_lexer
 
+
 def register():
     """Enable encodings of the form 'latex+x' where x describes another encoding.
     Unicode characters are translated to or from x when possible, otherwise
@@ -56,11 +57,15 @@ def register():
 
 # returns the codec search function
 # this is used if latex_codec.py were to be placed in stdlib
+
+
 def getregentry():
     """Encodings module API."""
     return find_latex('latex')
 
+
 class LatexUnicodeTable:
+
     """Tabulates a translation between latex and unicode."""
 
     def __init__(self, lexer):
@@ -101,18 +106,24 @@ class LatexUnicodeTable:
         self.register(u'\N{NOT SIGN}', b'\\neg')
         self.register(u'\N{SOFT HYPHEN}', b'\\-')
         self.register(u'\N{MACRON}', b'\\={}')
-        
+
         self.register(u'\N{DEGREE SIGN}', b'^\\circ', mode='math')
         self.register(u'\N{DEGREE SIGN}', b'\\textdegree', package='textcomp')
-        
+
         self.register(u'\N{PLUS-MINUS SIGN}', b'\\pm', mode='math')
         self.register(u'\N{PLUS-MINUS SIGN}', b'\\textpm', package='textcomp')
 
         self.register(u'\N{SUPERSCRIPT TWO}', b'^2', mode='math')
-        self.register(u'\N{SUPERSCRIPT TWO}', b'\\texttwosuperior', package='textcomp')
+        self.register(
+            u'\N{SUPERSCRIPT TWO}',
+            b'\\texttwosuperior',
+            package='textcomp')
 
         self.register(u'\N{SUPERSCRIPT THREE}', b'^3', mode='math')
-        self.register(u'\N{SUPERSCRIPT THREE}', b'\\textthreesuperior', package='textcomp')
+        self.register(
+            u'\N{SUPERSCRIPT THREE}',
+            b'\\textthreesuperior',
+            package='textcomp')
 
         self.register(u'\N{ACUTE ACCENT}', b"\\'{}")
 
@@ -122,12 +133,18 @@ class LatexUnicodeTable:
         self.register(u'\N{PILCROW SIGN}', b'\\P')
 
         self.register(u'\N{MIDDLE DOT}', b'\\cdot', mode='math')
-        self.register(u'\N{MIDDLE DOT}', b'\\textperiodcentered', package='textcomp')
+        self.register(
+            u'\N{MIDDLE DOT}',
+            b'\\textperiodcentered',
+            package='textcomp')
 
         self.register(u'\N{CEDILLA}', b'\\c{}')
 
         self.register(u'\N{SUPERSCRIPT ONE}', b'^1', mode='math')
-        self.register(u'\N{SUPERSCRIPT ONE}', b'\\textonesuperior', package='textcomp')
+        self.register(
+            u'\N{SUPERSCRIPT ONE}',
+            b'\\textonesuperior',
+            package='textcomp')
 
         self.register(u'\N{INVERTED QUESTION MARK}', b'?`')
         self.register(u'\N{LATIN CAPITAL LETTER A WITH GRAVE}', b'\\`A')
@@ -266,7 +283,9 @@ class LatexUnicodeTable:
         self.register(u'\N{LATIN SMALL LETTER O WITH MACRON}', b'\\=o')
         self.register(u'\N{LATIN CAPITAL LETTER O WITH BREVE}', b'\\u O')
         self.register(u'\N{LATIN SMALL LETTER O WITH BREVE}', b'\\u o')
-        self.register(u'\N{LATIN CAPITAL LETTER O WITH DOUBLE ACUTE}', b'\\H O')
+        self.register(
+            u'\N{LATIN CAPITAL LETTER O WITH DOUBLE ACUTE}',
+            b'\\H O')
         self.register(u'\N{LATIN SMALL LETTER O WITH DOUBLE ACUTE}', b'\\H o')
         self.register(u'\N{LATIN CAPITAL LIGATURE OE}', b'\\OE')
         self.register(u'\N{LATIN SMALL LIGATURE OE}', b'\\oe')
@@ -296,7 +315,9 @@ class LatexUnicodeTable:
         self.register(u'\N{LATIN SMALL LETTER U WITH BREVE}', b'\\u u')
         self.register(u'\N{LATIN CAPITAL LETTER U WITH RING ABOVE}', b'\\r U')
         self.register(u'\N{LATIN SMALL LETTER U WITH RING ABOVE}', b'\\r u')
-        self.register(u'\N{LATIN CAPITAL LETTER U WITH DOUBLE ACUTE}', b'\\H U')
+        self.register(
+            u'\N{LATIN CAPITAL LETTER U WITH DOUBLE ACUTE}',
+            b'\\H U')
         self.register(u'\N{LATIN SMALL LETTER U WITH DOUBLE ACUTE}', b'\\H u')
         self.register(u'\N{LATIN CAPITAL LETTER U WITH OGONEK}', b'\\c U')
         self.register(u'\N{LATIN SMALL LETTER U WITH OGONEK}', b'\\c u')
@@ -312,13 +333,21 @@ class LatexUnicodeTable:
         self.register(u'\N{LATIN CAPITAL LETTER Z WITH CARON}', b'\\v Z')
         self.register(u'\N{LATIN SMALL LETTER Z WITH CARON}', b'\\v z')
         self.register(u'\N{LATIN CAPITAL LETTER DZ WITH CARON}', b'D\\v Z')
-        self.register(u'\N{LATIN CAPITAL LETTER D WITH SMALL LETTER Z WITH CARON}', b'D\\v z')
+        self.register(
+            u'\N{LATIN CAPITAL LETTER D WITH SMALL LETTER Z WITH CARON}',
+            b'D\\v z')
         self.register(u'\N{LATIN SMALL LETTER DZ WITH CARON}', b'd\\v z')
         self.register(u'\N{LATIN CAPITAL LETTER LJ}', b'LJ', decode=False)
-        self.register(u'\N{LATIN CAPITAL LETTER L WITH SMALL LETTER J}', b'Lj', decode=False)
+        self.register(
+            u'\N{LATIN CAPITAL LETTER L WITH SMALL LETTER J}',
+            b'Lj',
+            decode=False)
         self.register(u'\N{LATIN SMALL LETTER LJ}', b'lj', decode=False)
         self.register(u'\N{LATIN CAPITAL LETTER NJ}', b'NJ', decode=False)
-        self.register(u'\N{LATIN CAPITAL LETTER N WITH SMALL LETTER J}', b'Nj', decode=False)
+        self.register(
+            u'\N{LATIN CAPITAL LETTER N WITH SMALL LETTER J}',
+            b'Nj',
+            decode=False)
         self.register(u'\N{LATIN SMALL LETTER NJ}', b'nj', decode=False)
         self.register(u'\N{LATIN CAPITAL LETTER A WITH CARON}', b'\\v A')
         self.register(u'\N{LATIN SMALL LETTER A WITH CARON}', b'\\v a')
@@ -336,14 +365,21 @@ class LatexUnicodeTable:
         self.register(u'\N{LATIN SMALL LETTER O WITH OGONEK}', b'\\c o')
         self.register(u'\N{LATIN SMALL LETTER J WITH CARON}', b'\\v\\j')
         self.register(u'\N{LATIN CAPITAL LETTER DZ}', b'DZ')
-        self.register(u'\N{LATIN CAPITAL LETTER D WITH SMALL LETTER Z}', b'Dz', decode=False)
+        self.register(
+            u'\N{LATIN CAPITAL LETTER D WITH SMALL LETTER Z}',
+            b'Dz',
+            decode=False)
         self.register(u'\N{LATIN SMALL LETTER DZ}', b'dz', decode=False)
         self.register(u'\N{LATIN CAPITAL LETTER G WITH ACUTE}', b"\\'G")
         self.register(u'\N{LATIN SMALL LETTER G WITH ACUTE}', b"\\'g")
         self.register(u'\N{LATIN CAPITAL LETTER AE WITH ACUTE}', b"\\'\\AE")
         self.register(u'\N{LATIN SMALL LETTER AE WITH ACUTE}', b"\\'\\ae")
-        self.register(u'\N{LATIN CAPITAL LETTER O WITH STROKE AND ACUTE}', b"\\'\\O")
-        self.register(u'\N{LATIN SMALL LETTER O WITH STROKE AND ACUTE}', b"\\'\\o")
+        self.register(
+            u'\N{LATIN CAPITAL LETTER O WITH STROKE AND ACUTE}',
+            b"\\'\\O")
+        self.register(
+            u'\N{LATIN SMALL LETTER O WITH STROKE AND ACUTE}',
+            b"\\'\\o")
         self.register(u'\N{PARTIAL DIFFERENTIAL}', b'\\partial', mode='math')
         self.register(u'\N{N-ARY PRODUCT}', b'\\prod', mode='math')
         self.register(u'\N{N-ARY SUMMATION}', b'\\sum', mode='math')
@@ -353,9 +389,15 @@ class LatexUnicodeTable:
         self.register(u'\N{INTERSECTION}', b'\\cap', mode='math')
         self.register(u'\N{UNION}', b'\\cup', mode='math')
         self.register(u'\N{RIGHTWARDS ARROW}', b'\\rightarrow', mode='math')
-        self.register(u'\N{RIGHTWARDS DOUBLE ARROW}', b'\\Rightarrow', mode='math')
+        self.register(
+            u'\N{RIGHTWARDS DOUBLE ARROW}',
+            b'\\Rightarrow',
+            mode='math')
         self.register(u'\N{LEFTWARDS ARROW}', b'\\leftarrow', mode='math')
-        self.register(u'\N{LEFTWARDS DOUBLE ARROW}', b'\\Leftarrow', mode='math')
+        self.register(
+            u'\N{LEFTWARDS DOUBLE ARROW}',
+            b'\\Leftarrow',
+            mode='math')
         self.register(u'\N{LOGICAL OR}', b'\\vee', mode='math')
         self.register(u'\N{LOGICAL AND}', b'\\wedge', mode='math')
         self.register(u'\N{ALMOST EQUAL TO}', b'\\approx', mode='math')
@@ -378,57 +420,105 @@ class LatexUnicodeTable:
         self.register(u'\N{GREEK SMALL LETTER BETA}', b'\\beta', mode='math')
         self.register(u'\N{GREEK SMALL LETTER GAMMA}', b'\\gamma', mode='math')
         self.register(u'\N{GREEK SMALL LETTER DELTA}', b'\\delta', mode='math')
-        self.register(u'\N{GREEK SMALL LETTER EPSILON}', b'\\epsilon', mode='math')
+        self.register(
+            u'\N{GREEK SMALL LETTER EPSILON}',
+            b'\\epsilon',
+            mode='math')
         self.register(u'\N{GREEK SMALL LETTER ZETA}', b'\\zeta', mode='math')
         self.register(u'\N{GREEK SMALL LETTER ETA}', b'\\eta', mode='math')
         self.register(u'\N{GREEK SMALL LETTER THETA}', b'\\theta', mode='math')
         self.register(u'\N{GREEK SMALL LETTER IOTA}', b'\\iota', mode='math')
         self.register(u'\N{GREEK SMALL LETTER KAPPA}', b'\\kappa', mode='math')
-        self.register(u'\N{GREEK SMALL LETTER LAMDA}', b'\\lambda', mode='math') # LAMDA not LAMBDA
+        self.register(
+            u'\N{GREEK SMALL LETTER LAMDA}',
+            b'\\lambda',
+            mode='math')  # LAMDA not LAMBDA
         self.register(u'\N{GREEK SMALL LETTER MU}', b'\\mu', mode='math')
         self.register(u'\N{GREEK SMALL LETTER NU}', b'\\nu', mode='math')
         self.register(u'\N{GREEK SMALL LETTER XI}', b'\\xi', mode='math')
-        self.register(u'\N{GREEK SMALL LETTER OMICRON}', b'\\omicron', mode='math')
+        self.register(
+            u'\N{GREEK SMALL LETTER OMICRON}',
+            b'\\omicron',
+            mode='math')
         self.register(u'\N{GREEK SMALL LETTER PI}', b'\\pi', mode='math')
         self.register(u'\N{GREEK SMALL LETTER RHO}', b'\\rho', mode='math')
         self.register(u'\N{GREEK SMALL LETTER SIGMA}', b'\\sigma', mode='math')
         self.register(u'\N{GREEK SMALL LETTER TAU}', b'\\tau', mode='math')
-        self.register(u'\N{GREEK SMALL LETTER UPSILON}', b'\\upsilon', mode='math')
+        self.register(
+            u'\N{GREEK SMALL LETTER UPSILON}',
+            b'\\upsilon',
+            mode='math')
         self.register(u'\N{GREEK SMALL LETTER PHI}', b'\\phi', mode='math')
         self.register(u'\N{GREEK SMALL LETTER CHI}', b'\\chi', mode='math')
         self.register(u'\N{GREEK SMALL LETTER PSI}', b'\\psi', mode='math')
         self.register(u'\N{GREEK SMALL LETTER OMEGA}', b'\\omega', mode='math')
-        self.register(u'\N{GREEK CAPITAL LETTER ALPHA}', b'\\Alpha', mode='math')
+        self.register(
+            u'\N{GREEK CAPITAL LETTER ALPHA}',
+            b'\\Alpha',
+            mode='math')
         self.register(u'\N{GREEK CAPITAL LETTER BETA}', b'\\Beta', mode='math')
-        self.register(u'\N{GREEK CAPITAL LETTER GAMMA}', b'\\Gamma', mode='math')
-        self.register(u'\N{GREEK CAPITAL LETTER DELTA}', b'\\Delta', mode='math')
-        self.register(u'\N{GREEK CAPITAL LETTER EPSILON}', b'\\Epsilon', mode='math')
+        self.register(
+            u'\N{GREEK CAPITAL LETTER GAMMA}',
+            b'\\Gamma',
+            mode='math')
+        self.register(
+            u'\N{GREEK CAPITAL LETTER DELTA}',
+            b'\\Delta',
+            mode='math')
+        self.register(
+            u'\N{GREEK CAPITAL LETTER EPSILON}',
+            b'\\Epsilon',
+            mode='math')
         self.register(u'\N{GREEK CAPITAL LETTER ZETA}', b'\\Zeta', mode='math')
         self.register(u'\N{GREEK CAPITAL LETTER ETA}', b'\\Eta', mode='math')
-        self.register(u'\N{GREEK CAPITAL LETTER THETA}', b'\\Theta', mode='math')
+        self.register(
+            u'\N{GREEK CAPITAL LETTER THETA}',
+            b'\\Theta',
+            mode='math')
         self.register(u'\N{GREEK CAPITAL LETTER IOTA}', b'\\Iota', mode='math')
-        self.register(u'\N{GREEK CAPITAL LETTER KAPPA}', b'\\Kappa', mode='math')
-        self.register(u'\N{GREEK CAPITAL LETTER LAMDA}', b'\\Lambda', mode='math') # LAMDA not LAMBDA
+        self.register(
+            u'\N{GREEK CAPITAL LETTER KAPPA}',
+            b'\\Kappa',
+            mode='math')
+        self.register(
+            u'\N{GREEK CAPITAL LETTER LAMDA}',
+            b'\\Lambda',
+            mode='math')  # LAMDA not LAMBDA
         self.register(u'\N{GREEK CAPITAL LETTER MU}', b'\\Mu', mode='math')
         self.register(u'\N{GREEK CAPITAL LETTER NU}', b'\\Nu', mode='math')
         self.register(u'\N{GREEK CAPITAL LETTER XI}', b'\\Xi', mode='math')
-        self.register(u'\N{GREEK CAPITAL LETTER OMICRON}', b'\\Omicron', mode='math')
+        self.register(
+            u'\N{GREEK CAPITAL LETTER OMICRON}',
+            b'\\Omicron',
+            mode='math')
         self.register(u'\N{GREEK CAPITAL LETTER PI}', b'\\Pi', mode='math')
         self.register(u'\N{GREEK CAPITAL LETTER RHO}', b'\\Rho', mode='math')
-        self.register(u'\N{GREEK CAPITAL LETTER SIGMA}', b'\\Sigma', mode='math')
+        self.register(
+            u'\N{GREEK CAPITAL LETTER SIGMA}',
+            b'\\Sigma',
+            mode='math')
         self.register(u'\N{GREEK CAPITAL LETTER TAU}', b'\\Tau', mode='math')
-        self.register(u'\N{GREEK CAPITAL LETTER UPSILON}', b'\\Upsilon', mode='math')
+        self.register(
+            u'\N{GREEK CAPITAL LETTER UPSILON}',
+            b'\\Upsilon',
+            mode='math')
         self.register(u'\N{GREEK CAPITAL LETTER PHI}', b'\\Phi', mode='math')
         self.register(u'\N{GREEK CAPITAL LETTER CHI}', b'\\Chi', mode='math')
         self.register(u'\N{GREEK CAPITAL LETTER PSI}', b'\\Psi', mode='math')
-        self.register(u'\N{GREEK CAPITAL LETTER OMEGA}', b'\\Omega', mode='math')
+        self.register(
+            u'\N{GREEK CAPITAL LETTER OMEGA}',
+            b'\\Omega',
+            mode='math')
         self.register(u'\N{COPYRIGHT SIGN}', b'\\copyright')
         self.register(u'\N{COPYRIGHT SIGN}', b'\\textcopyright')
         self.register(u'\N{LATIN CAPITAL LETTER A WITH ACUTE}', b"\\'A")
         self.register(u'\N{LATIN CAPITAL LETTER I WITH ACUTE}', b"\\'I")
         self.register(u'\N{HORIZONTAL ELLIPSIS}', b'\\ldots')
         self.register(u'\N{TRADE MARK SIGN}', b'^{TM}', mode='math')
-        self.register(u'\N{TRADE MARK SIGN}', b'\\texttrademark', package='textcomp')
+        self.register(
+            u'\N{TRADE MARK SIGN}',
+            b'\\texttrademark',
+            package='textcomp')
 
     def register(self, unicode_text, latex_text, mode='text', package=None,
                  decode=True, encode=True):
@@ -453,11 +543,11 @@ class LatexUnicodeTable:
             # e.g. bibtex uses them to prevent lower case transformation)
             if (len(tokens) == 2
                 and tokens[0].name.startswith('control')
-                and tokens[1].name == 'chars'):
+                    and tokens[1].name == 'chars'):
                 alt_tokens = (
                     tokens[0], latex_lexer.Token('chars', b'{'),
                     tokens[1], latex_lexer.Token('chars', b'}'),
-                    )
+                )
                 if not alt_tokens in self.unicode_map:
                     self.unicode_map[alt_tokens] = u"{" + unicode_text + u"}"
         if encode and unicode_text not in self.latex_map:
@@ -468,7 +558,9 @@ _LATEX_UNICODE_TABLE = LatexUnicodeTable(latex_lexer.LatexIncrementalDecoder())
 # incremental encoder does not need a buffer
 # but decoder does
 
+
 class LatexIncrementalEncoder(latex_lexer.LatexIncrementalEncoder):
+
     """Translating incremental encoder for latex. Maintains a state to
     determine whether control spaces etc. need to be inserted.
     """
@@ -531,9 +623,9 @@ class LatexIncrementalEncoder(latex_lexer.LatexIncrementalEncoder):
                 # translation failed
                 if self.errors == 'strict':
                     raise UnicodeEncodeError(
-                        "latex", # codec
-                        unicode_, # problematic input
-                        pos, pos + 1, # location of problematic character
+                        "latex",  # codec
+                        unicode_,  # problematic input
+                        pos, pos + 1,  # location of problematic character
                         "don't know how to translate {0} into latex"
                         .format(repr(c)))
                 elif self.errors == 'ignore':
@@ -564,7 +656,9 @@ class LatexIncrementalEncoder(latex_lexer.LatexIncrementalEncoder):
                     yield space
                 yield bytes_
 
+
 class LatexIncrementalDecoder(latex_lexer.LatexIncrementalDecoder):
+
     """Translating incremental decoder for latex."""
 
     table = _LATEX_UNICODE_TABLE
@@ -595,7 +689,7 @@ class LatexIncrementalDecoder(latex_lexer.LatexIncrementalDecoder):
             # because all other positions have already been checked in
             # earlier iterations
             for i in xrange(1, len(self.token_buffer) + 1):
-                last_tokens = tuple(self.token_buffer[-i:]) # last i tokens
+                last_tokens = tuple(self.token_buffer[-i:])  # last i tokens
                 try:
                     unicode_text = self.table.unicode_map[last_tokens]
                 except KeyError:
@@ -603,7 +697,8 @@ class LatexIncrementalDecoder(latex_lexer.LatexIncrementalDecoder):
                     continue
                 else:
                     # match!! flush buffer, and translate last bit
-                    for token in self.token_buffer[:-i]: # exclude last i tokens
+                    # exclude last i tokens
+                    for token in self.token_buffer[:-i]:
                         yield token.decode(self.inputenc)
                     yield unicode_text
                     self.token_buffer = []
@@ -617,23 +712,27 @@ class LatexIncrementalDecoder(latex_lexer.LatexIncrementalDecoder):
                 yield token.decode(self.inputenc)
             self.token_buffer = []
 
+
 class LatexCodec(codecs.Codec):
     IncrementalEncoder = None
     IncrementalDecoder = None
 
     def encode(self, unicode_, errors='strict'):
         """Convert unicode string to latex bytes."""
+        encoder = self.IncrementalEncoder(errors=errors)
         return (
-            self.IncrementalEncoder(errors=errors).encode(unicode_, final=True),
+            encoder.encode(unicode_, final=True),
             len(unicode_),
             )
 
     def decode(self, bytes_, errors='strict'):
         """Convert latex bytes to unicode string."""
+        decoder = self.IncrementalDecoder(errors=errors)
         return (
-            self.IncrementalDecoder(errors=errors).decode(bytes_, final=True),
+            decoder.decode(bytes_, final=True),
             len(bytes_),
             )
+
 
 def find_latex(encoding):
     # check if requested codec info is for latex encoding
@@ -641,15 +740,20 @@ def find_latex(encoding):
         return None
     # set up all classes with correct latex input encoding
     inputenc_ = encoding[6:] if encoding.startswith('latex+') else 'ascii'
+
     class IncrementalEncoder_(LatexIncrementalEncoder):
         inputenc = inputenc_
+
     class IncrementalDecoder_(LatexIncrementalDecoder):
         inputenc = inputenc_
+
     class Codec(LatexCodec):
         IncrementalEncoder = IncrementalEncoder_
         IncrementalDecoder = IncrementalDecoder_
+
     class StreamWriter(Codec, codecs.StreamWriter):
         pass
+
     class StreamReader(Codec, codecs.StreamReader):
         pass
     return codecs.CodecInfo(

@@ -15,8 +15,10 @@ from util import *
 
 srcdir = path(__file__).parent.joinpath('list_citation').abspath()
 
+
 def teardown_module():
     (srcdir / '_build').rmtree(True)
+
 
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_encoding(app):
