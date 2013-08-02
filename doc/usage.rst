@@ -345,7 +345,7 @@ and labelling plugins
    but the ``pybtex.style.sorting`` group appears to work.
 
 An minimal example is available here:
-https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/feature/document-custom-style/test/custom_style
+https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/custom_style
 
 Known Issues and Workarounds
 ----------------------------
