@@ -49,9 +49,9 @@ from sphinxcontrib.bibtex import latex_lexer
 
 
 def register():
-    """Enable encodings of the form 'latex+x' where x describes another encoding.
-    Unicode characters are translated to or from x when possible, otherwise
-    expanded to latex.
+    """Enable encodings of the form 'latex+x' where x describes another
+    encoding. Unicode characters are translated to or from x when possible,
+    otherwise expanded to latex.
     """
     codecs.register(find_latex)
 
