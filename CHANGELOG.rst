@@ -16,6 +16,8 @@
 * Document how to create custom pybtex styles (see issues #25, #29,
   and #34).
 
+* Code is now fully pep8 compliant.
+
 0.2.6 (2 March 2013)
 --------------------
 
