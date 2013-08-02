@@ -41,9 +41,10 @@ test_root = path(__file__).parent.joinpath('root').abspath()
 
 
 def _excstr(exc):
-    if type(exc) is tuple:
+    if isinstance(exc, tuple):
         return str(tuple(map(_excstr, exc)))
     return exc.__name__
+
 
 def raises(exc, func, *args, **kwds):
     """
@@ -58,6 +59,7 @@ def raises(exc, func, *args, **kwds):
         raise AssertionError('%s did not raise %s' %
                              (func.__name__, _excstr(exc)))
 
+
 def raises_msg(exc, msg, func, *args, **kwds):
     """
     Raise :exc:`AssertionError` if ``func(*args, **kwds)`` does not
@@ -65,11 +67,12 @@ def raises_msg(exc, msg, func, *args, **kwds):
     """
     try:
         func(*args, **kwds)
-    except exc, err:
+    except exc as err:
         assert msg in str(err), "\"%s\" not in \"%s\"" % (msg, err)
     else:
         raise AssertionError('%s did not raise %s' %
                              (func.__name__, _excstr(exc)))
+
 
 def skip_if(condition, msg=None):
     """Decorator to skip test if condition is true."""
@@ -82,9 +85,11 @@ def skip_if(condition, msg=None):
         return skipper
     return deco
 
+
 def skip_unless(condition, msg=None):
     """Decorator to skip test if condition is false."""
     return skip_if(not condition, msg)
+
 
 def skip_unless_importable(module, msg=None):
     """Decorator to skip test if module is not importable."""
@@ -97,14 +102,17 @@ def skip_unless_importable(module, msg=None):
 
 
 class Struct(object):
+
     def __init__(self, **kwds):
         self.__dict__.update(kwds)
 
 
 class ListOutput(object):
+
     """
     File-like object that collects written text in a list.
     """
+
     def __init__(self, name):
         self.name = name
         self.content = []
@@ -117,6 +125,7 @@ class ListOutput(object):
 
 
 class TestApp(application.Sphinx):
+
     """
     A subclass of :class:`Sphinx` that runs on the test root, with some
     better default values for the initialization parameters.
@@ -166,7 +175,8 @@ class TestApp(application.Sphinx):
             warningiserror = False
 
         application.Sphinx.__init__(self, srcdir, confdir, outdir, doctreedir,
-                                    buildername, confoverrides, status, warning,
+                                    buildername, confoverrides, status,
+                                    warning,
                                     freshenv, warningiserror, tags)
 
     def cleanup(self, doctrees=False):
@@ -233,5 +243,7 @@ def sprint(*args):
     sys.stderr.write(' '.join(map(str, args)) + '\n')
 
 _unicode_literals_re = re.compile(r'u(".*?")|u(\'.*?\')')
+
+
 def remove_unicode_literals(s):
     return _unicode_literals_re.sub(lambda x: x.group(1) or x.group(2), s)

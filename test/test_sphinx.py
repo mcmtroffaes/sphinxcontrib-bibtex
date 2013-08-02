@@ -15,8 +15,10 @@ from util import *
 srcdir = path(__file__).parent.joinpath('sphinx').abspath()
 warnfile = StringIO()
 
+
 def teardown_module():
     (srcdir / '_build').rmtree(True)
+
 
 @with_app(srcdir=srcdir, warning=warnfile)
 def test_sphinx(app):
@@ -25,6 +27,12 @@ def test_sphinx(app):
     assert re.search(u'could not relabel citation \\[Test01\\]', warnings)
     assert re.search(u'could not relabel citation \\[Test02\\]', warnings)
     assert re.search(u'could not relabel citation \\[Wa04\\]', warnings)
-    assert re.search(u'could not relabel citation reference \\[Test01\\]', warnings)
-    assert re.search(u'could not relabel citation reference \\[Test02\\]', warnings)
-    assert re.search(u'could not relabel citation reference \\[Wa04\\]', warnings)
+    assert re.search(
+        u'could not relabel citation reference \\[Test01\\]',
+        warnings)
+    assert re.search(
+        u'could not relabel citation reference \\[Test02\\]',
+        warnings)
+    assert re.search(
+        u'could not relabel citation reference \\[Wa04\\]',
+        warnings)

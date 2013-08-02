@@ -15,8 +15,10 @@ from util import *
 
 srcdir = path(__file__).parent.joinpath('list_enumerated').abspath()
 
+
 def teardown_module():
     (srcdir / '_build').rmtree(True)
+
 
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_encoding(app):
@@ -40,6 +42,5 @@ def test_encoding(app):
             '.*<li>.*Joke.*</li>'
             '.*<li>.*Klopgeest.*</li>'
             '.*<li>.*Laterfanter.*</li>'
-            '.*</ol>'
-            ,
+            '.*</ol>',
             stream.read(), re.MULTILINE | re.DOTALL)

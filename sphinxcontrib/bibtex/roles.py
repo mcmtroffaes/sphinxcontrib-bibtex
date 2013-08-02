@@ -10,9 +10,11 @@
 
 from pybtex.backends.doctree import Backend as output_backend
 import pybtex.database
-from sphinx.roles import XRefRole # for :cite:
+from sphinx.roles import XRefRole  # for :cite:
+
 
 class CiteRole(XRefRole):
+
     """Class for processing the :rst:role:`cite` role."""
     backend = output_backend()
 

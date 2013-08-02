@@ -8,9 +8,11 @@ import codecs
 import collections
 import re
 
+
 class Token(collections.namedtuple("Token", "name text")):
+
     """Stores information about a matched token."""
-    __slots__ = () # efficiency
+    __slots__ = ()  # efficiency
 
     def __new__(cls, name=None, text=None):
         return tuple.__new__(
@@ -33,7 +35,10 @@ class Token(collections.namedtuple("Token", "name text")):
 # implementation note: we derive from IncrementalDecoder because this
 # class serves excellently as a base class for incremental decoders,
 # but of course we don't decode yet until later
+
+
 class LatexLexer(codecs.IncrementalDecoder):
+
     """A very simple lexer for tex/latex code."""
 
     # implementation note: every token **must** be decodable by inputenc
@@ -48,7 +53,8 @@ class LatexLexer(codecs.IncrementalDecoder):
         # XXX but tests reveal otherwise?
         ('control_word', br'[\\][a-zA-Z]+'),
         ('control_symbol', br'[\\][~' br"'" br'"` =^!]'),
-        ('control_symbol_x', br'[\\][^a-zA-Z]'), # TODO should only match ascii
+        # TODO should only match ascii
+        ('control_symbol_x', br'[\\][^a-zA-Z]'),
         # parameter tokens
         # also support a lone hash so we can lex things like b'#a'
         ('parameter', br'\#[0-9]|\#'),
@@ -76,7 +82,7 @@ class LatexLexer(codecs.IncrementalDecoder):
         # (such as a lone '\' at the end of a buffer)
         # is never emitted, but used internally by the buffer
         ('unknown', br'.'),
-        ]
+    ]
 
     def __init__(self, errors='strict'):
         """Initialize the codec."""
@@ -138,7 +144,9 @@ class LatexLexer(codecs.IncrementalDecoder):
             yield self.raw_buffer
             self.raw_buffer = Token()
 
+
 class LatexIncrementalLexer(LatexLexer):
+
     """A very simple incremental lexer for tex/latex code. Roughly
     follows the state machine described in Tex By Topic, Chapter 2.
 
@@ -165,7 +173,7 @@ class LatexIncrementalLexer(LatexLexer):
             self.raw_buffer,
             {'M': 0, 'N': 1, 'S': 2}[self.state]
             | (4 if self.inline_math else 0)
-            )
+        )
 
     def setstate(self, state):
         self.raw_buffer = state[0]
@@ -183,7 +191,7 @@ class LatexIncrementalLexer(LatexLexer):
         pos = -len(self.raw_buffer)
         for token in self.get_raw_tokens(bytes_, final=final):
             pos = pos + len(token)
-            assert pos >= 0 # first token includes at least self.raw_buffer
+            assert pos >= 0  # first token includes at least self.raw_buffer
             if token.name == 'newline':
                 if self.state == 'N':
                     # if state was 'N', generate new paragraph
@@ -243,10 +251,10 @@ class LatexIncrementalLexer(LatexLexer):
                     # current position within bytes_
                     # this is the position right after the unknown token
                     raise UnicodeDecodeError(
-                        "latex", # codec
-                        bytes_, # problematic input
-                        pos - len(token), # start of problematic token
-                        pos, # end of it
+                        "latex",  # codec
+                        bytes_,  # problematic input
+                        pos - len(token),  # start of problematic token
+                        pos,  # end of it
                         "unknown token %s" % repr(token.text))
                 elif self.errors == 'ignore':
                     # do nothing
@@ -260,7 +268,9 @@ class LatexIncrementalLexer(LatexLexer):
                 raise AssertionError(
                     "unknown token name %s" % repr(token.name))
 
+
 class LatexIncrementalDecoder(LatexIncrementalLexer):
+
     """Simple incremental decoder. Transforms lexed latex tokens into
     unicode.
 
@@ -284,12 +294,14 @@ class LatexIncrementalDecoder(LatexIncrementalLexer):
     def decode(self, bytes_, final=False):
         try:
             return u''.join(self.get_unicode_tokens(bytes_, final=final))
-        except UnicodeDecodeError, e:
+        except UnicodeDecodeError as e:
             # API requires that the encode method raises a ValueError
             # in this case
             raise ValueError(e)
 
+
 class LatexIncrementalEncoder(codecs.IncrementalEncoder):
+
     """Simple incremental encoder for latex."""
 
     inputenc = "ascii"
@@ -313,7 +325,7 @@ class LatexIncrementalEncoder(codecs.IncrementalEncoder):
         """Encode unicode string into a latex byte sequence."""
         try:
             return b''.join(self.get_latex_bytes(unicode_, final=final))
-        except UnicodeEncodeError, e:
+        except UnicodeEncodeError as e:
             # API requires that the encode method raises a ValueError
             # in this case
             raise ValueError(e)

@@ -18,6 +18,7 @@ from sphinxcontrib.bibtex.roles import CiteRole
 from sphinxcontrib.bibtex.directives import BibliographyDirective
 from sphinxcontrib.bibtex.transforms import BibliographyTransform
 
+
 def init_bibtex_cache(app):
     """Create ``app.env.bibtex_cache`` if it does not exist yet.
     Reset citation label dictionary.
@@ -28,6 +29,7 @@ def init_bibtex_cache(app):
     if not hasattr(app.env, "bibtex_cache"):
         app.env.bibtex_cache = Cache()
 
+
 def purge_bibtex_cache(app, env, docname):
     """Remove all information related to *docname* from the cache.
 
@@ -37,6 +39,7 @@ def purge_bibtex_cache(app, env, docname):
     :type env: :class:`sphinx.environment.BuildEnvironment`
     """
     env.bibtex_cache.purge(docname)
+
 
 def process_citations(app, doctree, docname):
     """Replace labels of citation nodes by actual labels.
@@ -56,6 +59,7 @@ def process_citations(app, doctree, docname):
             app.warn("could not relabel citation [%s]" % key)
         else:
             node[0] = docutils.nodes.label('', label)
+
 
 def process_citation_references(app, doctree, docname):
     """Replace text of citation reference nodes by actual labels.
@@ -84,6 +88,7 @@ def process_citation_references(app, doctree, docname):
             else:
                 node[0] = docutils.nodes.Text('[' + label + ']')
 
+
 def check_duplicate_labels(app, env):
     """Check and warn about duplicate citation labels.
 
@@ -101,6 +106,7 @@ def check_duplicate_labels(app, env):
                     % (key, label_to_key[label]))
             else:
                 label_to_key[label] = key
+
 
 def setup(app):
     """Set up the bibtex extension:

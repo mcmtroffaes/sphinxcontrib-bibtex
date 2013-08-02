@@ -14,8 +14,10 @@ from util import *
 
 srcdir = path(__file__).parent.joinpath('custom_style').abspath()
 
+
 def teardown_module():
     (srcdir / '_build').rmtree(True)
+
 
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_custom_style(app):
