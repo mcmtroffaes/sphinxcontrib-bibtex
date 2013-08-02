@@ -156,19 +156,6 @@ class BibliographyCache:
         names (relative to the top source folder) that contain the
         references.
 
-    .. attribute:: cite
-
-        A :class:`str`. Should be one of:
-
-            ``"cited"``
-                Only generate cited references.
-
-            ``"notcited"``
-                Only generated non-cited references.
-
-            ``"all"``
-                Generate all references from the .bib files.
-
     .. attribute:: style
 
         The bibtex style.
@@ -192,6 +179,10 @@ class BibliographyCache:
     .. attribute:: labelprefix
 
         This bibliography's string prefix for pybtex generated labels.
+
+    .. attribute:: filter_
+
+        An :class:`ast.AST` node, containing the parsed filter expression.
     """
 
     def __init__(self, docname=None, bibfiles=None,
