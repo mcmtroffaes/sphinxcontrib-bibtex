@@ -18,9 +18,11 @@ from util import *
 
 srcdir = path(__file__).parent.joinpath('bibfile_out_of_date').abspath()
 
+
 def teardown_module():
     (srcdir / '_build').rmtree(True)
     os.remove(srcdir / 'test.bib')
+
 
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_encoding(app):

@@ -15,8 +15,10 @@ from util import *
 srcdir = path(__file__).parent.joinpath('bibfilenotfound').abspath()
 warnfile = StringIO()
 
+
 def teardown_module():
     (srcdir / '_build').rmtree(True)
+
 
 @with_app(srcdir=srcdir, warning=warnfile)
 def test_bibfilenotfound(app):

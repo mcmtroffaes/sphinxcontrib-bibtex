@@ -16,8 +16,10 @@ from util import *
 srcdir = path(__file__).parent.joinpath('issue15').abspath()
 warnfile = StringIO()
 
+
 def teardown_module():
     (srcdir / '_build').rmtree(True)
+
 
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_duplicate_label(app):

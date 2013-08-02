@@ -8,8 +8,7 @@ setup(
     entry_points={
         'pybtex.style.formatting': [
             'nowebref = plugins:NoWebRefStyle',
-            ]
-        },
+        ]
+    },
     py_modules=['plugins']
-    )
-
+)

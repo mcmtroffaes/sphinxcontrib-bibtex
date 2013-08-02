@@ -20,7 +20,9 @@ import collections
 from oset import oset
 import pybtex.database
 
+
 class Cache:
+
     """Global bibtex extension information cache. Stored in
     ``app.env.bibtex_cache``, so must be picklable.
 
@@ -121,7 +123,9 @@ class Cache:
             for key in self._cited[docname]:
                 yield key
 
+
 class BibfileCache:
+
     """Contains information about a parsed .bib file.
 
     .. attribute:: mtime
@@ -141,7 +145,9 @@ class BibfileCache:
         self.data = (data if data is not None
                      else pybtex.database.BibliographyData())
 
+
 class BibliographyCache:
+
     """Contains information about a bibliography directive.
 
     .. attribute:: docname

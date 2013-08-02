@@ -4,6 +4,7 @@ from setuptools import setup, find_packages
 import codecs
 import sys
 
+
 def readfile(filename):
     with codecs.open(filename, encoding="utf-8") as stream:
         return stream.read().split("\n")
