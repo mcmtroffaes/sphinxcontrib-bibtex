@@ -13,6 +13,9 @@
 
 * Refactor documentation of advanced features.
 
+* Document how to create custom pybtex styles (see issues #25, #29,
+  and #34).
+
 0.2.6 (2 March 2013)
 --------------------
 
