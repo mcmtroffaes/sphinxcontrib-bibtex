@@ -6,11 +6,10 @@
     Test behaviour when invalid cite option is given.
 """
 
-import nose.tools
 import re
 from StringIO import StringIO
 
-from util import *
+from util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('invalid_cite_option').abspath()
 warnfile = StringIO()

@@ -15,8 +15,6 @@
 import ast  # parse(), used for filter
 import os.path  # getmtime()
 
-import copy  # deepcopy
-import docutils.nodes
 from docutils.parsers.rst import directives  # for Directive.option_spec
 from sphinx.util.compat import Directive
 from sphinx.util.console import bold, standout

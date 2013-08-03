@@ -6,12 +6,10 @@
     Test filter option clash with all, cited, and notcited.
 """
 
-import nose.tools
 from StringIO import StringIO
-import os.path
 import re
 
-from util import *
+from util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('filter_option_clash').abspath()
 warnfile = StringIO()

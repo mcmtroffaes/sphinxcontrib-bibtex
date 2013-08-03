@@ -6,12 +6,11 @@
     Test order of bibliography entries when using an unsorted style.
 """
 
-import nose.tools
 from StringIO import StringIO
 import os.path
 import re
 
-from util import *
+from util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('issue15').abspath()
 warnfile = StringIO()
