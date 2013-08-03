@@ -42,8 +42,6 @@ OTHER DEALINGS IN THE SOFTWARE.
 from __future__ import print_function
 
 import codecs
-import collections
-import re
 
 from sphinxcontrib.bibtex import latex_lexer
 
