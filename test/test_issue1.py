@@ -7,9 +7,8 @@
 """
 
 import nose.tools
-from StringIO import StringIO
 
-from util import *
+from util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('issue1').abspath()
 
