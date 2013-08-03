@@ -6,11 +6,10 @@
     Test a custom style.
 """
 
-import nose.tools
 import os.path
 import re
 
-from util import *
+from util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('custom_style').abspath()
 

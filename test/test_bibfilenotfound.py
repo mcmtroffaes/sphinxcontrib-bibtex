@@ -6,11 +6,10 @@
     Bib file not found check.
 """
 
-import nose.tools
 import re
 from StringIO import StringIO
 
-from util import *
+from util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('bibfilenotfound').abspath()
 warnfile = StringIO()

@@ -6,12 +6,10 @@
     Test the ``:list: bullet`` option.
 """
 
-import nose.tools
-from StringIO import StringIO
 import os.path
 import re
 
-from util import *
+from util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('list_bullet').abspath()
 

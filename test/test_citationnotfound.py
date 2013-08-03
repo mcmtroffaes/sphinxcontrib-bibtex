@@ -6,11 +6,10 @@
     Citation not found check.
 """
 
-import nose.tools
 import re
 from StringIO import StringIO
 
-from util import *
+from util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('citationnotfound').abspath()
 warnfile = StringIO()

@@ -1,5 +1,3 @@
-import sys
-import os
 extensions = ['sphinxcontrib.bibtex']
 templates_path = ['_templates']
 source_suffix = '.rst'
