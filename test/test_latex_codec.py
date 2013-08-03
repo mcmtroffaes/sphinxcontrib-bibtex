@@ -10,7 +10,6 @@ if sys.version_info >= (3, 0):
     from io import BytesIO
 else:
     from cStringIO import StringIO as BytesIO
-from nose.exc import SkipTest
 from unittest import TestCase
 
 import sphinxcontrib.bibtex.latex_codec  # registers automatically
