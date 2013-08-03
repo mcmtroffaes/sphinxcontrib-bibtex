@@ -6,11 +6,10 @@
     Test filter option.
 """
 
-import nose.tools
 import os.path
 import re
 
-from util import *
+from util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('filter').abspath()
 
