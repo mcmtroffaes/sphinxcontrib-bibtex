@@ -13,13 +13,25 @@
   - coverage at 100%
   - merge release/x.x.x into develop and delete the release branch
 * fast-forward master
+  - git checkout develop && git pull --ff-only origin develop
   - git checkout master && git merge --ff-only develop && git push origin master
-* git tag -a -m "Tagging version x.x.x" x.x.x
-* git push --tags
-* python setup.py register
-* upload source to pypi
+* tag release
+  - git tag -a -m "Tagging version x.x.x" x.x.x
+  - git push --tags
+* create and register source zip
+  - git clean -xfd
+  - python setup.py sdist --format=zip
+  - python setup.py register
+  - upload source to pypi
+* test upload
+  - pip uninstall sphinxcontrib-bibtex
+  - pip install --user -U sphinxcontrib-bibtex
+  - cd sphinxcontrib-bibtex/test
+  - nosetests
 * activate new version on readthedocs.org
 * prep for next cycle
   - git checkout develop
   - VERSION: bump to x.x.xa0
   - CHANGELOG.rst: bump to x.x.x (in development)
+  - git commit -a -m "Version bump. [ci skip]"
+  - git push origin develop
