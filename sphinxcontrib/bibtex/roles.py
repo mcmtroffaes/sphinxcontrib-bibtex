@@ -8,7 +8,7 @@
         .. automethod:: result_nodes
 """
 
-from pybtex.backends.doctree import Backend as output_backend
+from pybtex.backends.doctree import Backend
 import pybtex.database
 from sphinx.roles import XRefRole  # for :cite:
 
@@ -16,7 +16,7 @@ from sphinx.roles import XRefRole  # for :cite:
 class CiteRole(XRefRole):
 
     """Class for processing the :rst:role:`cite` role."""
-    backend = output_backend()
+    backend = Backend()
 
     def result_nodes(self, document, env, node, is_ref):
         """Transform reference node into a citation reference,
