@@ -7,9 +7,11 @@ a ``bibliography`` directive, and a ``cite`` role, which
 work similarly to LaTeX's ``thebibliography`` environment
 and ``\cite`` command.
 
-Inspired by
-`bibstuff.sphinxext.bibref <https://github.com/matthew-brett/bibstuff>`_
-by Matthew Brett.
+For formatting, the extension relies on
+`pybtex <http://pybtex.sourceforge.net/>`_
+written by Andrey Golovizin.
+The extension is inspired by Matthew Brett's
+`bibstuff.sphinxext.bibref <https://github.com/matthew-brett/bibstuff>`_.
 
 * Download: http://pypi.python.org/pypi/sphinxcontrib-bibtex/#downloads
 

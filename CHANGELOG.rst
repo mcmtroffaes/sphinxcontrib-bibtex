@@ -1,5 +1,5 @@
-0.2.7 (in development)
-----------------------
+0.2.7 (4 August 2013)
+---------------------
 
 * Integrate with coveralls.io, first release with 100% test coverage.
 
@@ -16,7 +16,7 @@
 * Document how to create custom pybtex styles (see issues #25, #29,
   and #34).
 
-* Code is now fully pep8 compliant.
+* Code is now mostly pep8 compliant.
 
 0.2.6 (2 March 2013)
 --------------------
