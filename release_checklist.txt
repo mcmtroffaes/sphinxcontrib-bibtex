@@ -1,0 +1,25 @@
+* git checkout -b release/x.x.x
+* VERSION: set final version
+* CHANGELOG.rst:
+  - set release date
+  - all important changes are documented
+* doc:
+  - all new features are properly documented
+  - all new features have versionadded
+  - all workarounds are properly documented
+  - fixed workarounds are removed
+* make pull request on github
+  - travis build passes
+  - coverage at 100%
+  - merge release/x.x.x into develop and delete the release branch
+* fast-forward master
+  - git checkout master && git merge --ff-only develop && git push origin master
+* git tag -a -m "Tagging version x.x.x" x.x.x
+* git push --tags
+* python setup.py register
+* upload source to pypi
+* activate new version on readthedocs.org
+* prep for next cycle
+  - git checkout develop
+  - VERSION: bump to x.x.xa0
+  - CHANGELOG.rst: bump to x.x.x (in development)
