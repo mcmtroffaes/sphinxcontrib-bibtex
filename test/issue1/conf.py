@@ -3,10 +3,6 @@
 import tinkerer
 import tinkerer.paths
 
-# **************************************************************
-# TODO: Edit the lines below
-# **************************************************************
-
 # Change this to the name of your blog
 project = 'My blog'
 
