@@ -22,7 +22,7 @@
 import sys
 if sys.version_info < (2, 7):  # pragma: no cover
     from ordereddict import OrderedDict
-else:                         # pragma: no cover
+else:                          # pragma: no cover
     from collections import OrderedDict
 
 import ast
