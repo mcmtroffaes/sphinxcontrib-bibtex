@@ -15,7 +15,6 @@
   - git remote update --prune && git checkout develop && git merge --ff-only origin/develop
 * fast-forward master and tag release (push deferred until after testing)
   - git checkout master && git merge --ff-only develop
-  - git tag -a -m "Tagging version x.x.x" x.x.x
 * create and register source zip
   - git clean -xfd
   - python setup.py sdist --format=zip
@@ -27,6 +26,7 @@
   - cd sphinxcontrib-bibtex/test
   - nosetests
 * push release
+  - git tag -a -m "Tagging version x.x.x" x.x.x
   - git push origin master
   - git push --tags
 * activate new version on readthedocs.org
