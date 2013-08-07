@@ -31,7 +31,6 @@ import copy
 import docutils.nodes
 import docutils.transforms
 
-from pybtex.backends.doctree import Backend
 from pybtex.plugin import find_plugin
 
 from sphinxcontrib.bibtex.nodes import bibliography
@@ -245,12 +244,10 @@ class BibliographyTransform(docutils.transforms.Transform):
                 else:
                     sorted_entries.append(entry)
             sorted_entries += entries.itervalues()
-            # locate and instantiate style plugin
-            style_cls = find_plugin(
-                'pybtex.style.formatting', info.style)
-            style = style_cls()
+            # locate and instantiate style and backend plugins
+            style = find_plugin('pybtex.style.formatting', info.style)()
+            backend = find_plugin('pybtex.backends', 'docutils')()
             # create citation nodes for all references
-            backend = Backend()
             if info.list_ == "enumerated":
                 nodes = docutils.nodes.enumerated_list()
                 nodes['enumtype'] = info.enumtype
