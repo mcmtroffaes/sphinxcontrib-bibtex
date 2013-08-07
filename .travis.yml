@@ -10,6 +10,7 @@ branches:
 install:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then pip install 'Jinja2<2.7' --use-mirrors; fi" # Jinja2 2.6 is last version which supports Python 3.2; required by Sphinx
   - "pip install Sphinx==1.1.3 --use-mirrors" # Sphinx 1.2b1 is broken; https://bitbucket.org/birkenfeld/sphinx/issue/1160/citation-target-missing-assertionerror
+  - "pip install -e git+git://github.com/mcmtroffaes/pybtex-docutils.git#egg=pybtex-docutils" # it is not yet on the mirrors
   - "pip install Tinkerer --use-mirrors"
   - "pip install . --use-mirrors"
   - "pip install coveralls --use-mirrors"

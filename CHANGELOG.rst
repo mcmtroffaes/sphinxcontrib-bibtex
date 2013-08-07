@@ -1,6 +1,8 @@
 0.2.8 (in development)
 ----------------------
 
+* Use pybtex-docutils to remove dependency on pybtex.backends.doctree.
+
 0.2.7 (4 August 2013)
 ---------------------
 
