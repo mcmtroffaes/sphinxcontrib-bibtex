@@ -244,12 +244,10 @@ class BibliographyTransform(docutils.transforms.Transform):
                 else:
                     sorted_entries.append(entry)
             sorted_entries += entries.itervalues()
-            # locate and instantiate style plugin
-            style_cls = find_plugin(
-                'pybtex.style.formatting', info.style)
-            style = style_cls()
-            # create citation nodes for all references
+            # locate and instantiate style and backend plugins
+            style = find_plugin('pybtex.style.formatting', info.style)()
             backend = find_plugin('pybtex.backends', 'docutils')()
+            # create citation nodes for all references
             if info.list_ == "enumerated":
                 nodes = docutils.nodes.enumerated_list()
                 nodes['enumtype'] = info.enumtype
