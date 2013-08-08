@@ -19,11 +19,11 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_encoding(app):
+def test_list_bullet(app):
     app.builder.build_all()
     with open(os.path.join(app.outdir, "index.html")) as stream:
         assert re.search(
-            '<ul id="bibtex-bibliography-index-0">'
+            '<ul .* id="bibtex-bibliography-index-0">'
             '.*<li>.*Akkerdju.*</li>'
             '.*<li>.*Bro.*</li>'
             '.*<li>.*Chap.*</li>'

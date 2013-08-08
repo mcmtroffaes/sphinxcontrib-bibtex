@@ -1,4 +1,4 @@
 pybtex>=0.16
-pybtex-docutils
+pybtex-docutils>=0.2.0
 Sphinx>=1.0
 oset>=0.1.3
