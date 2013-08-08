@@ -1,6 +1,9 @@
 0.2.9 (in development)
 ----------------------
 
+* Upgrade to the latest pybtex-docutils to produce more optimal html output
+  (specifically: no more nested ``<span>``\ s).
+
 0.2.8 (7 August 2013)
 ---------------------
 
