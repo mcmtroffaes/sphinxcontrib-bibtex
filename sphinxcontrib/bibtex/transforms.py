@@ -265,7 +265,7 @@ class BibliographyTransform(docutils.transforms.Transform):
             for entry in style.format_entries(sorted_entries):
                 if info.list_ == "enumerated" or info.list_ == "bullet":
                     citation = docutils.nodes.list_item()
-                    citation += entry.text.render(backend)
+                    citation += backend.paragraph(entry)
                 else:  # "citation"
                     citation = backend.citation(entry, self.document)
                     # backend.citation(...) uses entry.key as citation label
