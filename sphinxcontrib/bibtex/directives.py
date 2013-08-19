@@ -22,7 +22,7 @@ from sphinx.util.console import bold, standout
 from pybtex.database.input import bibtex
 
 from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
-import sphinxcontrib.bibtex.latex_codec  # registers the latex codec
+import latexcodec  # registers the latex codec
 from sphinxcontrib.bibtex.nodes import bibliography
 
 
