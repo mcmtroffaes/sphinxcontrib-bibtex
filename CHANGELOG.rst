@@ -4,6 +4,8 @@
 * Upgrade to the latest pybtex-docutils to produce more optimal html output
   (specifically: no more nested ``<span>``\ s).
 
+* Remove latex codec code, and rely on latexcodec package instead.
+
 0.2.8 (7 August 2013)
 ---------------------
 
