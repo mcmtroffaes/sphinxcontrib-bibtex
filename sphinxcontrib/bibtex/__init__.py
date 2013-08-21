@@ -21,7 +21,6 @@ from sphinxcontrib.bibtex.transforms import BibliographyTransform
 
 def init_bibtex_cache(app):
     """Create ``app.env.bibtex_cache`` if it does not exist yet.
-    Reset citation label dictionary.
 
     :param app: The sphinx application.
     :type app: :class:`sphinx.application.Sphinx`
