@@ -18,7 +18,7 @@ before_script:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then 2to3 -w -n test; fi"
 script:
   - "cd test"
-  - "nosetests"
+  - "nosetests -c ../setup.cfg"
 after_success:
   - "coveralls"
 
