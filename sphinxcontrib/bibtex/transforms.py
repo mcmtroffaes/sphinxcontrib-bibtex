@@ -215,8 +215,6 @@ class BibliographyTransform(docutils.transforms.Transform):
             # generate entries
             entries = OrderedDict()
             for bibfile in info.bibfiles:
-                # XXX entries are modified below in an unpickable way
-                # XXX so fetch a deep copy
                 data = env.bibtex_cache.bibfiles[bibfile].data
                 for entry in data.entries.itervalues():
                     visitor = FilterVisitor(
@@ -231,6 +229,8 @@ class BibliographyTransform(docutils.transforms.Transform):
                         # recover by falling back to the default
                         ok = env.bibtex_cache.is_cited(entry.key)
                     if ok:
+                        # entries are modified below in an unpickable way
+                        # so fetch a deep copy
                         entries[entry.key] = copy.deepcopy(entry)
             # order entries according to which were cited first
             # first, we add all keys that were cited
@@ -261,7 +261,7 @@ class BibliographyTransform(docutils.transforms.Transform):
                 nodes = docutils.nodes.bullet_list()
             else:  # "citation"
                 nodes = docutils.nodes.paragraph()
-            # XXX style.format_entries modifies entries in unpickable way
+            # remind: style.format_entries modifies entries in unpickable way
             for entry in style.format_entries(sorted_entries):
                 if info.list_ == "enumerated" or info.list_ == "bullet":
                     citation = docutils.nodes.list_item()
