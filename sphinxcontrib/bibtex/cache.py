@@ -158,7 +158,7 @@ class BibliographyCache:
 
     .. attribute:: bibfiles
 
-        A :class:`list` of :class:`str`\ s containing the .bib file
+        A :class:`list` of :class:`str`\\ s containing the .bib file
         names (relative to the top source folder) that contain the
         references.
 
