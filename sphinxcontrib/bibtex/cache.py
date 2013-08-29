@@ -102,7 +102,7 @@ class Cache:
         :param key: The citation key.
         :type key: :class:`str`
         """
-        for docname, keys in self._cited.iteritems():
+        for keys in self._cited.itervalues():
             if key in keys:
                 return True
         return False
