@@ -140,6 +140,7 @@ class Cache:
             for bibcache in bibcaches.itervalues():
                 yield bibcache
 
+
 class BibfileCache:
 
     """Contains information about a parsed .bib file.

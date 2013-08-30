@@ -246,7 +246,8 @@ class BibliographyTransform(docutils.transforms.Transform):
                 nodes['enumtype'] = bibcache.enumtype
                 if bibcache.start >= 1:
                     nodes['start'] = bibcache.start
-                    env.bibtex_cache.set_enum_count(env.docname, bibcache.start)
+                    env.bibtex_cache.set_enum_count(
+                        env.docname, bibcache.start)
                 else:
                     nodes['start'] = env.bibtex_cache.get_enum_count(
                         env.docname)
