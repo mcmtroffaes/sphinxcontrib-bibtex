@@ -19,12 +19,6 @@
     .. autofunction:: transform_url_command
 """
 
-import sys
-if sys.version_info < (2, 7):  # pragma: no cover
-    from ordereddict import OrderedDict
-else:                          # pragma: no cover
-    from collections import OrderedDict
-
 import docutils.nodes
 import docutils.transforms
 
