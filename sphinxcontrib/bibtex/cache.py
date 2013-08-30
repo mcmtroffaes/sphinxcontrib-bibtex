@@ -148,33 +148,32 @@ class Cache:
 
     """Global bibtex extension information cache. Stored in
     ``app.env.bibtex_cache``, so must be picklable.
+    """
 
-    .. attribute:: bibfiles
+    bibfiles = None
+    """A :class:`dict` mapping .bib file names (relative to the top
+    source folder) to :class:`BibfileCache` instances.
+    """
 
-        A :class:`dict` mapping .bib file names (relative to the top
-        source folder) to :class:`BibfileCache` instances.
+    _bibliographies = None
+    """Each bibliography directive is assigned an id of the form
+    bibtex-bibliography-xxx. This :class:`dict` maps each docname
+    to another :class:`dict` which maps each id
+    to information about the bibliography directive,
+    :class:`BibliographyCache`. We need to store this extra
+    information separately because it cannot be stored in the
+    :class:`~sphinxcontrib.bibtex.nodes.bibliography` nodes
+    themselves.
+    """
 
-    .. attribute:: _bibliographies
+    _cited = None
+    """A :class:`dict` mapping each docname to a :class:`set` of
+    citation keys.
+    """
 
-        Each bibliography directive is assigned an id of the form
-        bibtex-bibliography-xxx. This :class:`dict` maps each docname
-        to another :class:`dict` which maps each id
-        to information about the bibliography directive,
-        :class:`BibliographyCache`. We need to store this extra
-        information separately because it cannot be stored in the
-        :class:`~sphinxcontrib.bibtex.nodes.bibliography` nodes
-        themselves.
-
-    .. attribute:: _cited
-
-        A :class:`dict` mapping each docname to a :class:`set` of
-        citation keys.
-
-    .. attribute:: _enum_count
-
-        A :class:`dict` mapping each docname to an :class:`int`
-        representing the current bibliography enumeration counter.
-
+    _enum_count = None
+    """A :class:`dict` mapping each docname to an :class:`int`
+    representing the current bibliography enumeration counter.
     """
 
     def __init__(self):
@@ -264,8 +263,8 @@ class Cache:
                 yield bibcache
 
     def _get_bibliography_entries(self, docname, id_, warn):
-        """Return bibliography entries, sorted by occurence in the bib
-        file.
+        """Return filtered bibliography entries, sorted by occurence
+        in the bib file.
         """
         # get the information of this bibliography node
         bibcache = self.get_bibliography_cache(docname=docname, id_=id_)
@@ -288,7 +287,7 @@ class Cache:
                     yield copy.deepcopy(entry)
 
     def get_bibliography_entries(self, docname, id_, warn):
-        """Return bibliography entries, sorted by citation order."""
+        """Return filtered bibliography entries, sorted by citation order."""
         # get entries, ordered by bib file occurrence
         entries = OrderedDict(
             (entry.key, entry) for entry in
