@@ -202,7 +202,6 @@ class BibliographyTransform(docutils.transforms.Transform):
         env = self.document.settings.env
         for bibnode in self.document.traverse(bibliography):
             # get the information of this bibliography node
-            # by looking up its id in the bibliography cache
             bibcache = env.bibtex_cache.get_bibliography_cache(
                 docname=env.docname, id_=bibnode['ids'][0])
             # generate entries
