@@ -77,7 +77,6 @@ class BibliographyDirective(Directive):
         bibliography.
         """
         env = self.state.document.settings.env
-        cache = env.bibtex_cache.bibliographies
         # create id and cache for this node
         # this id will be stored with the node
         # and is used to look up additional data in env.bibtex_cache
@@ -134,7 +133,7 @@ class BibliographyDirective(Directive):
             self.process_bibfile(bibfile, info.encoding)
             env.note_dependency(bibfile)
             info.bibfiles.append(bibfile)
-        cache[id_] = info
+        env.bibtex_cache.set_bibliography_cache(env.docname, id_, info)
         return [bibliography('', ids=[id_])]
 
     def parse_bibfile(self, bibfile, encoding):

@@ -123,6 +123,26 @@ class Cache:
             for key in self._cited[docname]:
                 yield key
 
+    def set_bibliography_cache(self, docname, id_, bibcache):
+        """Register *bibcache* (:class:`BibliographyCache`)
+        with id *id_* for document *docname*.
+        """
+        assert bibcache.docname == docname
+        assert id_ not in self.bibliographies
+        self.bibliographies[id_] = bibcache
+
+    def get_bibliography_cache(self, docname, id_):
+        """Return :class:`BibliographyCache` with id *id_* in
+        document *docname*.
+        """
+        infos = [info for other_id, info
+                 in self.bibliographies.iteritems()
+                 if other_id == id_ and info.docname == docname]
+        assert infos, "no bibliography id '%s' in %s" % (
+            id_, docname)
+        assert len(infos) == 1, "duplicate bibliography ids '%s' in %s" % (
+            id_, docname)
+        return infos[0]
 
 class BibfileCache:
 

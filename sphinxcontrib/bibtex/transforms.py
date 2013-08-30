@@ -203,15 +203,8 @@ class BibliographyTransform(docutils.transforms.Transform):
         for bibnode in self.document.traverse(bibliography):
             # get the information of this bibliography node
             # by looking up its id in the bibliography cache
-            id_ = bibnode['ids'][0]
-            infos = [info for other_id, info
-                     in env.bibtex_cache.bibliographies.iteritems()
-                     if other_id == id_ and info.docname == env.docname]
-            assert infos, "no bibliography id '%s' in %s" % (
-                id_, env.docname)
-            assert len(infos) == 1, "duplicate bibliography ids '%s' in %s" % (
-                id_, env.docname)
-            info = infos[0]
+            info = env.bibtex_cache.get_bibliography_cache(
+                docname=env.docname, id_=bibnode['ids'][0])
             # generate entries
             entries = OrderedDict()
             for bibfile in info.bibfiles:
