@@ -30,6 +30,13 @@ import pybtex.database
 import re
 
 
+def _raise_invalid_node(node):
+    """Helper method to raise an exception when an invalid node is
+    visited.
+    """
+    raise ValueError("invalid node %s in filter expression" % node)
+
+
 class _FilterVisitor(ast.NodeVisitor):
 
     """Visit the abstract syntax tree of a parsed filter expression."""
@@ -39,12 +46,6 @@ class _FilterVisitor(ast.NodeVisitor):
 
     is_cited = False
     """Whether the entry is cited."""
-
-    def _raise_invalid_node(self, node):
-        """Helper method to raise an exception when an invalid node is
-        visited.
-        """
-        raise ValueError("invalid node %s in filter expression" % node)
 
     def __init__(self, entry, is_cited):
         self.entry = entry
@@ -74,7 +75,7 @@ class _FilterVisitor(ast.NodeVisitor):
         if isinstance(node.op, ast.Not):
             return not self.visit(node.operand)
         else:
-            self._raise_invalid_node(node)
+            _raise_invalid_node(node)
 
     def visit_BinOp(self, node):
         if isinstance(node.op, ast.Mod):
@@ -89,7 +90,7 @@ class _FilterVisitor(ast.NodeVisitor):
                     "expected a string on right side of %s" % node.op)
             return re.search(regexp, name, re.IGNORECASE)
         else:
-            self._raise_invalid_node(node)
+            _raise_invalid_node(node)
 
     def visit_Compare(self, node):
         # keep it simple: binary comparators only
@@ -112,7 +113,7 @@ class _FilterVisitor(ast.NodeVisitor):
             return left >= right
         else:
             # not used currently: ast.Is | ast.IsNot | ast.In | ast.NotIn
-            self._raise_invalid_node(op)
+            _raise_invalid_node(op)
 
     def visit_Name(self, node):
         """Calculate the value of the given identifier."""
@@ -140,7 +141,7 @@ class _FilterVisitor(ast.NodeVisitor):
         return node.s
 
     def generic_visit(self, node):
-        self._raise_invalid_node(node)
+        _raise_invalid_node(node)
 
 
 class Cache:
