@@ -16,6 +16,12 @@
         :members:
 """
 
+import sys
+if sys.version_info < (2, 7):  # pragma: no cover
+    from ordereddict import OrderedDict
+else:                          # pragma: no cover
+    from collections import OrderedDict
+
 import ast
 import collections
 import copy
@@ -256,7 +262,7 @@ class Cache:
             for bibcache in bibcaches.itervalues():
                 yield bibcache
 
-    def get_filtered_bibliography_entries(self, docname, id_, warn):
+    def _get_bibliography_entries(self, docname, id_, warn):
         """Return bibliography entries, sorted by occurence in the bib
         file.
         """
@@ -280,6 +286,27 @@ class Cache:
                     # when formatting, so fetch a deep copy
                     yield copy.deepcopy(entry)
 
+
+    def get_bibliography_entries(self, docname, id_, warn):
+        """Return bibliography entries, sorted by citation order."""
+        # get entries, ordered by bib file occurrence
+        entries = OrderedDict(
+            (entry.key, entry) for entry in
+            self._get_bibliography_entries(
+                docname=docname, id_=id_, warn=warn))
+        # order entries according to which were cited first
+        # first, we add all keys that were cited
+        # then, we add all remaining keys
+        sorted_entries = []
+        for key in self.get_all_cited_keys():
+            try:
+                entry = entries.pop(key)
+            except KeyError:
+                pass
+            else:
+                sorted_entries.append(entry)
+        sorted_entries += entries.itervalues()
+        return sorted_entries
 
 class BibfileCache:
 

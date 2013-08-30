@@ -89,23 +89,8 @@ class BibliographyTransform(docutils.transforms.Transform):
             id_ = bibnode['ids'][0]
             bibcache = env.bibtex_cache.get_bibliography_cache(
                 docname=docname, id_=id_)
-            # get entries, ordered by bib file occurrence
-            entries = OrderedDict(
-                (entry.key, entry) for entry in
-                env.bibtex_cache.get_filtered_bibliography_entries(
-                    docname=docname, id_=id_, warn=env.app.warn))
-            # order entries according to which were cited first
-            # first, we add all keys that were cited
-            # then, we add all remaining keys
-            sorted_entries = []
-            for key in env.bibtex_cache.get_all_cited_keys():
-                try:
-                    entry = entries.pop(key)
-                except KeyError:
-                    pass
-                else:
-                    sorted_entries.append(entry)
-            sorted_entries += entries.itervalues()
+            entries = env.bibtex_cache.get_bibliography_entries(
+                docname=docname, id_=id_, warn=env.app.warn)
             # locate and instantiate style and backend plugins
             style = find_plugin('pybtex.style.formatting', bibcache.style)()
             backend = find_plugin('pybtex.backends', 'docutils')()
@@ -125,7 +110,7 @@ class BibliographyTransform(docutils.transforms.Transform):
             else:  # "citation"
                 nodes = docutils.nodes.paragraph()
             # remind: style.format_entries modifies entries in unpickable way
-            for entry in style.format_entries(sorted_entries):
+            for entry in style.format_entries(entries):
                 if bibcache.list_ == "enumerated" or bibcache.list_ == "bullet":
                     citation = docutils.nodes.list_item()
                     citation += backend.paragraph(entry)
