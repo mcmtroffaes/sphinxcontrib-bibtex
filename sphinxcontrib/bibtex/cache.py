@@ -31,10 +31,11 @@ class Cache:
         A :class:`dict` mapping .bib file names (relative to the top
         source folder) to :class:`BibfileCache` instances.
 
-    .. attribute:: bibliographies
+    .. attribute:: _bibliographies
 
         Each bibliography directive is assigned an id of the form
-        bibtex-bibliography-xxx. This :class:`dict` maps each such id
+        bibtex-bibliography-xxx. This :class:`dict` maps each docname
+        to another :class:`dict` which maps each id
         to information about the bibliography directive,
         :class:`BibliographyCache`. We need to store this extra
         information separately because it cannot be stored in the
@@ -56,7 +57,7 @@ class Cache:
     def __init__(self):
 
         self.bibfiles = {}
-        self.bibliographies = {}
+        self._bibliographies = collections.defaultdict(dict)
         self._cited = collections.defaultdict(oset)
         self._enum_count = {}
 
@@ -66,10 +67,7 @@ class Cache:
         :param docname: The document name.
         :type docname: :class:`str`
         """
-        ids = [id_ for id_, info in self.bibliographies.iteritems()
-               if info.docname == docname]
-        for id_ in ids:
-            del self.bibliographies[id_]
+        self._bibliographies.pop(docname, None)
         self._cited.pop(docname, None)
         self._enum_count.pop(docname, None)
 
@@ -109,7 +107,7 @@ class Cache:
 
     def get_label_from_key(self, key):
         """Return label for the given key."""
-        for info in self.bibliographies.itervalues():
+        for info in self.get_all_bibliography_caches():
             if key in info.labels:
                 return info.labels[key]
         else:
@@ -127,22 +125,20 @@ class Cache:
         """Register *bibcache* (:class:`BibliographyCache`)
         with id *id_* for document *docname*.
         """
-        assert bibcache.docname == docname
-        assert id_ not in self.bibliographies
-        self.bibliographies[id_] = bibcache
+        assert id_ not in self._bibliographies[docname]
+        self._bibliographies[docname][id_] = bibcache
 
     def get_bibliography_cache(self, docname, id_):
         """Return :class:`BibliographyCache` with id *id_* in
         document *docname*.
         """
-        infos = [info for other_id, info
-                 in self.bibliographies.iteritems()
-                 if other_id == id_ and info.docname == docname]
-        assert infos, "no bibliography id '%s' in %s" % (
-            id_, docname)
-        assert len(infos) == 1, "duplicate bibliography ids '%s' in %s" % (
-            id_, docname)
-        return infos[0]
+        return self._bibliographies[docname][id_]
+
+    def get_all_bibliography_caches(self):
+        """Return all bibliography caches."""
+        for bibcaches in self._bibliographies.itervalues():
+            for bibcache in bibcaches.itervalues():
+                yield bibcache
 
 class BibfileCache:
 
@@ -169,12 +165,6 @@ class BibfileCache:
 class BibliographyCache:
 
     """Contains information about a bibliography directive.
-
-    .. attribute:: docname
-
-        A :class:`str` containing the name of the document in which
-        the directive occurs. We need this information during the
-        Sphinx event *env-purge-doc*.
 
     .. attribute:: bibfiles
 
@@ -211,7 +201,7 @@ class BibliographyCache:
         An :class:`ast.AST` node, containing the parsed filter expression.
     """
 
-    def __init__(self, docname=None, bibfiles=None,
+    def __init__(self, bibfiles=None,
                  style=None,
                  list_="citation", enumtype="arabic", start=1,
                  labels=None,
@@ -220,7 +210,6 @@ class BibliographyCache:
                  labelprefix="",
                  filter_=None,
                  ):
-        self.docname = docname
         self.bibfiles = bibfiles if bibfiles is not None else []
         self.filter_ = filter_
         self.style = style

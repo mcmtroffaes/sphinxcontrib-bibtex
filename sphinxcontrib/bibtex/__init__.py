@@ -97,7 +97,7 @@ def check_duplicate_labels(app, env):
     :type env: :class:`sphinx.environment.BuildEnvironment`
     """
     label_to_key = {}
-    for info in env.bibtex_cache.bibliographies.itervalues():
+    for info in env.bibtex_cache.get_all_bibliography_caches():
         for key, label in info.labels.iteritems():
             if label in label_to_key:
                 app.warn(

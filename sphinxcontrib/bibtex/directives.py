@@ -110,7 +110,6 @@ class BibliographyDirective(Directive):
             # the default filter: include only cited entries
             filter_ = ast.parse("cited")
         info = BibliographyCache(
-            docname=env.docname,
             list_=self.options.get("list", "citation"),
             enumtype=self.options.get("enumtype", "arabic"),
             start=self.options.get("start", 1),
