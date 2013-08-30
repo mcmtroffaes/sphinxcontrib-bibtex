@@ -286,7 +286,6 @@ class Cache:
                     # when formatting, so fetch a deep copy
                     yield copy.deepcopy(entry)
 
-
     def get_bibliography_entries(self, docname, id_, warn):
         """Return bibliography entries, sorted by citation order."""
         # get entries, ordered by bib file occurrence
@@ -307,6 +306,7 @@ class Cache:
                 sorted_entries.append(entry)
         sorted_entries += entries.itervalues()
         return sorted_entries
+
 
 class BibfileCache:
 
