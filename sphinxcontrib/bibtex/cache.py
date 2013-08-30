@@ -276,12 +276,12 @@ class Cache:
                     entry=entry,
                     is_cited=self.is_cited(entry.key))
                 try:
-                    ok = visitor.visit(bibcache.filter_)
-                except ValueError as e:
-                    warn("syntax error in :filter: expression; %s" % e)
+                    success = visitor.visit(bibcache.filter_)
+                except ValueError as err:
+                    warn("syntax error in :filter: expression; %s" % err)
                     # recover by falling back to the default
-                    ok = self.is_cited(entry.key)
-                if ok:
+                    success = self.is_cited(entry.key)
+                if success:
                     # entries are modified in an unpickable way
                     # when formatting, so fetch a deep copy
                     yield copy.deepcopy(entry)
