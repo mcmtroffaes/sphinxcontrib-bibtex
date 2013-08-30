@@ -8,10 +8,6 @@
         .. autoattribute:: default_priority
         .. automethod:: apply
 
-    .. autoclass:: FilterVisitor
-        :members: entry, is_cited
-        :show-inheritance:
-
     .. autofunction:: node_text_transform
 
     .. autofunction:: transform_curly_bracket_strip
