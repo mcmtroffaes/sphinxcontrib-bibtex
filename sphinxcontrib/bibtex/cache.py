@@ -107,9 +107,9 @@ class Cache:
 
     def get_label_from_key(self, key):
         """Return label for the given key."""
-        for info in self.get_all_bibliography_caches():
-            if key in info.labels:
-                return info.labels[key]
+        for bibcache in self.get_all_bibliography_caches():
+            if key in bibcache.labels:
+                return bibcache.labels[key]
         else:
             raise KeyError("%s not found" % key)
 

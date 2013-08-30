@@ -203,18 +203,18 @@ class BibliographyTransform(docutils.transforms.Transform):
         for bibnode in self.document.traverse(bibliography):
             # get the information of this bibliography node
             # by looking up its id in the bibliography cache
-            info = env.bibtex_cache.get_bibliography_cache(
+            bibcache = env.bibtex_cache.get_bibliography_cache(
                 docname=env.docname, id_=bibnode['ids'][0])
             # generate entries
             entries = OrderedDict()
-            for bibfile in info.bibfiles:
+            for bibfile in bibcache.bibfiles:
                 data = env.bibtex_cache.bibfiles[bibfile].data
                 for entry in data.entries.itervalues():
                     visitor = FilterVisitor(
                         entry=entry,
                         is_cited=env.bibtex_cache.is_cited(entry.key))
                     try:
-                        ok = visitor.visit(info.filter_)
+                        ok = visitor.visit(bibcache.filter_)
                     except ValueError as e:
                         env.app.warn(
                             "syntax error in :filter: expression; %s" %
@@ -238,25 +238,25 @@ class BibliographyTransform(docutils.transforms.Transform):
                     sorted_entries.append(entry)
             sorted_entries += entries.itervalues()
             # locate and instantiate style and backend plugins
-            style = find_plugin('pybtex.style.formatting', info.style)()
+            style = find_plugin('pybtex.style.formatting', bibcache.style)()
             backend = find_plugin('pybtex.backends', 'docutils')()
             # create citation nodes for all references
-            if info.list_ == "enumerated":
+            if bibcache.list_ == "enumerated":
                 nodes = docutils.nodes.enumerated_list()
-                nodes['enumtype'] = info.enumtype
-                if info.start >= 1:
-                    nodes['start'] = info.start
-                    env.bibtex_cache.set_enum_count(env.docname, info.start)
+                nodes['enumtype'] = bibcache.enumtype
+                if bibcache.start >= 1:
+                    nodes['start'] = bibcache.start
+                    env.bibtex_cache.set_enum_count(env.docname, bibcache.start)
                 else:
                     nodes['start'] = env.bibtex_cache.get_enum_count(
                         env.docname)
-            elif info.list_ == "bullet":
+            elif bibcache.list_ == "bullet":
                 nodes = docutils.nodes.bullet_list()
             else:  # "citation"
                 nodes = docutils.nodes.paragraph()
             # remind: style.format_entries modifies entries in unpickable way
             for entry in style.format_entries(sorted_entries):
-                if info.list_ == "enumerated" or info.list_ == "bullet":
+                if bibcache.list_ == "enumerated" or bibcache.list_ == "bullet":
                     citation = docutils.nodes.list_item()
                     citation += backend.paragraph(entry)
                 else:  # "citation"
@@ -266,13 +266,13 @@ class BibliographyTransform(docutils.transforms.Transform):
                     # but we must note the entry.label now;
                     # at this point, we also already prefix the label
                     key = citation[0].astext()
-                    info.labels[key] = info.labelprefix + entry.label
+                    bibcache.labels[key] = bibcache.labelprefix + entry.label
                 node_text_transform(citation, transform_url_command)
-                if info.curly_bracket_strip:
+                if bibcache.curly_bracket_strip:
                     node_text_transform(
                         citation,
                         transform_curly_bracket_strip)
                 nodes += citation
-                if info.list_ == "enumerated":
+                if bibcache.list_ == "enumerated":
                     env.bibtex_cache.inc_enum_count(env.docname)
             bibnode.replace_self(nodes)
