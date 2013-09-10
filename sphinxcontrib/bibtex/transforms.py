@@ -61,6 +61,9 @@ def transform_url_command(textnode):
 
 
 class BibliographyTransform(docutils.transforms.Transform):
+    """A docutils transform to generate citation entries for
+    bibliography nodes.
+    """
 
     # transform must be applied before references are resolved
     default_priority = 10
