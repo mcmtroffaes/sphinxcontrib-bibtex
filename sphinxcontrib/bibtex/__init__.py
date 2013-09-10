@@ -70,8 +70,8 @@ def process_citation_references(app, doctree, docname):
     :param docname: The document name.
     :type docname: :class:`str`
     """
-    # XXX sphinx has already turned citation_reference nodes
-    # XXX into reference nodes
+    # sphinx has already turned citation_reference nodes
+    # into reference nodes, so iterate over reference nodes
     for node in doctree.traverse(docutils.nodes.reference):
         # exclude sphinx [source] labels
         if isinstance(node[0], docutils.nodes.Element):
@@ -97,7 +97,7 @@ def check_duplicate_labels(app, env):
     :type env: :class:`sphinx.environment.BuildEnvironment`
     """
     label_to_key = {}
-    for info in env.bibtex_cache.bibliographies.itervalues():
+    for info in env.bibtex_cache.get_all_bibliography_caches():
         for key, label in info.labels.iteritems():
             if label in label_to_key:
                 app.warn(

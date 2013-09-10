@@ -16,47 +16,169 @@
         :members:
 """
 
+import sys
+if sys.version_info < (2, 7):  # pragma: no cover
+    from ordereddict import OrderedDict
+else:                          # pragma: no cover
+    from collections import OrderedDict
+
+import ast
 import collections
+import copy
 from oset import oset
-import pybtex.database
+import re
+
+
+def _raise_invalid_node(node):
+    """Helper method to raise an exception when an invalid node is
+    visited.
+    """
+    raise ValueError("invalid node %s in filter expression" % node)
+
+
+class _FilterVisitor(ast.NodeVisitor):
+
+    """Visit the abstract syntax tree of a parsed filter expression."""
+
+    entry = None
+    """The bibliographic entry to which the filter must be applied."""
+
+    is_cited = False
+    """Whether the entry is cited."""
+
+    def __init__(self, entry, is_cited):
+        self.entry = entry
+        self.is_cited = is_cited
+
+    def visit_Module(self, node):
+        if len(node.body) != 1:
+            raise ValueError(
+                "filter expression cannot contain multiple expressions")
+        return self.visit(node.body[0])
+
+    def visit_Expr(self, node):
+        return self.visit(node.value)
+
+    def visit_BoolOp(self, node):
+        outcomes = (self.visit(value) for value in node.values)
+        if isinstance(node.op, ast.And):
+            return all(outcomes)
+        elif isinstance(node.op, ast.Or):
+            return any(outcomes)
+        else:  # pragma: no cover
+            # there are no other boolean operators
+            # so this code should never execute
+            assert False, "unexpected boolean operator %s" % node.op
+
+    def visit_UnaryOp(self, node):
+        if isinstance(node.op, ast.Not):
+            return not self.visit(node.operand)
+        else:
+            _raise_invalid_node(node)
+
+    def visit_BinOp(self, node):
+        if isinstance(node.op, ast.Mod):
+            # modulo operator is used for regular expression matching
+            name = self.visit(node.left)
+            regexp = self.visit(node.right)
+            if not isinstance(name, basestring):
+                raise ValueError(
+                    "expected a string on left side of %s" % node.op)
+            if not isinstance(regexp, basestring):
+                raise ValueError(
+                    "expected a string on right side of %s" % node.op)
+            return re.search(regexp, name, re.IGNORECASE)
+        else:
+            _raise_invalid_node(node)
+
+    def visit_Compare(self, node):
+        # keep it simple: binary comparators only
+        if len(node.ops) != 1:
+            raise ValueError("syntax for multiple comparators not supported")
+        left = self.visit(node.left)
+        op = node.ops[0]
+        right = self.visit(node.comparators[0])
+        if isinstance(op, ast.Eq):
+            return left == right
+        elif isinstance(op, ast.NotEq):
+            return left != right
+        elif isinstance(op, ast.Lt):
+            return left < right
+        elif isinstance(op, ast.LtE):
+            return left <= right
+        elif isinstance(op, ast.Gt):
+            return left > right
+        elif isinstance(op, ast.GtE):
+            return left >= right
+        else:
+            # not used currently: ast.Is | ast.IsNot | ast.In | ast.NotIn
+            _raise_invalid_node(op)
+
+    def visit_Name(self, node):
+        """Calculate the value of the given identifier."""
+        id_ = node.id
+        if id_ == 'type':
+            return self.entry.type.lower()
+        elif id_ == 'key':
+            return self.entry.key.lower()
+        elif id_ == 'cited':
+            return self.is_cited
+        elif id_ == 'True':
+            return True
+        elif id_ == 'False':
+            return False
+        elif id_ == 'author' or id_ == 'editor':
+            if id_ in self.entry.persons:
+                return u' and '.join(
+                    unicode(person) for person in self.entry.persons[id_])
+            else:
+                return u''
+        else:
+            return self.entry.fields.get(id_, "")
+
+    def visit_Str(self, node):
+        return node.s
+
+    def generic_visit(self, node):
+        _raise_invalid_node(node)
 
 
 class Cache:
 
     """Global bibtex extension information cache. Stored in
     ``app.env.bibtex_cache``, so must be picklable.
+    """
 
-    .. attribute:: bibfiles
+    bibfiles = None
+    """A :class:`dict` mapping .bib file names (relative to the top
+    source folder) to :class:`BibfileCache` instances.
+    """
 
-        A :class:`dict` mapping .bib file names (relative to the top
-        source folder) to :class:`BibfileCache` instances.
+    _bibliographies = None
+    """Each bibliography directive is assigned an id of the form
+    bibtex-bibliography-xxx. This :class:`dict` maps each docname
+    to another :class:`dict` which maps each id
+    to information about the bibliography directive,
+    :class:`BibliographyCache`. We need to store this extra
+    information separately because it cannot be stored in the
+    :class:`~sphinxcontrib.bibtex.nodes.bibliography` nodes
+    themselves.
+    """
 
-    .. attribute:: bibliographies
+    _cited = None
+    """A :class:`dict` mapping each docname to a :class:`set` of
+    citation keys.
+    """
 
-        Each bibliography directive is assigned an id of the form
-        bibtex-bibliography-xxx. This :class:`dict` maps each such id
-        to information about the bibliography directive,
-        :class:`BibliographyCache`. We need to store this extra
-        information separately because it cannot be stored in the
-        :class:`~sphinxcontrib.bibtex.nodes.bibliography` nodes
-        themselves.
-
-    .. attribute:: _cited
-
-        A :class:`dict` mapping each docname to a :class:`set` of
-        citation keys.
-
-    .. attribute:: _enum_count
-
-        A :class:`dict` mapping each docname to an :class:`int`
-        representing the current bibliography enumeration counter.
-
+    _enum_count = None
+    """A :class:`dict` mapping each docname to an :class:`int`
+    representing the current bibliography enumeration counter.
     """
 
     def __init__(self):
 
         self.bibfiles = {}
-        self.bibliographies = {}
+        self._bibliographies = collections.defaultdict(dict)
         self._cited = collections.defaultdict(oset)
         self._enum_count = {}
 
@@ -66,10 +188,7 @@ class Cache:
         :param docname: The document name.
         :type docname: :class:`str`
         """
-        ids = [id_ for id_, info in self.bibliographies.iteritems()
-               if info.docname == docname]
-        for id_ in ids:
-            del self.bibliographies[id_]
+        self._bibliographies.pop(docname, None)
         self._cited.pop(docname, None)
         self._enum_count.pop(docname, None)
 
@@ -102,16 +221,16 @@ class Cache:
         :param key: The citation key.
         :type key: :class:`str`
         """
-        for docname, keys in self._cited.iteritems():
+        for keys in self._cited.itervalues():
             if key in keys:
                 return True
         return False
 
     def get_label_from_key(self, key):
         """Return label for the given key."""
-        for info in self.bibliographies.itervalues():
-            if key in info.labels:
-                return info.labels[key]
+        for bibcache in self.get_all_bibliography_caches():
+            if key in bibcache.labels:
+                return bibcache.labels[key]
         else:
             raise KeyError("%s not found" % key)
 
@@ -123,8 +242,72 @@ class Cache:
             for key in self._cited[docname]:
                 yield key
 
+    def set_bibliography_cache(self, docname, id_, bibcache):
+        """Register *bibcache* (:class:`BibliographyCache`)
+        with id *id_* for document *docname*.
+        """
+        assert id_ not in self._bibliographies[docname]
+        self._bibliographies[docname][id_] = bibcache
 
-class BibfileCache:
+    def get_bibliography_cache(self, docname, id_):
+        """Return :class:`BibliographyCache` with id *id_* in
+        document *docname*.
+        """
+        return self._bibliographies[docname][id_]
+
+    def get_all_bibliography_caches(self):
+        """Return all bibliography caches."""
+        for bibcaches in self._bibliographies.itervalues():
+            for bibcache in bibcaches.itervalues():
+                yield bibcache
+
+    def _get_bibliography_entries(self, docname, id_, warn):
+        """Return filtered bibliography entries, sorted by occurence
+        in the bib file.
+        """
+        # get the information of this bibliography node
+        bibcache = self.get_bibliography_cache(docname=docname, id_=id_)
+        # generate entries
+        for bibfile in bibcache.bibfiles:
+            data = self.bibfiles[bibfile].data
+            for entry in data.entries.itervalues():
+                visitor = _FilterVisitor(
+                    entry=entry,
+                    is_cited=self.is_cited(entry.key))
+                try:
+                    success = visitor.visit(bibcache.filter_)
+                except ValueError as err:
+                    warn("syntax error in :filter: expression; %s" % err)
+                    # recover by falling back to the default
+                    success = self.is_cited(entry.key)
+                if success:
+                    # entries are modified in an unpickable way
+                    # when formatting, so fetch a deep copy
+                    yield copy.deepcopy(entry)
+
+    def get_bibliography_entries(self, docname, id_, warn):
+        """Return filtered bibliography entries, sorted by citation order."""
+        # get entries, ordered by bib file occurrence
+        entries = OrderedDict(
+            (entry.key, entry) for entry in
+            self._get_bibliography_entries(
+                docname=docname, id_=id_, warn=warn))
+        # order entries according to which were cited first
+        # first, we add all keys that were cited
+        # then, we add all remaining keys
+        sorted_entries = []
+        for key in self.get_all_cited_keys():
+            try:
+                entry = entries.pop(key)
+            except KeyError:
+                pass
+            else:
+                sorted_entries.append(entry)
+        sorted_entries += entries.itervalues()
+        return sorted_entries
+
+
+class BibfileCache(collections.namedtuple('BibfileCache', 'mtime data')):
 
     """Contains information about a parsed .bib file.
 
@@ -140,25 +323,19 @@ class BibfileCache:
 
     """
 
-    def __init__(self, mtime=None, data=None):
-        self.mtime = mtime if mtime is not None else -float("inf")
-        self.data = (data if data is not None
-                     else pybtex.database.BibliographyData())
 
-
-class BibliographyCache:
+class BibliographyCache(collections.namedtuple(
+    'BibliographyCache',
+    """bibfiles style encoding
+    list_ enumtype start labels labelprefix
+    filter_ curly_bracket_strip
+    """)):
 
     """Contains information about a bibliography directive.
 
-    .. attribute:: docname
-
-        A :class:`str` containing the name of the document in which
-        the directive occurs. We need this information during the
-        Sphinx event *env-purge-doc*.
-
     .. attribute:: bibfiles
 
-        A :class:`list` of :class:`str`\ s containing the .bib file
+        A :class:`list` of :class:`str`\\ s containing the .bib file
         names (relative to the top source folder) that contain the
         references.
 
@@ -190,24 +367,3 @@ class BibliographyCache:
 
         An :class:`ast.AST` node, containing the parsed filter expression.
     """
-
-    def __init__(self, docname=None, bibfiles=None,
-                 style=None,
-                 list_="citation", enumtype="arabic", start=1,
-                 labels=None,
-                 encoding=None,
-                 curly_bracket_strip=True,
-                 labelprefix="",
-                 filter_=None,
-                 ):
-        self.docname = docname
-        self.bibfiles = bibfiles if bibfiles is not None else []
-        self.filter_ = filter_
-        self.style = style
-        self.list_ = list_
-        self.enumtype = enumtype
-        self.start = start
-        self.encoding = encoding
-        self.curly_bracket_strip = curly_bracket_strip
-        self.labels = labels if labels is not None else {}
-        self.labelprefix = labelprefix

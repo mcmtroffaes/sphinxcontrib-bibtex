@@ -20,6 +20,7 @@ from sphinx.util.compat import Directive
 from sphinx.util.console import bold, standout
 
 from pybtex.database.input import bibtex
+from pybtex.database import BibliographyData
 
 from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
 import latexcodec  # registers the latex codec
@@ -77,7 +78,6 @@ class BibliographyDirective(Directive):
         bibliography.
         """
         env = self.state.document.settings.env
-        cache = env.bibtex_cache.bibliographies
         # create id and cache for this node
         # this id will be stored with the node
         # and is used to look up additional data in env.bibtex_cache
@@ -110,8 +110,7 @@ class BibliographyDirective(Directive):
         else:
             # the default filter: include only cited entries
             filter_ = ast.parse("cited")
-        info = BibliographyCache(
-            docname=env.docname,
+        bibcache = BibliographyCache(
             list_=self.options.get("list", "citation"),
             enumtype=self.options.get("enumtype", "arabic"),
             start=self.options.get("start", 1),
@@ -123,18 +122,20 @@ class BibliographyDirective(Directive):
             curly_bracket_strip=(
                 'disable-curly-bracket-strip' not in self.options),
             labelprefix=self.options.get("labelprefix", ""),
+            labels={},
+            bibfiles=[],
         )
-        if (info.list_ not in set(["bullet", "enumerated", "citation"])):
+        if (bibcache.list_ not in set(["bullet", "enumerated", "citation"])):
             env.app.warn(
-                "unknown bibliography list type '{0}'.".format(info.list_))
+                "unknown bibliography list type '{0}'.".format(bibcache.list_))
         for bibfile in self.arguments[0].split():
             # convert to normalized absolute path to ensure that the same file
             # only occurs once in the cache
             bibfile = os.path.normpath(env.relfn2path(bibfile.strip())[1])
-            self.process_bibfile(bibfile, info.encoding)
+            self.process_bibfile(bibfile, bibcache.encoding)
             env.note_dependency(bibfile)
-            info.bibfiles.append(bibfile)
-        cache[id_] = info
+            bibcache.bibfiles.append(bibfile)
+        env.bibtex_cache.set_bibliography_cache(env.docname, id_, bibcache)
         return [bibliography('', ids=[id_])]
 
     def parse_bibfile(self, bibfile, encoding):
@@ -192,7 +193,8 @@ class BibliographyDirective(Directive):
         except OSError:
             env.app.warn(
                 standout("could not open bibtex file {0}.".format(bibfile)))
-            cache[bibfile] = BibfileCache()  # dummy cache
+            cache[bibfile] = BibfileCache(  # dummy cache
+                mtime=-float("inf"), data=BibliographyData())
             return cache[bibfile].data
         # get cache and check if it is still up to date
         # if it is not up to date, parse the bibtex file

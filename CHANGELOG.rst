@@ -6,6 +6,10 @@
 
 * Remove latex codec code, and rely on latexcodec package instead.
 
+* :class:`FilterVisitor` has been removed from the public API.
+  Use :meth:`~sphinxcontrib.bibtex.cache.Cache.get_bibliography_entries`
+  instead.
+
 0.2.8 (7 August 2013)
 ---------------------
 
