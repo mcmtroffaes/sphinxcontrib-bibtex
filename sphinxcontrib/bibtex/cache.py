@@ -324,7 +324,10 @@ class BibfileCache(collections.namedtuple('BibfileCache', 'mtime data')):
     """
 
 
-class BibliographyCache:
+class BibliographyCache(collections.namedtuple(
+    'BibliographyCache',
+    'bibfiles style encoding list_ enumtype start labels labelprefix '
+    'filter_ curly_bracket_strip')):
 
     """Contains information about a bibliography directive.
 
@@ -362,23 +365,3 @@ class BibliographyCache:
 
         An :class:`ast.AST` node, containing the parsed filter expression.
     """
-
-    def __init__(self, bibfiles=None,
-                 style=None,
-                 list_="citation", enumtype="arabic", start=1,
-                 labels=None,
-                 encoding=None,
-                 curly_bracket_strip=True,
-                 labelprefix="",
-                 filter_=None,
-                 ):
-        self.bibfiles = bibfiles if bibfiles is not None else []
-        self.filter_ = filter_
-        self.style = style
-        self.list_ = list_
-        self.enumtype = enumtype
-        self.start = start
-        self.encoding = encoding
-        self.curly_bracket_strip = curly_bracket_strip
-        self.labels = labels if labels is not None else {}
-        self.labelprefix = labelprefix

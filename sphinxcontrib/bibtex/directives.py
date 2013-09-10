@@ -122,6 +122,8 @@ class BibliographyDirective(Directive):
             curly_bracket_strip=(
                 'disable-curly-bracket-strip' not in self.options),
             labelprefix=self.options.get("labelprefix", ""),
+            labels={},
+            bibfiles=[],
         )
         if (bibcache.list_ not in set(["bullet", "enumerated", "citation"])):
             env.app.warn(
