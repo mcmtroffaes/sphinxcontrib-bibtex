@@ -61,6 +61,7 @@ def transform_url_command(textnode):
 
 
 class BibliographyTransform(docutils.transforms.Transform):
+
     """A docutils transform to generate citation entries for
     bibliography nodes.
     """
