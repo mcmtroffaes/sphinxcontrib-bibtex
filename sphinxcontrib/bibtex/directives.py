@@ -20,6 +20,7 @@ from sphinx.util.compat import Directive
 from sphinx.util.console import bold, standout
 
 from pybtex.database.input import bibtex
+from pybtex.database import BibliographyData
 
 from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
 import latexcodec  # registers the latex codec
@@ -190,7 +191,8 @@ class BibliographyDirective(Directive):
         except OSError:
             env.app.warn(
                 standout("could not open bibtex file {0}.".format(bibfile)))
-            cache[bibfile] = BibfileCache()  # dummy cache
+            cache[bibfile] = BibfileCache(  # dummy cache
+                mtime=-float("inf"), data=BibliographyData())
             return cache[bibfile].data
         # get cache and check if it is still up to date
         # if it is not up to date, parse the bibtex file

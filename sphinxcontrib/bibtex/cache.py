@@ -26,7 +26,6 @@ import ast
 import collections
 import copy
 from oset import oset
-import pybtex.database
 import re
 
 
@@ -308,7 +307,7 @@ class Cache:
         return sorted_entries
 
 
-class BibfileCache:
+class BibfileCache(collections.namedtuple('BibfileCache', 'mtime data')):
 
     """Contains information about a parsed .bib file.
 
@@ -323,11 +322,6 @@ class BibfileCache:
         parsed .bib file.
 
     """
-
-    def __init__(self, mtime=None, data=None):
-        self.mtime = mtime if mtime is not None else -float("inf")
-        self.data = (data if data is not None
-                     else pybtex.database.BibliographyData())
 
 
 class BibliographyCache:
