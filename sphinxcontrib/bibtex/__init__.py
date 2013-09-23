@@ -86,6 +86,8 @@ def process_citation_references(app, doctree, docname):
                 app.warn("could not relabel citation reference [%s]" % key)
             else:
                 node[0] = docutils.nodes.Text('[' + label + ']')
+                uriparts = node['refuri'].split("#")
+                node['refuri'] = uriparts[0] + "#" + label
 
 
 def check_duplicate_labels(app, env):
