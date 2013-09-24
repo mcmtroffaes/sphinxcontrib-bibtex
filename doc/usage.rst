@@ -424,3 +424,11 @@ There are a few ways to work around this problem:
   the plan is to change the default citation style to ``:style: alpha``,
   as this style is also more in line with
   how citations are usually labelled in Sphinx.
+
+Citation Links Broken When Using LaTeX Backend
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This is a known bug in Sphinx's latex writer;
+a possible workaround is documented in
+`issue #45 <https://github.com/mcmtroffaes/sphinxcontrib-bibtex/pull/45>`_.
+A proper patch for Sphinx is planned.
