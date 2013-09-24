@@ -18,6 +18,13 @@ Roles and Directives
 
       See \cite{1987:nelson} for an introduction to non-standard analysis.
 
+   .. note::
+
+      Due to a docutils implementation detail, Sphinx's LaTeX backend
+      will not actually generate ``\cite`` commands. Instead, all
+      references, including citation references, are managed using
+      ``\hyperref`` and ``\label`` commands.
+
 .. rst:directive:: .. bibliography:: refs.bib [...]
 
    Create bibliography for all cited references. The ``all`` flag
