@@ -10,6 +10,9 @@
   Use :meth:`~sphinxcontrib.bibtex.cache.Cache.get_bibliography_entries`
   instead.
 
+* Fix upstream Sphinx bug concerning LaTeX citation hyperlinks
+  (contributed by erikb85; see pull request #45).
+
 0.2.8 (7 August 2013)
 ---------------------
 
