@@ -1,4 +1,4 @@
-0.2.9 (in development)
+0.2.9 (9 October 2013)
 ----------------------
 
 * Upgrade to the latest pybtex-docutils to produce more optimal html output
@@ -12,6 +12,8 @@
 
 * Fix upstream Sphinx bug concerning LaTeX citation hyperlinks
   (contributed by erikb85; see pull request #45).
+
+* Fix most pylint warnings, refactor code.
 
 0.2.8 (7 August 2013)
 ---------------------
