@@ -24,6 +24,7 @@ Roles and Directives
       will not actually generate ``\cite`` commands. Instead, all
       references, including citation references, are managed using
       ``\hyperref`` and ``\label`` commands.
+      See https://github.com/mcmtroffaes/sphinxcontrib-bibtex/issues/10
 
 .. rst:directive:: .. bibliography:: refs.bib [...]
 
