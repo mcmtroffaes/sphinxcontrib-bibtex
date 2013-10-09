@@ -15,6 +15,7 @@ Contents
    api
    changes
    license
+   related
 
 Indices and tables
 ==================
