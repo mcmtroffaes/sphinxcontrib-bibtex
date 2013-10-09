@@ -402,10 +402,12 @@ KeyError When Using ``:style: plain``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 When using the ``plain`` style, or any style that sorts entries, pybtex
-may raise ``KeyError: 'author'`` for entries that have no author. A
-patch has been submitted upstream:
+may raise ``KeyError: 'author'`` for entries that have no author.
+This has been fixed upstream:
 
-https://code.launchpad.net/~matthias-troffaes/pybtex/sorting-bugfix
+https://code.launchpad.net/~pybtex-devs/pybtex/trunk
+
+The next version of pybtex (0.17) will include this fix.
 
 Duplicate Labels When Using ``:style: plain``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -424,11 +426,12 @@ There are a few ways to work around this problem:
 * Use a style that has non-numerical labelling.
   Unfortunately, pybtex does not yet support such styles.
   A patch for non-numerical styles, such as ``:style: alpha``,
-  has been submitted upstream:
+  was accepted upstream:
 
-  https://code.launchpad.net/~matthias-troffaes/pybtex/label-alpha
+  https://code.launchpad.net/~pybtex-devs/pybtex/trunk
 
-  When this becomes part of pybtex,
+  The next version of pybtex (0.17) will include this update.
+  When the next pybtex is released,
   the plan is to change the default citation style to ``:style: alpha``,
   as this style is also more in line with
   how citations are usually labelled in Sphinx.
