@@ -445,3 +445,32 @@ which has been fixed upstream:
 https://bitbucket.org/birkenfeld/sphinx/pull-request/171
 
 https://bitbucket.org/birkenfeld/sphinx/pull-request/173
+
+Mismatch Between Output of HTML and LaTeX Backends
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Sphinx's LaTeX writer currently collects all citations together,
+and puts them on a separate page, with a separate title,
+whereas the html writer puts citations
+at the location where they are defined.
+This issue will occur also if you use regular citations in Sphinx:
+it has nothing to do with sphinxcontrib-bibtex per se.
+
+To get a closer match between the two outputs,
+you can tell Sphinx to generate a rubric title only for html:
+
+.. code-block:: rest
+
+   .. only:: html
+
+      .. rubric:: References
+
+   .. bibliography:: refs.bib
+
+This code could be placed in your :file:`zreferences.rst`.
+
+The current aim is to fix Sphinx's LaTeX writer
+to match the html output more closely.
+The issue is tracked here:
+
+https://github.com/mcmtroffaes/sphinxcontrib-bibtex/issues/48
