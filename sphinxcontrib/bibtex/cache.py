@@ -327,9 +327,9 @@ class BibfileCache(collections.namedtuple('BibfileCache', 'mtime data')):
 class BibliographyCache(collections.namedtuple(
     'BibliographyCache',
     """bibfiles style encoding
-    list_ enumtype start labels labelprefix
-    filter_ curly_bracket_strip
-    """)):
+list_ enumtype start labels labelprefix
+filter_ curly_bracket_strip
+""")):
 
     """Contains information about a bibliography directive.
 
