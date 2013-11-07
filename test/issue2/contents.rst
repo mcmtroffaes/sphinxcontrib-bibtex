@@ -3,7 +3,7 @@ Contents
 
 .. toctree::
 
-   doc1
-   doc2
+   adoc1
+   adoc2
 
 .. bibliography:: test.bib

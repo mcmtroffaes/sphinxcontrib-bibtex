@@ -28,9 +28,9 @@ def test_encoding(app):
         os.path.join(srcdir, 'test_old.bib'),
         os.path.join(srcdir, 'test.bib'))
     app.builder.build_all()
-    with open(os.path.join(app.outdir, "index.html")) as stream:
+    with open(os.path.join(app.outdir, "contents.html")) as stream:
         assert re.search(
-            '<p id="bibtex-bibliography-index-0">'
+            '<p id="bibtex-bibliography-contents-0">'
             '.*<tr><td class="label">\\[1\\]</td><td>.*Akkerdju.*</td></tr>'
             '.*<tr><td class="label">\\[2\\]</td><td>.*Bro.*</td></tr>'
             '.*<tr><td class="label">\\[3\\]</td><td>.*Chap.*</td></tr>'
@@ -43,9 +43,9 @@ def test_encoding(app):
         os.path.join(srcdir, 'test_new.bib'),
         os.path.join(srcdir, 'test.bib'))
     app.builder.build_all()
-    with open(os.path.join(app.outdir, "index.html")) as stream:
+    with open(os.path.join(app.outdir, "contents.html")) as stream:
         assert re.search(
-            '<p id="bibtex-bibliography-index-0">'
+            '<p id="bibtex-bibliography-contents-0">'
             '.*<tr><td class="label">\\[1\\]</td><td>.*Eminence.*</td></tr>'
             '.*<tr><td class="label">\\[2\\]</td><td>.*Frater.*</td></tr>'
             '.*<tr><td class="label">\\[3\\]</td><td>.*Giggles.*</td></tr>'
