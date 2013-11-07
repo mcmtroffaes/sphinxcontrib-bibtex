@@ -1,7 +1,6 @@
 extensions = ['sphinxcontrib.bibtex']
 source_suffix = '.rst'
 master_doc = 'index'
-project = u'Sphinx bibtex extension test'
 copyright = u'2011, Matthias C. M. Troffaes'
 version = '1.0'
 release = '1.0'

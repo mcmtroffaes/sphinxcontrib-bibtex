@@ -10,7 +10,6 @@ sys.path.insert(0, os.path.abspath('.'))
 
 source_suffix = '.rst'
 master_doc = 'index'
-project = u'test'
 copyright = u'2012, nobody'
 version = '0'
 release = '0'
