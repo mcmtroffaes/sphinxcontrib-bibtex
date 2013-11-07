@@ -23,8 +23,10 @@ from pybtex.database.input import bibtex
 from pybtex.database import BibliographyData
 
 from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
-import latexcodec  # registers the latex codec
 from sphinxcontrib.bibtex.nodes import bibliography
+
+# register the latex codec
+import latexcodec  # noqa
 
 
 def process_start_option(value):
