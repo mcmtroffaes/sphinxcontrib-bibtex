@@ -7,6 +7,8 @@ include requirements.txt
 recursive-include doc *
 recursive-include test *
 global-exclude *.pyc
-global-exclude .gitignore
+exclude .gitignore
+exclude .travis.yml
+exclude release_checklist.txt
 prune doc/_build
 
