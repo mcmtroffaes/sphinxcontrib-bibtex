@@ -12,10 +12,6 @@ source_suffix = '.rst'
 exclude_patterns = ['_build']
 latex_elements = {
 }
-latex_documents = [
-    ('index', 'test.tex', u'test Documentation',
-     u'nobody', 'manual'),
-]
 man_pages = [
     ('index', 'test', u'test Documentation',
      [u'nobody'], 1)
