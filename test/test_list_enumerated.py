@@ -19,23 +19,23 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_encoding(app):
+def test_list_enumerated(app):
     app.builder.build_all()
-    with open(os.path.join(app.outdir, "index.html")) as stream:
+    with open(os.path.join(app.outdir, "contents.html")) as stream:
         assert re.search(
-            '<ol .*id="bibtex-bibliography-index-0".* start="1".*>'
+            '<ol .*id="bibtex-bibliography-contents-0".* start="1".*>'
             '.*<li>.*Akkerdju.*</li>'
             '.*<li>.*Bro.*</li>'
             '.*<li>.*Chap.*</li>'
             '.*<li>.*Dude.*</li>'
             '.*</ol>'
-            '.*<ol .*id="bibtex-bibliography-index-1".* start="5".*>'
+            '.*<ol .*id="bibtex-bibliography-contents-1".* start="5".*>'
             '.*<li>.*Eminence.*</li>'
             '.*<li>.*Frater.*</li>'
             '.*<li>.*Giggles.*</li>'
             '.*<li>.*Handy.*</li>'
             '.*</ol>'
-            '.*<ol .*id="bibtex-bibliography-index-2".* start="23".*>'
+            '.*<ol .*id="bibtex-bibliography-contents-2".* start="23".*>'
             '.*<li>.*Iedereen.*</li>'
             '.*<li>.*Joke.*</li>'
             '.*<li>.*Klopgeest.*</li>'

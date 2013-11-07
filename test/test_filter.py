@@ -21,7 +21,7 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_filter(app):
     app.builder.build_all()
-    with open(os.path.join(app.outdir, "index.html")) as stream:
+    with open(os.path.join(app.outdir, "contents.html")) as stream:
         output = stream.read()
         assert re.search('Tralalala', output)
         assert not re.search('ideetje', output)

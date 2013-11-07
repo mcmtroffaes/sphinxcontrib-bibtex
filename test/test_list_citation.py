@@ -19,11 +19,11 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_encoding(app):
+def test_list_citation(app):
     app.builder.build_all()
-    with open(os.path.join(app.outdir, "index.html")) as stream:
+    with open(os.path.join(app.outdir, "contents.html")) as stream:
         assert re.search(
-            '<p id="bibtex-bibliography-index-0">'
+            '<p id="bibtex-bibliography-contents-0">'
             '.*<tr><td class="label">\\[1\\]</td><td>.*Akkerdju.*</td></tr>'
             '.*<tr><td class="label">\\[2\\]</td><td>.*Bro.*</td></tr>'
             '.*<tr><td class="label">\\[3\\]</td><td>.*Chap.*</td></tr>'

@@ -9,7 +9,6 @@ extensions = [
 sys.path.insert(0, os.path.abspath('.'))
 
 source_suffix = '.rst'
-master_doc = 'index'
 exclude_patterns = ['_build']
 latex_elements = {
 }
