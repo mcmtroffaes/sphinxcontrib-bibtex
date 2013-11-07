@@ -31,8 +31,6 @@ html_sidebars = {
 
 source_suffix = tinkerer.source_suffix
 master_doc = tinkerer.master_doc
-version = tinkerer.__version__
-release = tinkerer.__version__
 html_title = project
 html_use_index = False
 html_show_sourcelink = False
