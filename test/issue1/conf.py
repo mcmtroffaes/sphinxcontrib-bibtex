@@ -21,7 +21,6 @@ exclude_patterns = ["drafts/*"]
 # Tinkerer to play nice with Sphinx
 # **************************************************************
 
-source_suffix = tinkerer.source_suffix
 master_doc = tinkerer.master_doc
 html_title = project
 html_use_index = False

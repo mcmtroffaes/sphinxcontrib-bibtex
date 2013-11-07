@@ -8,5 +8,4 @@ extensions = [
 # make sure we find the module
 sys.path.insert(0, os.path.abspath('.'))
 
-source_suffix = '.rst'
 exclude_patterns = ['_build']
