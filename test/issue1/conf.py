@@ -3,7 +3,6 @@ import tinkerer.paths
 project = 'My blog'
 tagline = 'Add intelligent tagline here'
 author = 'Winston Smith'
-copyright = '1984, ' + author
 website = 'http://127.0.0.1/blog/html/'
 disqus_shortname = None
 html_favicon = 'tinkerer.ico'
