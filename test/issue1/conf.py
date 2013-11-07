@@ -55,7 +55,7 @@ extensions = [
 templates_path = ['_templates']
 
 # Add other static paths here
-html_static_path = ['_static', tinkerer.paths.static]
+html_static_path = [tinkerer.paths.static]
 
 # Add other theme paths here
 html_theme_path = [tinkerer.paths.themes]
