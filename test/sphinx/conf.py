@@ -1,5 +1,4 @@
 extensions = ['sphinxcontrib.bibtex']
-templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
 project = u'Sphinx bibtex extension test'

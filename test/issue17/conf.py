@@ -8,7 +8,6 @@ extensions = [
 # make sure we find the module
 sys.path.insert(0, os.path.abspath('.'))
 
-templates_path = ['_templates']
 source_suffix = '.rst'
 master_doc = 'index'
 project = u'test'
