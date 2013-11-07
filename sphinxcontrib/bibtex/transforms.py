@@ -105,7 +105,7 @@ class BibliographyTransform(docutils.transforms.Transform):
                 nodes = docutils.nodes.paragraph()
             # remind: style.format_entries modifies entries in unpickable way
             for entry in style.format_entries(entries):
-                if bibcache.list_ == "enumerated" or bibcache.list_ == "bullet":
+                if bibcache.list_ in ["enumerated", "bullet"]:
                     citation = docutils.nodes.list_item()
                     citation += backend.paragraph(entry)
                 else:  # "citation"
