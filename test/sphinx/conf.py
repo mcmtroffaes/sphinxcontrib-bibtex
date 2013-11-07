@@ -2,9 +2,6 @@ extensions = ['sphinxcontrib.bibtex']
 source_suffix = '.rst'
 master_doc = 'index'
 exclude_patterns = ['_build']
-pygments_style = 'sphinx'
-html_theme = 'default'
-htmlhelp_basename = 'Sphinxbibtexextensiontestdoc'
 latex_documents = [
     ('index', 'Sphinxbibtexextensiontest.tex',
      u'Sphinx bibtex extension test Documentation',
