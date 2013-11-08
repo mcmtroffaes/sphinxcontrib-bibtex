@@ -5,7 +5,7 @@ Overview
 --------
 
 .. include:: ../README.rst
-   :start-line: 3
+   :start-line: 5
 
 Installation
 ------------
