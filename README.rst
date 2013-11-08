@@ -1,3 +1,6 @@
+sphinxcontrib-bibtex
+====================
+
 A Sphinx extension for BibTeX style citations.
 
 This extension allows `BibTeX <http://www.bibtex.org/>`_
