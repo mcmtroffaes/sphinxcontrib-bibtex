@@ -18,9 +18,11 @@ before_script:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then 2to3 -w -n test; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then 2to3 -w -n test; fi"
 script:
+  # only test documentation and run coverage for one python version
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then cd doc; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then make html; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then cd ..; fi"
   - "cd test"
-  # only run coverage for one python version
-  # additional note: coverage seems really slow on pypy for some reason
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then coverage run --source=sphinxcontrib.bibtex `type -p nosetests`; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION != '2.7' ]]; then nosetests; fi"
 after_success:
