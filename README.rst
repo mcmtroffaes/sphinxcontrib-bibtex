@@ -1,6 +1,8 @@
 sphinxcontrib-bibtex
 ====================
 
+|pypi| |travis| |crate| |coveralls|
+
 A Sphinx extension for BibTeX style citations.
 
 This extension allows `BibTeX <http://www.bibtex.org/>`_
@@ -20,12 +22,20 @@ The extension is inspired by Matthew Brett's
 
 * Documentation: http://sphinxcontrib-bibtex.readthedocs.org/
 
-* Development: http://github.com/mcmtroffaes/sphinxcontrib-bibtex/ |imagetravis| |imagecoveralls|
+* Development: http://github.com/mcmtroffaes/sphinxcontrib-bibtex/
 
-.. |imagetravis| image:: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex.png?branch=develop
-       :target: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex
-       :alt: travis-ci
+.. |pypi| image:: https://badge.fury.io/py/sphinxcontrib-bibtex.png
+    :target: http://badge.fury.io/py/sphinxcontrib-bibtex
+    :alt: pypi
 
-.. |imagecoveralls| image:: https://coveralls.io/repos/mcmtroffaes/sphinxcontrib-bibtex/badge.png?branch=develop
-       :target: https://coveralls.io/r/mcmtroffaes/sphinxcontrib-bibtex?branch=develop
-       :alt: coveralls.io
+.. |travis| image:: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex.png?branch=develop
+    :target: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex
+    :alt: travis-ci
+
+.. |crate| image:: https://pypip.in/d/sphinxcontrib-bibtex/badge.png
+    :target: https://crate.io/packages/sphinxcontrib-bibtex?version=latest
+    :alt: crate.io
+
+.. |coveralls| image:: https://coveralls.io/repos/mcmtroffaes/sphinxcontrib-bibtex/badge.png?branch=develop
+    :target: https://coveralls.io/r/mcmtroffaes/sphinxcontrib-bibtex?branch=develop
+    :alt: coveralls.io

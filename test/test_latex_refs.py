@@ -22,6 +22,5 @@ def test_latex_refs(app):
     app.builder.build_all()
     with open(os.path.join(app.outdir, "test.tex")) as stream:
         code = stream.read()
-        # broken: hyperref should match label
         assert re.search('\\hyperref\[contents:huygens\]', code)
-        assert re.search('\\label{contents:1}', code)
+        assert re.search('\\label{contents:huygens}', code)
