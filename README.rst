@@ -22,7 +22,7 @@ The extension is inspired by Matthew Brett's
 
 * Documentation: http://sphinxcontrib-bibtex.readthedocs.org/
 
-* Development: http://github.com/mcmtroffaes/sphinxcontrib-bibtex/ |imagetravis| |imagecoveralls|
+* Development: http://github.com/mcmtroffaes/sphinxcontrib-bibtex/
 
 .. |pypi| image:: https://badge.fury.io/py/sphinxcontrib-bibtex.png
     :target: http://badge.fury.io/py/sphinxcontrib-bibtex
