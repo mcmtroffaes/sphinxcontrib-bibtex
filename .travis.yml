@@ -26,4 +26,6 @@ script:
   - "if [[ $TRAVIS_PYTHON_VERSION != '2.7' ]]; then nosetests; fi"
   - "popd"
 after_success:
+  - "pushd test"
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then coveralls; fi"
+  - "popd"
