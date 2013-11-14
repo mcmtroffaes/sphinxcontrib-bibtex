@@ -131,7 +131,8 @@ class _FilterVisitor(ast.NodeVisitor):
         elif id_ == 'author' or id_ == 'editor':
             if id_ in self.entry.persons:
                 return u' and '.join(
-                    unicode(person) for person in self.entry.persons[id_])
+                    six.text_type(person)  # XXX needs fix in pybtex?
+                    for person in self.entry.persons[id_])
             else:
                 return u''
         else:
