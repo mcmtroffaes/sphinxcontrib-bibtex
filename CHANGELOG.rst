@@ -3,6 +3,11 @@
 
 * Support pypy.
 
+* Drop Python 3.2 support.
+
+* Drop 2to3 and instead use six to support both Python 2 and 3 from a
+  single code base.
+
 0.2.9 (9 October 2013)
 ----------------------
 
