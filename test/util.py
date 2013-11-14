@@ -8,11 +8,11 @@
 """
 
 import sys
-import StringIO
 import tempfile
 import shutil
 import re
 from codecs import open
+from six import StringIO
 from six.moves import map
 from six.moves import zip
 
@@ -168,7 +168,7 @@ class TestApp(application.Sphinx):
         if confoverrides is None:
             confoverrides = {}
         if status is None:
-            status = StringIO.StringIO()
+            status = StringIO()
         if warning is None:
             warning = ListOutput('stderr')
         if freshenv is None:

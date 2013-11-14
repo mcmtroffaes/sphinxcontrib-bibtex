@@ -6,7 +6,7 @@
     Test filter option clash with all, cited, and notcited.
 """
 
-from StringIO import StringIO
+from six import StringIO
 import re
 
 from util import path, with_app

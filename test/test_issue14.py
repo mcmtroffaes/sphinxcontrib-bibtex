@@ -6,7 +6,7 @@
     Test duplicate label issue.
 """
 
-from StringIO import StringIO
+from six import StringIO
 import os.path
 import re
 

@@ -7,7 +7,7 @@
 """
 
 import nose.tools
-from StringIO import StringIO
+from six import StringIO
 import re
 
 from util import path, with_app

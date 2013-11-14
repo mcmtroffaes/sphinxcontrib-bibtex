@@ -7,7 +7,7 @@
 """
 
 import re
-from StringIO import StringIO
+from six import StringIO
 
 from util import path, with_app
 
