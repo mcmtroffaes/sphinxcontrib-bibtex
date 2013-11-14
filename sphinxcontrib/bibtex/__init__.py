@@ -17,6 +17,7 @@ from sphinxcontrib.bibtex.nodes import bibliography
 from sphinxcontrib.bibtex.roles import CiteRole
 from sphinxcontrib.bibtex.directives import BibliographyDirective
 from sphinxcontrib.bibtex.transforms import BibliographyTransform
+import six
 
 
 def init_bibtex_cache(app):
@@ -98,7 +99,7 @@ def check_duplicate_labels(app, env):
     """
     label_to_key = {}
     for info in env.bibtex_cache.get_all_bibliography_caches():
-        for key, label in info.labels.iteritems():
+        for key, label in six.iteritems(info.labels):
             if label in label_to_key:
                 app.warn(
                     "duplicate label for keys %s and %s"

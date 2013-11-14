@@ -13,6 +13,8 @@ import tempfile
 import shutil
 import re
 from codecs import open
+from six.moves import map
+from six.moves import zip
 
 try:
     from functools import wraps
