@@ -14,7 +14,6 @@ import re
 from codecs import open
 from six import StringIO
 from six.moves import map
-from six.moves import zip
 
 try:
     from functools import wraps
