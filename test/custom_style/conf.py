@@ -5,7 +5,7 @@ exclude_patterns = ['_build']
 
 from pybtex.style.formatting.unsrt import Style as UnsrtStyle
 from pybtex.style.template import words
-from pybtex.plugin import plugin_registry_loader
+from pybtex.plugin import register_plugin
 
 class NoWebRefStyle(UnsrtStyle):
     name = 'nowebref'
@@ -14,5 +14,4 @@ class NoWebRefStyle(UnsrtStyle):
         # the following is just one simple way to return an empty node
         return words['']
 
-plugin_registry_loader.register_name(
-    'pybtex.style.formatting', 'nowebref', NoWebRefStyle)
+register_plugin('pybtex.style.formatting', NoWebRefStyle)
