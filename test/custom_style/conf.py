@@ -8,10 +8,9 @@ from pybtex.style.template import words
 from pybtex.plugin import register_plugin
 
 class NoWebRefStyle(UnsrtStyle):
-    name = 'nowebref'
 
     def format_web_refs(self, e):
         # the following is just one simple way to return an empty node
         return words['']
 
-register_plugin('pybtex.style.formatting', NoWebRefStyle)
+register_plugin('pybtex.style.formatting', 'nowebref', NoWebRefStyle)
