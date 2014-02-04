@@ -1,3 +1,0 @@
-[pybtex.style.formatting]
-nowebref = plugins:NoWebRefStyle
-
