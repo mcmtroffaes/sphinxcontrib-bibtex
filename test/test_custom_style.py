@@ -10,6 +10,8 @@ import os.path
 import re
 
 from util import path, with_app
+from nose.tools import nottest
+from nose import SkipTest
 
 srcdir = path(__file__).parent.joinpath('custom_style').abspath()
 
@@ -18,6 +20,10 @@ def teardown_module():
     (srcdir / '_build').rmtree(True)
 
 
+def test_custom_style_skip():
+    raise SkipTest("this test is disabled until pybtex 0.17 is out")
+
+@nottest
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_custom_style(app):
     app.builder.build_all()
