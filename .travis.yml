@@ -1,7 +1,6 @@
 language: python
 python:
   - "3.3"
-  - "3.2"
   - "2.7"
   - "2.6"
   - "pypy"
@@ -9,12 +8,10 @@ branches:
   only:
     - develop
 install:
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then pip install 'Jinja2<2.7'; fi" # Jinja2 2.6 is last version which supports Python 3.2; required by Sphinx
   - "pip install Tinkerer" # Tinkerer is required for tests
   - "pip install ."
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install coveralls; fi"
 before_script:
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.2' ]]; then 2to3 -w -n test; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.3' ]]; then 2to3 -w -n test; fi"
 script:
   # only test documentation and run coverage for one python version
