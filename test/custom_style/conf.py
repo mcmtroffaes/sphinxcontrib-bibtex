@@ -7,6 +7,7 @@ from pybtex.style.formatting.unsrt import Style as UnsrtStyle
 from pybtex.style.template import words
 from pybtex.plugin import register_plugin
 
+
 class NoWebRefStyle(UnsrtStyle):
 
     def format_web_refs(self, e):
