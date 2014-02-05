@@ -8,6 +8,8 @@
 * Drop 2to3 and instead use six to support both Python 2 and 3 from a
   single code base.
 
+* Simplify instructions for custom styles.
+
 0.2.9 (9 October 2013)
 ----------------------
 
