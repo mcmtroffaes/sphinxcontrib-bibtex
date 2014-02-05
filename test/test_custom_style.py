@@ -23,6 +23,7 @@ def teardown_module():
 def test_custom_style_skip():
     raise SkipTest("this test is disabled until pybtex 0.17 is out")
 
+
 @nottest
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_custom_style(app):

@@ -6,7 +6,7 @@
     Test order of bibliography entries when using an unsorted style.
 """
 
-from StringIO import StringIO
+from six import StringIO
 import os.path
 import re
 

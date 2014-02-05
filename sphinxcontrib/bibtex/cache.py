@@ -17,6 +17,7 @@
 """
 
 import sys
+import six
 if sys.version_info < (2, 7):  # pragma: no cover
     from ordereddict import OrderedDict
 else:                          # pragma: no cover
@@ -81,10 +82,10 @@ class _FilterVisitor(ast.NodeVisitor):
             # modulo operator is used for regular expression matching
             name = self.visit(node.left)
             regexp = self.visit(node.right)
-            if not isinstance(name, basestring):
+            if not isinstance(name, six.string_types):
                 raise ValueError(
                     "expected a string on left side of %s" % node.op)
-            if not isinstance(regexp, basestring):
+            if not isinstance(regexp, six.string_types):
                 raise ValueError(
                     "expected a string on right side of %s" % node.op)
             return re.search(regexp, name, re.IGNORECASE)
@@ -130,7 +131,8 @@ class _FilterVisitor(ast.NodeVisitor):
         elif id_ == 'author' or id_ == 'editor':
             if id_ in self.entry.persons:
                 return u' and '.join(
-                    unicode(person) for person in self.entry.persons[id_])
+                    six.text_type(person)  # XXX needs fix in pybtex?
+                    for person in self.entry.persons[id_])
             else:
                 return u''
         else:
@@ -221,7 +223,7 @@ class Cache:
         :param key: The citation key.
         :type key: :class:`str`
         """
-        for keys in self._cited.itervalues():
+        for keys in six.itervalues(self._cited):
             if key in keys:
                 return True
         return False
@@ -257,8 +259,8 @@ class Cache:
 
     def get_all_bibliography_caches(self):
         """Return all bibliography caches."""
-        for bibcaches in self._bibliographies.itervalues():
-            for bibcache in bibcaches.itervalues():
+        for bibcaches in six.itervalues(self._bibliographies):
+            for bibcache in six.itervalues(bibcaches):
                 yield bibcache
 
     def _get_bibliography_entries(self, docname, id_, warn):
@@ -270,7 +272,7 @@ class Cache:
         # generate entries
         for bibfile in bibcache.bibfiles:
             data = self.bibfiles[bibfile].data
-            for entry in data.entries.itervalues():
+            for entry in six.itervalues(data.entries):
                 visitor = _FilterVisitor(
                     entry=entry,
                     is_cited=self.is_cited(entry.key))
@@ -303,7 +305,7 @@ class Cache:
                 pass
             else:
                 sorted_entries.append(entry)
-        sorted_entries += entries.itervalues()
+        sorted_entries += six.itervalues(entries)
         return sorted_entries
 
 

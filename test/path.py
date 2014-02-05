@@ -11,6 +11,7 @@ import os
 import sys
 import shutil
 from codecs import open
+from six.moves import map
 
 
 FILESYSTEMENCODING = sys.getfilesystemencoding() or sys.getdefaultencoding()
