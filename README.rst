@@ -1,7 +1,7 @@
 sphinxcontrib-bibtex
 ====================
 
-|pypi| |travis| |crate| |coveralls|
+|travis| |coveralls| |downloads| |version| |license|
 
 A Sphinx extension for BibTeX style citations.
 
@@ -24,18 +24,22 @@ The extension is inspired by Matthew Brett's
 
 * Development: http://github.com/mcmtroffaes/sphinxcontrib-bibtex/
 
-.. |pypi| image:: https://badge.fury.io/py/sphinxcontrib-bibtex.png
-    :target: http://badge.fury.io/py/sphinxcontrib-bibtex
-    :alt: pypi
-
 .. |travis| image:: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex.png?branch=develop
     :target: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex
     :alt: travis-ci
 
-.. |crate| image:: https://pypip.in/d/sphinxcontrib-bibtex/badge.png
-    :target: https://crate.io/packages/sphinxcontrib-bibtex?version=latest
-    :alt: crate.io
-
 .. |coveralls| image:: https://coveralls.io/repos/mcmtroffaes/sphinxcontrib-bibtex/badge.png?branch=develop
     :target: https://coveralls.io/r/mcmtroffaes/sphinxcontrib-bibtex?branch=develop
     :alt: coveralls.io
+
+.. |downloads| image:: https://pypip.in/d/sphinxcontrib-bibtex/badge.png
+    :target: http://pypi.python.org/pypi/sphinxcontrib-bibtex/
+    :alt: downloads
+
+.. |version| image:: https://pypip.in/v/sphinxcontrib-bibtex/badge.png
+    :target: http://pypi.python.org/pypi/sphinxcontrib-bibtex/
+    :alt: latest version
+
+.. |license| image:: https://pypip.in/license/sphinxcontrib-bibtex/badge.png
+    :target: http://pypi.python.org/pypi/sphinxcontrib-bibtex/
+    :alt: license
