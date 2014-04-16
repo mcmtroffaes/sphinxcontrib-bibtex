@@ -12,8 +12,9 @@ branches:
     - develop
 install:
   - "pip install Tinkerer" # Tinkerer is required for tests
-  - "pip install ."
+  - "pip install -r requirements.txt"
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install coveralls check-manifest flake8; fi"
+  - "python setup.py develop"
 script:
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then check-manifest; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then flake8; fi"
