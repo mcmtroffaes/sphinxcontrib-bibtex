@@ -13,3 +13,5 @@
    key
    false
    title
+   in
+   notin
