@@ -4,6 +4,9 @@ python:
   - "2.7"
   - "2.6"
   - "pypy"
+matrix:
+  allow_failures:
+    - python: "2.6" # argparse 1.2 cannot be installed due to travis bug?
 branches:
   only:
     - develop
