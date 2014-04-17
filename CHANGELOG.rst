@@ -1,6 +1,11 @@
 0.2.10 (in development)
 -----------------------
 
+* **BACKWARD INCOMPATIBLE**
+  The alpha style is now default, so citations are labelled in a way
+  that is more standard for Sphinx. To get the old behaviour back, add
+  ``:style: plain`` to your bibliography directives.
+
 * Support pypy.
 
 * Drop Python 3.2 support.

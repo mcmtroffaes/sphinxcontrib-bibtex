@@ -64,9 +64,8 @@ Roles and Directives
       for more information and workarounds.
 
    You can also pick a bibliography style, using the ``style`` option.
-   This is not yet quite as useful, as only ``plain`` and ``unsrt``
-   are supported.
-   The ``plain`` style is the default.
+   The ``alpha`` style is the default.
+   Other supported styles are ``plain``, ``unsrt``, and ``unsrtalpha``.
 
    .. code-block:: rest
 
@@ -394,18 +393,8 @@ There are a few ways to work around this problem:
 
 * Use the ``labelprefix`` option, as documented above.
 
-* Use a style that has non-numerical labelling.
-  Unfortunately, pybtex does not yet support such styles.
-  A patch for non-numerical styles, such as ``:style: alpha``,
-  was accepted upstream:
-
-  https://code.launchpad.net/~pybtex-devs/pybtex/trunk
-
-  The next version of pybtex (0.17) will include this update.
-  When the next pybtex is released,
-  the plan is to change the default citation style to ``:style: alpha``,
-  as this style is also more in line with
-  how citations are usually labelled in Sphinx.
+* Use a style that has non-numerical labelling,
+  such as ``:style: alpha``.
 
 Citation Links Broken When Using LaTeX Backend
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
