@@ -18,7 +18,7 @@
 * create and register source zip
   - git clean -xfd
   - python setup.py register
-  - python setup.py sdist --format=zip upload
+  - python setup.py sdist bdist_wheel upload
 * test upload
   - pip uninstall sphinxcontrib-bibtex
   - pip install --user -U sphinxcontrib-bibtex
