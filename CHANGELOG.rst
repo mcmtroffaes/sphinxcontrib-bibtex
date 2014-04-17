@@ -6,6 +6,11 @@
   that is more standard for Sphinx. To get the old behaviour back, add
   ``:style: plain`` to your bibliography directives.
 
+* **BACKWARD INCOMPATIBLE**
+  :meth:`~sphinxcontrib.bibtex.cache.Cache.is_cited` has been removed.
+  Use :meth:`~sphinxcontrib.bibtex.cache.Cache.get_cited_docnames` instead,
+  which will return an empty list for keys that are not cited.
+
 * Support pypy.
 
 * Drop Python 3.2 support.
