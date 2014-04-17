@@ -206,7 +206,7 @@ expression.
 
 The filter expression supports:
 
-* The boolean operators ``and``, ``or``, ``in``, and ``not in``.
+* The boolean operators ``and``, ``or``.
 
 * The unary operator ``not``.
 
@@ -230,9 +230,10 @@ The filter expression supports:
 
 * Single and double quoted strings, such as ``'hello'`` or ``"world"``.
 
-* Set literals, such has ``{"hello", "world"}``.
+* Set literals, such has ``{"hello", "world"}``, as well as
+  the set operators ``&``, ``|``, ``in``, and ``not in``.
 
-* The set operators ``&`` and ``|``.
+  .. versionadded:: 0.3.0
 
 * Various identifiers, such as:
 
@@ -247,21 +248,11 @@ The filter expression supports:
 
   - ``docname`` evaluates to the name of the current document.
 
+    .. versionadded:: 0.3.0
+
   - ``docnames`` evaluates to a set of names from which the entry is cited.
-    You can use this to support local bibliographies:
 
-    .. code-block:: rest
-
-       .. bibliography:: refs.bib
-          :filter: docname in docnames
-
-    More generally, you can use this to support bibliographies for
-    citations from specific documents only:
-
-    .. code-block:: rest
-
-       .. bibliography:: refs.bib
-          :filter: {"doc1", "doc2"} & docnames
+    .. versionadded:: 0.3.0
 
   - ``True`` and ``False``.
 
@@ -288,6 +279,36 @@ The filter expression supports:
     which would include all cited entries that have a year
     that is less or equal than 2003; any entries that do not
     specify a year would be omitted.
+
+Local Bibliographies
+~~~~~~~~~~~~~~~~~~~~
+
+To create a bibliography that includes only citations that were cited
+in the current document, use the following filter:
+
+.. code-block:: rest
+                
+   .. bibliography:: refs.bib
+      :filter: docname in docnames
+
+More generally, you can create bibliographies for
+citations that were cited from specific documents only:
+
+.. code-block:: rest
+
+   .. bibliography:: refs.bib
+      :filter: {"doc1", "doc2"} & docnames
+
+This bibliography will include all citations that were cited from
+:file:`doc1.rst` or :file:`doc2.rst`. Another hypothetical example:
+
+.. code-block:: rest
+
+   .. bibliography:: refs.bib
+      :filter: cited and ({"doc1", "doc2"} >= docnames)
+
+This bibliography will include all citations that were cited
+in :file:`doc1.rst` or :file:`doc2.rst`, but nowhere else.
 
 Custom Formatting, Sorting, and Labelling
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
