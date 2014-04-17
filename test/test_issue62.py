@@ -16,13 +16,16 @@ srcdir = path(__file__).parent.joinpath('issue62').abspath()
 def teardown_module():
     (srcdir / '_build').rmtree(True)
 
+
 def extract_references(code):
     return frozenset(re.findall(
         '<a class="reference internal" href="([^"]+)"', code))
 
+
 def extract_citations(code):
     return frozenset(re.findall(
         '<table class="docutils citation" frame="void" id="([^"]+)"', code))
+
 
 def check_code(code, refs, cites, otherrefs, othercites):
     code_refs = extract_references(code)
@@ -33,6 +36,7 @@ def check_code(code, refs, cites, otherrefs, othercites):
     assert cites == code_cites
     assert not(otherrefs & code_refs)
     assert not(othercites & code_cites)
+
 
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_local_bibliographies(app):
