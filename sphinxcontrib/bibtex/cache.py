@@ -79,17 +79,22 @@ class _FilterVisitor(ast.NodeVisitor):
             _raise_invalid_node(node)
 
     def visit_BinOp(self, node):
-        if isinstance(node.op, ast.Mod):
+        left = self.visit(node.left)
+        op = node.op
+        right = self.visit(node.right)
+        if isinstance(op, ast.Mod):
             # modulo operator is used for regular expression matching
-            name = self.visit(node.left)
-            regexp = self.visit(node.right)
-            if not isinstance(name, six.string_types):
+            if not isinstance(left, six.string_types):
                 raise ValueError(
                     "expected a string on left side of %s" % node.op)
-            if not isinstance(regexp, six.string_types):
+            if not isinstance(right, six.string_types):
                 raise ValueError(
                     "expected a string on right side of %s" % node.op)
-            return re.search(regexp, name, re.IGNORECASE)
+            return re.search(right, left, re.IGNORECASE)
+        elif isinstance(op, ast.BitOr):
+            return left | right
+        elif isinstance(op, ast.BitAnd):
+            return left & right
         else:
             _raise_invalid_node(node)
 
@@ -146,6 +151,9 @@ class _FilterVisitor(ast.NodeVisitor):
                 return u''
         else:
             return self.entry.fields.get(id_, "")
+
+    def visit_Set(self, node):
+        return frozenset(self.visit(elt) for elt in node.elts)
 
     def visit_Str(self, node):
         return node.s

@@ -206,11 +206,11 @@ expression.
 
 The filter expression supports:
 
-* The boolean operators ``and`` and ``or``.
+* The boolean operators ``and``, ``or``, ``in``, and ``not in``.
 
 * The unary operator ``not``.
 
-* Binary comparison ``==``, ``<=``, ``<``, ``>=``, and ``>``.
+* The comparison operators ``==``, ``<=``, ``<``, ``>=``, and ``>``.
 
 * Regular expression matching using the ``%`` operator, where the left
   hand side is the string to be matched, and the right hand side is
@@ -230,6 +230,10 @@ The filter expression supports:
 
 * Single and double quoted strings, such as ``'hello'`` or ``"world"``.
 
+* Set literals, such has ``{"hello", "world"}``.
+
+* The set operators ``&`` and ``|``.
+
 * Various identifiers, such as:
 
   - ``type`` is the entry type, as a lower case string
@@ -240,6 +244,24 @@ The filter expression supports:
 
   - ``cited`` evaluates to ``True`` if the entry was cited in the document,
     and to ``False`` otherwise.
+
+  - ``docname`` evaluates to the name of the current document.
+
+  - ``docnames`` evaluates to a set of names from which the entry is cited.
+    You can use this to support local bibliographies:
+
+    .. code-block:: rest
+
+       .. bibliography:: refs.bib
+          :filter: docname in docnames
+
+    More generally, you can use this to support bibliographies for
+    citations from specific documents only:
+
+    .. code-block:: rest
+
+       .. bibliography:: refs.bib
+          :filter: {"doc1", "doc2"} & docnames
 
   - ``True`` and ``False``.
 
