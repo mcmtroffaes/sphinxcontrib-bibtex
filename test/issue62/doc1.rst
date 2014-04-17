@@ -53,4 +53,4 @@ Bibliography
 
 .. bibliography:: refs.bib
    :labelprefix: A
-   :filter: "doc1" in docnames
+   :filter: docname in docnames

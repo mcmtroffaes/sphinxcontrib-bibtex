@@ -44,4 +44,4 @@ Summary
 
 .. bibliography:: refs.bib
    :labelprefix: C
-   :filter: "summary" in docnames and key != "fuhrmans_molecular_2012"
+   :filter: docname in docnames and key != "fuhrmans_molecular_2012"
