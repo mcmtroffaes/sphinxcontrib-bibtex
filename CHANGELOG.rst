@@ -11,6 +11,16 @@
   Use :meth:`~sphinxcontrib.bibtex.cache.Cache.get_cited_docnames` instead,
   which will return an empty list for keys that are not cited.
 
+* Improved support for local bibliographies (see issues #52, #62, and
+  #63; test case provided by Boris Kheyfets):
+
+  - New ``docname`` and ``docnames`` filter identifiers.
+
+  - Filter expressions now also support set literals and the operators
+    ``in``, ``not in``, ``&``, and ``|``.
+
+  See documentation for details.
+
 * Support pypy.
 
 * Drop support for Python 2.6 and Python 3.2.
