@@ -273,17 +273,6 @@ Custom Formatting, Sorting, and Labelling
 :mod:`pybtex` provides a very powerful way to create and register new
 styles, using setuptools entry points,
 as documented here: http://pybtex.sourceforge.net/plugins.html
-This method requires you to create a package for your custom styles,
-which is tedious especially if you are simply making a minor modification
-to an existing style.
-
-The development version of :mod:`pybtex`
-also provides a way to register plugins
-without having to create a package.
-
-https://code.launchpad.net/~pybtex-devs/pybtex/trunk
-
-The next version of pybtex (0.17) will include this functionality.
 
 Simply add the following code to your ``conf.py``:
 
@@ -367,17 +356,6 @@ There are a few ways to work around this problem:
   file :file:`zreferences.rst`.
 
 Hopefully, this limitation can be lifted in a future release.
-
-KeyError When Using ``:style: plain``
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-When using the ``plain`` style, or any style that sorts entries, pybtex
-may raise ``KeyError: 'author'`` for entries that have no author.
-This has been fixed upstream:
-
-https://code.launchpad.net/~pybtex-devs/pybtex/trunk
-
-The next version of pybtex (0.17) will include this fix.
 
 Duplicate Labels When Using ``:style: plain``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
