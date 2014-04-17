@@ -20,6 +20,8 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_tinker(app):
     app.builder.build_all()
-    nose.tools.assert_true(app.env.bibtex_cache.is_cited(u"2011:BabikerIPv6"))
+    nose.tools.assert_equal(
+        app.env.bibtex_cache.get_cited_docnames(u"2011:BabikerIPv6"),
+        {u"2012/07/24/hello_world_"})
     nose.tools.assert_equal(
         app.env.bibtex_cache.get_label_from_key(u"2011:BabikerIPv6"), u"BNC11")

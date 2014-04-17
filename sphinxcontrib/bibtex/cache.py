@@ -44,12 +44,13 @@ class _FilterVisitor(ast.NodeVisitor):
     entry = None
     """The bibliographic entry to which the filter must be applied."""
 
-    is_cited = False
-    """Whether the entry is cited."""
+    cited_docnames = False
+    """The documents where the entry is cited (empty if not cited)."""
 
-    def __init__(self, entry, is_cited):
+    def __init__(self, entry, docname, cited_docnames):
         self.entry = entry
-        self.is_cited = is_cited
+        self.docname = docname
+        self.cited_docnames = cited_docnames
 
     def visit_Module(self, node):
         if len(node.body) != 1:
@@ -78,17 +79,22 @@ class _FilterVisitor(ast.NodeVisitor):
             _raise_invalid_node(node)
 
     def visit_BinOp(self, node):
-        if isinstance(node.op, ast.Mod):
+        left = self.visit(node.left)
+        op = node.op
+        right = self.visit(node.right)
+        if isinstance(op, ast.Mod):
             # modulo operator is used for regular expression matching
-            name = self.visit(node.left)
-            regexp = self.visit(node.right)
-            if not isinstance(name, six.string_types):
+            if not isinstance(left, six.string_types):
                 raise ValueError(
                     "expected a string on left side of %s" % node.op)
-            if not isinstance(regexp, six.string_types):
+            if not isinstance(right, six.string_types):
                 raise ValueError(
                     "expected a string on right side of %s" % node.op)
-            return re.search(regexp, name, re.IGNORECASE)
+            return re.search(right, left, re.IGNORECASE)
+        elif isinstance(op, ast.BitOr):
+            return left | right
+        elif isinstance(op, ast.BitAnd):
+            return left & right
         else:
             _raise_invalid_node(node)
 
@@ -111,8 +117,12 @@ class _FilterVisitor(ast.NodeVisitor):
             return left > right
         elif isinstance(op, ast.GtE):
             return left >= right
+        elif isinstance(op, ast.In):
+            return left in right
+        elif isinstance(op, ast.NotIn):
+            return left not in right
         else:
-            # not used currently: ast.Is | ast.IsNot | ast.In | ast.NotIn
+            # not used currently: ast.Is | ast.IsNot
             _raise_invalid_node(op)
 
     def visit_Name(self, node):
@@ -123,7 +133,11 @@ class _FilterVisitor(ast.NodeVisitor):
         elif id_ == 'key':
             return self.entry.key.lower()
         elif id_ == 'cited':
-            return self.is_cited
+            return bool(self.cited_docnames)
+        elif id_ == 'docname':
+            return self.docname
+        elif id_ == 'docnames':
+            return self.cited_docnames
         elif id_ == 'True':
             return True
         elif id_ == 'False':
@@ -137,6 +151,9 @@ class _FilterVisitor(ast.NodeVisitor):
                 return u''
         else:
             return self.entry.fields.get(id_, "")
+
+    def visit_Set(self, node):
+        return frozenset(self.visit(elt) for elt in node.elts)
 
     def visit_Str(self, node):
         return node.s
@@ -217,16 +234,15 @@ class Cache:
         """
         self._cited[docname].add(key)
 
-    def is_cited(self, key):
-        """Return whether the given key is cited in any document.
+    def get_cited_docnames(self, key):
+        """Return the *docnames* from which the given *key* is cited.
 
         :param key: The citation key.
         :type key: :class:`str`
         """
-        for keys in six.itervalues(self._cited):
-            if key in keys:
-                return True
-        return False
+        return frozenset([
+            docname for docname, keys in six.iteritems(self._cited)
+            if key in keys])
 
     def get_label_from_key(self, key):
         """Return label for the given key."""
@@ -273,15 +289,17 @@ class Cache:
         for bibfile in bibcache.bibfiles:
             data = self.bibfiles[bibfile].data
             for entry in six.itervalues(data.entries):
+                cited_docnames = self.get_cited_docnames(entry.key)
                 visitor = _FilterVisitor(
                     entry=entry,
-                    is_cited=self.is_cited(entry.key))
+                    docname=docname,
+                    cited_docnames=cited_docnames)
                 try:
                     success = visitor.visit(bibcache.filter_)
                 except ValueError as err:
                     warn("syntax error in :filter: expression; %s" % err)
                     # recover by falling back to the default
-                    success = self.is_cited(entry.key)
+                    success = bool(cited_docnames)
                 if success:
                     # entries are modified in an unpickable way
                     # when formatting, so fetch a deep copy

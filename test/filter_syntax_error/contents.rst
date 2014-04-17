@@ -5,7 +5,7 @@
    :filter: yield author
 
 .. bibliography:: test.bib
-   :filter: author in title
+   :filter: author is title
 
 .. bibliography:: test.bib
    :filter: False % title

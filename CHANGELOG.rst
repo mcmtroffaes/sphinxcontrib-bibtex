@@ -6,9 +6,24 @@
   that is more standard for Sphinx. To get the old behaviour back, add
   ``:style: plain`` to your bibliography directives.
 
+* **BACKWARD INCOMPATIBLE**
+  :meth:`~sphinxcontrib.bibtex.cache.Cache.is_cited` has been removed.
+  Use :meth:`~sphinxcontrib.bibtex.cache.Cache.get_cited_docnames` instead,
+  which will return an empty list for keys that are not cited.
+
+* Improved support for local bibliographies (see issues #52, #62, and
+  #63; test case provided by Boris Kheyfets):
+
+  - New ``docname`` and ``docnames`` filter identifiers.
+
+  - Filter expressions now also support set literals and the operators
+    ``in``, ``not in``, ``&``, and ``|``.
+
+  See documentation for details.
+
 * Support pypy.
 
-* Drop Python 3.2 support.
+* Drop support for Python 2.6 and Python 3.2.
 
 * Drop 2to3 and instead use six to support both Python 2 and 3 from a
   single code base.

@@ -13,3 +13,8 @@
    key
    false
    title
+   in
+   notin
+   set
+   bitand
+   bitor
