@@ -13,7 +13,7 @@
 
 * Support pypy.
 
-* Drop Python 3.2 support.
+* Drop support for Python 2.6 and Python 3.2.
 
 * Drop 2to3 and instead use six to support both Python 2 and 3 from a
   single code base.
