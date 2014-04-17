@@ -1,5 +1,5 @@
-0.2.10 (in development)
------------------------
+0.3.0 (in development)
+----------------------
 
 * **BACKWARD INCOMPATIBLE**
   The alpha style is now default, so citations are labelled in a way
