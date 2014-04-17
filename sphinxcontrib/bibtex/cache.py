@@ -47,8 +47,9 @@ class _FilterVisitor(ast.NodeVisitor):
     cited_docnames = False
     """The documents where the entry is cited (empty if not cited)."""
 
-    def __init__(self, entry, cited_docnames):
+    def __init__(self, entry, docname, cited_docnames):
         self.entry = entry
+        self.docname = docname
         self.cited_docnames = cited_docnames
 
     def visit_Module(self, node):
@@ -128,6 +129,8 @@ class _FilterVisitor(ast.NodeVisitor):
             return self.entry.key.lower()
         elif id_ == 'cited':
             return bool(self.cited_docnames)
+        elif id_ == 'docname':
+            return self.docname
         elif id_ == 'docnames':
             return self.cited_docnames
         elif id_ == 'True':
@@ -281,6 +284,7 @@ class Cache:
                 cited_docnames = self.get_cited_docnames(entry.key)
                 visitor = _FilterVisitor(
                     entry=entry,
+                    docname=docname,
                     cited_docnames=cited_docnames)
                 try:
                     success = visitor.visit(bibcache.filter_)
