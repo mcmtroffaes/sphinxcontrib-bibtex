@@ -18,7 +18,7 @@ Extra reference to a footnote [#footnote-walley2004]_.
 
 Extra reference to a citation [Wa04]_.
 
-Another few citations: :cite:`rockafellar:1970` and :cite:`1972:savage`.
+Another few citations: :cite:`rockafellar:1970,1972:savage`.
 
 More citations: 
 
