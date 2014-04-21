@@ -18,6 +18,12 @@ Roles and Directives
 
       See \cite{1987:nelson} for an introduction to non-standard analysis.
 
+   Multiple comma-separated keys can be specified at once:
+
+   .. code-block:: rest
+
+      See :cite:`1987:nelson,2001:schechter`.
+
    .. note::
 
       Due to a docutils implementation detail, Sphinx's LaTeX backend
