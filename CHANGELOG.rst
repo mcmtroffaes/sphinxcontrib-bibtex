@@ -24,7 +24,7 @@
 * Multiple comma-separated citation keys per cite command (see issue
   #61, suggested by Boris Kheyfets).
 
-* Support pypy.
+* Add support for pypy and Python 3.4.
 
 * Drop support for Python 2.6 and Python 3.2.
 
