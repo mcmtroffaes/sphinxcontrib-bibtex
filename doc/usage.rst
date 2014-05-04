@@ -78,10 +78,6 @@ Roles and Directives
      .. bibliography:: refs.bib
         :style: unsrt
 
-   All citations have numbered labels, as in the ``plain`` LaTeX
-   bibliography style, regardless of the style chosen. This limitation
-   might be lifted in a future version.
-
    .. warning::
 
       Sphinx will attempt to resolve references to the bibliography
