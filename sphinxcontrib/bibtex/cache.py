@@ -158,7 +158,8 @@ class _FilterVisitor(ast.NodeVisitor):
     def visit_Str(self, node):
         return node.s
 
-    def visit_NameConstant(self, node):
+    # NameConstant is Python 3.4 only so do not insist on coverage
+    def visit_NameConstant(self, node):  # pragma: no cover
         return node.value
 
     def generic_visit(self, node):
