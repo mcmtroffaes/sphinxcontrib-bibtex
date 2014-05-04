@@ -158,6 +158,9 @@ class _FilterVisitor(ast.NodeVisitor):
     def visit_Str(self, node):
         return node.s
 
+    def visit_NameConstant(self, node):
+        return node.value
+
     def generic_visit(self, node):
         _raise_invalid_node(node)
 
