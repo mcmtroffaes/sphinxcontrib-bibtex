@@ -1,5 +1,5 @@
-0.3.0 (in development)
-----------------------
+0.3.0 (4 May 2014)
+------------------
 
 * **BACKWARD INCOMPATIBLE**
   The alpha style is now default, so citations are labelled in a way
