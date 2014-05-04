@@ -1,5 +1,5 @@
-0.3.0 (in development)
-----------------------
+0.3.0 (4 May 2014)
+------------------
 
 * **BACKWARD INCOMPATIBLE**
   The alpha style is now default, so citations are labelled in a way
@@ -32,6 +32,8 @@
   single code base.
 
 * Simplify instructions for custom styles.
+
+* Various test suite improvements.
 
 0.2.9 (9 October 2013)
 ----------------------
