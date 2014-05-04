@@ -33,6 +33,8 @@
 
 * Simplify instructions for custom styles.
 
+* Various test suite improvements.
+
 0.2.9 (9 October 2013)
 ----------------------
 
