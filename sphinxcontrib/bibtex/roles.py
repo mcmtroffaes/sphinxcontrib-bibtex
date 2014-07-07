@@ -38,6 +38,6 @@ class CiteRole(XRefRole):
 
 
 def _fake_entry(key):
-    entry = pybtex.database.Entry(type_=None)
+    entry = pybtex.database.Entry(type_="")
     entry.key = key
     return entry
