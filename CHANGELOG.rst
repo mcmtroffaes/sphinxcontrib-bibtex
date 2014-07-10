@@ -1,6 +1,9 @@
 0.3.1 (in development)
 ----------------------
 
+* Fix for ``type_.lower()`` bug: pybtex 0.18 expects type to be a
+  string (this fixes issue #68 reported by jluttine).
+
 0.3.0 (4 May 2014)
 ------------------
 
