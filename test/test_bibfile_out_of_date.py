@@ -12,7 +12,7 @@ import shutil
 import re
 import time
 
-from util import path, with_app
+from sphinx_testing.util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('bibfile_out_of_date').abspath()
 

@@ -9,7 +9,7 @@
 import re
 from six import StringIO
 
-from util import path, with_app
+from sphinx_testing.util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('invalid_cite_option').abspath()
 warnfile = StringIO()

@@ -6,7 +6,7 @@
     Test that sphinx [source] links do not generate a warning.
 """
 
-from util import path, with_app
+from sphinx_testing.util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('issue17').abspath()
 

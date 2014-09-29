@@ -9,7 +9,7 @@
 import os.path
 import re
 
-from util import path, with_app
+from sphinx_testing.util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('list_enumerated').abspath()
 

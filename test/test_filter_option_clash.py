@@ -9,7 +9,7 @@
 from six import StringIO
 import re
 
-from util import path, with_app
+from sphinx_testing.util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('filter_option_clash').abspath()
 warnfile = StringIO()

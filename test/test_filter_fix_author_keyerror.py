@@ -6,7 +6,7 @@
     Test for a bug in the filter option.
 """
 
-from util import path, with_app
+from sphinx_testing.util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('filter_fix_author_keyerror').abspath()
 

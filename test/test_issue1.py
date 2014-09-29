@@ -8,7 +8,7 @@
 
 import nose.tools
 
-from util import path, with_app
+from sphinx_testing.util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('issue1').abspath()
 
