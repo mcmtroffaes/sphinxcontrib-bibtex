@@ -7,22 +7,20 @@
 """
 
 import re
-from six import StringIO
-
 from sphinx_testing.util import path, with_app
 
+
 srcdir = path(__file__).dirname().joinpath('sphinx').abspath()
-warnfile = StringIO()
 
 
 def teardown_module():
     (srcdir / '_build').rmtree(True)
 
 
-@with_app(srcdir=srcdir, warning=warnfile)
+@with_app(srcdir=srcdir)
 def test_sphinx(app, status, warning):
     app.builder.build_all()
-    warnings = warnfile.getvalue()
+    warnings = warning.getvalue()
     assert re.search(u'could not relabel citation \\[Test01\\]', warnings)
     assert re.search(u'could not relabel citation \\[Test02\\]', warnings)
     assert re.search(u'could not relabel citation \\[Wa04\\]', warnings)

@@ -6,14 +6,12 @@
     Test order of bibliography entries when using an unsorted style.
 """
 
-from six import StringIO
 import os.path
 import re
-
 from sphinx_testing.util import path, with_app
 
+
 srcdir = path(__file__).dirname().joinpath('issue15').abspath()
-warnfile = StringIO()
 
 
 def teardown_module():

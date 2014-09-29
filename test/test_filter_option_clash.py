@@ -6,23 +6,21 @@
     Test filter option clash with all, cited, and notcited.
 """
 
-from six import StringIO
 import re
-
 from sphinx_testing.util import path, with_app
 
+
 srcdir = path(__file__).dirname().joinpath('filter_option_clash').abspath()
-warnfile = StringIO()
 
 
 def teardown_module():
     (srcdir / '_build').rmtree(True)
 
 
-@with_app(srcdir=srcdir, warning=warnfile)
+@with_app(srcdir=srcdir)
 def test_filter_option_clash(app, status, warning):
     app.builder.build_all()
-    warnings = warnfile.getvalue()
+    warnings = warning.getvalue()
     assert re.search(':filter: overrides :all:', warnings)
     assert re.search(':filter: overrides :cited:', warnings)
     assert re.search(':filter: overrides :notcited:', warnings)

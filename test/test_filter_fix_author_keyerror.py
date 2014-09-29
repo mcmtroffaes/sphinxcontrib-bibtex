@@ -8,7 +8,9 @@
 
 from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).dirname().joinpath('filter_fix_author_keyerror').abspath()
+
+srcdir = path(__file__).dirname().joinpath(
+    'filter_fix_author_keyerror').abspath()
 
 
 def teardown_module():
