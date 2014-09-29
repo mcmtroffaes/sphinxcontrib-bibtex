@@ -11,7 +11,7 @@ from six import StringIO
 
 from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('bibfilenotfound').abspath()
+srcdir = path(__file__).dirname().joinpath('bibfilenotfound').abspath()
 warnfile = StringIO()
 
 

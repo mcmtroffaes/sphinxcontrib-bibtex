@@ -12,7 +12,7 @@ import re
 
 from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('filter_syntax_error').abspath()
+srcdir = path(__file__).dirname().joinpath('filter_syntax_error').abspath()
 warnfile = StringIO()
 
 

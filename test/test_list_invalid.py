@@ -11,7 +11,7 @@ import re
 
 from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('list_invalid').abspath()
+srcdir = path(__file__).dirname().joinpath('list_invalid').abspath()
 warnfile = StringIO()
 
 

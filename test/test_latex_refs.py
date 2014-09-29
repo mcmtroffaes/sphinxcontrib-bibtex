@@ -10,7 +10,7 @@ import os
 import re
 from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('latex_refs').abspath()
+srcdir = path(__file__).dirname().joinpath('latex_refs').abspath()
 
 
 def teardown_module():

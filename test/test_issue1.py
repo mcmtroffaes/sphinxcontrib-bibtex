@@ -10,7 +10,7 @@ import nose.tools
 
 from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('issue1').abspath()
+srcdir = path(__file__).dirname().joinpath('issue1').abspath()
 
 
 def teardown_module():

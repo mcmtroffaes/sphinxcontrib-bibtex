@@ -12,7 +12,7 @@ import re
 
 from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('issue14').abspath()
+srcdir = path(__file__).dirname().joinpath('issue14').abspath()
 warnfile = StringIO()
 
 

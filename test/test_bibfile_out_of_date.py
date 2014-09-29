@@ -14,7 +14,7 @@ import time
 
 from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('bibfile_out_of_date').abspath()
+srcdir = path(__file__).dirname().joinpath('bibfile_out_of_date').abspath()
 
 
 def teardown_module():

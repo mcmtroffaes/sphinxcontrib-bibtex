@@ -10,7 +10,7 @@ import os
 import re
 from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('issue62').abspath()
+srcdir = path(__file__).dirname().joinpath('issue62').abspath()
 
 
 def teardown_module():
