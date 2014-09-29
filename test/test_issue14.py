@@ -21,7 +21,7 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warning=warnfile)
-def test_duplicate_label(app):
+def test_duplicate_label(app, status, warning):
     app.builder.build_all()
     warnings = warnfile.getvalue()
     assert re.search(

@@ -19,7 +19,7 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_list_enumerated(app):
+def test_list_enumerated(app, status, warning):
     app.builder.build_all()
     with open(os.path.join(app.outdir, "contents.html")) as stream:
         assert re.search(

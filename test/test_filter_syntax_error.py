@@ -21,7 +21,7 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warning=warnfile)
-def test_filter_syntax_error(app):
+def test_filter_syntax_error(app, status, warning):
     app.builder.build_all()
     warnings = warnfile.getvalue()
     nose.tools.assert_equal(

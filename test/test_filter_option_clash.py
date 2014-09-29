@@ -20,7 +20,7 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warning=warnfile)
-def test_filter_option_clash(app):
+def test_filter_option_clash(app, status, warning):
     app.builder.build_all()
     warnings = warnfile.getvalue()
     assert re.search(':filter: overrides :all:', warnings)

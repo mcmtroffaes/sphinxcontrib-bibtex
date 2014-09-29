@@ -19,7 +19,7 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_label_prefix(app):
+def test_label_prefix(app, status, warning):
     app.builder.build_all()
     with open(os.path.join(app.outdir, "doc1.html")) as stream:
         assert re.search('<td class="label">\\[A1\\]</td>', stream.read())

@@ -18,7 +18,7 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True, buildername='latex')
-def test_latex_refs(app):
+def test_latex_refs(app, status, warning):
     app.builder.build_all()
     with open(os.path.join(app.outdir, "test.tex")) as stream:
         code = stream.read()

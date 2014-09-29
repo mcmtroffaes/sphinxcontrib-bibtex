@@ -18,7 +18,7 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_mixing_citation_styles(app):
+def test_mixing_citation_styles(app, status, warning):
     app.builder.build_all()
     nose.tools.assert_equal(
         app.env.bibtex_cache.get_cited_docnames(u"Test"), {u"adoc1"})

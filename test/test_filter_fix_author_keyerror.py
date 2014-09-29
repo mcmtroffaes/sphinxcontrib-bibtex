@@ -16,5 +16,5 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_filter_fix_author_keyerror(app):
+def test_filter_fix_author_keyerror(app, status, warning):
     app.builder.build_all()

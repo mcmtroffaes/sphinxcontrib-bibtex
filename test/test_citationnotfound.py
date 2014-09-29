@@ -20,7 +20,7 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warning=warnfile)
-def test_citationnotfound(app):
+def test_citationnotfound(app, status, warning):
     app.builder.build_all()
     warnings = warnfile.getvalue()
     assert re.search('citation not found: nosuchkey', warnings)

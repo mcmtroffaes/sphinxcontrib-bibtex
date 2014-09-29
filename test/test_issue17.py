@@ -16,5 +16,5 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_sphinx_source_no_warning(app):
+def test_sphinx_source_no_warning(app, status, warning):
     app.builder.build_all()

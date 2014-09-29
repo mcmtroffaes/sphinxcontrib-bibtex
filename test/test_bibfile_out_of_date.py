@@ -23,7 +23,7 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_encoding(app):
+def test_encoding(app, status, warning):
     shutil.copyfile(
         os.path.join(srcdir, 'test_old.bib'),
         os.path.join(srcdir, 'test.bib'))

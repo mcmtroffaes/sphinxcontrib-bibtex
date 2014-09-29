@@ -39,7 +39,7 @@ def check_code(code, refs, cites, otherrefs, othercites):
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_local_bibliographies(app):
+def test_local_bibliographies(app, status, warning):
     doc1_refs = frozenset([
         '#wustner-atomistic-2014',
         '#fuhrmans-molecular-2012',
