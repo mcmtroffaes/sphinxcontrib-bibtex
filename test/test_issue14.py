@@ -6,7 +6,6 @@
     Test duplicate label issue.
 """
 
-import os.path
 import re
 from sphinx_testing.util import path, with_app
 
@@ -24,7 +23,7 @@ def test_duplicate_label(app, status, warning):
     assert re.search(
         'duplicate label for keys (Test and Test2)|(Test2 and Test)',
         warning.getvalue())
-    with open(os.path.join(app.outdir, "doc1.html")) as stream:
-        assert re.search('<td class="label">\\[1\\]</td>', stream.read())
-    with open(os.path.join(app.outdir, "doc2.html")) as stream:
-        assert re.search('<td class="label">\\[1\\]</td>', stream.read())
+    output = (app.outdir / "doc1.html").read_text()
+    assert re.search('<td class="label">\\[1\\]</td>', output)
+    output = (app.outdir / "doc2.html").read_text()
+    assert re.search('<td class="label">\\[1\\]</td>', output)

@@ -6,7 +6,6 @@
     Test local bibliographies.
 """
 
-import os
 import re
 from sphinx_testing.util import path, with_app
 
@@ -74,12 +73,12 @@ def test_local_bibliographies(app, status, warning):
         'mcmahon-membrane-2010',
         ])
     app.builder.build_all()
-    with open(os.path.join(app.outdir, "doc1.html")) as stream:
-        check_code(stream.read(), doc1_refs, doc1_cites,
-                   doc2_refs | sum_refs, doc2_cites | sum_cites)
-    with open(os.path.join(app.outdir, "doc2.html")) as stream:
-        check_code(stream.read(), doc2_refs, doc2_cites,
-                   doc1_refs | sum_refs, doc1_cites | sum_cites)
-    with open(os.path.join(app.outdir, "summary.html")) as stream:
-        check_code(stream.read(), sum_refs, sum_cites,
-                   doc1_refs | doc2_refs, doc1_cites | doc2_cites)
+    output = (app.outdir / "doc1.html").read_text()
+    check_code(output, doc1_refs, doc1_cites,
+               doc2_refs | sum_refs, doc2_cites | sum_cites)
+    output = (app.outdir / "doc2.html").read_text()
+    check_code(output, doc2_refs, doc2_cites,
+               doc1_refs | sum_refs, doc1_cites | sum_cites)
+    output = (app.outdir / "summary.html").read_text()
+    check_code(output, sum_refs, sum_cites,
+               doc1_refs | doc2_refs, doc1_cites | doc2_cites)

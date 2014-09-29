@@ -6,7 +6,6 @@
     Test a custom style.
 """
 
-import os.path
 import re
 
 from sphinx_testing.util import path, with_app
@@ -21,8 +20,7 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_custom_style(app, status, warning):
     app.builder.build_all()
-    with open(os.path.join(app.outdir, "contents.html")) as stream:
-        output = stream.read()
-        # the custom style suppresses web links
-        assert not re.search('http://arxiv.org', output)
-        assert not re.search('http://dx.doi.org', output)
+    output = (app.outdir / "contents.html").read_text()
+    # the custom style suppresses web links
+    assert not re.search('http://arxiv.org', output)
+    assert not re.search('http://dx.doi.org', output)

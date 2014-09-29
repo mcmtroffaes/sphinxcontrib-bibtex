@@ -6,7 +6,6 @@
     Test the ``:list: bullet`` option.
 """
 
-import os.path
 import re
 
 from sphinx_testing.util import path, with_app
@@ -21,12 +20,12 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_list_bullet(app, status, warning):
     app.builder.build_all()
-    with open(os.path.join(app.outdir, "contents.html")) as stream:
-        assert re.search(
-            '<ul .* id="bibtex-bibliography-contents-0">'
-            '.*<li>.*Akkerdju.*</li>'
-            '.*<li>.*Bro.*</li>'
-            '.*<li>.*Chap.*</li>'
-            '.*<li>.*Dude.*</li>'
-            '.*</ul>',
-            stream.read(), re.MULTILINE | re.DOTALL)
+    output = (app.outdir / "contents.html").read_text()
+    assert re.search(
+        '<ul .* id="bibtex-bibliography-contents-0">'
+        '.*<li>.*Akkerdju.*</li>'
+        '.*<li>.*Bro.*</li>'
+        '.*<li>.*Chap.*</li>'
+        '.*<li>.*Dude.*</li>'
+        '.*</ul>',
+        output, re.MULTILINE | re.DOTALL)

@@ -6,10 +6,9 @@
     Test filter option.
 """
 
-import os.path
 import re
-
 from sphinx_testing.util import path, with_app
+
 
 srcdir = path(__file__).dirname().joinpath('filter').abspath()
 
@@ -21,53 +20,43 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_filter(app, status, warning):
     app.builder.build_all()
-    with open(os.path.join(app.outdir, "contents.html")) as stream:
-        output = stream.read()
-        assert re.search('Tralalala', output)
-        assert not re.search('ideetje', output)
-        assert not re.search('Jakkamakka', output)
-    with open(os.path.join(app.outdir, "or.html")) as stream:
-        output = stream.read()
-        assert not re.search('Tralalala', output)
-        assert re.search('ideetje', output)
-        assert re.search('Jakkamakka', output)
-    with open(os.path.join(app.outdir, "noteq.html")) as stream:
-        output = stream.read()
-        assert re.search('Tralalala', output)
-        assert re.search('ideetje', output)
-        assert not re.search('Jakkamakka', output)
-    with open(os.path.join(app.outdir, "lt.html")) as stream:
-        output = stream.read()
-        assert re.search('Tralalala', output)
-        assert not re.search('ideetje', output)
-        assert not re.search('Jakkamakka', output)
-    with open(os.path.join(app.outdir, "lte.html")) as stream:
-        output = stream.read()
-        assert re.search('Tralalala', output)
-        assert not re.search('ideetje', output)
-        assert re.search('Jakkamakka', output)
-    with open(os.path.join(app.outdir, "gt.html")) as stream:
-        output = stream.read()
-        assert not re.search('Tralalala', output)
-        assert re.search('ideetje', output)
-        assert not re.search('Jakkamakka', output)
-    with open(os.path.join(app.outdir, "gte.html")) as stream:
-        output = stream.read()
-        assert not re.search('Tralalala', output)
-        assert re.search('ideetje', output)
-        assert re.search('Jakkamakka', output)
-    with open(os.path.join(app.outdir, "key.html")) as stream:
-        output = stream.read()
-        assert not re.search('Tralalala', output)
-        assert re.search('ideetje', output)
-        assert not re.search('Jakkamakka', output)
-    with open(os.path.join(app.outdir, "false.html")) as stream:
-        output = stream.read()
-        assert not re.search('Tralalala', output)
-        assert not re.search('ideetje', output)
-        assert not re.search('Jakkamakka', output)
-    with open(os.path.join(app.outdir, "title.html")) as stream:
-        output = stream.read()
-        assert not re.search('Tralalala', output)
-        assert not re.search('ideetje', output)
-        assert re.search('Jakkamakka', output)
+    output = (app.outdir / "contents.html").read_text()
+    assert re.search('Tralalala', output)
+    assert not re.search('ideetje', output)
+    assert not re.search('Jakkamakka', output)
+    output = (app.outdir / "or.html").read_text()
+    assert not re.search('Tralalala', output)
+    assert re.search('ideetje', output)
+    assert re.search('Jakkamakka', output)
+    output = (app.outdir / "noteq.html").read_text()
+    assert re.search('Tralalala', output)
+    assert re.search('ideetje', output)
+    assert not re.search('Jakkamakka', output)
+    output = (app.outdir / "lt.html").read_text()
+    assert re.search('Tralalala', output)
+    assert not re.search('ideetje', output)
+    assert not re.search('Jakkamakka', output)
+    output = (app.outdir / "lte.html").read_text()
+    assert re.search('Tralalala', output)
+    assert not re.search('ideetje', output)
+    assert re.search('Jakkamakka', output)
+    output = (app.outdir / "gt.html").read_text()
+    assert not re.search('Tralalala', output)
+    assert re.search('ideetje', output)
+    assert not re.search('Jakkamakka', output)
+    output = (app.outdir / "gte.html").read_text()
+    assert not re.search('Tralalala', output)
+    assert re.search('ideetje', output)
+    assert re.search('Jakkamakka', output)
+    output = (app.outdir / "key.html").read_text()
+    assert not re.search('Tralalala', output)
+    assert re.search('ideetje', output)
+    assert not re.search('Jakkamakka', output)
+    output = (app.outdir / "false.html").read_text()
+    assert not re.search('Tralalala', output)
+    assert not re.search('ideetje', output)
+    assert not re.search('Jakkamakka', output)
+    output = (app.outdir / "title.html").read_text()
+    assert not re.search('Tralalala', output)
+    assert not re.search('ideetje', output)
+    assert re.search('Jakkamakka', output)

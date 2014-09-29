@@ -6,7 +6,6 @@
     Test the ``:encoding:`` option.
 """
 
-import os.path
 import re
 
 from sphinx_testing.util import path, with_app
@@ -21,5 +20,5 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_encoding(app, status, warning):
     app.builder.build_all()
-    with open(os.path.join(app.outdir, "contents.html")) as stream:
-        assert re.search("Tést☺", stream.read())
+    output = (app.outdir / "contents.html").read_text()
+    assert re.search("Tést☺", output)
