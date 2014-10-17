@@ -10,8 +10,6 @@ import os.path
 import re
 
 from util import path, with_app
-from nose.tools import nottest
-from nose import SkipTest
 
 srcdir = path(__file__).parent.joinpath('custom_style').abspath()
 
