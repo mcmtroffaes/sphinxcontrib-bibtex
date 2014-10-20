@@ -5,7 +5,6 @@
     Test label style.
 """
 
-from six import StringIO
 import os.path
 import re
 
