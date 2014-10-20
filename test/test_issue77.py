@@ -12,7 +12,6 @@ import re
 from util import path, with_app
 
 srcdir = path(__file__).parent.joinpath('issue77').abspath()
-warnfile = StringIO()
 
 
 def teardown_module():
@@ -22,7 +21,6 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_issue77(app):
     app.builder.build_all()
-    warnings = warnfile.getvalue()
     with open(os.path.join(app.outdir, "contents.html")) as stream:
         output = stream.read()
         assert len(re.findall('\\[APAa\\]', output)) == 2
