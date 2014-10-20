@@ -344,6 +344,9 @@ Now ``mystyle`` will be available to you as a formatting style:
    .. bibliography:: refs.bib
       :style: mystyle
 
+An minimal example is available here:
+https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/custom_style
+
 The formatting code uses a very intuitive template engine.
 The source code for ``unsrt`` provides many great examples:
 http://bazaar.launchpad.net/~pybtex-devs/pybtex/trunk/view/head:/pybtex/style/formatting/unsrt.py
@@ -355,9 +358,9 @@ labelling plugins
 (using the ``pybtex.style.labels`` group),
 and sorting plugins
 (using the ``pybtex.style.sorting`` group).
-
-An minimal example is available here:
-https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/custom_style
+A minimal example demonstrating how to create a custom label style
+is available here:
+https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/feature/label-style/test/issue77
 
 Known Issues and Workarounds
 ----------------------------
