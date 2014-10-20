@@ -360,7 +360,7 @@ and sorting plugins
 (using the ``pybtex.style.sorting`` group).
 A minimal example demonstrating how to create a custom label style
 is available here:
-https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/feature/label-style/test/issue77
+https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/issue77
 
 Known Issues and Workarounds
 ----------------------------
