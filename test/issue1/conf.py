@@ -25,4 +25,4 @@ master_doc = tinkerer.master_doc
 html_title = project
 html_use_index = False
 html_show_sourcelink = False
-html_add_permalinks = None
+html_add_permalinks = ""
