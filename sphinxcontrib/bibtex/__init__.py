@@ -130,3 +130,4 @@ def setup(app):
     app.connect("doctree-resolved", process_citation_references)
     app.connect("env-purge-doc", purge_bibtex_cache)
     app.connect("env-updated", check_duplicate_labels)
+    return {'parallel_read_safe': True}
