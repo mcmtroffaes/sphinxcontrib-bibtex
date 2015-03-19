@@ -1,0 +1,22 @@
+"""
+    test_issue80
+    ~~~~~~~~~~~~
+
+    Test parallel build.
+"""
+
+import os.path
+import re
+
+from util import path, with_app
+
+srcdir = path(__file__).parent.joinpath('issue80').abspath()
+
+
+def teardown_module():
+    (srcdir / '_build').rmtree(True)
+
+
+@with_app(srcdir=srcdir, warningiserror=True, parallel=8)
+def test_issue80(app):
+    app.builder.build_all()
