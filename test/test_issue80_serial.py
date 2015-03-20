@@ -5,9 +5,9 @@
     Test parallel build.
 """
 
-from util import path, with_app
+from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('issue80').abspath()
+srcdir = path(__file__).dirname().joinpath('issue80').abspath()
 
 
 def teardown_module():
@@ -15,5 +15,5 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True, parallel=0)
-def test_issue80_serial(app):
+def test_issue80_serial(app, status, warning):
     app.builder.build_all()
