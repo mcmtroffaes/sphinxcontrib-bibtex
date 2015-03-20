@@ -22,4 +22,6 @@ def teardown_module():
 def test_issue80_parallel(app):
     app.builder.build_all()
     warnings = warnfile.getvalue()
-    assert re.search('the sphinxcontrib.bibtex extension is not safe for parallel reading, doing serial read', warnings)
+    assert re.search(
+        'the sphinxcontrib.bibtex extension is not safe for parallel '
+        'reading, doing serial read', warnings)
