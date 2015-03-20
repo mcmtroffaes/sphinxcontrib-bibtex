@@ -30,6 +30,7 @@
   - git push origin master
   - git push --tags
   - git checkout develop
+  - git branch -d release/x.x.x
 * activate new version on readthedocs.org
 * prep for next cycle
   - git checkout develop

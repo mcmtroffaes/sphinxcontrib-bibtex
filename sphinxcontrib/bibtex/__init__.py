@@ -130,3 +130,7 @@ def setup(app):
     app.connect("doctree-resolved", process_citation_references)
     app.connect("env-purge-doc", purge_bibtex_cache)
     app.connect("env-updated", check_duplicate_labels)
+    # Parallel read is not safe at the moment: in the current design,
+    # the document that contains references must be read last for all
+    # references to be resolved.
+    return {'parallel_read_safe': False}

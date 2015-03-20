@@ -136,7 +136,7 @@ class TestApp(application.Sphinx):
                  buildername='html', confoverrides=None,
                  status=None, warning=None, freshenv=None,
                  warningiserror=None, tags=None,
-                 confname='conf.py', cleanenv=False):
+                 confname='conf.py', cleanenv=False, verbosity=0, parallel=0):
 
         application.CONFIG_FILENAME = confname
 
@@ -178,7 +178,8 @@ class TestApp(application.Sphinx):
         application.Sphinx.__init__(self, srcdir, confdir, outdir, doctreedir,
                                     buildername, confoverrides, status,
                                     warning,
-                                    freshenv, warningiserror, tags)
+                                    freshenv, warningiserror, tags,
+                                    verbosity, parallel)
 
     def cleanup(self, doctrees=False):
         AutoDirective._registry.clear()

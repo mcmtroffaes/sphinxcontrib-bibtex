@@ -4,6 +4,9 @@
 * Document how to create custom label styles (see issue #77, reported
   by tino).
 
+* Disable parallel_read_safe for Sphinx 1.3 and later (see issue #80,
+  reported by andreacassioli).
+
 0.3.1 (10 July 2014)
 --------------------
 
