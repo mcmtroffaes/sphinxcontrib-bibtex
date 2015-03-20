@@ -14,6 +14,6 @@ def teardown_module():
     (srcdir / '_build').rmtree(True)
 
 
-@with_app(srcdir=srcdir, warningiserror=True, parallel=8)
-def test_issue80(app):
+@with_app(srcdir=srcdir, warningiserror=True, parallel=0)
+def test_issue80_serial(app):
     app.builder.build_all()
