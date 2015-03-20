@@ -1,5 +1,5 @@
-0.3.2 (in development)
-----------------------
+0.3.2 (20 March 2015)
+---------------------
 
 * Document how to create custom label styles (see issue #77, reported
   by tino).
