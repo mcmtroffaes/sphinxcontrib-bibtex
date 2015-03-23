@@ -7,22 +7,20 @@
 """
 
 import nose.tools
-from six import StringIO
 import re
+from sphinx_testing.util import path, with_app
 
-from util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('filter_syntax_error').abspath()
-warnfile = StringIO()
+srcdir = path(__file__).dirname().joinpath('filter_syntax_error').abspath()
 
 
 def teardown_module():
     (srcdir / '_build').rmtree(True)
 
 
-@with_app(srcdir=srcdir, warning=warnfile)
-def test_filter_syntax_error(app):
+@with_app(srcdir=srcdir)
+def test_filter_syntax_error(app, status, warning):
     app.builder.build_all()
-    warnings = warnfile.getvalue()
     nose.tools.assert_equal(
-        len(re.findall('syntax error in :filter: expression', warnings)), 9)
+        len(re.findall(
+            'syntax error in :filter: expression', warning.getvalue())), 9)

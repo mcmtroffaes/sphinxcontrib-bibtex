@@ -7,20 +7,18 @@
 """
 
 import re
-from six import StringIO
+from sphinx_testing.util import path, with_app
 
-from util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('bibfilenotfound').abspath()
-warnfile = StringIO()
+srcdir = path(__file__).dirname().joinpath('bibfilenotfound').abspath()
 
 
 def teardown_module():
     (srcdir / '_build').rmtree(True)
 
 
-@with_app(srcdir=srcdir, warning=warnfile)
-def test_bibfilenotfound(app):
+@with_app(srcdir=srcdir)
+def test_bibfilenotfound(app, status, warning):
     app.builder.build_all()
-    warnings = warnfile.getvalue()
-    assert re.search('could not open bibtex file .*unknown[.]bib', warnings)
+    assert re.search(
+        'could not open bibtex file .*unknown[.]bib', warning.getvalue())

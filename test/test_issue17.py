@@ -6,9 +6,9 @@
     Test that sphinx [source] links do not generate a warning.
 """
 
-from util import path, with_app
+from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('issue17').abspath()
+srcdir = path(__file__).dirname().joinpath('issue17').abspath()
 
 
 def teardown_module():
@@ -16,5 +16,5 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_sphinx_source_no_warning(app):
+def test_sphinx_source_no_warning(app, status, warning):
     app.builder.build_all()

@@ -8,9 +8,9 @@
 
 import nose.tools
 
-from util import path, with_app
+from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('issue1').abspath()
+srcdir = path(__file__).dirname().joinpath('issue1').abspath()
 
 
 def teardown_module():
@@ -18,7 +18,7 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_tinker(app):
+def test_tinker(app, status, warning):
     app.builder.build_all()
     nose.tools.assert_equal(
         app.env.bibtex_cache.get_cited_docnames(u"2011:BabikerIPv6"),

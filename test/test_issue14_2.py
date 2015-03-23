@@ -6,12 +6,11 @@
     Test labelprefix option.
 """
 
-import os.path
 import re
 
-from util import path, with_app
+from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('issue14_2').abspath()
+srcdir = path(__file__).dirname().joinpath('issue14_2').abspath()
 
 
 def teardown_module():
@@ -19,9 +18,9 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_label_prefix(app):
+def test_label_prefix(app, status, warning):
     app.builder.build_all()
-    with open(os.path.join(app.outdir, "doc1.html")) as stream:
-        assert re.search('<td class="label">\\[A1\\]</td>', stream.read())
-    with open(os.path.join(app.outdir, "doc2.html")) as stream:
-        assert re.search('<td class="label">\\[B1\\]</td>', stream.read())
+    output = (app.outdir / "doc1.html").read_text()
+    assert re.search('<td class="label">\\[A1\\]</td>', output)
+    output = (app.outdir / "doc2.html").read_text()
+    assert re.search('<td class="label">\\[B1\\]</td>', output)

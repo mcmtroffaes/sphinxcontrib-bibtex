@@ -6,14 +6,11 @@
     Test order of bibliography entries when using an unsorted style.
 """
 
-from six import StringIO
-import os.path
 import re
+from sphinx_testing.util import path, with_app
 
-from util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('issue15').abspath()
-warnfile = StringIO()
+srcdir = path(__file__).dirname().joinpath('issue15').abspath()
 
 
 def teardown_module():
@@ -21,9 +18,9 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_duplicate_label(app):
+def test_duplicate_label(app, status, warning):
     app.builder.build_all()
-    with open(os.path.join(app.outdir, "contents.html")) as stream:
-        assert re.search(
-            '<tr>.*Test 1.*</tr>.*<tr>.*Test 2.*</tr>',
-            stream.read(), re.DOTALL)
+    output = (app.outdir / "contents.html").read_text()
+    assert re.search(
+        '<tr>.*Test 1.*</tr>.*<tr>.*Test 2.*</tr>',
+        output, re.DOTALL)

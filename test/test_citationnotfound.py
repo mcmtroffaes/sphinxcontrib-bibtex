@@ -7,20 +7,17 @@
 """
 
 import re
-from six import StringIO
+from sphinx_testing.util import path, with_app
 
-from util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('citationnotfound').abspath()
-warnfile = StringIO()
+srcdir = path(__file__).dirname().joinpath('citationnotfound').abspath()
 
 
 def teardown_module():
     (srcdir / '_build').rmtree(True)
 
 
-@with_app(srcdir=srcdir, warning=warnfile)
-def test_citationnotfound(app):
+@with_app(srcdir=srcdir)
+def test_citationnotfound(app, status, warning):
     app.builder.build_all()
-    warnings = warnfile.getvalue()
-    assert re.search('citation not found: nosuchkey', warnings)
+    assert re.search('citation not found: nosuchkey', warning.getvalue())

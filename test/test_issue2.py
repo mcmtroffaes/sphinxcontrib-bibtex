@@ -8,9 +8,9 @@
 
 import nose.tools
 
-from util import path, with_app
+from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('issue2').abspath()
+srcdir = path(__file__).dirname().joinpath('issue2').abspath()
 
 
 def teardown_module():
@@ -18,7 +18,7 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_mixing_citation_styles(app):
+def test_mixing_citation_styles(app, status, warning):
     app.builder.build_all()
     nose.tools.assert_equal(
         app.env.bibtex_cache.get_cited_docnames(u"Test"), {u"adoc1"})

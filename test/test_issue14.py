@@ -6,28 +6,24 @@
     Test duplicate label issue.
 """
 
-from six import StringIO
-import os.path
 import re
+from sphinx_testing.util import path, with_app
 
-from util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('issue14').abspath()
-warnfile = StringIO()
+srcdir = path(__file__).dirname().joinpath('issue14').abspath()
 
 
 def teardown_module():
     (srcdir / '_build').rmtree(True)
 
 
-@with_app(srcdir=srcdir, warning=warnfile)
-def test_duplicate_label(app):
+@with_app(srcdir=srcdir)
+def test_duplicate_label(app, status, warning):
     app.builder.build_all()
-    warnings = warnfile.getvalue()
     assert re.search(
         'duplicate label for keys (Test and Test2)|(Test2 and Test)',
-        warnings)
-    with open(os.path.join(app.outdir, "doc1.html")) as stream:
-        assert re.search('<td class="label">\\[1\\]</td>', stream.read())
-    with open(os.path.join(app.outdir, "doc2.html")) as stream:
-        assert re.search('<td class="label">\\[1\\]</td>', stream.read())
+        warning.getvalue())
+    output = (app.outdir / "doc1.html").read_text()
+    assert re.search('<td class="label">\\[1\\]</td>', output)
+    output = (app.outdir / "doc2.html").read_text()
+    assert re.search('<td class="label">\\[1\\]</td>', output)

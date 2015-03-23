@@ -8,9 +8,9 @@
 import os.path
 import re
 
-from util import path, with_app
+from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).parent.joinpath('issue77').abspath()
+srcdir = path(__file__).dirname().joinpath('issue77').abspath()
 
 
 def teardown_module():
@@ -18,7 +18,7 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_issue77(app):
+def test_issue77(app, status, warning):
     app.builder.build_all()
     with open(os.path.join(app.outdir, "contents.html")) as stream:
         output = stream.read()

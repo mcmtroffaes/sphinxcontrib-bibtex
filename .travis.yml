@@ -8,7 +8,7 @@ branches:
   only:
     - develop
 install:
-  - "pip install Tinkerer" # Tinkerer is required for tests
+  - "pip install sphinx-testing Tinkerer" # required for tests
   - "pip install ."
   - "if [[ $TRAVIS_PYTHON_VERSION == '2.7' ]]; then pip install coveralls check-manifest flake8; fi"
 script:
