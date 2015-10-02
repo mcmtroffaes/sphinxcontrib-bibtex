@@ -5,9 +5,6 @@
     Test for reference with no author and no key.
 """
 
-import os.path
-import re
-
 from sphinx_testing.util import path, with_app
 
 srcdir = path(__file__).dirname().joinpath('issue85').abspath()
