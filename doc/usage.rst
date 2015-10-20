@@ -216,7 +216,9 @@ whilst in the other document you could have:
 The bibliographies will then both generate an entry for ``boole1854``,
 with links and backlinks as expected.
 
-.. alsosee:: :ref:`section-local-bibliographies`
+.. seealso::
+
+   :ref:`section-local-bibliographies`
 
 Filtering
 ~~~~~~~~~
