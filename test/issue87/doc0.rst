@@ -6,4 +6,4 @@ doc0
 
 .. bibliography:: test.bib
    :labelprefix: A
-   :keyprefix: tag0
+   :keyprefix: tag0-

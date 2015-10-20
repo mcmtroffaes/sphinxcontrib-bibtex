@@ -5,4 +5,4 @@ doc1
 
 .. bibliography:: test.bib
    :labelprefix: B
-   :keyprefix: tag1
+   :keyprefix: tag1-

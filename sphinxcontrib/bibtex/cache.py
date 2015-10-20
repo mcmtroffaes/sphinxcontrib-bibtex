@@ -352,7 +352,7 @@ class BibliographyCache(collections.namedtuple(
     'BibliographyCache',
     """bibfiles style encoding
 list_ enumtype start labels labelprefix
-filter_ curly_bracket_strip
+filter_ curly_bracket_strip keyprefix
 """)):
 
     """Contains information about a bibliography directive.
@@ -386,6 +386,10 @@ filter_ curly_bracket_strip
     .. attribute:: labelprefix
 
         This bibliography's string prefix for pybtex generated labels.
+
+    .. attribute:: keyprefix
+
+        This bibliography's string prefix for citation keys.
 
     .. attribute:: filter_
 
