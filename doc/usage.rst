@@ -181,6 +181,45 @@ use the ``labelprefix`` option.
       :notcited:
       :labelprefix: B
 
+.. _section-key-prefixing:
+
+Key Prefixing
+~~~~~~~~~~~~~
+
+.. versionadded:: 0.3.3
+
+If you have multiple bibliographies, and you would like entries to be
+repeated in different documents, then use the ``keyprefix`` option.
+
+For example, suppose you have two documents, and you would like to cite
+``boole1854`` in both of these doucments, with the bibliography entries
+showing in both of the documents. In one document you could have:
+
+.. code-block:: rest
+
+   See :cite:`a-boole1854`
+
+   .. bibliography:: refs.bib
+      :labelprefix: A
+      :keyprefix: a-
+
+whilst in the other document you could have:
+
+.. code-block:: rest
+
+   See :cite:`b-boole1854`
+
+   .. bibliography:: refs.bib
+      :labelprefix: B
+      :keyprefix: b-
+
+The bibliographies will then both generate an entry for ``boole1854``,
+with links and backlinks as expected.
+
+.. seealso::
+
+   :ref:`section-local-bibliographies`
+
 Filtering
 ~~~~~~~~~
 
@@ -282,8 +321,21 @@ The filter expression supports:
     that is less or equal than 2003; any entries that do not
     specify a year would be omitted.
 
+.. _section-local-bibliographies:
+
 Local Bibliographies
 ~~~~~~~~~~~~~~~~~~~~
+
+Both the ``keyprefix`` and ``filter`` options can be used
+to achieve local bibliographies.
+
+The ``filter`` system for local bibliographies is the simplest one to
+use, but offers the least amount of flexibility.  In particular, it
+can only be used if no citation key is used in more than one
+document. This is not always satisfied. If you need to cite the same
+reference in multiple documents with references to multiple local
+bibliographies, use the ``keyprefix`` system; see
+:ref:`section-key-prefixing`.
 
 To create a bibliography that includes only citations that were cited
 in the current document, use the following filter:

@@ -293,7 +293,10 @@ class Cache:
         for bibfile in bibcache.bibfiles:
             data = self.bibfiles[bibfile].data
             for entry in six.itervalues(data.entries):
-                cited_docnames = self.get_cited_docnames(entry.key)
+                # beware: the prefix is not stored in the data
+                # to allow reusing the data for multiple bibliographies
+                cited_docnames = self.get_cited_docnames(
+                    bibcache.keyprefix + entry.key)
                 visitor = _FilterVisitor(
                     entry=entry,
                     docname=docname,
@@ -307,7 +310,10 @@ class Cache:
                 if success:
                     # entries are modified in an unpickable way
                     # when formatting, so fetch a deep copy
-                    yield copy.deepcopy(entry)
+                    # and return this copy with prefixed key
+                    entry2 = copy.deepcopy(entry)
+                    entry2.key = bibcache.keyprefix + entry.key
+                    yield entry2
 
     def get_bibliography_entries(self, docname, id_, warn):
         """Return filtered bibliography entries, sorted by citation order."""
@@ -352,7 +358,7 @@ class BibliographyCache(collections.namedtuple(
     'BibliographyCache',
     """bibfiles style encoding
 list_ enumtype start labels labelprefix
-filter_ curly_bracket_strip
+filter_ curly_bracket_strip keyprefix
 """)):
 
     """Contains information about a bibliography directive.
@@ -386,6 +392,10 @@ filter_ curly_bracket_strip
     .. attribute:: labelprefix
 
         This bibliography's string prefix for pybtex generated labels.
+
+    .. attribute:: keyprefix
+
+        This bibliography's string prefix for citation keys.
 
     .. attribute:: filter_
 

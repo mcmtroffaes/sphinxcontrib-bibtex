@@ -72,6 +72,7 @@ class BibliographyDirective(Directive):
         'encoding': directives.encoding,
         'disable-curly-bracket-strip': directives.flag,
         'labelprefix': directives.unchanged,
+        'keyprefix': directives.unchanged,
     }
 
     def run(self):
@@ -124,6 +125,7 @@ class BibliographyDirective(Directive):
             curly_bracket_strip=(
                 'disable-curly-bracket-strip' not in self.options),
             labelprefix=self.options.get("labelprefix", ""),
+            keyprefix=self.options.get("keyprefix", ""),
             labels={},
             bibfiles=[],
         )

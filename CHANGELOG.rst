@@ -1,6 +1,10 @@
 0.3.3 (in development)
 ----------------------
 
+* Add per-bibliography key prefixes, enabling local bibliographies to
+  be used in isolation from each other (see issue #87, reported by
+  marscher).
+
 0.3.2 (20 March 2015)
 ---------------------
 
