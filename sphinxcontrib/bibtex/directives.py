@@ -71,8 +71,8 @@ class BibliographyDirective(Directive):
         'start': process_start_option,
         'encoding': directives.encoding,
         'disable-curly-bracket-strip': directives.flag,
-        'labelprefix': directives.unchanged,  # :prefix:
-        'keyprefix': directives.unchanged,  # :tag:
+        'labelprefix': directives.unchanged,
+        'keyprefix': directives.unchanged,
     }
 
     def run(self):
