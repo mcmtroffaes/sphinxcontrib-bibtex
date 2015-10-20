@@ -186,7 +186,6 @@ Key Prefixing for Local Bibliographies
 
 .. versionadded:: 0.3.3
 
-
 If you have multiple bibliographies, and you would like entries to be
 repeated in different documents, then use the ``keyprefix`` option.
 
