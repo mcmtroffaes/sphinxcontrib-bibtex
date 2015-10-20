@@ -181,6 +181,40 @@ use the ``labelprefix`` option.
       :notcited:
       :labelprefix: B
 
+Key Prefixing for Local Bibliographies
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 0.3.3
+
+
+If you have multiple bibliographies, and you would like entries to be
+repeated in different documents, then use the ``keyprefix`` option.
+
+For example, suppose you have two documents, and you would like to cite
+``boole1854`` in both of these doucments, with the bibliography entries
+showing in both of the documents. In one document you could have:
+
+.. code-block:: rest
+
+   See :cite:`a-boole1854`
+
+   .. bibliography:: refs.bib
+      :labelprefix: A
+      :keyprefix: a-
+
+whilst in the other document you could have:
+
+.. code-block:: rest
+
+   See :cite:`b-boole1854`
+
+   .. bibliography:: refs.bib
+      :labelprefix: B
+      :keyprefix: b-
+
+The bibliographies will then both generate an entry for ``boole1854``,
+with links and backlinks as expected.
+
 Filtering
 ~~~~~~~~~
 
