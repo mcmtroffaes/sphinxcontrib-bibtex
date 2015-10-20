@@ -349,7 +349,7 @@ https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/custom_sty
 
 The formatting code uses a very intuitive template engine.
 The source code for ``unsrt`` provides many great examples:
-http://bazaar.launchpad.net/~pybtex-devs/pybtex/trunk/view/head:/pybtex/style/formatting/unsrt.py
+https://bitbucket.org/pybtex-devs/pybtex/src/master/pybtex/style/formatting/unsrt.py?at=master&fileviewer=file-view-default
 
 The above example only demonstrates a custom formatting style plugin.
 It is also possible to register custom author/editor naming plugins
