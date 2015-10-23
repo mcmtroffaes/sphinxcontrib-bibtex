@@ -20,7 +20,7 @@ setup(
     name='sphinxcontrib-bibtex',
     version=version,
     url='https://github.com/mcmtroffaes/sphinxcontrib-bibtex',
-    download_url='http://pypi.python.org/pypi/sphinxcontrib-bibtex',
+    download_url='https://pypi.python.org/pypi/sphinxcontrib-bibtex',
     license='BSD',
     author='Matthias C. M. Troffaes',
     author_email='matthias.troffaes@gmail.com',
