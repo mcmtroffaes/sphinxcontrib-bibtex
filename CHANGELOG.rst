@@ -5,6 +5,10 @@
   be used in isolation from each other (see issue #87, reported by
   marscher).
 
+* Documentation now points to new location of pybtex on bitbucket.
+
+* Simplified testing code by using the new sphinx_testing package.
+
 0.3.2 (20 March 2015)
 ---------------------
 
