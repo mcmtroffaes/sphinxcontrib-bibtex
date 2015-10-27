@@ -480,9 +480,9 @@ Citation Links Broken When Using LaTeX Backend
 This is a known bug in Sphinx's latex writer,
 which has been fixed upstream:
 
-https://bitbucket.org/birkenfeld/sphinx/pull-request/171
+https://bitbucket.org/birkenfeld/sphinx/pull-requests/171
 
-https://bitbucket.org/birkenfeld/sphinx/pull-request/173
+https://bitbucket.org/birkenfeld/sphinx/pull-requests/173
 
 Mismatch Between Output of HTML and LaTeX Backends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
