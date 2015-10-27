@@ -1,9 +1,13 @@
-0.3.3 (in development)
-----------------------
+0.3.3 (23 October 2015)
+-----------------------
 
 * Add per-bibliography key prefixes, enabling local bibliographies to
   be used in isolation from each other (see issue #87, reported by
   marscher).
+
+* Documentation now points to new location of pybtex on bitbucket.
+
+* Simplified testing code by using the new sphinx_testing package.
 
 0.3.2 (20 March 2015)
 ---------------------

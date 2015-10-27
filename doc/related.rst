@@ -5,7 +5,7 @@ Below is a list of projects which include functionality that is
 similar or related to sphinxcontrib-bibtex.
 If you know of any other, leave a message on the issue tracker.
 
-* Andrey Golovizin's `pybtex <http://pybtex.sourceforge.net/>`_,
+* Andrey Golovizin's `pybtex <http://pybtex.org/>`_,
   a general purpose Python library for working with bibtex files.
   Drives sphinxcontrib-bibtex.
 

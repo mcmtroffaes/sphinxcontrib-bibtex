@@ -10,5 +10,7 @@ global-exclude *.pyc
 exclude .gitignore
 exclude .travis.yml
 exclude release_checklist.txt
+exclude tox.ini
+exclude shell.nix
 prune doc/_build
 

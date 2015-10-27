@@ -369,7 +369,7 @@ Custom Formatting, Sorting, and Labelling
 
 :mod:`pybtex` provides a very powerful way to create and register new
 styles, using setuptools entry points,
-as documented here: http://pybtex.sourceforge.net/plugins.html
+as documented here: http://pybtex.org/plugins.html
 
 Simply add the following code to your ``conf.py``:
 
@@ -420,7 +420,7 @@ Known Issues and Workarounds
 Tinkerer
 ~~~~~~~~
 
-To use the bibtex extension with `Tinkerer <http://www.tinkerer.me/>`_,
+To use the bibtex extension with `Tinkerer <http://tinkerer.me/>`_,
 be sure to specify the bibtex extension first in your ``conf.py`` file::
 
     extensions = ['sphinxcontrib.bibtex', 'tinkerer.ext.blog', 'tinkerer.ext.disqus']
