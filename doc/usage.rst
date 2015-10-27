@@ -369,7 +369,7 @@ Custom Formatting, Sorting, and Labelling
 
 :mod:`pybtex` provides a very powerful way to create and register new
 styles, using setuptools entry points,
-as documented here: http://pybtex.org/plugins.html
+as documented here: http://docs.pybtex.org/api/plugins.html
 
 Simply add the following code to your ``conf.py``:
 
