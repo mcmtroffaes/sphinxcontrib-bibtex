@@ -20,9 +20,9 @@ The extension is inspired by Matthew Brett's
 
 * Download: https://pypi.python.org/pypi/sphinxcontrib-bibtex/#downloads
 
-* Documentation: http://sphinxcontrib-bibtex.readthedocs.org/
+* Documentation: http://sphinxcontrib-bibtex.readthedocs.org/en/latest/
 
-* Development: http://github.com/mcmtroffaes/sphinxcontrib-bibtex/
+* Development: https://github.com/mcmtroffaes/sphinxcontrib-bibtex/
 
 .. |travis| image:: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex.png?branch=develop
     :target: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex
