@@ -484,13 +484,13 @@ https://bitbucket.org/birkenfeld/sphinx/pull-requests/171
 
 https://bitbucket.org/birkenfeld/sphinx/pull-requests/173
 
-Output of LaTeX Backend Fails If ``:cite:`` Is Used In Any Figure Caption
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+LaTeX Backend Fails with Citations In Figure Captions
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-This is caused by the invalid use of ``\phantomsection`` in figure
-captions. This issue can be worked around by adding the following to
-``conf.py`` by making ``\phantomsection`` an empty command in figure
-environments:
+Sphinx generates ``\phantomsection`` commands for references,
+however LaTeX does not support these in figure captions.
+You can work around this problem by adding the following code to
+your ``conf.py``:
 
 .. code-block:: python
 
