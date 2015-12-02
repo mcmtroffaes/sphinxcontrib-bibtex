@@ -484,6 +484,24 @@ https://bitbucket.org/birkenfeld/sphinx/pull-requests/171
 
 https://bitbucket.org/birkenfeld/sphinx/pull-requests/173
 
+Output of LaTeX Backend Fails If ``:cite:`` Is Used In Any Figure Caption
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+This is caused by the invalid use of ``\phantomsection`` in figure
+captions. This issue can be worked around by adding the following to
+``conf.py`` by making ``\phantomsection`` an empty command in figure
+environments:
+
+.. code-block:: python
+
+   latex_elements = {
+    'preamble': r'''
+        % make phantomsection empty inside figures
+        \usepackage{etoolbox}
+        \AtBeginEnvironment{figure}{\renewcommand{\phantomsection}{}}
+    '''
+   }
+
 Mismatch Between Output of HTML and LaTeX Backends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
