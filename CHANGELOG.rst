@@ -1,6 +1,9 @@
 0.3.4 (in development)
 ----------------------
 
+* Document LaTeX workaround for ``:cite:`` in figure captions
+  (contributed by xuhdev, see issue #92 and pull request #93).
+
 0.3.3 (23 October 2015)
 -----------------------
 
