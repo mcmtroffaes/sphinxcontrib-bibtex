@@ -4,6 +4,9 @@
 * Document LaTeX workaround for ``:cite:`` in figure captions
   (contributed by xuhdev, see issue #92 and pull request #93).
 
+* Add ``bibtex_default_style`` config value to override the default
+  bibliography style (see issue #91 and pull request #97).
+
 0.3.3 (23 October 2015)
 -----------------------
 
