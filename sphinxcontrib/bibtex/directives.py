@@ -101,8 +101,8 @@ class BibliographyDirective(Directive):
                 filter_ = ast.parse(self.options["filter"])
             except SyntaxError:
                 env.app.warn(
-                    standout("syntax error in :filter: expression")
-                    + " (" + self.options["filter"] + "); "
+                    standout("syntax error in :filter: expression") +
+                    " (" + self.options["filter"] + "); "
                     "the option will be ignored"
                 )
                 filter_ = ast.parse("cited")
