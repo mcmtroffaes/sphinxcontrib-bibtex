@@ -117,7 +117,8 @@ class BibliographyDirective(Directive):
             list_=self.options.get("list", "citation"),
             enumtype=self.options.get("enumtype", "arabic"),
             start=self.options.get("start", 1),
-            style=self.options.get("style", "alpha"),
+            style=self.options.get(
+                "style", env.app.config.bibtex_default_style),
             filter_=filter_,
             encoding=self.options.get(
                 'encoding',

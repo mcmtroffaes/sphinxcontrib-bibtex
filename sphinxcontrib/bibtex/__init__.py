@@ -111,6 +111,7 @@ def check_duplicate_labels(app, env):
 def setup(app):
     """Set up the bibtex extension:
 
+    * register config values
     * register directives
     * register nodes
     * register roles
@@ -121,6 +122,7 @@ def setup(app):
     :type app: :class:`sphinx.application.Sphinx`
     """
 
+    app.add_config_value("bibtex_default_style", "alpha", "html")
     app.add_directive("bibliography", BibliographyDirective)
     app.add_role("cite", CiteRole())
     app.add_node(bibliography)
