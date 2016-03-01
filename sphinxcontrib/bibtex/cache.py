@@ -16,13 +16,11 @@
         :members:
 """
 
-import sys
 import six
-if sys.version_info < (2, 7):  # pragma: no cover
-    from ordereddict import OrderedDict
-else:                          # pragma: no cover
+try:                 # pragma: no cover
     from collections import OrderedDict
-
+except ImportError:  # pragma: no cover
+    from ordereddict import OrderedDict
 import ast
 import collections
 import copy
