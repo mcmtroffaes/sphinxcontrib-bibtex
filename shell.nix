@@ -12,12 +12,14 @@ with import <nixpkgs> {}; {
       python27
       python33
       python34
+      python35
       # development tools and libraries
       stdenv
       libxml2
       libxslt
-      python27Packages.tox
-      python27Packages.cython
+      python35Packages.tox
+      python35Packages.cython
+      python35Packages.sphinx
     ];
   };
 }
