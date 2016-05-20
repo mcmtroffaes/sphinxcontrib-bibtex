@@ -12,6 +12,7 @@
 """
 
 import docutils.nodes
+import docutils.parsers.rst
 from sphinxcontrib.bibtex.cache import Cache
 from sphinxcontrib.bibtex.nodes import bibliography
 from sphinxcontrib.bibtex.roles import CiteRole
@@ -123,15 +124,24 @@ def setup(app):
     """
 
     app.add_config_value("bibtex_default_style", "alpha", "html")
-    app.add_directive("bibliography", BibliographyDirective)
-    app.add_role("cite", CiteRole())
-    app.add_node(bibliography)
-    app.add_transform(BibliographyTransform)
     app.connect("builder-inited", init_bibtex_cache)
     app.connect("doctree-resolved", process_citations)
     app.connect("doctree-resolved", process_citation_references)
     app.connect("env-purge-doc", purge_bibtex_cache)
     app.connect("env-updated", check_duplicate_labels)
+
+    # docutils keeps state around during testing, so to avoid spurious
+    # warnings, we detect here whether the directives have already been
+    # registered... very ugly hack but no better solution so far
+    _directives = docutils.parsers.rst.directives._directives
+    if "bibliography" not in _directives:
+        app.add_directive("bibliography", BibliographyDirective)
+        app.add_role("cite", CiteRole())
+        app.add_node(bibliography)
+        app.add_transform(BibliographyTransform)
+    else:
+        assert _directives["bibliography"] is BibliographyDirective
+
     # Parallel read is not safe at the moment: in the current design,
     # the document that contains references must be read last for all
     # references to be resolved.

@@ -7,6 +7,8 @@
 * Add ``bibtex_default_style`` config value to override the default
   bibliography style (see issue #91 and pull request #97).
 
+* Support Python 3.5 (see issue #100).
+
 0.3.3 (23 October 2015)
 -----------------------
 
