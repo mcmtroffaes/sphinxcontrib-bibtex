@@ -309,8 +309,13 @@ class Cache:
                     # entries are modified in an unpickable way
                     # when formatting, so fetch a deep copy
                     # and return this copy with prefixed key
+                    # we do not deep copy entry.collection because that
+                    # consumes enormous amounts of memory
+                    entry.collection = None
                     entry2 = copy.deepcopy(entry)
                     entry2.key = bibcache.keyprefix + entry.key
+                    entry2.collection = data
+                    entry.collection = data
                     yield entry2
 
     def get_bibliography_entries(self, docname, id_, warn):
