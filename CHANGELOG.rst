@@ -4,6 +4,8 @@
 * Fix extremely high memory usage when handling large bibliographies
   (reported by agjohnson, see issue #102).
 
+* Fix tests for Sphinx 1.5.1 (see issue #111, reported by jamesjer).
+
 0.3.4 (20 May 2016)
 -------------------
 
