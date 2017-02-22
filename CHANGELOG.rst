@@ -1,5 +1,5 @@
-0.3.5 (in development)
-----------------------
+0.3.5 (22 February 2017)
+------------------------
 
 * Fix extremely high memory usage when handling large bibliographies
   (reported by agjohnson, see issue #102).
