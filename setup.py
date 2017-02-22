@@ -9,6 +9,7 @@ def readfile(filename):
     with io.open(filename, encoding="utf-8") as stream:
         return stream.read().split("\n")
 
+
 readme = readfile("README.rst")[5:]  # skip title and badges
 requires = readfile("requirements.txt")
 version = readfile("VERSION")[0].strip()
