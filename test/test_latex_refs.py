@@ -20,5 +20,7 @@ def teardown_module():
 def test_latex_refs(app, status, warning):
     app.builder.build_all()
     output = (app.outdir / "test.tex").read_text()
-    assert re.search('\\hyperref\[contents:huygens\]', output)
-    assert re.search('\\label{contents:huygens}', output)
+    assert re.search(
+        '\\hyperref\[(\\\\detokenize{)?contents:huygens(})?}\]', output)
+    assert re.search(
+        '\\label{(\\\\detokenize{)?contents:huygens(})?}}', output)
