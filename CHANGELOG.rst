@@ -1,5 +1,7 @@
-0.3.6 (in development)
-----------------------
+0.3.6 (23 February 2017)
+------------------------
+
+* Real fix for issue #111 (again reported by jamesjer).
 
 0.3.5 (22 February 2017)
 ------------------------
