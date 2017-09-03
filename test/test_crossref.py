@@ -5,6 +5,7 @@
     Test that cross references work.
 """
 
+import io
 import os.path
 import re
 
@@ -21,7 +22,7 @@ def teardown_module():
 def test_crossref(app, status, warning):
     app.builder.build_all()
     # default style is plain; check output
-    with open(os.path.join(app.outdir, "contents.html")) as stream:
+    with io.open(os.path.join(app.outdir, "contents.html"), encoding='utf-8') as stream:
         output = stream.read()
         # ensure Zaf is cited
         assert len(re.findall('\\[Zaf\\]', output)) == 2
