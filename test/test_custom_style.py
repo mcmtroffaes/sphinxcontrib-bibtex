@@ -20,7 +20,7 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_custom_style(app, status, warning):
     app.builder.build_all()
-    output = (app.outdir / "contents.html").read_text()
+    output = (app.outdir / "contents.html").read_text(encoding='utf-8')
     # the custom style suppresses web links
     assert not re.search('http://arxiv.org', output)
     assert not re.search('http://dx.doi.org', output)
