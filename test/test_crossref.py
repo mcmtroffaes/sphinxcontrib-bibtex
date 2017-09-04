@@ -22,11 +22,10 @@ def teardown_module():
 def test_crossref(app, status, warning):
     app.builder.build_all()
     # default style is plain; check output
-    with io.open(os.path.join(app.outdir, "contents.html"), encoding='utf-8') as stream:
-        output = stream.read()
-        # ensure Zaf is cited
-        assert len(re.findall('\\[Zaf\\]', output)) == 2
-        # ensure proceedings only mentioned for Zaf
-        assert len(re.findall(
-            'Proceedings of the Second International Symposium '
-            'on Imprecise Probabilities and Their Applications', output)) == 1
+    output = (app.outdir / "contents.html").read_text(encoding='utf-8')
+    # ensure Zaf is cited
+    assert len(re.findall('\\[Zaf\\]', output)) == 2
+    # ensure proceedings only mentioned for Zaf
+    assert len(re.findall(
+        'Proceedings of the Second International Symposium '
+        'on Imprecise Probabilities and Their Applications', output)) == 1
