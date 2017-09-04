@@ -7,6 +7,9 @@ python:
   - "3.3"
   - "2.7"
   #- "pypy"  # travis builder issues?
+env:
+  - LC_ALL="en_US.utf-8"
+  - LC_ALL="en_US.ascii"
 branches:
   only:
     - develop
