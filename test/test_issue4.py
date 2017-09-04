@@ -21,4 +21,4 @@ def teardown_module():
 def test_encoding(app, status, warning):
     app.builder.build_all()
     output = (app.outdir / "contents.html").read_text(encoding='utf-8')
-    assert re.search("Tést☺", output)
+    assert re.search(u"Tést☺", output)
