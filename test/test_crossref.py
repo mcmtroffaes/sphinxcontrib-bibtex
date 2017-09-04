@@ -5,8 +5,6 @@
     Test that cross references work.
 """
 
-import io
-import os.path
 import re
 
 from sphinx_testing.util import path, with_app
