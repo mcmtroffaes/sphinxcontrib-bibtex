@@ -22,16 +22,16 @@ def teardown_module():
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
-def test_encoding(app, status, warning):
+def test_bibfile_out_of_date(app, status, warning):
     shutil.copyfile((srcdir / 'test_old.bib'), (srcdir / 'test.bib'))
     app.builder.build_all()
     output = (app.outdir / "contents.html").read_text()
     assert re.search(
         '<p id="bibtex-bibliography-contents-0">'
-        '.*<tr><td class="label">\\[1\\]</td><td>.*Akkerdju.*</td></tr>'
-        '.*<tr><td class="label">\\[2\\]</td><td>.*Bro.*</td></tr>'
-        '.*<tr><td class="label">\\[3\\]</td><td>.*Chap.*</td></tr>'
-        '.*<tr><td class="label">\\[4\\]</td><td>.*Dude.*</td></tr>'
+        '.*<tr><td class="label">.*\\[1\\].*</td><td>.*Akkerdju.*</td></tr>'
+        '.*<tr><td class="label">.*\\[2\\].*</td><td>.*Bro.*</td></tr>'
+        '.*<tr><td class="label">.*\\[3\\].*</td><td>.*Chap.*</td></tr>'
+        '.*<tr><td class="label">.*\\[4\\].*</td><td>.*Dude.*</td></tr>'
         '.*</p>',
         output, re.MULTILINE | re.DOTALL)
     # wait to ensure different timestamp
@@ -41,9 +41,9 @@ def test_encoding(app, status, warning):
     output = (app.outdir / "contents.html").read_text()
     assert re.search(
         '<p id="bibtex-bibliography-contents-0">'
-        '.*<tr><td class="label">\\[1\\]</td><td>.*Eminence.*</td></tr>'
-        '.*<tr><td class="label">\\[2\\]</td><td>.*Frater.*</td></tr>'
-        '.*<tr><td class="label">\\[3\\]</td><td>.*Giggles.*</td></tr>'
-        '.*<tr><td class="label">\\[4\\]</td><td>.*Handy.*</td></tr>'
+        '.*<tr><td class="label">.*\\[1\\].*</td><td>.*Eminence.*</td></tr>'
+        '.*<tr><td class="label">.*\\[2\\].*</td><td>.*Frater.*</td></tr>'
+        '.*<tr><td class="label">.*\\[3\\].*</td><td>.*Giggles.*</td></tr>'
+        '.*<tr><td class="label">.*\\[4\\].*</td><td>.*Handy.*</td></tr>'
         '.*</p>',
         output, re.MULTILINE | re.DOTALL)

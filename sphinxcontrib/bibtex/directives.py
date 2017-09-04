@@ -15,7 +15,7 @@
 import ast  # parse(), used for filter
 import os.path  # getmtime()
 
-from docutils.parsers.rst import Directive, directives  # for Directive.option_spec
+from docutils.parsers.rst import Directive, directives
 from sphinx.util.console import bold, standout
 
 from pybtex.database.input import bibtex
