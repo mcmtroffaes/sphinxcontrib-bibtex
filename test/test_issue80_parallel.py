@@ -5,7 +5,6 @@
     Test parallel build.
 """
 
-import re
 from sphinx_testing.util import path, with_app
 
 srcdir = path(__file__).dirname().joinpath('issue80').abspath()
