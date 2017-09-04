@@ -1,7 +1,7 @@
 Doc1
 ====
 
-:cite:`Test1`
+:cite:`Test`
 
 .. bibliography:: test1.bib
    :all:
