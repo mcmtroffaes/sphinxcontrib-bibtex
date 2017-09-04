@@ -20,7 +20,7 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_label_prefix(app, status, warning):
     app.builder.build_all()
-    output = (app.outdir / "doc1.html").read_text()
+    output = (app.outdir / "doc1.html").read_text(encoding='utf-8')
     assert re.search('<td class="label">.*\\[A1\\].*</td>', output)
-    output = (app.outdir / "doc2.html").read_text()
+    output = (app.outdir / "doc2.html").read_text(encoding='utf-8')
     assert re.search('<td class="label">.*\\[B1\\].*</td>', output)
