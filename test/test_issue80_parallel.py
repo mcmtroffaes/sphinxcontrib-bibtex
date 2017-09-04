@@ -18,7 +18,3 @@ def teardown_module():
 @with_app(srcdir=srcdir, parallel=8)
 def test_issue80_parallel(app, status, warning):
     app.builder.build_all()
-    # latest sphinx no longer issues a warning
-    #assert re.search(
-    #    'the sphinxcontrib.bibtex extension is not safe for parallel '
-    #    'reading, doing serial read', warning.getvalue())
