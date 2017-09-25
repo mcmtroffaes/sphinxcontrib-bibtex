@@ -1,7 +1,13 @@
-0.3.6 (23 February 2017)
-------------------------
+0.3.6 (25 September 2017)
+-------------------------
 
 * Real fix for issue #111 (again reported by jamesjer).
+
+* Fix test regressions due to latest Sphinx updates.
+
+* Fix test regressions on ascii locale.
+
+* Support and test Python 3.6.
 
 0.3.5 (22 February 2017)
 ------------------------
