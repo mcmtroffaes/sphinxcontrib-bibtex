@@ -3,9 +3,11 @@
 
 * Real fix for issue #111 (again reported by jamesjer).
 
-* Fix test regressions due to latest Sphinx updates.
+* Fix test regressions due to latest Sphinx updates (see issues #115,
+  #120, #121, and #122, reported by ndarmage and ghisvail).
 
-* Fix test regressions on ascii locale.
+* Fix test regressions on ascii locale (see issue #121, reported by
+  ghisvail).
 
 * Support and test Python 3.6.
 
