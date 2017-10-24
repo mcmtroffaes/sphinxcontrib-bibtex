@@ -1,4 +1,3 @@
-latexcodec>=0.3.0
 pybtex>=0.17
 pybtex-docutils>=0.2.0
 six>=1.4.1

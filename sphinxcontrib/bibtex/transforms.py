@@ -10,8 +10,6 @@
 
     .. autofunction:: node_text_transform
 
-    .. autofunction:: transform_curly_bracket_strip
-
     .. autofunction:: transform_url_command
 """
 
@@ -30,16 +28,6 @@ def node_text_transform(node, transform):
             node.replace(child, transform(child))
         else:
             node_text_transform(child, transform)
-
-
-def transform_curly_bracket_strip(textnode):
-    """Strip curly brackets from text."""
-    text = textnode.astext()
-    if '{' in text or '}' in text:
-        text = text.replace('{', '').replace('}', '')
-        return docutils.nodes.Text(text)
-    else:
-        return textnode
 
 
 def transform_url_command(textnode):

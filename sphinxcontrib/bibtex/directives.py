@@ -24,9 +24,6 @@ from pybtex.database import BibliographyData
 from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
 from sphinxcontrib.bibtex.nodes import bibliography
 
-# register the latex codec
-import latexcodec  # noqa
-
 
 def process_start_option(value):
     """Process and validate the start option value
@@ -69,7 +66,6 @@ class BibliographyDirective(Directive):
         'enumtype': directives.unchanged,
         'start': process_start_option,
         'encoding': directives.encoding,
-        'disable-curly-bracket-strip': directives.flag,
         'labelprefix': directives.unchanged,
         'keyprefix': directives.unchanged,
     }
@@ -121,9 +117,7 @@ class BibliographyDirective(Directive):
             filter_=filter_,
             encoding=self.options.get(
                 'encoding',
-                'latex+' + self.state.document.settings.input_encoding),
-            curly_bracket_strip=(
-                'disable-curly-bracket-strip' not in self.options),
+                self.state.document.settings.input_encoding),
             labelprefix=self.options.get("labelprefix", ""),
             keyprefix=self.options.get("keyprefix", ""),
             labels={},
