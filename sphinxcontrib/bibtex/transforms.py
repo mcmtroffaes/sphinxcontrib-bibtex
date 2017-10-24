@@ -105,10 +105,6 @@ class BibliographyTransform(docutils.transforms.Transform):
                     key = citation[0].astext()
                     bibcache.labels[key] = bibcache.labelprefix + entry.label
                 node_text_transform(citation, transform_url_command)
-                if bibcache.curly_bracket_strip:
-                    node_text_transform(
-                        citation,
-                        transform_curly_bracket_strip)
                 nodes += citation
                 if bibcache.list_ == "enumerated":
                     env.bibtex_cache.inc_enum_count(env.docname)
