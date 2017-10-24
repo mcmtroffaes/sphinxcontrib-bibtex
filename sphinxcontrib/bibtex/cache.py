@@ -361,7 +361,7 @@ class BibliographyCache(collections.namedtuple(
     'BibliographyCache',
     """bibfiles style encoding
 list_ enumtype start labels labelprefix
-filter_ curly_bracket_strip keyprefix
+filter_ keyprefix
 """)):
 
     """Contains information about a bibliography directive.
