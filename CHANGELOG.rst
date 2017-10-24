@@ -1,5 +1,9 @@
-0.3.7 (in development)
+0.4.0 (in development)
 ----------------------
+
+* Remove latexcodec and curly bracket strip functionality, as this is
+  now supported by pybtex natively (see issue #127, reported by
+  erosennin).
 
 0.3.6 (25 September 2017)
 -------------------------
