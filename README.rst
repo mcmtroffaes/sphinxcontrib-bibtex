@@ -32,14 +32,14 @@ The extension is inspired by Matthew Brett's
     :target: https://coveralls.io/github/mcmtroffaes/sphinxcontrib-bibtex?branch=develop
     :alt: coveralls.io
 
-.. |downloads| image:: https://pypip.in/d/sphinxcontrib-bibtex/badge.png
+.. |downloads| image:: https://img.shields.io/pypi/dm/sphinxcontrib-bibtex.svg
     :target: https://pypi.python.org/pypi/sphinxcontrib-bibtex/
     :alt: downloads
 
-.. |version| image:: https://pypip.in/v/sphinxcontrib-bibtex/badge.png
+.. |version| image:: https://img.shields.io/pypi/v/sphinxcontrib-bibtex.svg
     :target: https://pypi.python.org/pypi/sphinxcontrib-bibtex/
     :alt: latest version
 
-.. |license| image:: https://pypip.in/license/sphinxcontrib-bibtex/badge.png
+.. |license| image:: https://img.shields.io/pypi/l/sphinxcontrib-bibtex.svg
     :target: https://pypi.python.org/pypi/sphinxcontrib-bibtex/
     :alt: license
