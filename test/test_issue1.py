@@ -26,4 +26,5 @@ if sys.version_info[0] > 2:
             app.env.bibtex_cache.get_cited_docnames(u"2011:BabikerIPv6"),
             {u"2012/07/24/hello_world_"})
         nose.tools.assert_equal(
-            app.env.bibtex_cache.get_label_from_key(u"2011:BabikerIPv6"), u"BNC11")
+            app.env.bibtex_cache.get_label_from_key(u"2011:BabikerIPv6"),
+            u"BNC11")
