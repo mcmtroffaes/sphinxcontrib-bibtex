@@ -18,9 +18,9 @@ def teardown_module():
     (srcdir / '_build').rmtree(True)
 
 
-@with_app(srcdir=srcdir, warningiserror=True)
-def test_tinker(app, status, warning):
-    if sys.version_info[0] > 2:
+if sys.version_info[0] > 2:
+    @with_app(srcdir=srcdir, warningiserror=True)
+    def test_tinker(app, status, warning):
         app.builder.build_all()
         nose.tools.assert_equal(
             app.env.bibtex_cache.get_cited_docnames(u"2011:BabikerIPv6"),
