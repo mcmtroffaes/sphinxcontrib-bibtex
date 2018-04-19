@@ -1,7 +1,7 @@
 sphinxcontrib-bibtex
 ====================
 
-|travis| |coveralls| |downloads| |version| |license|
+|travis| |coveralls| |version| |license|
 
 A Sphinx extension for BibTeX style citations.
 
@@ -31,10 +31,6 @@ The extension is inspired by Matthew Brett's
 .. |coveralls| image:: https://coveralls.io/repos/mcmtroffaes/sphinxcontrib-bibtex/badge.png?branch=develop
     :target: https://coveralls.io/github/mcmtroffaes/sphinxcontrib-bibtex?branch=develop
     :alt: coveralls.io
-
-.. |downloads| image:: https://img.shields.io/pypi/dm/sphinxcontrib-bibtex.svg
-    :target: https://pypi.python.org/pypi/sphinxcontrib-bibtex/
-    :alt: downloads
 
 .. |version| image:: https://img.shields.io/pypi/v/sphinxcontrib-bibtex.svg
     :target: https://pypi.python.org/pypi/sphinxcontrib-bibtex/
