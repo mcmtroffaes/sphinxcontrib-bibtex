@@ -1,9 +1,12 @@
-0.4.0 (in development)
-----------------------
+0.4.0 (19 April 2018)
+---------------------
 
 * Remove latexcodec and curly bracket strip functionality, as this is
   now supported by pybtex natively (see issue #127, reported by
   erosennin).
+
+* Fix tests failures with Sphinx 1.7 (see pull request #136, reported
+  and fixed by mitya57).
 
 0.3.6 (25 September 2017)
 -------------------------
