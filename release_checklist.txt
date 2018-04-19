@@ -17,8 +17,8 @@
   - git remote update --prune && git checkout develop && git merge --ff-only origin/develop
 * create and register source zip
   - git clean -xfd
-  - python setup.py register
-  - python setup.py sdist bdist_wheel upload
+  - python setup.py sdist bdist_wheel
+  - twine upload dist/*
 * test upload
   - pip uninstall sphinxcontrib-bibtex
   - pip install --user -U sphinxcontrib-bibtex
@@ -26,7 +26,7 @@
   - nosetests
 * push release
   - git checkout master && git merge --ff-only develop
-  - git tag -a -m "Tagging version x.x.x" x.x.x
+  - git tag -a -m "Tagging version `cat VERSION`" `cat VERSION`
   - git push origin master
   - git push --tags
   - git checkout develop
