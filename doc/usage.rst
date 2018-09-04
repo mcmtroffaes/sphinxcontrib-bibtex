@@ -90,13 +90,11 @@ Roles and Directives
    .. code-block:: rest
 
      .. bibliography:: refs.bib
-        :encoding: latex+latin
+        :encoding: latin
 
-   Note that, usually, you want to prepend your encoding with
-   ``latex+``, in order to convert LaTeX control characters to unicode
-   characters (for instance, to convert ``\'e`` into ``é``). The latex
-   codec is invoked by default, for your convenience. Be sure to write
-   ``\%`` when you intend to format a percent sign.
+   LaTeX control characters are automatically converted to unicode 
+   characters (for instance, to convert ``\'e`` into ``é``). Be sure 
+   to write ``\%`` when you intend to format a percent sign.
 
 .. XXX not documenting disable-curly-bracket-strip for now; might remove it
 
