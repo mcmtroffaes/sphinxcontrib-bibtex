@@ -1,5 +1,16 @@
-0.4.1 (in development)
-----------------------
+0.4.1 (28 November 2018)
+------------------------
+
+* Disable tinkerer test due to upstream bug.
+
+* Remove crossref test due to changed upstream behaviour in pybtex.
+
+* Fix latex test to match new upstream code generation.
+
+* Fix documentation of encoding option (contributed by Kai Mühlbauer).
+
+* Migrate to sphinx.util.logging in favour of old deprecated logging
+  method.
 
 0.4.0 (19 April 2018)
 ---------------------
