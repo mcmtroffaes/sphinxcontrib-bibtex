@@ -148,13 +148,12 @@ class BibliographyDirective(Directive):
         :return: The parsed bibliography data.
         :rtype: :class:`pybtex.database.BibliographyData`
         """
-        app = self.state.document.settings.env.app
         parser = bibtex.Parser(encoding)
         logger.info(
             bold("parsing bibtex file {0}... ".format(bibfile)), nonl=True)
         parser.parse_file(bibfile)
         logger.info("parsed {0} entries"
-                 .format(len(parser.data.entries)))
+                    .format(len(parser.data.entries)))
         return parser.data
 
     def update_bibfile_cache(self, bibfile, mtime, encoding):
