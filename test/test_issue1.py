@@ -7,7 +7,7 @@
 """
 
 import nose.tools
-import sys
+# import sys
 
 from sphinx_testing.util import path, with_app
 
@@ -18,7 +18,7 @@ def teardown_module():
     (srcdir / '_build').rmtree(True)
 
 
-#if sys.version_info[0] > 2:
+# if sys.version_info[0] > 2:
 if False:
     @with_app(srcdir=srcdir, warningiserror=True)
     def test_tinker(app, status, warning):
