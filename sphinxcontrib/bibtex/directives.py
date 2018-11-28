@@ -14,6 +14,7 @@
 
 import ast  # parse(), used for filter
 import os.path  # getmtime()
+import sphinx.util
 
 from docutils.parsers.rst import Directive, directives
 from sphinx.util.console import bold, standout
@@ -23,6 +24,9 @@ from pybtex.database import BibliographyData
 
 from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
 from sphinxcontrib.bibtex.nodes import bibliography
+
+
+logger = sphinx.util.logging.getLogger(__name__)
 
 
 def process_start_option(value):
@@ -87,15 +91,15 @@ class BibliographyDirective(Directive):
             env.docname, env.new_serialno('bibtex'))
         if "filter" in self.options:
             if "all" in self.options:
-                env.app.warn(standout(":filter: overrides :all:"))
+                logger.warning(standout(":filter: overrides :all:"))
             if "notcited" in self.options:
-                env.app.warn(standout(":filter: overrides :notcited:"))
+                logger.warning(standout(":filter: overrides :notcited:"))
             if "cited" in self.options:
-                env.app.warn(standout(":filter: overrides :cited:"))
+                logger.warning(standout(":filter: overrides :cited:"))
             try:
                 filter_ = ast.parse(self.options["filter"])
             except SyntaxError:
-                env.app.warn(
+                logger.warning(
                     standout("syntax error in :filter: expression") +
                     " (" + self.options["filter"] + "); "
                     "the option will be ignored"
@@ -124,7 +128,7 @@ class BibliographyDirective(Directive):
             bibfiles=[],
         )
         if (bibcache.list_ not in set(["bullet", "enumerated", "citation"])):
-            env.app.warn(
+            logger.warning(
                 "unknown bibliography list type '{0}'.".format(bibcache.list_))
         for bibfile in self.arguments[0].split():
             # convert to normalized absolute path to ensure that the same file
@@ -146,10 +150,10 @@ class BibliographyDirective(Directive):
         """
         app = self.state.document.settings.env.app
         parser = bibtex.Parser(encoding)
-        app.info(
+        logger.info(
             bold("parsing bibtex file {0}... ".format(bibfile)), nonl=True)
         parser.parse_file(bibfile)
-        app.info("parsed {0} entries"
+        logger.info("parsed {0} entries"
                  .format(len(parser.data.entries)))
         return parser.data
 
@@ -189,7 +193,7 @@ class BibliographyDirective(Directive):
         try:
             mtime = os.path.getmtime(bibfile)
         except OSError:
-            env.app.warn(
+            logger.warning(
                 standout("could not open bibtex file {0}.".format(bibfile)))
             cache[bibfile] = BibfileCache(  # dummy cache
                 mtime=-float("inf"), data=BibliographyData())
@@ -197,18 +201,18 @@ class BibliographyDirective(Directive):
         # get cache and check if it is still up to date
         # if it is not up to date, parse the bibtex file
         # and store it in the cache
-        env.app.info(
+        logger.info(
             bold("checking for {0} in bibtex cache... ".format(bibfile)),
             nonl=True)
         try:
             bibfile_cache = cache[bibfile]
         except KeyError:
-            env.app.info("not found")
+            logger.info("not found")
             self.update_bibfile_cache(bibfile, mtime, encoding)
         else:
             if mtime != bibfile_cache.mtime:
-                env.app.info("out of date")
+                logger.info("out of date")
                 self.update_bibfile_cache(bibfile, mtime, encoding)
             else:
-                env.app.info('up to date')
+                logger.info('up to date')
         return cache[bibfile].data

@@ -15,10 +15,14 @@
 
 import docutils.nodes
 import docutils.transforms
+import sphinx.util
 
 from pybtex.plugin import find_plugin
 
 from sphinxcontrib.bibtex.nodes import bibliography
+
+
+logger = sphinx.util.logging.getLogger(__name__)
 
 
 def node_text_transform(node, transform):
@@ -72,7 +76,7 @@ class BibliographyTransform(docutils.transforms.Transform):
             bibcache = env.bibtex_cache.get_bibliography_cache(
                 docname=docname, id_=id_)
             entries = env.bibtex_cache.get_bibliography_entries(
-                docname=docname, id_=id_, warn=env.app.warn)
+                docname=docname, id_=id_, warn=logger.warning)
             # locate and instantiate style and backend plugins
             style = find_plugin('pybtex.style.formatting', bibcache.style)()
             backend = find_plugin('pybtex.backends', 'docutils')()

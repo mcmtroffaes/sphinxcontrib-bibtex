@@ -13,12 +13,16 @@
 
 import docutils.nodes
 import docutils.parsers.rst
+import sphinx.util
 from sphinxcontrib.bibtex.cache import Cache
 from sphinxcontrib.bibtex.nodes import bibliography
 from sphinxcontrib.bibtex.roles import CiteRole
 from sphinxcontrib.bibtex.directives import BibliographyDirective
 from sphinxcontrib.bibtex.transforms import BibliographyTransform
 import six
+
+
+logger = sphinx.util.logging.getLogger(__name__)
 
 
 def init_bibtex_cache(app):
@@ -57,7 +61,7 @@ def process_citations(app, doctree, docname):
         try:
             label = app.env.bibtex_cache.get_label_from_key(key)
         except KeyError:
-            app.warn("could not relabel citation [%s]" % key)
+            logger.warning("could not relabel citation [%s]" % key)
         else:
             node[0] = docutils.nodes.label('', label)
 
@@ -85,7 +89,7 @@ def process_citation_references(app, doctree, docname):
             try:
                 label = app.env.bibtex_cache.get_label_from_key(key)
             except KeyError:
-                app.warn("could not relabel citation reference [%s]" % key)
+                logger.warning("could not relabel citation reference [%s]" % key)
             else:
                 node[0] = docutils.nodes.Text('[' + label + ']')
 
@@ -102,7 +106,7 @@ def check_duplicate_labels(app, env):
     for info in env.bibtex_cache.get_all_bibliography_caches():
         for key, label in six.iteritems(info.labels):
             if label in label_to_key:
-                app.warn(
+                logger.warning(
                     "duplicate label for keys %s and %s"
                     % (key, label_to_key[label]))
             else:
