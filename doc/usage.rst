@@ -24,14 +24,6 @@ Roles and Directives
 
       See :cite:`1987:nelson,2001:schechter`.
 
-   .. note::
-
-      Due to a docutils implementation detail, Sphinx's LaTeX backend
-      will not actually generate ``\cite`` commands. Instead, all
-      references, including citation references, are managed using
-      ``\hyperref`` and ``\label`` commands.
-      See https://github.com/mcmtroffaes/sphinxcontrib-bibtex/issues/10
-
 .. rst:directive:: .. bibliography:: refs.bib [...]
 
    Create bibliography for all cited references. The ``all`` flag
