@@ -459,16 +459,6 @@ There are a few ways to work around this problem:
 * Use a style that has non-numerical labelling,
   such as ``:style: alpha``.
 
-Citation Links Broken When Using LaTeX Backend
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-This is a known bug in Sphinx's latex writer,
-which has been fixed upstream:
-
-https://bitbucket.org/birkenfeld/sphinx/pull-requests/171
-
-https://bitbucket.org/birkenfeld/sphinx/pull-requests/173
-
 LaTeX Backend Fails with Citations In Figure Captions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
