@@ -34,8 +34,6 @@ Roles and Directives
 
    .. code-block:: rest
 
-     .. rubric:: References
-
      .. bibliography:: refs.bib
         :cited:
 
@@ -49,9 +47,6 @@ Roles and Directives
         \newblock {\em Radically Elementary Probability Theory}.
         \newblock Princeton University Press, 1987.
       \end{thebibliography}
-
-   Note that, unlike LaTeX, the :rst:dir:`bibliography` directive does
-   not generate a default section title.
 
    .. warning::
 
@@ -515,8 +510,11 @@ you can tell Sphinx to generate a rubric title only for html:
 
 This code could be placed in your :file:`zreferences.rst`.
 
-The current aim is to fix Sphinx's LaTeX writer
-to match the html output more closely.
-The issue is tracked here:
+Alternatively, to remove the bibliography section title from the
+LaTeX output, you can add the following to your LaTeX preamble:
 
-https://github.com/mcmtroffaes/sphinxcontrib-bibtex/issues/48
+.. code-block:: latex
+
+   \usepackage{etoolbox}
+   \patchcmd{\thebibliography}{\section*{\refname}}{}{}{}
+
