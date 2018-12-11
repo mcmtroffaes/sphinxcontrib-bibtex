@@ -10,16 +10,16 @@ with import <nixpkgs> {}; {
     buildInputs = [
       # python versions that we test
       python27
-      python34
       python35
       python36
+      python37
       # development tools and libraries
       stdenv
       libxml2
       libxslt
-      python36Packages.tox
-      python36Packages.cython
-      python36Packages.sphinx
+      python37Packages.tox
+      python37Packages.cython
+      python37Packages.sphinx
     ];
   };
 }
