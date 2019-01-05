@@ -142,7 +142,7 @@ def setup(app):
     if "bibliography" not in _directives:
         app.add_directive("bibliography", BibliographyDirective)
         app.add_role("cite", CiteRole())
-        app.add_node(bibliography)
+        app.add_node(bibliography, override=True)
     else:
         assert _directives["bibliography"] is BibliographyDirective
     try:
