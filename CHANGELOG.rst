@@ -1,6 +1,8 @@
 0.4.2 (in development)
 ----------------------
 
+* Drop Python 3.3 support, add Python 3.7 support.
+
 0.4.1 (28 November 2018)
 ------------------------
 
