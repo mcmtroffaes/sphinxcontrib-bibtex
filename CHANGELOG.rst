@@ -1,7 +1,11 @@
-0.4.2 (in development)
+0.4.2 (7 January 2018)
 ----------------------
 
 * Drop Python 3.3 support, add Python 3.7 support.
+
+* Work around issue with sphinx-testing on Fedora (reported by
+  jamesjer in issue #157, fix contributed by mitya57 in pull request
+  #158).
 
 0.4.1 (28 November 2018)
 ------------------------
