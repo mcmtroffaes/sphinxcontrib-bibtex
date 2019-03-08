@@ -23,7 +23,8 @@ def extract_references(code):
 
 def extract_citations(code):
     return frozenset(re.findall(
-        '<table class="bibtex docutils citation" frame="void" id="([^"]+)"', code))
+        '<table class="bibtex docutils citation" frame="void" id="([^"]+)"',
+        code))
 
 
 def check_code(code, refs, cites, otherrefs, othercites):
