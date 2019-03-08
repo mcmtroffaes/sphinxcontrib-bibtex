@@ -21,15 +21,15 @@ def teardown_module():
 def test_sphinx(app, status, warning):
     app.builder.build_all()
     warnings = warning.getvalue()
-    assert re.search(u'could not relabel citation \\[Test01\\]', warnings)
-    assert re.search(u'could not relabel citation \\[Test02\\]', warnings)
-    assert re.search(u'could not relabel citation \\[Wa04\\]', warnings)
-    assert re.search(
+    assert not re.search(u'could not relabel citation \\[Test01\\]', warnings)
+    assert not re.search(u'could not relabel citation \\[Test02\\]', warnings)
+    assert not re.search(u'could not relabel citation \\[Wa04\\]', warnings)
+    assert not re.search(
         u'could not relabel citation reference \\[Test01\\]',
         warnings)
-    assert re.search(
+    assert not re.search(
         u'could not relabel citation reference \\[Test02\\]',
         warnings)
-    assert re.search(
+    assert not re.search(
         u'could not relabel citation reference \\[Wa04\\]',
         warnings)

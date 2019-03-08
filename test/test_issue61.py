@@ -20,5 +20,5 @@ def teardown_module():
 def test_multiple_keys(app, status, warning):
     app.builder.build_all()
     output = (app.outdir / "contents.html").read_text(encoding='utf-8')
-    assert re.search('class="reference internal" href="#testone"', output)
-    assert re.search('class="reference internal" href="#testtwo"', output)
+    assert re.search('class="bibtex reference internal" href="#testone"', output)
+    assert re.search('class="bibtex reference internal" href="#testtwo"', output)
