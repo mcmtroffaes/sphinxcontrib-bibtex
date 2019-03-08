@@ -13,12 +13,16 @@
 
 import docutils.nodes
 import docutils.parsers.rst
+import sphinx
 import sphinx.util
 from sphinxcontrib.bibtex.cache import Cache
 from sphinxcontrib.bibtex.nodes import bibliography
 from sphinxcontrib.bibtex.roles import CiteRole
 from sphinxcontrib.bibtex.directives import BibliographyDirective
-from sphinxcontrib.bibtex.transforms import BibliographyTransform
+from sphinxcontrib.bibtex.transforms import (
+    BibliographyTransform,
+    OverrideCitationReferences,
+    HandleMissingCitesTransform)
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -56,6 +60,8 @@ def process_citations(app, doctree, docname):
     :type docname: :class:`str`
     """
     for node in doctree.traverse(docutils.nodes.citation):
+        if "bibtex" not in node.attributes.get('classes', []):
+            continue
         key = node[0].astext()
         try:
             label = app.env.bibtex_cache.get_label_from_key(key)
@@ -79,21 +85,17 @@ def process_citation_references(app, doctree, docname):
     # sphinx has already turned citation_reference nodes
     # into reference nodes, so iterate over reference nodes
     for node in doctree.traverse(docutils.nodes.reference):
-        # exclude sphinx [source] labels
-        if isinstance(node[0], docutils.nodes.Element):
-            if 'viewcode-link' in node[0]['classes']:
-                continue
+        if "bibtex" not in node.attributes.get('classes', []):
+            continue
         text = node[0].astext()
-        if text.startswith('[') and text.endswith(']'):
-            key = text[1:-1]
-            try:
-                label = app.env.bibtex_cache.get_label_from_key(key)
-            except KeyError:
-                logger.warning(
-                    "could not relabel citation reference [%s]" % key,
-                    type="bibtex", subtype="relabel")
-            else:
-                node[0] = docutils.nodes.Text('[' + label + ']')
+        key = text[1:-1]
+        try:
+            label = app.env.bibtex_cache.get_label_from_key(key)
+        except KeyError:
+            logger.warning(
+                "could not relabel citation reference [%s]" % key)
+        else:
+            node[0] = docutils.nodes.Text('[' + label + ']')
 
 
 def check_duplicate_labels(app, env):
@@ -148,6 +150,11 @@ def setup(app):
     transforms = app.registry.get_transforms()
     if BibliographyTransform not in transforms:
         app.add_transform(BibliographyTransform)
+    if sphinx.version_info < (2,):
+        if OverrideCitationReferences not in transforms:
+            app.add_transform(OverrideCitationReferences)
+        if HandleMissingCitesTransform not in transforms:
+            app.add_post_transform(HandleMissingCitesTransform)
 
     # Parallel read is not safe at the moment: in the current design,
     # the document that contains references must be read last for all

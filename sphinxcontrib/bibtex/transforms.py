@@ -16,6 +16,7 @@
 import docutils.nodes
 import docutils.transforms
 import sphinx.util
+from sphinx import addnodes
 
 from pybtex.plugin import find_plugin
 
@@ -50,6 +51,64 @@ def transform_url_command(textnode):
         return node
     else:
         return textnode
+
+
+class OverrideCitationReferences(docutils.transforms.Transform):
+    """
+    Replace citation references by pending_xref nodes before the default
+    docutils transform tries to resolve them.
+
+    This transform overrides sphinx.transforms.CitationReferences,
+    in order to propogate the classes of the citation_reference node
+    to the pending_xref node (see PR sphinx-doc/sphinx#6147)
+    """
+    # the default priority of sphinx.transforms.CitationReferences is 619
+    default_priority = 618
+
+    def apply(self, **kwargs):
+
+        # mark citation labels as not smartquoted
+        # for citation in self.document.traverse(nodes.citation):
+        #     label = cast(nodes.label, citation[0])
+        #     label['support_smartquotes'] = False
+
+        for citation_ref in self.document.traverse(
+                docutils.nodes.citation_reference):
+            cittext = citation_ref.astext()
+            refnode = addnodes.pending_xref(
+                cittext, refdomain='std', reftype='citation',
+                reftarget=cittext, refwarn=True,
+                support_smartquotes=False,
+                ids=citation_ref["ids"])
+            refnode.source = citation_ref.source or citation_ref.parent.source
+            refnode.line = citation_ref.line or citation_ref.parent.line
+            refnode += docutils.nodes.Text('[' + cittext + ']')
+            for class_name in citation_ref.attributes.get('classes', []):
+                refnode['classes'].append(class_name)
+            citation_ref.parent.replace(citation_ref, refnode)
+
+
+class HandleMissingCitesTransform(docutils.transforms.Transform):
+    """ before sphinx.transforms.post_transforms.ReferencesResolver
+    missing citations need to be handled (default_priority=10)
+    """
+    default_priority = 9
+
+    def apply(self):
+        # type: () -> None
+        app = self.document.settings.env.app
+        for node in self.document.traverse(addnodes.pending_xref):
+            if "bibtex" not in node.attributes.get('classes', []):
+                continue
+            text = node[0].astext()
+            key = text[1:-1]
+            try:
+                app.env.bibtex_cache.get_label_from_key(key)
+            except KeyError:
+                logger.warning(
+                    "could not relabel citation reference [%s]" % key)
+                # strip class (otherwise ReferencesResolver fails)
+                node.attributes['classes'] = []
 
 
 class BibliographyTransform(docutils.transforms.Transform):
@@ -102,6 +161,7 @@ class BibliographyTransform(docutils.transforms.Transform):
                     citation += backend.paragraph(entry)
                 else:  # "citation"
                     citation = backend.citation(entry, self.document)
+                    citation['classes'].append('bibtex')
                     # backend.citation(...) uses entry.key as citation label
                     # we change it to entry.label later onwards
                     # but we must note the entry.label now;

@@ -32,6 +32,8 @@ class CiteRole(XRefRole):
         refnodes = [
             self.backend.citation_reference(_fake_entry(key), document)
             for key in keys]
+        for refnode in refnodes:
+            refnode['classes'].append('bibtex')
         for key in keys:
             env.bibtex_cache.add_cited(key, env.docname)
         return refnodes, []

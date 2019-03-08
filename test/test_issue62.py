@@ -18,7 +18,7 @@ def teardown_module():
 
 def extract_references(code):
     return frozenset(re.findall(
-        '<a class="reference internal" href="([^"]+)"', code))
+        '<a class="bibtex reference internal" href="([^"]+)"', code))
 
 
 def extract_citations(code):
