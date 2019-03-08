@@ -66,7 +66,7 @@ class OverrideCitationReferences(docutils.transforms.Transform):
     default_priority = 618
 
     def apply(self, **kwargs):
-        # type: (Any) -> None
+
         # mark citation labels as not smartquoted
         # for citation in self.document.traverse(nodes.citation):
         #     label = cast(nodes.label, citation[0])
