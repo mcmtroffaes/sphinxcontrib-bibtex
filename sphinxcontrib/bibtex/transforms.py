@@ -88,6 +88,29 @@ class OverrideCitationReferences(docutils.transforms.Transform):
             citation_ref.parent.replace(citation_ref, refnode)
 
 
+class HandleMissingCitesTransform(docutils.transforms.Transform):
+    """ before sphinx.transforms.post_transforms.ReferencesResolver
+    missing citations need to be handled
+    """
+    default_priority = 620
+
+    def apply(self):
+        # type: () -> None
+        app = self.document.settings.env.app
+        for node in self.document.traverse(addnodes.pending_xref):
+            if "bibtex" not in node.attributes.get('classes', []):
+                continue
+            text = node[0].astext()
+            key = text[1:-1]
+            try:
+                app.env.bibtex_cache.get_label_from_key(key)
+            except KeyError:
+                logger.warning(
+                    "could not relabel citation reference [%s]" % key)
+                # strip class (otherwise ReferencesResolver fails)
+                node.attributes['classes'] = []
+
+
 class BibliographyTransform(docutils.transforms.Transform):
 
     """A docutils transform to generate citation entries for

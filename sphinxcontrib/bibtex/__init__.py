@@ -18,7 +18,10 @@ from sphinxcontrib.bibtex.cache import Cache
 from sphinxcontrib.bibtex.nodes import bibliography
 from sphinxcontrib.bibtex.roles import CiteRole
 from sphinxcontrib.bibtex.directives import BibliographyDirective
-from sphinxcontrib.bibtex.transforms import BibliographyTransform, OverrideCitationReferences
+from sphinxcontrib.bibtex.transforms import (
+    BibliographyTransform,
+    OverrideCitationReferences,
+    HandleMissingCitesTransform)
 import six
 
 
@@ -153,6 +156,8 @@ def setup(app):
         app.add_transform(BibliographyTransform)
     if OverrideCitationReferences not in transforms:
         app.add_transform(OverrideCitationReferences)
+    if HandleMissingCitesTransform not in transforms:
+        app.add_transform(HandleMissingCitesTransform)
 
     # Parallel read is not safe at the moment: in the current design,
     # the document that contains references must be read last for all
