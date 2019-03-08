@@ -157,7 +157,7 @@ def setup(app):
     if OverrideCitationReferences not in transforms:
         app.add_transform(OverrideCitationReferences)
     if HandleMissingCitesTransform not in transforms:
-        app.add_transform(HandleMissingCitesTransform)
+        app.add_post_transform(HandleMissingCitesTransform)
 
     # Parallel read is not safe at the moment: in the current design,
     # the document that contains references must be read last for all

@@ -90,9 +90,9 @@ class OverrideCitationReferences(docutils.transforms.Transform):
 
 class HandleMissingCitesTransform(docutils.transforms.Transform):
     """ before sphinx.transforms.post_transforms.ReferencesResolver
-    missing citations need to be handled
+    missing citations need to be handled (default_priority=10)
     """
-    default_priority = 620
+    default_priority = 9
 
     def apply(self):
         # type: () -> None
