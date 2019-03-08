@@ -84,7 +84,7 @@ class OverrideCitationReferences(docutils.transforms.Transform):
             refnode.line = citation_ref.line or citation_ref.parent.line
             refnode += docutils.nodes.Text('[' + cittext + ']')
             for class_name in citation_ref.attributes.get('classes', []):
-                refnode.set_class(class_name)
+                refnode['classes'].append(class_name)
             citation_ref.parent.replace(citation_ref, refnode)
 
 
@@ -161,7 +161,7 @@ class BibliographyTransform(docutils.transforms.Transform):
                     citation += backend.paragraph(entry)
                 else:  # "citation"
                     citation = backend.citation(entry, self.document)
-                    citation.set_class('bibtex')
+                    citation['classes'].append('bibtex')
                     # backend.citation(...) uses entry.key as citation label
                     # we change it to entry.label later onwards
                     # but we must note the entry.label now;
