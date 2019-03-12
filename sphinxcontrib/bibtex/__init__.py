@@ -13,6 +13,7 @@
 
 import docutils.nodes
 import docutils.parsers.rst
+import sphinx
 import sphinx.util
 from sphinxcontrib.bibtex.cache import Cache
 from sphinxcontrib.bibtex.nodes import bibliography
@@ -154,10 +155,11 @@ def setup(app):
         transforms = SphinxStandaloneReader.transforms
     if BibliographyTransform not in transforms:
         app.add_transform(BibliographyTransform)
-    if OverrideCitationReferences not in transforms:
-        app.add_transform(OverrideCitationReferences)
-    if HandleMissingCitesTransform not in transforms:
-        app.add_post_transform(HandleMissingCitesTransform)
+    if sphinx.version_info < (2,):
+        if OverrideCitationReferences not in transforms:
+            app.add_transform(OverrideCitationReferences)
+        if HandleMissingCitesTransform not in transforms:
+            app.add_post_transform(HandleMissingCitesTransform)
 
     # Parallel read is not safe at the moment: in the current design,
     # the document that contains references must be read last for all
