@@ -61,7 +61,8 @@ def process_citations(app, doctree, docname):
         try:
             label = app.env.bibtex_cache.get_label_from_key(key)
         except KeyError:
-            logger.warning("could not relabel citation [%s]" % key)
+            logger.warning("could not relabel citation [%s]" % key,
+                           type="bibtex", subtype="relabel")
         else:
             node[0] = docutils.nodes.label('', label)
 
@@ -90,7 +91,8 @@ def process_citation_references(app, doctree, docname):
                 label = app.env.bibtex_cache.get_label_from_key(key)
             except KeyError:
                 logger.warning(
-                    "could not relabel citation reference [%s]" % key)
+                    "could not relabel citation reference [%s]" % key,
+                    type="bibtex", subtype="relabel")
             else:
                 node[0] = docutils.nodes.Text('[' + label + ']')
 
