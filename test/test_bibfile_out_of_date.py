@@ -21,6 +21,12 @@ def teardown_module():
     (srcdir / 'test.bib').rmtree(True)
 
 
+def htmlbibitem(label, text):
+    return (
+        '.*<dt class="label".*><span class="brackets">'
+        '<a.*>{0}</a></span></dt>\s*<dd>.*{1}.*</dd>'.format(label, text))
+
+
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_bibfile_out_of_date(app, status, warning):
     shutil.copyfile((srcdir / 'test_old.bib'), (srcdir / 'test.bib'))
@@ -28,11 +34,11 @@ def test_bibfile_out_of_date(app, status, warning):
     output = (path(app.outdir) / "index.html").read_text()
     assert re.search(
         '<p id="bibtex-bibliography-index-0">'
-        '.*<tr><td class="label">.*\\[1\\].*</td><td>.*Akkerdju.*</td></tr>'
-        '.*<tr><td class="label">.*\\[2\\].*</td><td>.*Bro.*</td></tr>'
-        '.*<tr><td class="label">.*\\[3\\].*</td><td>.*Chap.*</td></tr>'
-        '.*<tr><td class="label">.*\\[4\\].*</td><td>.*Dude.*</td></tr>'
-        '.*</p>',
+        + htmlbibitem("1", "Akkerdju")
+        + htmlbibitem("2", "Bro")
+        + htmlbibitem("3", "Chap")
+        + htmlbibitem("4", "Dude")
+        + '.*</p>',
         output, re.MULTILINE | re.DOTALL)
     # wait to ensure different timestamp
     time.sleep(0.1)
@@ -41,9 +47,9 @@ def test_bibfile_out_of_date(app, status, warning):
     output = (path(app.outdir) / "index.html").read_text()
     assert re.search(
         '<p id="bibtex-bibliography-index-0">'
-        '.*<tr><td class="label">.*\\[1\\].*</td><td>.*Eminence.*</td></tr>'
-        '.*<tr><td class="label">.*\\[2\\].*</td><td>.*Frater.*</td></tr>'
-        '.*<tr><td class="label">.*\\[3\\].*</td><td>.*Giggles.*</td></tr>'
-        '.*<tr><td class="label">.*\\[4\\].*</td><td>.*Handy.*</td></tr>'
-        '.*</p>',
+        + htmlbibitem("1", "Eminence")
+        + htmlbibitem("2", "Frater")
+        + htmlbibitem("3", "Giggles")
+        + htmlbibitem("4", "Handy")
+        + '.*</p>',
         output, re.MULTILINE | re.DOTALL)
