@@ -23,7 +23,7 @@ def test_duplicate_label(app, status, warning):
     assert re.search(
         'duplicate label for keys (Test and Test2)|(Test2 and Test)',
         warning.getvalue())
-    output = (app.outdir / "doc1.html").read_text(encoding='utf-8')
+    output = (path(app.outdir) / "doc1.html").read_text(encoding='utf-8')
     assert re.search('<td class="label">\\[1\\]</td>', output)
-    output = (app.outdir / "doc2.html").read_text(encoding='utf-8')
+    output = (path(app.outdir) / "doc2.html").read_text(encoding='utf-8')
     assert re.search('<td class="label">\\[1\\]</td>', output)

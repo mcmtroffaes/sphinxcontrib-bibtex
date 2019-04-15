@@ -19,14 +19,14 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_issue87(app, status, warning):
     app.builder.build_all()
-    output = (app.outdir / "doc0.html").read_text(encoding='utf-8')
+    output = (path(app.outdir) / "doc0.html").read_text(encoding='utf-8')
     assert re.search(
         'class="reference internal" href="#tag0-2009-mandel"', output)
     assert re.search(
         'class="reference internal" href="#tag0-2003-evensen"', output)
     assert re.search('AMan09', output)
     assert re.search('AEve03', output)
-    output = (app.outdir / "doc1.html").read_text(encoding='utf-8')
+    output = (path(app.outdir) / "doc1.html").read_text(encoding='utf-8')
     assert re.search(
         'class="reference internal" href="#tag1-2009-mandel"', output)
     assert not re.search(

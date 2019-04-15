@@ -20,7 +20,7 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_list_enumerated(app, status, warning):
     app.builder.build_all()
-    output = (app.outdir / "index.html").read_text()
+    output = (path(app.outdir) / "index.html").read_text()
     assert re.search(
         '<ol .*id="bibtex-bibliography-contents-0".* start="1".*>'
         '.*<li>.*Akkerdju.*</li>'

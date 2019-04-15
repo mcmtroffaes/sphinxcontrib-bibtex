@@ -25,7 +25,7 @@ def teardown_module():
 def test_bibfile_out_of_date(app, status, warning):
     shutil.copyfile((srcdir / 'test_old.bib'), (srcdir / 'test.bib'))
     app.builder.build_all()
-    output = (app.outdir / "index.html").read_text()
+    output = (path(app.outdir) / "index.html").read_text()
     assert re.search(
         '<p id="bibtex-bibliography-contents-0">'
         '.*<tr><td class="label">.*\\[1\\].*</td><td>.*Akkerdju.*</td></tr>'
@@ -38,7 +38,7 @@ def test_bibfile_out_of_date(app, status, warning):
     time.sleep(0.1)
     shutil.copyfile((srcdir / 'test_new.bib'), (srcdir / 'test.bib'))
     app.builder.build_all()
-    output = (app.outdir / "index.html").read_text()
+    output = (path(app.outdir) / "index.html").read_text()
     assert re.search(
         '<p id="bibtex-bibliography-contents-0">'
         '.*<tr><td class="label">.*\\[1\\].*</td><td>.*Eminence.*</td></tr>'

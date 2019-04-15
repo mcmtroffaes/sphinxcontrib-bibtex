@@ -20,7 +20,7 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True, buildername='latex')
 def test_latex_refs(app, status, warning):
     app.builder.build_all()
-    output = (app.outdir / "test.tex").read_text(encoding='utf-8')
+    output = (path(app.outdir) / "test.tex").read_text(encoding='utf-8')
     if sphinx.version_info >= (1, 8):
         assert r'\sphinxcite{contents:huygens}' in output
         assert r'\bibitem[Huy57]{contents:huygens}' in output
