@@ -24,7 +24,7 @@ def teardown_module():
 def htmlbibitem(label, text):
     return (
         '.*<dt class="label".*><span class="brackets">'
-        '<a.*>{0}</a></span></dt>\s*<dd>.*{1}.*</dd>'.format(label, text))
+        '<a.*>{0}</a></span></dt>\\s*<dd>.*{1}.*</dd>'.format(label, text))
 
 
 @with_app(srcdir=srcdir, warningiserror=True)
