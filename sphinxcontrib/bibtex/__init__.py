@@ -19,7 +19,6 @@ from sphinxcontrib.bibtex.nodes import bibliography
 from sphinxcontrib.bibtex.roles import CiteRole
 from sphinxcontrib.bibtex.directives import BibliographyDirective
 from sphinxcontrib.bibtex.transforms import BibliographyTransform
-import six
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -107,7 +106,7 @@ def check_duplicate_labels(app, env):
     """
     label_to_key = {}
     for info in env.bibtex_cache.get_all_bibliography_caches():
-        for key, label in six.iteritems(info.labels):
+        for key, label in info.labels.items():
             if label in label_to_key:
                 logger.warning(
                     "duplicate label for keys %s and %s"

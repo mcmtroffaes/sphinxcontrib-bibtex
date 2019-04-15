@@ -1,5 +1,8 @@
-0.4.3 (in development)
+1.0.0 (in development)
 ----------------------
+
+* Drop Python 2.7 and 3.4 support (as upstream sphinx has dropped
+  support for these as well).
 
 0.4.2 (7 January 2018)
 ----------------------

@@ -9,7 +9,6 @@ with import <nixpkgs> {}; {
     name = "my-env";
     buildInputs = [
       # python versions that we test
-      python27
       python35
       python36
       python37
