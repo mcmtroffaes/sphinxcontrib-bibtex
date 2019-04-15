@@ -21,7 +21,7 @@ def teardown_module():
 def test_issue91(app, status, warning):
     app.builder.build_all()
     # default style is plain; check output
-    with open(os.path.join(app.outdir, "contents.html")) as stream:
+    with open(os.path.join(app.outdir, "index.html")) as stream:
         output = stream.read()
         # ensure Man09 is cited with plain style and not with alpha style
         assert len(re.findall('\\[1\\]', output)) == 2

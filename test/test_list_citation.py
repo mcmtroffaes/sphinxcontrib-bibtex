@@ -20,7 +20,7 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_list_citation(app, status, warning):
     app.builder.build_all()
-    output = (app.outdir / "contents.html").read_text()
+    output = (app.outdir / "index.html").read_text()
     assert re.search(
         '<p id="bibtex-bibliography-contents-0">'
         '.*<tr><td class="label">.*\\[1\\].*</td><td>.*Akkerdju.*</td></tr>'

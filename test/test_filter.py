@@ -20,7 +20,7 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_filter(app, status, warning):
     app.builder.build_all()
-    output = (app.outdir / "contents.html").read_text(encoding='utf-8')
+    output = (app.outdir / "index.html").read_text(encoding='utf-8')
     assert re.search('Tralalala', output)
     assert not re.search('ideetje', output)
     assert not re.search('Jakkamakka', output)
