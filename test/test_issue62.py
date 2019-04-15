@@ -23,7 +23,7 @@ def extract_references(code):
 
 def extract_citations(code):
     return frozenset(re.findall(
-        '<table class="docutils citation" frame="void" id="([^"]+)"', code))
+        '<dt class="label" id="([^"]+)"', code))
 
 
 def check_code(code, refs, cites, otherrefs, othercites):
