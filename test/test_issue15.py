@@ -20,7 +20,7 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_duplicate_label(app, status, warning):
     app.builder.build_all()
-    output = (app.outdir / "contents.html").read_text()
+    output = (path(app.outdir) / "index.html").read_text()
     assert re.search(
-        '<tr>.*Test 1.*</tr>.*<tr>.*Test 2.*</tr>',
+        '<dd>.*Test 1.*</dd>.*<dd>.*Test 2.*</dd>',
         output, re.DOTALL)

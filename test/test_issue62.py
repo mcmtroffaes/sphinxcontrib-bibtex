@@ -23,7 +23,7 @@ def extract_references(code):
 
 def extract_citations(code):
     return frozenset(re.findall(
-        '<table class="docutils citation" frame="void" id="([^"]+)"', code))
+        '<dt class="label" id="([^"]+)"', code))
 
 
 def check_code(code, refs, cites, otherrefs, othercites):
@@ -73,12 +73,12 @@ def test_local_bibliographies(app, status, warning):
         'mcmahon-membrane-2010',
         ])
     app.builder.build_all()
-    output = (app.outdir / "doc1.html").read_text(encoding='utf-8')
+    output = (path(app.outdir) / "doc1.html").read_text(encoding='utf-8')
     check_code(output, doc1_refs, doc1_cites,
                doc2_refs | sum_refs, doc2_cites | sum_cites)
-    output = (app.outdir / "doc2.html").read_text(encoding='utf-8')
+    output = (path(app.outdir) / "doc2.html").read_text(encoding='utf-8')
     check_code(output, doc2_refs, doc2_cites,
                doc1_refs | sum_refs, doc1_cites | sum_cites)
-    output = (app.outdir / "summary.html").read_text(encoding='utf-8')
+    output = (path(app.outdir) / "summary.html").read_text(encoding='utf-8')
     check_code(output, sum_refs, sum_cites,
                doc1_refs | doc2_refs, doc1_cites | doc2_cites)

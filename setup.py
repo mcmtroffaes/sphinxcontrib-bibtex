@@ -2,7 +2,6 @@
 
 import io
 from setuptools import setup, find_packages
-import sys
 
 
 def readfile(filename):
@@ -13,9 +12,6 @@ def readfile(filename):
 readme = readfile("README.rst")[5:]  # skip title and badges
 requires = readfile("requirements.txt")
 version = readfile("VERSION")[0].strip()
-
-if sys.version_info < (2, 7):
-    requires.append('ordereddict>=1.1')
 
 setup(
     name='sphinxcontrib-bibtex',
@@ -36,10 +32,7 @@ setup(
         'License :: OSI Approved :: BSD License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
