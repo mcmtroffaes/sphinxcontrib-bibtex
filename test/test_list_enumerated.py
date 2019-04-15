@@ -22,19 +22,19 @@ def test_list_enumerated(app, status, warning):
     app.builder.build_all()
     output = (path(app.outdir) / "index.html").read_text()
     assert re.search(
-        '<ol .*id="bibtex-bibliography-contents-0".* start="1".*>'
+        '<ol .*id="bibtex-bibliography-index-0".* start="1".*>'
         '.*<li>.*Akkerdju.*</li>'
         '.*<li>.*Bro.*</li>'
         '.*<li>.*Chap.*</li>'
         '.*<li>.*Dude.*</li>'
         '.*</ol>'
-        '.*<ol .*id="bibtex-bibliography-contents-1".* start="5".*>'
+        '.*<ol .*id="bibtex-bibliography-index-1".* start="5".*>'
         '.*<li>.*Eminence.*</li>'
         '.*<li>.*Frater.*</li>'
         '.*<li>.*Giggles.*</li>'
         '.*<li>.*Handy.*</li>'
         '.*</ol>'
-        '.*<ol .*id="bibtex-bibliography-contents-2".* start="23".*>'
+        '.*<ol .*id="bibtex-bibliography-index-2".* start="23".*>'
         '.*<li>.*Iedereen.*</li>'
         '.*<li>.*Joke.*</li>'
         '.*<li>.*Klopgeest.*</li>'

@@ -22,7 +22,7 @@ def test_list_bullet(app, status, warning):
     app.builder.build_all()
     output = (path(app.outdir) / "index.html").read_text()
     assert re.search(
-        '<ul .* id="bibtex-bibliography-contents-0">'
+        '<ul .* id="bibtex-bibliography-index-0">'
         '.*<li>.*Akkerdju.*</li>'
         '.*<li>.*Bro.*</li>'
         '.*<li>.*Chap.*</li>'

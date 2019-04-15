@@ -27,7 +27,7 @@ def test_bibfile_out_of_date(app, status, warning):
     app.builder.build_all()
     output = (path(app.outdir) / "index.html").read_text()
     assert re.search(
-        '<p id="bibtex-bibliography-contents-0">'
+        '<p id="bibtex-bibliography-index-0">'
         '.*<tr><td class="label">.*\\[1\\].*</td><td>.*Akkerdju.*</td></tr>'
         '.*<tr><td class="label">.*\\[2\\].*</td><td>.*Bro.*</td></tr>'
         '.*<tr><td class="label">.*\\[3\\].*</td><td>.*Chap.*</td></tr>'
@@ -40,7 +40,7 @@ def test_bibfile_out_of_date(app, status, warning):
     app.builder.build_all()
     output = (path(app.outdir) / "index.html").read_text()
     assert re.search(
-        '<p id="bibtex-bibliography-contents-0">'
+        '<p id="bibtex-bibliography-index-0">'
         '.*<tr><td class="label">.*\\[1\\].*</td><td>.*Eminence.*</td></tr>'
         '.*<tr><td class="label">.*\\[2\\].*</td><td>.*Frater.*</td></tr>'
         '.*<tr><td class="label">.*\\[3\\].*</td><td>.*Giggles.*</td></tr>'

@@ -22,10 +22,10 @@ def test_latex_refs(app, status, warning):
     app.builder.build_all()
     output = (path(app.outdir) / "test.tex").read_text(encoding='utf-8')
     if sphinx.version_info >= (1, 8):
-        assert r'\sphinxcite{contents:huygens}' in output
-        assert r'\bibitem[Huy57]{contents:huygens}' in output
+        assert r'\sphinxcite{index:huygens}' in output
+        assert r'\bibitem[Huy57]{index:huygens}' in output
     else:
         assert re.search(
-            r'\\hyperref\[(\\detokenize{)?contents:huygens(})?\]', output)
+            r'\\hyperref\[(\\detokenize{)?index:huygens(})?\]', output)
         assert re.search(
-            r'\\label{(\\detokenize{)?contents:huygens(})?}}', output)
+            r'\\label{(\\detokenize{)?index:huygens(})?}}', output)

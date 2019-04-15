@@ -22,7 +22,7 @@ def test_list_citation(app, status, warning):
     app.builder.build_all()
     output = (path(app.outdir) / "index.html").read_text()
     assert re.search(
-        '<p id="bibtex-bibliography-contents-0">'
+        '<p id="bibtex-bibliography-index-0">'
         '.*<tr><td class="label">.*\\[1\\].*</td><td>.*Akkerdju.*</td></tr>'
         '.*<tr><td class="label">.*\\[2\\].*</td><td>.*Bro.*</td></tr>'
         '.*<tr><td class="label">.*\\[3\\].*</td><td>.*Chap.*</td></tr>'
