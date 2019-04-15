@@ -20,5 +20,5 @@ def teardown_module():
 def test_issue77(app, status, warning):
     app.builder.build_all()
     output = (path(app.outdir) / "index.html").read_text(encoding='utf-8')
-    assert len(re.findall('\\[APAa\\]', output)) == 2
-    assert len(re.findall('\\[APAb\\]', output)) == 2
+    assert len(re.findall('\\[APAa\\]', output)) == 1
+    assert len(re.findall('\\[APAb\\]', output)) == 1
