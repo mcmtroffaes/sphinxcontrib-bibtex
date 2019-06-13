@@ -16,7 +16,6 @@
 import docutils.nodes
 import docutils.transforms
 import sphinx.util
-from sphinx import addnodes
 
 from pybtex.plugin import find_plugin
 
