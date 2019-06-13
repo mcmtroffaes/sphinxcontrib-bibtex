@@ -11,7 +11,7 @@ branches:
   only:
     - develop
 install:
-  - "pip install codecov sphinx-testing Tinkerer" # required for tests
+  - "pip install codecov sphinx-testing" # required for tests
   - "pip install ."
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then pip install check-manifest flake8; fi"
 script:

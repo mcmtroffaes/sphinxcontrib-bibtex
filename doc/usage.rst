@@ -402,14 +402,6 @@ https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/issue77
 Known Issues and Workarounds
 ----------------------------
 
-Tinkerer
-~~~~~~~~
-
-To use the bibtex extension with `Tinkerer <http://tinkerer.me/>`_,
-be sure to specify the bibtex extension first in your ``conf.py`` file::
-
-    extensions = ['sphinxcontrib.bibtex', 'tinkerer.ext.blog', 'tinkerer.ext.disqus']
-
 Encoding: Percent Signs
 ~~~~~~~~~~~~~~~~~~~~~~~
 
