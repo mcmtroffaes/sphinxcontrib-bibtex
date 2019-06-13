@@ -56,13 +56,9 @@ def process_citations(app, doctree, docname):
     :type docname: :class:`str`
     """
     for node in doctree.traverse(docutils.nodes.citation):
-        key = node[0].astext()
-        try:
+        if "bibtex" in node.attributes.get('classes', []):
+            key = node[0].astext()
             label = app.env.bibtex_cache.get_label_from_key(key)
-        except KeyError:
-            logger.warning("could not relabel citation [%s]" % key,
-                           type="bibtex", subtype="relabel")
-        else:
             node[0] = docutils.nodes.label('', label)
 
 
@@ -79,21 +75,11 @@ def process_citation_references(app, doctree, docname):
     # sphinx has already turned citation_reference nodes
     # into reference nodes, so iterate over reference nodes
     for node in doctree.traverse(docutils.nodes.reference):
-        # exclude sphinx [source] labels
-        if isinstance(node[0], docutils.nodes.Element):
-            if 'viewcode-link' in node[0]['classes']:
-                continue
-        text = node[0].astext()
-        if text.startswith('[') and text.endswith(']'):
+        if "bibtex" in node.attributes.get('classes', []):
+            text = node[0].astext()
             key = text[1:-1]
-            try:
-                label = app.env.bibtex_cache.get_label_from_key(key)
-            except KeyError:
-                logger.warning(
-                    "could not relabel citation reference [%s]" % key,
-                    type="bibtex", subtype="relabel")
-            else:
-                node[0] = docutils.nodes.Text('[' + label + ']')
+            label = app.env.bibtex_cache.get_label_from_key(key)
+            node[0] = docutils.nodes.Text('[' + label + ']')
 
 
 def check_duplicate_labels(app, env):

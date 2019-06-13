@@ -6,7 +6,7 @@
     General Sphinx test and check output.
 """
 
-import re
+import nose.tools
 from sphinx_testing.util import path, with_app
 
 
@@ -21,15 +21,8 @@ def teardown_module():
 def test_sphinx(app, status, warning):
     app.builder.build_all()
     warnings = warning.getvalue()
-    assert re.search(u'could not relabel citation \\[Test01\\]', warnings)
-    assert re.search(u'could not relabel citation \\[Test02\\]', warnings)
-    assert re.search(u'could not relabel citation \\[Wa04\\]', warnings)
-    assert re.search(
-        u'could not relabel citation reference \\[Test01\\]',
-        warnings)
-    assert re.search(
-        u'could not relabel citation reference \\[Test02\\]',
-        warnings)
-    assert re.search(
-        u'could not relabel citation reference \\[Wa04\\]',
-        warnings)
+    assert u'could not relabel citation' not in warnings
+    assert u'is not referenced' in warnings
+    # for coverage
+    with nose.tools.assert_raises(KeyError):
+        app.env.bibtex_cache.get_label_from_key("nonexistinglabel")

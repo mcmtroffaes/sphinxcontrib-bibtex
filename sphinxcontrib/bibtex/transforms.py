@@ -102,6 +102,7 @@ class BibliographyTransform(docutils.transforms.Transform):
                     citation += backend.paragraph(entry)
                 else:  # "citation"
                     citation = backend.citation(entry, self.document)
+                    citation['classes'].append('bibtex')
                     # backend.citation(...) uses entry.key as citation label
                     # we change it to entry.label later onwards
                     # but we must note the entry.label now;

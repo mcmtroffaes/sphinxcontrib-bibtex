@@ -19,7 +19,7 @@ def teardown_module():
 
 def htmlbiblabel(label):
     return (
-        '<dt class="label".*><span class="brackets">{0}</span></dt>'
+        '<dt class="bibtex label".*><span class="brackets">{0}</span></dt>'
         .format(label))
 
 
