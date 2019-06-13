@@ -7,7 +7,6 @@
 """
 
 import re
-import sphinx
 from sphinx_testing.util import path, with_app
 
 srcdir = path(__file__).dirname().joinpath('latex_refs').abspath()
