@@ -132,10 +132,6 @@ class _FilterVisitor(ast.NodeVisitor):
             return self.docname
         elif id_ == 'docnames':
             return self.cited_docnames
-        elif id_ == 'True':
-            return True
-        elif id_ == 'False':
-            return False
         elif id_ == 'author' or id_ == 'editor':
             if id_ in self.entry.persons:
                 return u' and '.join(
