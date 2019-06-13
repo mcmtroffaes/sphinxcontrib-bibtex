@@ -144,13 +144,8 @@ def setup(app):
         app.add_directive("bibliography", BibliographyDirective)
         app.add_role("cite", CiteRole())
         app.add_node(bibliography, override=True)
-    else:
-        assert _directives["bibliography"] is BibliographyDirective
-    try:
-        transforms = app.registry.get_transforms()
-    except AttributeError:  # Sphinx < 1.7
-        from sphinx.io import SphinxStandaloneReader
-        transforms = SphinxStandaloneReader.transforms
+    assert _directives["bibliography"] is BibliographyDirective
+    transforms = app.registry.get_transforms()
     if BibliographyTransform not in transforms:
         app.add_transform(BibliographyTransform)
 

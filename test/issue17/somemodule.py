@@ -1,6 +1,6 @@
 """Some module."""
 
 
-def somefunction():
-    """Some function."""
+class someclass:
+    """Some class."""
     pass

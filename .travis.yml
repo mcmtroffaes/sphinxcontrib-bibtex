@@ -11,9 +11,9 @@ branches:
   only:
     - develop
 install:
-  - "pip install sphinx-testing Tinkerer" # required for tests
+  - "pip install codecov sphinx-testing" # required for tests
   - "pip install ."
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then pip install coveralls check-manifest flake8; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then pip install check-manifest flake8; fi"
 script:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then check-manifest; fi"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then flake8; fi"
@@ -21,10 +21,8 @@ script:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then make html; fi"
   - "popd"
   - "pushd test"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then coverage run --source=sphinxcontrib.bibtex `type -p nosetests`; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION != '3.7' ]]; then nosetests; fi"
-  - "popd"
+  - "nosetests --with-coverage"
 after_success:
   - "pushd test"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then coveralls; fi"
+  - "codecov"
   - "popd"
