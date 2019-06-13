@@ -21,10 +21,8 @@ script:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then make html; fi"
   - "popd"
   - "pushd test"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then nosetests --with-coverage; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION != '3.7' ]]; then nosetests; fi"
-  - "popd"
+  - "nosetests --with-coverage"
 after_success:
   - "pushd test"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then codecov; fi"
+  - "codecov"
   - "popd"
