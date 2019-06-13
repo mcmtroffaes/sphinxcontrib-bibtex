@@ -4,7 +4,15 @@
 * Drop Python 2.7 and 3.4 support (as upstream sphinx has dropped
   support for these as well).
 
-* Update for Sphinx 2.0.
+* Add Python 3.8 support (contributed by hroncok).
+
+* Update for Sphinx 2.0, and drop Sphinx 1.x support (as there is too
+  much difference between the two versions).
+
+* Non-bibtex citations will now no longer issue warnings (fix
+  contributed by chrisjsewell).
+
+* Switch to codecov for coverage reporting.
 
 0.4.2 (7 January 2018)
 ----------------------
