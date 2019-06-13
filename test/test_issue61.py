@@ -19,7 +19,7 @@ def teardown_module():
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_multiple_keys(app, status, warning):
     app.builder.build_all()
-    output = (app.outdir / "contents.html").read_text(encoding='utf-8')
+    output = (path(app.outdir) / "contents.html").read_text(encoding='utf-8')
     assert re.search(
         'class="bibtex reference internal" href="#testone"', output)
     assert re.search(
