@@ -56,15 +56,9 @@ def process_citations(app, doctree, docname):
     :type docname: :class:`str`
     """
     for node in doctree.traverse(docutils.nodes.citation):
-        if "bibtex" not in node.attributes.get('classes', []):
-            continue
-        key = node[0].astext()
-        try:
+        if "bibtex" in node.attributes.get('classes', []):
+            key = node[0].astext()
             label = app.env.bibtex_cache.get_label_from_key(key)
-        except KeyError:
-            logger.warning("could not relabel citation [%s]" % key,
-                           type="bibtex", subtype="relabel")
-        else:
             node[0] = docutils.nodes.label('', label)
 
 
@@ -81,16 +75,10 @@ def process_citation_references(app, doctree, docname):
     # sphinx has already turned citation_reference nodes
     # into reference nodes, so iterate over reference nodes
     for node in doctree.traverse(docutils.nodes.reference):
-        if "bibtex" not in node.attributes.get('classes', []):
-            continue
-        text = node[0].astext()
-        key = text[1:-1]
-        try:
+        if "bibtex" in node.attributes.get('classes', []):
+            text = node[0].astext()
+            key = text[1:-1]
             label = app.env.bibtex_cache.get_label_from_key(key)
-        except KeyError:
-            logger.warning(
-                "could not relabel citation reference [%s]" % key)
-        else:
             node[0] = docutils.nodes.Text('[' + label + ']')
 
 
