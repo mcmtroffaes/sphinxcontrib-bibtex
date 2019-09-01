@@ -79,8 +79,8 @@ Roles and Directives
      .. bibliography:: refs.bib
         :encoding: latin
 
-   LaTeX control characters are automatically converted to unicode 
-   characters (for instance, to convert ``\'e`` into ``é``). Be sure 
+   LaTeX control characters are automatically converted to unicode
+   characters (for instance, to convert ``\'e`` into ``é``). Be sure
    to write ``\%`` when you intend to format a percent sign.
 
 .. XXX not documenting disable-curly-bracket-strip for now; might remove it
@@ -96,6 +96,32 @@ Roles and Directives
 
 Advanced Features
 -----------------
+
+Keyed Lists
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 0.4.3
+
+You can change the style of the text shown as the citation link for both
+the link in the text and as shown in the bibliography.  While the default
+citation is built from the authors name and publication year as obtained with
+
+.. code-block:: rest
+
+   .. bibliography:: refs1.bib
+      :list: citation
+      :cited:
+
+
+you can alternatively use the bibtex entry name as the key:
+
+.. code-block:: rest
+
+   .. bibliography:: refs1.bib
+      :list: citation_key
+      :cited:
+
+
 
 Bullet Lists and Enumerated Lists
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -326,7 +352,7 @@ To create a bibliography that includes only citations that were cited
 in the current document, use the following filter:
 
 .. code-block:: rest
-                
+
    .. bibliography:: refs.bib
       :filter: docname in docnames
 
@@ -507,4 +533,3 @@ LaTeX output, you can add the following to your LaTeX preamble:
 
    \usepackage{etoolbox}
    \patchcmd{\thebibliography}{\section*{\refname}}{}{}{}
-

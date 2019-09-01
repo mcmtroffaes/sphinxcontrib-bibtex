@@ -127,7 +127,8 @@ class BibliographyDirective(Directive):
             labels={},
             bibfiles=[],
         )
-        if (bibcache.list_ not in set(["bullet", "enumerated", "citation"])):
+        if (bibcache.list_ not in set(["bullet", "enumerated",
+                                       "citation", "citation_key"])):
             logger.warning(
                 "unknown bibliography list type '{0}'.".format(bibcache.list_))
         for bibfile in self.arguments[0].split():

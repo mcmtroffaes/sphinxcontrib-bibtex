@@ -100,6 +100,10 @@ class BibliographyTransform(docutils.transforms.Transform):
                 if bibcache.list_ in ["enumerated", "bullet"]:
                     citation = docutils.nodes.list_item()
                     citation += backend.paragraph(entry)
+                elif bibcache.list_ == 'citation_key':
+                    citation = backend.citation(entry, self.document)
+                    key = citation[0].astext()
+                    bibcache.labels[key] = key
                 else:  # "citation"
                     citation = backend.citation(entry, self.document)
                     # backend.citation(...) uses entry.key as citation label
