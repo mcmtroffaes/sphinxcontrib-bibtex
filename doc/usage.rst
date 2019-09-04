@@ -395,9 +395,10 @@ labelling plugins
 (using the ``pybtex.style.labels`` group),
 and sorting plugins
 (using the ``pybtex.style.sorting`` group).
-A minimal example demonstrating how to create a custom label style
-is available here:
-https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/issue77
+A few minimal examples demonstrating how to create a custom label styles
+are available here:
+* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/issue77
+* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/custom_labels
 
 Known Issues and Workarounds
 ----------------------------

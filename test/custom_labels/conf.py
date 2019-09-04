@@ -7,6 +7,7 @@ extensions = ['sphinxcontrib.bibtex']
 exclude_patterns = ['_build']
 
 
+# a simple label style which uses the bibtex keys for labels
 class MyLabelStyle(BaseLabelStyle):
 
     def format_labels(self, sorted_entries):
