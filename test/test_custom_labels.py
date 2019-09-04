@@ -6,8 +6,6 @@
     Test a custom label style.
 """
 
-import re
-
 from sphinx_testing.util import path, with_app
 
 srcdir = path(__file__).dirname().joinpath('custom_labels').abspath()
