@@ -24,7 +24,7 @@ script:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then make html; fi"
   - "popd"
   - "pushd test"
-  - "nosetests --with-coverage"
+  - "nosetests --with-coverage --cover-package=sphinxcontrib.bibtex"
 after_success:
   - "pushd test"
   - "codecov"
