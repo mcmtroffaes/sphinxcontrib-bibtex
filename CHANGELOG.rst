@@ -1,12 +1,12 @@
-1.0.0 (in development)
-----------------------
+1.0.0 (20 September 2019)
+-------------------------
 
 * Drop Python 2.7 and 3.4 support (as upstream sphinx has dropped
   support for these as well).
 
 * Add Python 3.8 support (contributed by hroncok).
 
-* Update for Sphinx 2.0, and drop Sphinx 1.x support (as there is too
+* Update for Sphinx 2.x, and drop Sphinx 1.x support (as there is too
   much difference between the two versions).
 
 * Non-bibtex citations will now no longer issue warnings (fix
