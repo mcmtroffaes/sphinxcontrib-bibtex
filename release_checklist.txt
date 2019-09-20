@@ -17,7 +17,7 @@
   - git remote update --prune && git checkout develop && git merge --ff-only origin/develop
 * create and register source zip
   - git clean -xfd
-  - python setup.py sdist bdist_wheel
+  - python3 setup.py sdist bdist_wheel
   - twine upload dist/*
 * test upload
   - pip uninstall sphinxcontrib-bibtex
