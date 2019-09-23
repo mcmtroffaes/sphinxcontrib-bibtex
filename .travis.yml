@@ -7,6 +7,11 @@ python:
   - "3.6"
   - "3.5"
   #- "pypy"  # travis builder issues?
+env:
+  - SPHINX="==2.0.0"
+  - SPHINX="==2.1.0"
+  # latest:
+  - SPHINX=""
 branches:
   only:
     - develop
@@ -14,6 +19,7 @@ install:
   # need development version of pybtex for latest bug fix
   # can remove next line once pybtex version > 0.22.2 is released
   - "pip install git+https://bitbucket.org/pybtex-devs/pybtex"
+  - "pip install sphinx$SPHINX"
   - "pip install codecov sphinx-testing" # required for tests
   - "pip install ."
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then pip install check-manifest flake8; fi"
