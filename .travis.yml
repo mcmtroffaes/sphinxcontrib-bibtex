@@ -25,6 +25,7 @@ script:
   - "popd"
   - "pushd test"
   - "nosetests --with-coverage --cover-package=sphinxcontrib.bibtex"
+  - "popd"
 after_success:
   - "pushd test"
   - "codecov"
