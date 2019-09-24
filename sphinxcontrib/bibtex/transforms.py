@@ -64,6 +64,19 @@ class BibliographyTransform(docutils.transforms.Transform):
     http://docutils.sourceforge.net/docs/ref/transforms.html
     """
 
+    def sortdocs(self):
+        sortorder = {}
+        env = self.document.settings.env
+        rel = env.collect_relations()
+        init = [i for i in rel if rel[i][1] is None][0]
+        docname = init
+        i = 0
+        while (docname is not None):
+            sortorder[docname] = i
+            docname = rel[docname][2]
+            i += 1
+        return sortorder
+
     def apply(self):
         """Transform each
         :class:`~sphinxcontrib.bibtex.nodes.bibliography` node into a
@@ -75,6 +88,7 @@ class BibliographyTransform(docutils.transforms.Transform):
             id_ = bibnode['ids'][0]
             bibcache = env.bibtex_cache.get_bibliography_cache(
                 docname=docname, id_=id_)
+            env.bibtex_cache.sortorder = self.sortdocs()
             entries = env.bibtex_cache.get_bibliography_entries(
                 docname=docname, id_=id_, warn=logger.warning)
             # locate and instantiate style and backend plugins

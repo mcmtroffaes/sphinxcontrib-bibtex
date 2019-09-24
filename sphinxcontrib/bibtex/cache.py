@@ -256,7 +256,7 @@ class Cache:
         """Yield all citation keys, sorted first by document
         (alphabetical), then by citation order in the document.
         """
-        for docname in sorted(self._cited):
+        for docname in sorted(self._cited, key=lambda x: self.sortorder[x]):
             for key in self._cited[docname]:
                 yield key
 
