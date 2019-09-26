@@ -21,6 +21,7 @@ from pybtex.plugin import find_plugin
 
 from sphinxcontrib.bibtex.nodes import bibliography
 
+
 logger = sphinx.util.logging.getLogger(__name__)
 
 
