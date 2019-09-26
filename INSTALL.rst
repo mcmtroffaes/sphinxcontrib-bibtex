@@ -26,3 +26,9 @@ where refs.bib would contain an entry::
      publisher = {Princeton University Press},
      year = {1987}
    }
+
+In the default style, this will get rendered as:
+
+See [Nel87]_ for an introduction to non-standard analysis.
+
+.. [Nel87] Edward Nelson. *Radically Elementary Probability Theory*. Princeton University Press, 1987.
