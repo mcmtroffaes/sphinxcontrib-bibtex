@@ -252,12 +252,12 @@ class Cache:
         else:
             raise KeyError("%s not found" % key)
 
-    def get_all_cited_keys(self):
-        """Yield all citation keys, sorted first by document
-        (alphabetical), then by citation order in the document.
+    def get_all_cited_keys(self, docnames):
+        """Yield all citation keys for given *docnames* in order, then
+        ordered by citation order.
         """
-        for docname in sorted(self._cited):
-            for key in self._cited[docname]:
+        for docname in docnames:
+            for key in self._cited.get(docname, []):
                 yield key
 
     def set_bibliography_cache(self, docname, id_, bibcache):
@@ -316,7 +316,7 @@ class Cache:
                     entry.collection = data
                     yield entry2
 
-    def get_bibliography_entries(self, docname, id_, warn):
+    def get_bibliography_entries(self, docname, id_, warn, docnames):
         """Return filtered bibliography entries, sorted by citation order."""
         # get entries, ordered by bib file occurrence
         entries = OrderedDict(
@@ -327,7 +327,7 @@ class Cache:
         # first, we add all keys that were cited
         # then, we add all remaining keys
         sorted_entries = []
-        for key in self.get_all_cited_keys():
+        for key in self.get_all_cited_keys(docnames):
             try:
                 entry = entries.pop(key)
             except KeyError:

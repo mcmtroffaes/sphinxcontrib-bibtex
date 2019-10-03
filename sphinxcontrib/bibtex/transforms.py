@@ -52,6 +52,15 @@ def transform_url_command(textnode):
         return textnode
 
 
+def get_docnames(env):
+    rel = env.collect_relations()
+    docname = env.config.master_doc
+    while docname is not None:
+        yield docname
+        parent, prevdoc, nextdoc = rel[docname]
+        docname = nextdoc
+
+
 class BibliographyTransform(docutils.transforms.Transform):
 
     """A docutils transform to generate citation entries for
@@ -71,12 +80,14 @@ class BibliographyTransform(docutils.transforms.Transform):
         """
         env = self.document.settings.env
         docname = env.docname
+        docnames = list(get_docnames(env))
         for bibnode in self.document.traverse(bibliography):
             id_ = bibnode['ids'][0]
             bibcache = env.bibtex_cache.get_bibliography_cache(
                 docname=docname, id_=id_)
             entries = env.bibtex_cache.get_bibliography_entries(
-                docname=docname, id_=id_, warn=logger.warning)
+                docname=docname, id_=id_, warn=logger.warning,
+                docnames=docnames)
             # locate and instantiate style and backend plugins
             style = find_plugin('pybtex.style.formatting', bibcache.style)()
             backend = find_plugin('pybtex.backends', 'docutils')()

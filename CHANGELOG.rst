@@ -1,6 +1,9 @@
 1.0.1 (in development)
 ----------------------
 
+* Improve citation ordering code (reported by ukos-git, see issue
+  #182).
+
 1.0.0 (20 September 2019)
 -------------------------
 
