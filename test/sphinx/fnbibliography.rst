@@ -13,6 +13,8 @@ Another few citations: :fncite:`rockafellar:1970,1972:savage`.
 
 Cite it twice: :fncite:`1657:huygens`.
 
+Bad citation: :fncite:`keydoesnotexist`.
+
 .. rubric:: Footnotes
 
 .. [#note] A footnote.
