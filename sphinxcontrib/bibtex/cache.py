@@ -265,16 +265,6 @@ class Cache:
         """
         self._cited[docname].add(key)
 
-    def get_cited_docnames(self, key):
-        """Return the *docnames* from which the given *key* is cited.
-
-        :param key: The citation key.
-        :type key: :class:`str`
-        """
-        return frozenset([
-            docname for docname, keys in self._cited.items()
-            if key in keys])
-
     def get_label_from_key(self, key):
         """Return label for the given key."""
         for bibcaches in self._bibliographies.values():
