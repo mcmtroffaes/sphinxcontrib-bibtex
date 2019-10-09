@@ -199,11 +199,11 @@ class Cache:
     """
 
     _fnbibliographies = None
-    """Each footnotebibliography directive is assigned an id of the form
-    bibtex-footnotebibliography-xxx. This :class:`dict` maps each
+    """Each fnbibliography directive is assigned an id of the form
+    bibtex-fnbibliography-xxx. This :class:`dict` maps each
     docname to another :class:`dict` which maps each id to information
     about the bibliography directive,
-    :class:`FootnoteBibliographyCache`.
+    :class:`FnBibliographyCache`.
     """
 
     _cited = None
