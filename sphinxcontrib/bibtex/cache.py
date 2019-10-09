@@ -479,7 +479,8 @@ filter_ keyprefix
 
 class FnBibliographyCache(collections.namedtuple(
     'FnBibliographyCache',
-    "bibfiles style encoding")):
+    """bibfiles style encoding
+""")):
 
     """Contains information about a fnbibliography directive.
 
