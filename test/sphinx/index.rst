@@ -8,6 +8,7 @@ Welcome to Sphinx bibtex extension test's documentation!
 
 Citation :cite:`1996:fukuda` :cite:`dreze:2000` to other document.
 Regular citation test [Test01]_ to other document.
+Mix with a footnote [#note]_.
 
 Contents:
 
@@ -23,3 +24,4 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+.. [#note] A footnote.
