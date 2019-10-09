@@ -277,9 +277,10 @@ class Cache:
 
     def get_label_from_key(self, key):
         """Return label for the given key."""
-        for bibcache in self.get_all_bibliography_caches():
-            if key in bibcache.labels:
-                return bibcache.labels[key]
+        for bibcaches in self._bibliographies.values():
+            for bibcache in bibcaches.values():
+                if key in bibcache.labels:
+                    return bibcache.labels[key]
         else:
             raise KeyError("%s not found" % key)
 
@@ -290,19 +291,6 @@ class Cache:
         for docname in docnames:
             for key in self._cited.get(docname, []):
                 yield key
-
-    def set_bibliography_cache(self, docname, id_, bibcache):
-        """Register *bibcache* (:class:`BibliographyCache`)
-        with id *id_* for document *docname*.
-        """
-        assert id_ not in self._bibliographies[docname]
-        self._bibliographies[docname][id_] = bibcache
-
-    def get_all_bibliography_caches(self):
-        """Return all bibliography caches."""
-        for bibcaches in self._bibliographies.values():
-            for bibcache in bibcaches.values():
-                yield bibcache
 
     def _get_bibliography_entries(self, docname, id_, warn):
         """Return filtered bibliography entries, sorted by occurence
