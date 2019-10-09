@@ -198,9 +198,22 @@ class Cache:
     themselves.
     """
 
+    _fnbibliographies = None
+    """Each footnotebibliography directive is assigned an id of the form
+    bibtex-footnotebibliography-xxx. This :class:`dict` maps each
+    docname to another :class:`dict` which maps each id to information
+    about the bibliography directive,
+    :class:`FootnoteBibliographyCache`.
+    """
+
     _cited = None
     """A :class:`dict` mapping each docname to a :class:`set` of
     citation keys.
+    """
+
+    _fncited = None
+    """A :class:`dict` mapping each docname to a :class:`set` of
+    footnote keys.
     """
 
     _enum_count = None
@@ -213,6 +226,8 @@ class Cache:
         self.bibfiles = {}
         self._bibliographies = collections.defaultdict(dict)
         self._cited = collections.defaultdict(oset)
+        self._fnbibliographies = collections.defaultdict(dict)
+        self._fncited = collections.defaultdict(oset)
         self._enum_count = {}
 
     def purge(self, docname):
@@ -223,6 +238,8 @@ class Cache:
         """
         self._bibliographies.pop(docname, None)
         self._cited.pop(docname, None)
+        self._fnbibliographies.pop(docname, None)
+        self._fncited.pop(docname, None)
         self._enum_count.pop(docname, None)
 
     def inc_enum_count(self, docname):
@@ -281,12 +298,6 @@ class Cache:
         assert id_ not in self._bibliographies[docname]
         self._bibliographies[docname][id_] = bibcache
 
-    def get_bibliography_cache(self, docname, id_):
-        """Return :class:`BibliographyCache` with id *id_* in
-        document *docname*.
-        """
-        return self._bibliographies[docname][id_]
-
     def get_all_bibliography_caches(self):
         """Return all bibliography caches."""
         for bibcaches in self._bibliographies.values():
@@ -298,15 +309,17 @@ class Cache:
         in the bib file.
         """
         # get the information of this bibliography node
-        bibcache = self.get_bibliography_cache(docname=docname, id_=id_)
+        bibcache = self._bibliographies[docname][id_]
         # generate entries
         for bibfile in bibcache.bibfiles:
             data = self.bibfiles[bibfile].data
             for entry in data.entries.values():
                 # beware: the prefix is not stored in the data
                 # to allow reusing the data for multiple bibliographies
-                cited_docnames = self.get_cited_docnames(
-                    bibcache.keyprefix + entry.key)
+                key = bibcache.keyprefix + entry.key
+                cited_docnames = frozenset([
+                    docname for docname, keys in self._cited.items()
+                    if key in keys])
                 visitor = _FilterVisitor(
                     entry=entry,
                     docname=docname,
@@ -330,6 +343,29 @@ class Cache:
                     entry.collection = data
                     yield entry2
 
+    def _get_fnbibliography_entries(self, docname, id_, warn):
+        """Return filtered footnote bibliography entries, sorted by
+        occurence in the bib file.
+        """
+        # get the information of this bibliography node
+        bibcache = self._fnbibliographies[docname][id_]
+        # generate entries
+        for bibfile in bibcache.bibfiles:
+            data = self.bibfiles[bibfile].data
+            for entry in data.entries.values():
+                if entry.key in self._fncited[docname]:
+                    # entries are modified in an unpickable way
+                    # when formatting, so fetch a deep copy
+                    # and return this copy
+                    # we do not deep copy entry.collection because that
+                    # consumes enormous amounts of memory
+                    entry.collection = None
+                    entry2 = copy.deepcopy(entry)
+                    entry2.key = entry.key
+                    entry2.collection = data
+                    entry.collection = data
+                    yield entry2
+
     def get_bibliography_entries(self, docname, id_, warn, docnames):
         """Return filtered bibliography entries, sorted by citation order."""
         # get entries, ordered by bib file occurrence
@@ -342,6 +378,29 @@ class Cache:
         # then, we add all remaining keys
         sorted_entries = []
         for key in self.get_all_cited_keys(docnames):
+            try:
+                entry = entries.pop(key)
+            except KeyError:
+                pass
+            else:
+                sorted_entries.append(entry)
+        sorted_entries += entries.values()
+        return sorted_entries
+
+    def get_fnbibliography_entries(self, docname, id_, warn):
+        """Return filtered footnote bibliography entries, sorted by
+        citation order.
+        """
+        # get entries, ordered by bib file occurrence
+        entries = OrderedDict(
+            (entry.key, entry) for entry in
+            self._get_fnbibliography_entries(
+                docname=docname, id_=id_, warn=warn))
+        # order entries according to which were cited first
+        # first, we add all keys that were cited
+        # then, we add all remaining keys
+        sorted_entries = []
+        for key in self._fncited[docname]:
             try:
                 entry = entries.pop(key)
             except KeyError:
@@ -415,6 +474,24 @@ filter_ keyprefix
     .. attribute:: filter_
 
         An :class:`ast.AST` node, containing the parsed filter expression.
+    """
+
+
+class FnBibliographyCache(collections.namedtuple(
+    'FnBibliographyCache',
+    "bibfiles style encoding")):
+
+    """Contains information about a fnbibliography directive.
+
+    .. attribute:: bibfiles
+
+        A :class:`list` of :class:`str`\\ s containing the .bib file
+        names (relative to the top source folder) that contain the
+        references.
+
+    .. attribute:: style
+
+        The bibtex style.
     """
 
 

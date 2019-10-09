@@ -131,7 +131,7 @@ def setup(app):
         app.add_directive("bibliography", BibliographyDirective)
         app.add_directive("fnbibliography", FnBibliographyDirective)
         app.add_role("cite", CiteRole())
-        app.add_role("cite", FnCiteRole())
+        app.add_role("fncite", FnCiteRole())
         app.add_node(bibliography, override=True)
         app.add_node(fnbibliography, override=True)
     assert _directives["bibliography"] is BibliographyDirective
