@@ -1,5 +1,5 @@
-Usage
-=====
+Bibtex Extension Usage
+======================
 
 Roles and Directives
 --------------------
@@ -59,6 +59,7 @@ Roles and Directives
    You can also pick a bibliography style, using the ``style`` option.
    The ``alpha`` style is the default.
    Other supported styles are ``plain``, ``unsrt``, and ``unsrtalpha``.
+   You can also create your own style (see :ref:`bibtex-custom-formatting`).
 
    .. code-block:: rest
 
@@ -349,6 +350,8 @@ This bibliography will include all citations that were cited from
 This bibliography will include all citations that were cited
 in :file:`doc1.rst` or :file:`doc2.rst`, but nowhere else.
 
+.. _bibtex-custom-formatting:
+
 Custom Formatting, Sorting, and Labelling
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -397,11 +400,22 @@ and sorting plugins
 (using the ``pybtex.style.sorting`` group).
 A few minimal examples demonstrating how to create a custom label styles
 are available here:
+
 * https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/issue77
 * https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/custom_labels
 
 Known Issues and Workarounds
 ----------------------------
+
+No Parallel Builds
+~~~~~~~~~~~~~~~~~~
+
+Because the extension needs to process documents in sequential order
+to know what citation entries are cited, in the current design,
+parallel builds are not supported. If parallel builds are important
+for you, you can use the footbib extension, which converts citations
+into footnotes, which are local to each document, and which therefore
+do not have this limitation.
 
 Encoding: Percent Signs
 ~~~~~~~~~~~~~~~~~~~~~~~

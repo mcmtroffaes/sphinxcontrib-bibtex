@@ -1,7 +1,4 @@
 """
-    New Doctree Directives
-    ~~~~~~~~~~~~~~~~~~~~~~
-
     .. autoclass:: BibliographyDirective
 
         .. automethod:: run
@@ -16,8 +13,8 @@ import sphinx.util
 from docutils.parsers.rst import Directive, directives
 from sphinx.util.console import standout
 
-from sphinxcontrib.bibtex.cache import BibliographyCache, process_bibfile
-from sphinxcontrib.bibtex.nodes import bibliography
+from .cache import BibliographyCache, process_bibfile
+from .nodes import bibliography
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -132,5 +129,5 @@ class BibliographyDirective(Directive):
                 env.bibtex_cache.bibfiles, bibfile, bibcache.encoding)
             env.note_dependency(bibfile)
             bibcache.bibfiles.append(bibfile)
-        env.bibtex_cache.set_bibliography_cache(env.docname, id_, bibcache)
+        env.bibtex_cache.bibliographies[env.docname][id_] = bibcache
         return [bibliography('', ids=[id_])]

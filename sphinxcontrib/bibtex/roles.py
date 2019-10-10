@@ -1,7 +1,4 @@
 """
-    New Doctree Roles
-    ~~~~~~~~~~~~~~~~~
-
     .. autoclass:: CiteRole
         :show-inheritance:
 
@@ -10,7 +7,7 @@
 
 from pybtex.plugin import find_plugin
 import pybtex.database
-from sphinx.roles import XRefRole  # for :cite:
+from sphinx.roles import XRefRole
 
 
 class CiteRole(XRefRole):
@@ -35,7 +32,7 @@ class CiteRole(XRefRole):
         for refnode in refnodes:
             refnode['classes'].append('bibtex')
         for key in keys:
-            env.bibtex_cache.add_cited(key, env.docname)
+            env.bibtex_cache.cited[env.docname].add(key)
         return refnodes, []
 
 

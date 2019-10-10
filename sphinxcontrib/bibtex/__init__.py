@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-    Sphinx Interface
-    ~~~~~~~~~~~~~~~~
-
     .. autofunction:: setup
     .. autofunction:: init_bibtex_cache
     .. autofunction:: purge_bibtex_cache
@@ -12,13 +9,12 @@
 """
 
 import docutils.nodes
-import docutils.parsers.rst
 import sphinx.util
-from sphinxcontrib.bibtex.cache import Cache
-from sphinxcontrib.bibtex.nodes import bibliography
-from sphinxcontrib.bibtex.roles import CiteRole
-from sphinxcontrib.bibtex.directives import BibliographyDirective
-from sphinxcontrib.bibtex.transforms import BibliographyTransform
+from .cache import Cache
+from .nodes import bibliography
+from .roles import CiteRole
+from .directives import BibliographyDirective
+from .transforms import BibliographyTransform
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -91,14 +87,15 @@ def check_duplicate_labels(app, env):
     :type env: :class:`sphinx.environment.BuildEnvironment`
     """
     label_to_key = {}
-    for info in env.bibtex_cache.get_all_bibliography_caches():
-        for key, label in info.labels.items():
-            if label in label_to_key:
-                logger.warning(
-                    "duplicate label for keys %s and %s"
-                    % (key, label_to_key[label]))
-            else:
-                label_to_key[label] = key
+    for bibcaches in env.bibtex_cache.bibliographies.values():
+        for bibcache in bibcaches.values():
+            for key, label in bibcache.labels.items():
+                if label in label_to_key:
+                    logger.warning(
+                        "duplicate label for keys %s and %s"
+                        % (key, label_to_key[label]))
+                else:
+                    label_to_key[label] = key
 
 
 def setup(app):
@@ -121,19 +118,10 @@ def setup(app):
     app.connect("doctree-resolved", process_citation_references)
     app.connect("env-purge-doc", purge_bibtex_cache)
     app.connect("env-updated", check_duplicate_labels)
-
-    # docutils keeps state around during testing, so to avoid spurious
-    # warnings, we detect here whether the directives have already been
-    # registered... very ugly hack but no better solution so far
-    _directives = docutils.parsers.rst.directives._directives
-    if "bibliography" not in _directives:
-        app.add_directive("bibliography", BibliographyDirective)
-        app.add_role("cite", CiteRole())
-        app.add_node(bibliography, override=True)
-    assert _directives["bibliography"] is BibliographyDirective
-    transforms = app.registry.get_transforms()
-    if BibliographyTransform not in transforms:
-        app.add_transform(BibliographyTransform)
+    app.add_directive("bibliography", BibliographyDirective)
+    app.add_role("cite", CiteRole())
+    app.add_node(bibliography, override=True)
+    app.add_transform(BibliographyTransform)
 
     # Parallel read is not safe at the moment: in the current design,
     # the document that contains references must be read last for all

@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    Cached Information
-    ~~~~~~~~~~~~~~~~~~
-
-    Classes and methods to maintain any information that is stored
+    Classes and methods to maintain any bibtex information that is stored
     outside the doctree.
 
     .. autoclass:: Cache
@@ -187,7 +184,7 @@ class Cache:
     source folder) to :class:`BibfileCache` instances.
     """
 
-    _bibliographies = None
+    bibliographies = None
     """Each bibliography directive is assigned an id of the form
     bibtex-bibliography-xxx. This :class:`dict` maps each docname
     to another :class:`dict` which maps each id
@@ -198,12 +195,12 @@ class Cache:
     themselves.
     """
 
-    _cited = None
+    cited = None
     """A :class:`dict` mapping each docname to a :class:`set` of
     citation keys.
     """
 
-    _enum_count = None
+    enum_count = None
     """A :class:`dict` mapping each docname to an :class:`int`
     representing the current bibliography enumeration counter.
     """
@@ -211,9 +208,9 @@ class Cache:
     def __init__(self):
 
         self.bibfiles = {}
-        self._bibliographies = collections.defaultdict(dict)
-        self._cited = collections.defaultdict(oset)
-        self._enum_count = {}
+        self.bibliographies = collections.defaultdict(dict)
+        self.cited = collections.defaultdict(oset)
+        self.enum_count = {}
 
     def purge(self, docname):
         """Remove  all information related to *docname*.
@@ -221,48 +218,16 @@ class Cache:
         :param docname: The document name.
         :type docname: :class:`str`
         """
-        self._bibliographies.pop(docname, None)
-        self._cited.pop(docname, None)
-        self._enum_count.pop(docname, None)
-
-    def inc_enum_count(self, docname):
-        """Increment enumeration list counter for document *docname*."""
-        self._enum_count[docname] += 1
-
-    def set_enum_count(self, docname, value):
-        """Set enumeration list counter for document *docname* to *value*."""
-        self._enum_count[docname] = value
-
-    def get_enum_count(self, docname):
-        """Get enumeration list counter for document *docname*."""
-        return self._enum_count[docname]
-
-    def add_cited(self, key, docname):
-        """Add the given *key* to the set of cited keys for
-        *docname*.
-
-        :param key: The citation key.
-        :type key: :class:`str`
-        :param docname: The document name.
-        :type docname: :class:`str`
-        """
-        self._cited[docname].add(key)
-
-    def get_cited_docnames(self, key):
-        """Return the *docnames* from which the given *key* is cited.
-
-        :param key: The citation key.
-        :type key: :class:`str`
-        """
-        return frozenset([
-            docname for docname, keys in self._cited.items()
-            if key in keys])
+        self.bibliographies.pop(docname, None)
+        self.cited.pop(docname, None)
+        self.enum_count.pop(docname, None)
 
     def get_label_from_key(self, key):
         """Return label for the given key."""
-        for bibcache in self.get_all_bibliography_caches():
-            if key in bibcache.labels:
-                return bibcache.labels[key]
+        for bibcaches in self.bibliographies.values():
+            for bibcache in bibcaches.values():
+                if key in bibcache.labels:
+                    return bibcache.labels[key]
         else:
             raise KeyError("%s not found" % key)
 
@@ -271,42 +236,25 @@ class Cache:
         ordered by citation order.
         """
         for docname in docnames:
-            for key in self._cited.get(docname, []):
+            for key in self.cited.get(docname, []):
                 yield key
-
-    def set_bibliography_cache(self, docname, id_, bibcache):
-        """Register *bibcache* (:class:`BibliographyCache`)
-        with id *id_* for document *docname*.
-        """
-        assert id_ not in self._bibliographies[docname]
-        self._bibliographies[docname][id_] = bibcache
-
-    def get_bibliography_cache(self, docname, id_):
-        """Return :class:`BibliographyCache` with id *id_* in
-        document *docname*.
-        """
-        return self._bibliographies[docname][id_]
-
-    def get_all_bibliography_caches(self):
-        """Return all bibliography caches."""
-        for bibcaches in self._bibliographies.values():
-            for bibcache in bibcaches.values():
-                yield bibcache
 
     def _get_bibliography_entries(self, docname, id_, warn):
         """Return filtered bibliography entries, sorted by occurence
         in the bib file.
         """
         # get the information of this bibliography node
-        bibcache = self.get_bibliography_cache(docname=docname, id_=id_)
+        bibcache = self.bibliographies[docname][id_]
         # generate entries
         for bibfile in bibcache.bibfiles:
             data = self.bibfiles[bibfile].data
             for entry in data.entries.values():
                 # beware: the prefix is not stored in the data
                 # to allow reusing the data for multiple bibliographies
-                cited_docnames = self.get_cited_docnames(
-                    bibcache.keyprefix + entry.key)
+                key = bibcache.keyprefix + entry.key
+                cited_docnames = frozenset([
+                    docname for docname, keys in self.cited.items()
+                    if key in keys])
                 visitor = _FilterVisitor(
                     entry=entry,
                     docname=docname,

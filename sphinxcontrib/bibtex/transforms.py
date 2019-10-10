@@ -1,7 +1,4 @@
 """
-    New Doctree Transforms
-    ~~~~~~~~~~~~~~~~~~~~~~
-
     .. autoclass:: BibliographyTransform
         :show-inheritance:
 
@@ -19,7 +16,7 @@ import sphinx.util
 
 from pybtex.plugin import find_plugin
 
-from sphinxcontrib.bibtex.nodes import bibliography
+from .nodes import bibliography
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -83,8 +80,7 @@ class BibliographyTransform(docutils.transforms.Transform):
         docnames = list(get_docnames(env))
         for bibnode in self.document.traverse(bibliography):
             id_ = bibnode['ids'][0]
-            bibcache = env.bibtex_cache.get_bibliography_cache(
-                docname=docname, id_=id_)
+            bibcache = env.bibtex_cache.bibliographies[docname][id_]
             entries = env.bibtex_cache.get_bibliography_entries(
                 docname=docname, id_=id_, warn=logger.warning,
                 docnames=docnames)
@@ -97,11 +93,9 @@ class BibliographyTransform(docutils.transforms.Transform):
                 nodes['enumtype'] = bibcache.enumtype
                 if bibcache.start >= 1:
                     nodes['start'] = bibcache.start
-                    env.bibtex_cache.set_enum_count(
-                        env.docname, bibcache.start)
+                    env.bibtex_cache.enum_count[env.docname] = bibcache.start
                 else:
-                    nodes['start'] = env.bibtex_cache.get_enum_count(
-                        env.docname)
+                    nodes['start'] = env.bibtex_cache.enum_count[env.docname]
             elif bibcache.list_ == "bullet":
                 nodes = docutils.nodes.bullet_list()
             else:  # "citation"
@@ -123,5 +117,5 @@ class BibliographyTransform(docutils.transforms.Transform):
                 node_text_transform(citation, transform_url_command)
                 nodes += citation
                 if bibcache.list_ == "enumerated":
-                    env.bibtex_cache.inc_enum_count(env.docname)
+                    env.bibtex_cache.enum_count[env.docname] += 1
             bibnode.replace_self(nodes)
