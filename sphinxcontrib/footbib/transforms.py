@@ -11,8 +11,7 @@ import docutils.transforms
 
 from pybtex.plugin import find_plugin
 
-from sphinxcontrib.bibtex.transforms import (
-    node_text_transform, transform_url_command)
+from ..bibtex.transforms import node_text_transform, transform_url_command
 from .nodes import bibliography
 
 
