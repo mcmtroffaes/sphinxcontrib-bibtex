@@ -137,7 +137,6 @@ class BibliographyDirective(Directive):
         return [bibliography('', ids=[id_])]
 
 
-
 class FnBibliographyDirective(BibliographyDirective):
 
     """Class for processing the :rst:dir:`fnbibliography` directive.
