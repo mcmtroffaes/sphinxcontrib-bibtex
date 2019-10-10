@@ -12,6 +12,7 @@ Contents
 
    quickstart
    usage
+   usage-footbib
    api
    changes
    license

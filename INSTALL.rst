@@ -29,6 +29,20 @@ where refs.bib would contain an entry::
 
 In the default style, this will get rendered as:
 
-See [Nel87]_ for an introduction to non-standard analysis.
+See [Nel87a]_ for an introduction to non-standard analysis.
 
-.. [Nel87] Edward Nelson. *Radically Elementary Probability Theory*. Princeton University Press, 1987.
+.. [Nel87a] Edward Nelson. *Radically Elementary Probability Theory*. Princeton University Press, 1987.
+
+Similarly, with footbib:
+
+.. code-block:: rest
+
+   Non-standard analysis is lovely. :footcite:`1987:nelson`
+
+   .. footbibliography:: refs.bib
+
+which will get rendered as:
+
+Non-standard analysis is lovely. [#Nel87b]_
+
+.. [#Nel87b] Edward Nelson. *Radically Elementary Probability Theory*. Princeton University Press, 1987.

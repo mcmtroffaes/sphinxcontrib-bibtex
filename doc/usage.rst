@@ -1,5 +1,5 @@
-Usage
-=====
+Bibtex Extension Usage
+======================
 
 Roles and Directives
 --------------------
@@ -59,6 +59,7 @@ Roles and Directives
    You can also pick a bibliography style, using the ``style`` option.
    The ``alpha`` style is the default.
    Other supported styles are ``plain``, ``unsrt``, and ``unsrtalpha``.
+   You can also create your own style (see :ref:`bibtex-custom-formatting`).
 
    .. code-block:: rest
 
@@ -348,6 +349,8 @@ This bibliography will include all citations that were cited from
 
 This bibliography will include all citations that were cited
 in :file:`doc1.rst` or :file:`doc2.rst`, but nowhere else.
+
+.. _bibtex-custom-formatting:
 
 Custom Formatting, Sorting, and Labelling
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
