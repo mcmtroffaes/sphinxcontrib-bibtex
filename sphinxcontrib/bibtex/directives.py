@@ -5,9 +5,6 @@
     .. autoclass:: BibliographyDirective
 
         .. automethod:: run
-        .. automethod:: process_bibfile
-        .. automethod:: update_bibfile_cache
-        .. automethod:: parse_bibfile
 
     .. autofunction:: process_start_option
 """
@@ -22,7 +19,7 @@ from sphinx.util.console import bold, standout
 from pybtex.database.input import bibtex
 from pybtex.database import BibliographyData
 
-from sphinxcontrib.bibtex.cache import BibliographyCache, BibfileCache
+from sphinxcontrib.bibtex.cache import BibliographyCache, process_bibfile
 from sphinxcontrib.bibtex.nodes import bibliography
 
 
@@ -134,84 +131,9 @@ class BibliographyDirective(Directive):
             # convert to normalized absolute path to ensure that the same file
             # only occurs once in the cache
             bibfile = os.path.normpath(env.relfn2path(bibfile.strip())[1])
-            self.process_bibfile(bibfile, bibcache.encoding)
+            process_bibfile(
+                env.bibtex_cache.bibfiles, bibfile, bibcache.encoding)
             env.note_dependency(bibfile)
             bibcache.bibfiles.append(bibfile)
         env.bibtex_cache.set_bibliography_cache(env.docname, id_, bibcache)
         return [bibliography('', ids=[id_])]
-
-    def parse_bibfile(self, bibfile, encoding):
-        """Parse *bibfile*, and return parsed data.
-
-        :param bibfile: The bib file name.
-        :type bibfile: ``str``
-        :return: The parsed bibliography data.
-        :rtype: :class:`pybtex.database.BibliographyData`
-        """
-        parser = bibtex.Parser(encoding)
-        logger.info(
-            bold("parsing bibtex file {0}... ".format(bibfile)), nonl=True)
-        parser.parse_file(bibfile)
-        logger.info("parsed {0} entries"
-                    .format(len(parser.data.entries)))
-        return parser.data
-
-    def update_bibfile_cache(self, bibfile, mtime, encoding):
-        """Parse *bibfile* (see :meth:`parse_bibfile`), and store the
-        parsed data, along with modification time *mtime*, in the
-        bibtex cache.
-
-        :param bibfile: The bib file name.
-        :type bibfile: ``str``
-        :param mtime: The bib file's modification time.
-        :type mtime: ``float``
-        :return: The parsed bibliography data.
-        :rtype: :class:`pybtex.database.BibliographyData`
-        """
-        data = self.parse_bibfile(bibfile, encoding)
-        env = self.state.document.settings.env
-        env.bibtex_cache.bibfiles[bibfile] = BibfileCache(
-            mtime=mtime,
-            data=data)
-        return data
-
-    def process_bibfile(self, bibfile, encoding):
-        """Check if ``env.bibtex_cache.bibfiles[bibfile]`` is still
-        up to date. If not, parse the *bibfile* (see
-        :meth:`update_bibfile_cache`), and store parsed data in the
-        bibtex cache.
-
-        :param bibfile: The bib file name.
-        :type bibfile: ``str``
-        :return: The parsed bibliography data.
-        :rtype: :class:`pybtex.database.BibliographyData`
-        """
-        env = self.state.document.settings.env
-        cache = env.bibtex_cache.bibfiles
-        # get modification time of bibfile
-        try:
-            mtime = os.path.getmtime(bibfile)
-        except OSError:
-            logger.warning(
-                standout("could not open bibtex file {0}.".format(bibfile)))
-            cache[bibfile] = BibfileCache(  # dummy cache
-                mtime=-float("inf"), data=BibliographyData())
-            return cache[bibfile].data
-        # get cache and check if it is still up to date
-        # if it is not up to date, parse the bibtex file
-        # and store it in the cache
-        logger.info(
-            bold("checking for {0} in bibtex cache... ".format(bibfile)),
-            nonl=True)
-        try:
-            bibfile_cache = cache[bibfile]
-        except KeyError:
-            logger.info("not found")
-            self.update_bibfile_cache(bibfile, mtime, encoding)
-        else:
-            if mtime != bibfile_cache.mtime:
-                logger.info("out of date")
-                self.update_bibfile_cache(bibfile, mtime, encoding)
-            else:
-                logger.info('up to date')
-        return cache[bibfile].data
