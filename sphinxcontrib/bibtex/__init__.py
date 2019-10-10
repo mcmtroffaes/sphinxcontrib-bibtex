@@ -122,19 +122,10 @@ def setup(app):
     app.connect("doctree-resolved", process_citation_references)
     app.connect("env-purge-doc", purge_bibtex_cache)
     app.connect("env-updated", check_duplicate_labels)
-
-    # docutils keeps state around during testing, so to avoid spurious
-    # warnings, we detect here whether the directives have already been
-    # registered... very ugly hack but no better solution so far
-    _directives = docutils.parsers.rst.directives._directives
-    if "bibliography" not in _directives:
-        app.add_directive("bibliography", BibliographyDirective)
-        app.add_role("cite", CiteRole())
-        app.add_node(bibliography, override=True)
-    assert _directives["bibliography"] is BibliographyDirective
-    transforms = app.registry.get_transforms()
-    if BibliographyTransform not in transforms:
-        app.add_transform(BibliographyTransform)
+    app.add_directive("bibliography", BibliographyDirective)
+    app.add_role("cite", CiteRole())
+    app.add_node(bibliography, override=True)
+    app.add_transform(BibliographyTransform)
 
     # Parallel read is not safe at the moment: in the current design,
     # the document that contains references must be read last for all

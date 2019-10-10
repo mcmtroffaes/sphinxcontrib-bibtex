@@ -6,6 +6,7 @@
     .. autofunction:: setup
     .. autofunction:: init_footbib_cache
     .. autofunction:: purge_footbib_cache
+    .. autofunction:: merge_footbib_cache
 """
 
 import docutils.nodes
@@ -75,18 +76,9 @@ def setup(app):
     app.connect("builder-inited", init_footbib_cache)
     app.connect("env-merge-info", merge_footbib_cache)
     app.connect("env-purge-doc", purge_footbib_cache)
-
-    # docutils keeps state around during testing, so to avoid spurious
-    # warnings, we detect here whether the directives have already been
-    # registered... very ugly hack but no better solution so far
-    _directives = docutils.parsers.rst.directives._directives
-    if "footbibliography" not in _directives:
-        app.add_directive("footbibliography", BibliographyDirective)
-        app.add_role("footcite", CiteRole())
-        app.add_node(bibliography, override=True)
-    assert _directives["footbibliography"] is BibliographyDirective
-    transforms = app.registry.get_transforms()
-    if BibliographyTransform not in transforms:
-        app.add_transform(BibliographyTransform)
+    app.add_directive("footbibliography", BibliographyDirective)
+    app.add_role("footcite", CiteRole())
+    app.add_node(bibliography, override=True)
+    app.add_transform(BibliographyTransform)
 
     return {'parallel_read_safe': True}
