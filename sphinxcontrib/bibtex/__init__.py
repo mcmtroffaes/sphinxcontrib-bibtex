@@ -14,12 +14,11 @@
 import docutils.nodes
 import docutils.parsers.rst
 import sphinx.util
-from sphinxcontrib.bibtex.cache import Cache
-from sphinxcontrib.bibtex.nodes import bibliography, fnbibliography
-from sphinxcontrib.bibtex.roles import CiteRole, FnCiteRole
-from sphinxcontrib.bibtex.directives import BibliographyDirective
-from sphinxcontrib.bibtex.directives import FnBibliographyDirective
-from sphinxcontrib.bibtex.transforms import BibliographyTransform
+from .cache import Cache
+from .nodes import bibliography, fnbibliography
+from .roles import CiteRole, FnCiteRole
+from .directives import BibliographyDirective, FnBibliographyDirective
+from .transforms import BibliographyTransform
 
 
 logger = sphinx.util.logging.getLogger(__name__)
