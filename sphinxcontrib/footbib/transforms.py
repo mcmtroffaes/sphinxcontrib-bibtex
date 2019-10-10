@@ -7,10 +7,6 @@
 
         .. autoattribute:: default_priority
         .. automethod:: apply
-
-    .. autofunction:: node_text_transform
-
-    .. autofunction:: transform_url_command
 """
 
 import docutils.nodes
