@@ -5,6 +5,12 @@ source using ``python setup.py install``. Then add:
 
    extensions = ['sphinxcontrib.bibtex']
 
+or
+
+.. code-block:: python
+
+   extensions = ['sphinxcontrib.footbib']
+
 to your project's Sphinx configuration file ``conf.py``.
 
 Minimal Example
