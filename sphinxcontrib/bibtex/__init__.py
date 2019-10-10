@@ -12,7 +12,6 @@
 """
 
 import docutils.nodes
-import docutils.parsers.rst
 import sphinx.util
 from .cache import Cache
 from .nodes import bibliography
