@@ -19,7 +19,7 @@ import sphinx.util
 
 from pybtex.plugin import find_plugin
 
-from sphinxcontrib.bibtex.nodes import bibliography, fnbibliography
+from .nodes import bibliography, fnbibliography
 
 
 logger = sphinx.util.logging.getLogger(__name__)

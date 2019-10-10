@@ -137,7 +137,7 @@ class BibliographyDirective(Directive):
         return [bibliography('', ids=[id_])]
 
 
-class FnBibliographyDirective(BibliographyDirective):
+class FnBibliographyDirective(Directive):
 
     """Class for processing the :rst:dir:`fnbibliography` directive.
 
@@ -152,6 +152,10 @@ class FnBibliographyDirective(BibliographyDirective):
        :class:`~sphinxcontrib.bibtex.transforms.BibliographyTransform`.
     """
 
+    required_arguments = 1
+    optional_arguments = 0
+    final_argument_whitespace = True
+    has_content = False
     option_spec = {
         'style': directives.unchanged,
         'encoding': directives.encoding,
