@@ -21,7 +21,7 @@ def teardown_module():
 def test_mixing_citation_styles(app, status, warning):
     app.builder.build_all()
     cited_docnames = [
-        docname for docname, keys in app.env.bibtex_cache._cited.items()
+        docname for docname, keys in app.env.bibtex_cache.cited.items()
         if u"Test" in keys]
     nose.tools.assert_equal(
         cited_docnames, [u"adoc1"])

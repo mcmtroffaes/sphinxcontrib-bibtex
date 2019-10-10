@@ -132,5 +132,5 @@ class BibliographyDirective(Directive):
                 env.bibtex_cache.bibfiles, bibfile, bibcache.encoding)
             env.note_dependency(bibfile)
             bibcache.bibfiles.append(bibfile)
-        env.bibtex_cache._bibliographies[env.docname][id_] = bibcache
+        env.bibtex_cache.bibliographies[env.docname][id_] = bibcache
         return [bibliography('', ids=[id_])]
