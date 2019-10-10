@@ -117,7 +117,7 @@ class BibliographyCache(collections.namedtuple(
     """bibfiles style encoding
 """)):
 
-    """Contains information about a fnbibliography directive.
+    """Contains information about a footbibliography directive.
 
     .. attribute:: bibfiles
 

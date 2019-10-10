@@ -10,7 +10,7 @@
 
 from pybtex.plugin import find_plugin
 import pybtex.database
-from sphinx.roles import XRefRole  # for :cite:
+from sphinx.roles import XRefRole
 
 
 class CiteRole(XRefRole):
