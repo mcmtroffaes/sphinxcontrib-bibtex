@@ -14,10 +14,7 @@ import os.path  # getmtime()
 import sphinx.util
 
 from docutils.parsers.rst import Directive, directives
-from sphinx.util.console import bold, standout
-
-from pybtex.database.input import bibtex
-from pybtex.database import BibliographyData
+from sphinx.util.console import standout
 
 from sphinxcontrib.bibtex.cache import BibliographyCache, process_bibfile
 from sphinxcontrib.bibtex.nodes import bibliography
