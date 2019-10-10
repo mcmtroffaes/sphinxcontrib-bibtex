@@ -1,4 +1,4 @@
-1.0.1 (in development)
+1.1.0 (in development)
 ----------------------
 
 * Improve citation ordering code (reported by ukos-git, see issue
@@ -8,6 +8,14 @@
   Functions for processing bib files have been moved to the cache
   module. They are no longer class methods but standalone functions,
   so they can be more easily reused.
+
+* **EXPERIMENTAL FEATURE**
+  The package now ships with a new extension, called footbib. This
+  extension adds a ``footcite`` role and ``footbibliography``
+  directive, to allow easy and simple local (per document)
+  bibliographies through footnotes. Supports parallel builds. This
+  extension should be considered experimental. Feedback is
+  welcome. See issues #184 and #185.
 
 1.0.0 (20 September 2019)
 -------------------------
