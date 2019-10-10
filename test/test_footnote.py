@@ -17,4 +17,5 @@ def teardown_module():
 
 @with_app(srcdir=srcdir, warningiserror=True)
 def test_footnote(app, status, warning):
+    app.parallel = 4
     app.builder.build_all()
