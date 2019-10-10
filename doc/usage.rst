@@ -406,6 +406,16 @@ are available here:
 Known Issues and Workarounds
 ----------------------------
 
+No Parallel Builds
+~~~~~~~~~~~~~~~~~~
+
+Because the extension needs to process documents in sequential order
+to know what citation entries are cited, in the current design,
+parallel builds are not supported. If parallel builds are important
+for you, you can use the footbib extension, which converts citations
+into footnotes, which are local to each document, and which therefore
+do not have this limitation.
+
 Encoding: Percent Signs
 ~~~~~~~~~~~~~~~~~~~~~~~
 
