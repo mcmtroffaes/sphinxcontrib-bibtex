@@ -39,30 +39,6 @@ class CiteRole(XRefRole):
         return refnodes, []
 
 
-class FnCiteRole(XRefRole):
-
-    """Class for processing the :rst:role:`fncite` role."""
-    backend = find_plugin('pybtex.backends', 'docutils')()
-
-    def result_nodes(self, document, env, node, is_ref):
-        """Transform reference node into a footnote reference,
-        and note that the reference was cited.
-        """
-        keys = node['reftarget'].split(',')
-        # Note that at this point, usually, env.bibtex_cache.bibfiles
-        # is still empty because the bibliography directive may not
-        # have been processed yet, so we cannot get the actual entry.
-        # Instead, we simply fake an entry with the desired key.
-        refnodes = [
-            self.backend.footnote_reference(_fake_entry(key), document)
-            for key in keys]
-        for refnode in refnodes:
-            refnode['classes'].append('bibtex')
-        for key in keys:
-            env.bibtex_cache._fncited[env.docname].add(key)
-        return refnodes, []
-
-
 def _fake_entry(key):
     entry = pybtex.database.Entry(type_="")
     entry.key = key

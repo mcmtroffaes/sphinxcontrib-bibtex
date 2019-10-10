@@ -19,7 +19,7 @@ import sphinx.util
 
 from pybtex.plugin import find_plugin
 
-from .nodes import bibliography, fnbibliography
+from .nodes import bibliography
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -81,7 +81,6 @@ class BibliographyTransform(docutils.transforms.Transform):
         env = self.document.settings.env
         docname = env.docname
         docnames = list(get_docnames(env))
-        # regular citations
         for bibnode in self.document.traverse(bibliography):
             id_ = bibnode['ids'][0]
             bibcache = env.bibtex_cache._bibliographies[docname][id_]
@@ -124,22 +123,4 @@ class BibliographyTransform(docutils.transforms.Transform):
                 nodes += citation
                 if bibcache.list_ == "enumerated":
                     env.bibtex_cache.inc_enum_count(env.docname)
-            bibnode.replace_self(nodes)
-        # footnote citations
-        for bibnode in self.document.traverse(fnbibliography):
-            id_ = bibnode['ids'][0]
-            bibcache = env.bibtex_cache._fnbibliographies[docname][id_]
-            entries = env.bibtex_cache.get_fnbibliography_entries(
-                docname=docname, id_=id_, warn=logger.warning)
-            # locate and instantiate style and backend plugins
-            style = find_plugin('pybtex.style.formatting', bibcache.style)()
-            backend = find_plugin('pybtex.backends', 'docutils')()
-            # create citation nodes for all references
-            nodes = docutils.nodes.paragraph()
-            # remind: style.format_entries modifies entries in unpickable way
-            for entry in style.format_entries(entries):
-                footnote = backend.footnote(entry, self.document)
-                footnote['classes'].append('bibtex')
-                node_text_transform(footnote, transform_url_command)
-                nodes += footnote
             bibnode.replace_self(nodes)

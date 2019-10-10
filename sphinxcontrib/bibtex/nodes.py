@@ -14,11 +14,3 @@ class bibliography(nodes.General, nodes.Element):
     :class:`~sphinxcontrib.bibtex.transforms.BibliographyTransform`.
     """
     pass
-
-
-class fnbibliography(nodes.General, nodes.Element):
-    """Node for representing a footnote bibliography. Replaced by a list
-    of footnotes by
-    :class:`~sphinxcontrib.bibtex.transforms.BibliographyTransform`.
-    """
-    pass

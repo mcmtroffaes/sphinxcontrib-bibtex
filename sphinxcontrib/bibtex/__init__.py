@@ -15,9 +15,9 @@ import docutils.nodes
 import docutils.parsers.rst
 import sphinx.util
 from .cache import Cache
-from .nodes import bibliography, fnbibliography
-from .roles import CiteRole, FnCiteRole
-from .directives import BibliographyDirective, FnBibliographyDirective
+from .nodes import bibliography
+from .roles import CiteRole
+from .directives import BibliographyDirective
 from .transforms import BibliographyTransform
 
 
@@ -129,11 +129,8 @@ def setup(app):
     _directives = docutils.parsers.rst.directives._directives
     if "bibliography" not in _directives:
         app.add_directive("bibliography", BibliographyDirective)
-        app.add_directive("fnbibliography", FnBibliographyDirective)
         app.add_role("cite", CiteRole())
-        app.add_role("fncite", FnCiteRole())
         app.add_node(bibliography, override=True)
-        app.add_node(fnbibliography, override=True)
     assert _directives["bibliography"] is BibliographyDirective
     transforms = app.registry.get_transforms()
     if BibliographyTransform not in transforms:

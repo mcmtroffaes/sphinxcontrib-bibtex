@@ -1,19 +1,19 @@
-Testing the fnbibliography directive
-====================================
+Testing the footbibliography directive
+======================================
 
 Text
 ----
 
-Huyghens :fncite:`1657:huygens` wrote one of the first books on
+Huyghens :footcite:`1657:huygens` wrote one of the first books on
 probability theory.
 
 Mix with a footnote [#note]_.
 
-Another few citations: :fncite:`rockafellar:1970,1972:savage`.
+Another few citations: :footcite:`rockafellar:1970,1972:savage`.
 
-Cite it twice: :fncite:`1657:huygens`.
+Cite it twice: :footcite:`1657:huygens`.
 
-Bad citation: :fncite:`keydoesnotexist`.
+Bad citation: :footcite:`keydoesnotexist`.
 
 .. rubric:: Footnotes
 
@@ -21,4 +21,4 @@ Bad citation: :fncite:`keydoesnotexist`.
 
 .. rubric:: References
 
-.. fnbibliography:: test.bib test2.bib subfolder/test.bib
+.. footbibliography:: test.bib test2.bib subfolder/test.bib

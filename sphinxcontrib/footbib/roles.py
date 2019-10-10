@@ -10,38 +10,12 @@
 
 from pybtex.plugin import find_plugin
 import pybtex.database
-from sphinx.roles import XRefRole  # for :cite:
+from sphinx.roles import XRefRole
 
 
 class CiteRole(XRefRole):
 
-    """Class for processing the :rst:role:`cite` role."""
-    backend = find_plugin('pybtex.backends', 'docutils')()
-
-    def result_nodes(self, document, env, node, is_ref):
-        """Transform reference node into a citation reference,
-        and note that the reference was cited.
-        """
-        keys = node['reftarget'].split(',')
-        # Note that at this point, usually, env.bibtex_cache.bibfiles
-        # is still empty because the bibliography directive may not
-        # have been processed yet, so we cannot get the actual entry.
-        # Instead, we simply fake an entry with the desired key, and
-        # fix the label at doctree-resolved time. This happens in
-        # process_citation_references.
-        refnodes = [
-            self.backend.citation_reference(_fake_entry(key), document)
-            for key in keys]
-        for refnode in refnodes:
-            refnode['classes'].append('bibtex')
-        for key in keys:
-            env.bibtex_cache.add_cited(key, env.docname)
-        return refnodes, []
-
-
-class FnCiteRole(XRefRole):
-
-    """Class for processing the :rst:role:`fncite` role."""
+    """Class for processing the :rst:role:`footcite` role."""
     backend = find_plugin('pybtex.backends', 'docutils')()
 
     def result_nodes(self, document, env, node, is_ref):
@@ -49,17 +23,15 @@ class FnCiteRole(XRefRole):
         and note that the reference was cited.
         """
         keys = node['reftarget'].split(',')
-        # Note that at this point, usually, env.bibtex_cache.bibfiles
+        # Note that at this point, usually, env.footbib_cache.bibfiles
         # is still empty because the bibliography directive may not
         # have been processed yet, so we cannot get the actual entry.
         # Instead, we simply fake an entry with the desired key.
         refnodes = [
             self.backend.footnote_reference(_fake_entry(key), document)
             for key in keys]
-        for refnode in refnodes:
-            refnode['classes'].append('bibtex')
         for key in keys:
-            env.bibtex_cache._fncited[env.docname].add(key)
+            env.footbib_cache.cited[env.docname].add(key)
         return refnodes, []
 
 
