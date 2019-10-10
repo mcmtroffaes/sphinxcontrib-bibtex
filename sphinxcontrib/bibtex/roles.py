@@ -1,7 +1,4 @@
 """
-    New Doctree Roles
-    ~~~~~~~~~~~~~~~~~
-
     .. autoclass:: CiteRole
         :show-inheritance:
 

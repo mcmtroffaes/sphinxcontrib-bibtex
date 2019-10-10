@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-    Sphinx Interface
-    ~~~~~~~~~~~~~~~~
-
     .. autofunction:: setup
     .. autofunction:: init_bibtex_cache
     .. autofunction:: purge_bibtex_cache

@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-    Cached Information
-    ~~~~~~~~~~~~~~~~~~
-
-    Classes and methods to maintain any information that is stored
+    Classes and methods to maintain any bibtex information that is stored
     outside the doctree.
 
     .. autoclass:: Cache

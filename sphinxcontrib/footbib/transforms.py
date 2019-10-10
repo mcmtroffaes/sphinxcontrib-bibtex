@@ -1,7 +1,4 @@
 """
-    New Doctree Transforms
-    ~~~~~~~~~~~~~~~~~~~~~~
-
     .. autoclass:: BibliographyTransform
         :show-inheritance:
 

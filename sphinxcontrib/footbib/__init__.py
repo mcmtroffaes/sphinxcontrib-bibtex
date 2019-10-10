@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-    Sphinx Interface
-    ~~~~~~~~~~~~~~~~
-
     .. autofunction:: setup
     .. autofunction:: init_footbib_cache
     .. autofunction:: purge_footbib_cache

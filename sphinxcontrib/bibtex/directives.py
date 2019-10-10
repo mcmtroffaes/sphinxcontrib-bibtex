@@ -1,7 +1,4 @@
 """
-    New Doctree Directives
-    ~~~~~~~~~~~~~~~~~~~~~~
-
     .. autoclass:: BibliographyDirective
 
         .. automethod:: run

@@ -1,7 +1,4 @@
 """
-    New Doctree Nodes
-    ~~~~~~~~~~~~~~~~~
-
     .. autoclass:: bibliography
 """
 
