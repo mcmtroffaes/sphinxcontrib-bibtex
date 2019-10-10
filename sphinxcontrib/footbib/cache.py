@@ -13,18 +13,12 @@
         :members:
 """
 
-from collections import OrderedDict
 import collections
 import copy
-import os.path  # getmtime()
 from oset import oset
-import re
 
 import sphinx.util
-from sphinx.util.console import bold, standout
-
-from pybtex.database.input import bibtex
-from pybtex.database import BibliographyData
+from sphinx.util.console import standout
 
 
 logger = sphinx.util.logging.getLogger(__name__)

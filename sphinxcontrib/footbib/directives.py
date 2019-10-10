@@ -7,9 +7,7 @@
         .. automethod:: run
 """
 
-import ast  # parse(), used for filter
-import os.path  # getmtime()
-import sphinx.util
+import os.path  # normpath
 
 from docutils.parsers.rst import Directive, directives
 
