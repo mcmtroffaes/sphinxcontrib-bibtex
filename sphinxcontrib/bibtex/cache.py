@@ -14,14 +14,28 @@
 
     .. autoclass:: BibliographyCache
         :members:
+
+    .. autofunction:: parse_bibfile
+
+    .. autofunction:: process_bibfile
 """
 
 from collections import OrderedDict
 import ast
 import collections
 import copy
+import os.path  # getmtime()
 from oset import oset
 import re
+
+import sphinx.util
+from sphinx.util.console import bold, standout
+
+from pybtex.database.input import bibtex
+from pybtex.database import BibliographyData
+
+
+logger = sphinx.util.logging.getLogger(__name__)
 
 
 def _raise_invalid_node(node):
@@ -402,3 +416,62 @@ filter_ keyprefix
 
         An :class:`ast.AST` node, containing the parsed filter expression.
     """
+
+
+def parse_bibfile(bibfile, encoding):
+    """Parse *bibfile*, and return parsed data.
+
+    :param bibfile: The bib file name.
+    :type bibfile: ``str``
+    :return: The parsed bibliography data.
+    :rtype: :class:`pybtex.database.BibliographyData`
+    """
+    parser = bibtex.Parser(encoding)
+    logger.info(
+        bold("parsing bibtex file {0}... ".format(bibfile)), nonl=True)
+    parser.parse_file(bibfile)
+    logger.info("parsed {0} entries"
+                .format(len(parser.data.entries)))
+    return parser.data
+
+
+def process_bibfile(cache, bibfile, encoding):
+    """Check if ``cache[bibfile]`` is still up to date. If not, parse
+    the *bibfile*, and store parsed data in the bibtex cache.
+
+    :param cache: The cache for all bib files.
+    :type cache: ``dict``
+    :param bibfile: The bib file name.
+    :type bibfile: ``str``
+    :return: The parsed bibliography data.
+    :rtype: :class:`pybtex.database.BibliographyData`
+    """
+    # get modification time of bibfile
+    try:
+        mtime = os.path.getmtime(bibfile)
+    except OSError:
+        logger.warning(
+            standout("could not open bibtex file {0}.".format(bibfile)))
+        cache[bibfile] = BibfileCache(  # dummy cache
+            mtime=-float("inf"), data=BibliographyData())
+        return cache[bibfile].data
+    # get cache and check if it is still up to date
+    # if it is not up to date, parse the bibtex file
+    # and store it in the cache
+    logger.info(
+        bold("checking for {0} in bibtex cache... ".format(bibfile)),
+        nonl=True)
+    try:
+        bibfile_cache = cache[bibfile]
+    except KeyError:
+        logger.info("not found")
+        cache[bibfile] = BibfileCache(
+            mtime=mtime, data=parse_bibfile(bibfile, encoding))
+    else:
+        if mtime != bibfile_cache.mtime:
+            logger.info("out of date")
+            cache[bibfile] = BibfileCache(
+                mtime=mtime, data=parse_bibfile(bibfile, encoding))
+        else:
+            logger.info('up to date')
+    return cache[bibfile].data

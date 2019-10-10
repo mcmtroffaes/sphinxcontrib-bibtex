@@ -4,6 +4,11 @@
 * Improve citation ordering code (reported by ukos-git, see issue
   #182).
 
+* **BACKWARD INCOMPATIBLE**
+  Functions for processing bib files have been moved to the cache
+  module. They are no longer class methods but standalone functions,
+  so they can be more easily reused.
+
 1.0.0 (20 September 2019)
 -------------------------
 
