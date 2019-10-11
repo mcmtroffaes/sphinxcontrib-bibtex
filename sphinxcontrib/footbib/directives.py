@@ -58,15 +58,14 @@ class BibliographyDirective(Directive):
             encoding=self.options.get(
                 'encoding',
                 self.state.document.settings.input_encoding),
-            bibfiles=[],
-        )
-        for bibfile in self.arguments[0].split():
             # convert to normalized absolute path to ensure that the same file
             # only occurs once in the cache
-            bibfile = os.path.normpath(env.relfn2path(bibfile.strip())[1])
+            bibfiles=[os.path.normpath(env.relfn2path(bibfile.strip())[1])
+                      for bibfile in self.arguments[0].split()],
+        )
+        for bibfile in bibcache.bibfiles:
             process_bibfile(
                 env.footbib_cache.bibfiles, bibfile, bibcache.encoding)
             env.note_dependency(bibfile)
-            bibcache.bibfiles.append(bibfile)
         env.footbib_cache.bibliographies[env.docname][id_] = bibcache
         return [bibliography('', ids=[id_])]

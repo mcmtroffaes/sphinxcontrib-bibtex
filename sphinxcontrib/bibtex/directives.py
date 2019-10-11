@@ -116,18 +116,17 @@ class BibliographyDirective(Directive):
             labelprefix=self.options.get("labelprefix", ""),
             keyprefix=self.options.get("keyprefix", ""),
             labels={},
-            bibfiles=[],
+            # convert to normalized absolute path to ensure that the same file
+            # only occurs once in the cache
+            bibfiles=[os.path.normpath(env.relfn2path(bibfile.strip())[1])
+                      for bibfile in self.arguments[0].split()],
         )
         if (bibcache.list_ not in set(["bullet", "enumerated", "citation"])):
             logger.warning(
                 "unknown bibliography list type '{0}'.".format(bibcache.list_))
-        for bibfile in self.arguments[0].split():
-            # convert to normalized absolute path to ensure that the same file
-            # only occurs once in the cache
-            bibfile = os.path.normpath(env.relfn2path(bibfile.strip())[1])
+        for bibfile in bibcache.bibfiles:
             process_bibfile(
                 env.bibtex_cache.bibfiles, bibfile, bibcache.encoding)
             env.note_dependency(bibfile)
-            bibcache.bibfiles.append(bibfile)
         env.bibtex_cache.bibliographies[env.docname][id_] = bibcache
         return [bibliography('', ids=[id_])]
