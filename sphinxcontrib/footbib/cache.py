@@ -21,6 +21,16 @@ from sphinx.util.console import standout
 logger = sphinx.util.logging.getLogger(__name__)
 
 
+def new_id(env):
+    """Generate a new footbib id for the given build environment."""
+    return 'footbib-bibliography-%s-%s' % (
+        env.docname, env.new_serialno('footbib'))
+
+
+def _defaultdict_oset():
+    return collections.defaultdict(oset)
+
+
 class Cache:
 
     """Global footbib extension information cache. Stored in
@@ -45,14 +55,20 @@ class Cache:
     """
 
     cited = None
-    """A :class:`dict` mapping each docname to a :class:`set` of
-    footnote keys.
+    """A :class:`dict` mapping each docname to another :class:`dict`
+    which maps each id to a :class:`set` of footnote keys.
+    """
+
+    current_id = None
+    """A :class:`dict` mapping each docname to the currently active
+    footbib-bibliography-xxx id.
     """
 
     def __init__(self):
         self.bibfiles = {}
         self.bibliographies = collections.defaultdict(dict)
-        self.cited = collections.defaultdict(oset)
+        self.cited = collections.defaultdict(_defaultdict_oset)
+        self.current_id = collections.defaultdict(dict)
 
     def purge(self, docname):
         """Remove all information related to *docname*.
@@ -62,6 +78,7 @@ class Cache:
         """
         self.bibliographies.pop(docname, None)
         self.cited.pop(docname, None)
+        self.current_id.pop(docname, None)
 
     def merge(self, docnames, other):
         """Merge information from *other* cache related to *docnames*.
@@ -75,6 +92,7 @@ class Cache:
         for docname in docnames:
             self.bibliographies[docname] = other.bibliographies[docname]
             self.cited[docname] = other.cited[docname]
+            self.current_id[docname] = other.current_id[docname]
 
     def get_bibliography_entries(self, docname, id_):
         """Return filtered footnote bibliography entries, sorted by
@@ -83,7 +101,7 @@ class Cache:
         # order entries according to which were cited first
         sorted_entries = []
         bibcache = self.bibliographies[docname][id_]
-        for key in self.cited[docname]:
+        for key in self.cited[docname][id_]:
             for bibfile in bibcache.bibfiles:
                 data = self.bibfiles[bibfile].data
                 try:

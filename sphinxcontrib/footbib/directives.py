@@ -9,7 +9,7 @@ import os.path  # normpath
 from docutils.parsers.rst import Directive, directives
 
 from ..bibtex.cache import process_bibfile
-from .cache import BibliographyCache
+from .cache import BibliographyCache, new_id
 from .nodes import bibliography
 
 
@@ -50,8 +50,6 @@ class BibliographyDirective(Directive):
         # ids within a single document, but we need the id to be
         # unique across all documents, so we also include the docname
         # in the id)
-        id_ = 'footbib-bibliography-%s-%s' % (
-            env.docname, env.new_serialno('footbib'))
         bibcache = BibliographyCache(
             style=self.options.get(
                 "style", env.app.config.footbib_default_style),
@@ -63,9 +61,12 @@ class BibliographyDirective(Directive):
             bibfiles=[os.path.normpath(env.relfn2path(bibfile.strip())[1])
                       for bibfile in self.arguments[0].split()],
         )
+        cache = env.footbib_cache
         for bibfile in bibcache.bibfiles:
             process_bibfile(
-                env.footbib_cache.bibfiles, bibfile, bibcache.encoding)
+                cache.bibfiles, bibfile, bibcache.encoding)
             env.note_dependency(bibfile)
-        env.footbib_cache.bibliographies[env.docname][id_] = bibcache
+        id_ = cache.current_id[env.docname]
+        cache.bibliographies[env.docname][id_] = bibcache
+        cache.current_id[env.docname] = new_id(env)
         return [bibliography('', ids=[id_])]
