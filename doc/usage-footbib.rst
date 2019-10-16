@@ -1,6 +1,17 @@
 Footbib Extension Usage
 =======================
 
+Configuration
+-------------
+
+* ``footbib_bibfiles``: a list of bib files, must be set
+
+* ``footbib_encoding``: encoding of the bib files (default:
+  "utf-8-sig")
+
+* ``footbib_default_style``: the default pybtex citation style
+  (default: "alpha")
+
 Roles and Directives
 --------------------
 
@@ -24,21 +35,22 @@ Roles and Directives
 
       See :footcite:`1987:nelson,2001:schechter`.
 
-.. rst:directive:: .. footbibliography:: refs.bib [...]
+Advanced Features
+-----------------
 
-   Create footnotes for all references that are cited in the current
-   document. For example:
+Multiple Footnote Paragraphs
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-   .. code-block:: rest
+.. rst:directive:: .. footbibliography::
 
-     .. footbibliography:: refs.bib
+   Create footnotes at this location for all references that are cited
+   in the current document, but that have not been cited yet earlier
+   in the document.
 
-   which would be roughly equivalent to the following LaTeX code:
-
-   .. code-block:: latex
-
-      \footbibliography{refs.bib}
-
+   This can be useful if you want to have multiple footnote paragraphs
+   in the same document, rather than just a single paragraph with
+   footnotes at the bottom of the document.
+   
    You can also pick a bibliography style, using the ``style`` option.
    The ``alpha`` style is the default.
    Other supported styles are ``plain``, ``unsrt``, and ``unsrtalpha``.
@@ -46,17 +58,5 @@ Roles and Directives
 
    .. code-block:: rest
 
-     .. footbibliography:: refs.bib
+     .. footbibliography::
         :style: unsrt
-
-   You can also set the encoding of the bibliography files, using the
-   ``encoding`` option.
-
-   .. code-block:: rest
-
-     .. footbibliography:: refs.bib
-        :encoding: latin
-
-   LaTeX control characters are automatically converted to unicode 
-   characters (for instance, to convert ``\'e`` into ``é``). Be sure 
-   to write ``\%`` when you intend to format a percent sign.

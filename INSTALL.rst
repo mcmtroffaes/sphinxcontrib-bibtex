@@ -10,6 +10,7 @@ or
 .. code-block:: python
 
    extensions = ['sphinxcontrib.footbib']
+   footbib_bibfiles = ['refs.bib']
 
 to your project's Sphinx configuration file ``conf.py``.
 
@@ -44,8 +45,6 @@ Similarly, with footbib:
 .. code-block:: rest
 
    Non-standard analysis is lovely. :footcite:`1987:nelson`
-
-   .. footbibliography:: refs.bib
 
 which will get rendered as:
 
