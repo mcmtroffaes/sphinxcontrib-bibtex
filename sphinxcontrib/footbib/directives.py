@@ -4,11 +4,9 @@
         .. automethod:: run
 """
 
-import os.path  # normpath
-
 from docutils.parsers.rst import Directive, directives
 
-from ..bibtex.cache import process_bibfile
+from ..bibtex.cache import normpath_bibfile, process_bibfile
 from .cache import BibliographyCache, new_id
 from .nodes import bibliography
 
@@ -28,8 +26,8 @@ class BibliographyDirective(Directive):
        :class:`~sphinxcontrib.footbib.transforms.BibliographyTransform`.
     """
 
-    required_arguments = 1
-    optional_arguments = 0
+    required_arguments = 0
+    optional_arguments = 32
     final_argument_whitespace = True
     has_content = False
     option_spec = {
@@ -54,12 +52,13 @@ class BibliographyDirective(Directive):
             style=self.options.get(
                 "style", env.app.config.footbib_default_style),
             encoding=self.options.get(
-                'encoding',
-                self.state.document.settings.input_encoding),
+                "encoding", env.app.config.footbib_default_encoding),
             # convert to normalized absolute path to ensure that the same file
             # only occurs once in the cache
-            bibfiles=[os.path.normpath(env.relfn2path(bibfile.strip())[1])
-                      for bibfile in self.arguments[0].split()],
+            bibfiles=[
+                normpath_bibfile(env, bibfile) for bibfile in (
+                    self.arguments or env.app.config.footbib_default_bibfiles)
+                ],
         )
         cache = env.footbib_cache
         for bibfile in bibcache.bibfiles:

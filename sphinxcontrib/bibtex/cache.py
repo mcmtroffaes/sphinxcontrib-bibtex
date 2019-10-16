@@ -366,6 +366,21 @@ filter_ keyprefix
     """
 
 
+def normpath_bibfile(env, bibfile):
+    """Return normalised path to *bibfile* for the given environment
+    *env*.
+
+    :param env: The sphinx build environment.
+    :type env: :class:`sphinx.environment.BuildEnvironment`
+    :param bibfile: The bib file name.
+    :type bibfile: ``str``
+    :return: A normalised path to the bib file.
+    :rtype: ``str``
+    """
+    return os.path.normpath(
+        env.relfn2path(bibfile.strip(), env.app.config.master_doc)[1])
+
+
 def parse_bibfile(bibfile, encoding):
     """Parse *bibfile*, and return parsed data.
 
