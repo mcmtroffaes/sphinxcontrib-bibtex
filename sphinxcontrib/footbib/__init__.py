@@ -66,7 +66,7 @@ def merge_footbib_cache(app, env, docnames, other):
     env.footbib_cache.merge(docnames, other.footbib_cache)
 
 
-def add_footbibliography(app, docname, source):
+def add_footer(app, docname, source):
     """Add a footer containing a single footbibliography directive, if
     need be.
 
@@ -111,7 +111,7 @@ def setup(app):
     app.connect("builder-inited", init_footbib_cache)
     app.connect("env-merge-info", merge_footbib_cache)
     app.connect("env-purge-doc", purge_footbib_cache)
-    app.connect("source-read", add_footbibliography)
+    app.connect("source-read", add_footer)
     app.connect("source-read", init_current_id)
     app.add_directive("footbibliography", BibliographyDirective)
     app.add_role("footcite", CiteRole())
