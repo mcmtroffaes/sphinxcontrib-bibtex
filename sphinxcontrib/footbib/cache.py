@@ -38,9 +38,8 @@ class Cache:
     """
 
     bibfiles = None
-    """A :class:`dict` mapping .bib file names (relative to the top
-    source folder) to :class:`~sphinxcontrib.bibtex.BibfileCache`
-    instances.
+    """A :class:`dict` mapping .bib file names to
+    :class:`~sphinxcontrib.bibtex.BibfileCache` instances.
     """
 
     bibliographies = None
@@ -102,8 +101,8 @@ class Cache:
         sorted_entries = []
         bibcache = self.bibliographies[docname][id_]
         for key in self.cited[docname][id_]:
-            for bibfile in bibcache.bibfiles:
-                data = self.bibfiles[bibfile].data
+            for bibfile_cache in self.bibfiles.values():
+                data = bibfile_cache.data
                 try:
                     entry = data.entries[key]
                 except KeyError:
@@ -129,16 +128,10 @@ class Cache:
 
 class BibliographyCache(collections.namedtuple(
     'BibliographyCache',
-    """bibfiles style encoding
+    """style
 """)):
 
     """Contains information about a footbibliography directive.
-
-    .. attribute:: bibfiles
-
-        A :class:`list` of :class:`str`\\ s containing the .bib file
-        names (relative to the top source folder) that contain the
-        references.
 
     .. attribute:: style
 

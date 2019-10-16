@@ -27,12 +27,10 @@ class BibliographyDirective(Directive):
     """
 
     required_arguments = 0
-    optional_arguments = 32
-    final_argument_whitespace = True
+    optional_arguments = 0
     has_content = False
     option_spec = {
         'style': directives.unchanged,
-        'encoding': directives.encoding,
     }
 
     def run(self):
@@ -51,19 +49,9 @@ class BibliographyDirective(Directive):
         bibcache = BibliographyCache(
             style=self.options.get(
                 "style", env.app.config.footbib_default_style),
-            encoding=self.options.get(
-                "encoding", env.app.config.footbib_default_encoding),
-            # convert to normalized absolute path to ensure that the same file
-            # only occurs once in the cache
-            bibfiles=[
-                normpath_bibfile(env, bibfile) for bibfile in (
-                    self.arguments or env.app.config.footbib_default_bibfiles)
-                ],
         )
         cache = env.footbib_cache
-        for bibfile in bibcache.bibfiles:
-            process_bibfile(
-                cache.bibfiles, bibfile, bibcache.encoding)
+        for bibfile in cache.bibfiles:
             env.note_dependency(bibfile)
         id_ = cache.current_id[env.docname]
         cache.bibliographies[env.docname][id_] = bibcache

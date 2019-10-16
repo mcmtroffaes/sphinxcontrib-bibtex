@@ -8,8 +8,9 @@
 
 import re
 import sphinx.util
+from sphinx.errors import ExtensionError
 from ..bibtex.cache import normpath_bibfile, process_bibfile
-from .cache import Cache
+from .cache import Cache, new_id
 from .nodes import bibliography
 from .roles import CiteRole
 from .directives import BibliographyDirective
@@ -25,15 +26,18 @@ def init_footbib_cache(app):
     :param app: The sphinx application.
     :type app: :class:`sphinx.application.Sphinx`
     """
+    # check config
+    if not app.config.footbib_bibfiles:
+        raise ExtensionError("You must configure the footbib_bibfiles setting")
+    # add cache if not already present
     if not hasattr(app.env, "footbib_cache"):
         app.env.footbib_cache = Cache()
-    # process default bib files now, to prevent them being processed
-    # multiple times in parallel builds
-    for bibfile in app.config.footbib_default_bibfiles:
-        bibfile2 = normpath_bibfile(app.env, bibfile)
+    # update bib file information in the cache
+    for bibfile in app.config.footbib_bibfiles:
         process_bibfile(
-            app.env.footbib_cache.bibfiles, bibfile2,
-            app.config.footbib_default_encoding)
+            app.env.footbib_cache.bibfiles,
+            normpath_bibfile(app.env, bibfile),
+            app.config.footbib_encoding)
 
 
 def purge_footbib_cache(app, env, docname):
@@ -81,6 +85,10 @@ def add_footbibliography(app, docname, source):
         source[0] += app.config.footbib_footer
 
 
+def init_current_id(app, docname, source):
+    app.env.footbib_cache.current_id[docname] = new_id(app.env)
+
+
 def setup(app):
     """Set up the footbib extension:
 
@@ -96,14 +104,15 @@ def setup(app):
     """
 
     app.add_config_value("footbib_default_style", "alpha", "html")
-    app.add_config_value("footbib_default_bibfiles", [], "html")
-    app.add_config_value("footbib_default_encoding", "utf-8-sig", "html")
+    app.add_config_value("footbib_bibfiles", [], "html")
+    app.add_config_value("footbib_encoding", "utf-8-sig", "html")
     app.add_config_value(
         "footbib_footer", "\n\n.. footbibliography::\n", "html")
     app.connect("builder-inited", init_footbib_cache)
     app.connect("env-merge-info", merge_footbib_cache)
     app.connect("env-purge-doc", purge_footbib_cache)
     app.connect("source-read", add_footbibliography)
+    app.connect("source-read", init_current_id)
     app.add_directive("footbibliography", BibliographyDirective)
     app.add_role("footcite", CiteRole())
     app.add_node(bibliography, override=True)

@@ -9,8 +9,6 @@ from pybtex.plugin import find_plugin
 import pybtex.database
 from sphinx.roles import XRefRole
 
-from .cache import new_id
-
 
 class CiteRole(XRefRole):
 
@@ -30,8 +28,6 @@ class CiteRole(XRefRole):
             self.backend.footnote_reference(_fake_entry(key), document)
             for key in keys]
         cache = env.footbib_cache
-        if env.docname not in cache.current_id:
-            cache.current_id[env.docname] = new_id(env)
         for key in keys:
             for otherkeys in cache.cited[env.docname].values():
                 if key in otherkeys:

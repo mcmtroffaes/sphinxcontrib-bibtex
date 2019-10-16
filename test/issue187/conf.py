@@ -1,3 +1,3 @@
 extensions = ['sphinxcontrib.footbib']
 exclude_patterns = ['_build']
-footbib_default_bibfiles = ['test.bib']
+footbib_bibfiles = ['test.bib']
