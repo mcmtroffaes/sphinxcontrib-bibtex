@@ -7,7 +7,7 @@
 from docutils.parsers.rst import Directive, directives
 
 from ..bibtex.cache import normpath_bibfile, process_bibfile
-from .cache import BibliographyCache, new_id
+from .cache import BibliographyCache
 from .nodes import bibliography
 
 
@@ -55,5 +55,5 @@ class BibliographyDirective(Directive):
             env.note_dependency(bibfile)
         id_ = cache.current_id[env.docname]
         cache.bibliographies[env.docname][id_] = bibcache
-        cache.current_id[env.docname] = new_id(env)
+        cache.new_current_id(env)
         return [bibliography('', ids=[id_])]

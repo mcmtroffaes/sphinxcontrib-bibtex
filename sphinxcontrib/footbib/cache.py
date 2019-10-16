@@ -21,12 +21,6 @@ from sphinx.util.console import standout
 logger = sphinx.util.logging.getLogger(__name__)
 
 
-def new_id(env):
-    """Generate a new footbib id for the given build environment."""
-    return 'footbib-bibliography-%s-%s' % (
-        env.docname, env.new_serialno('footbib'))
-
-
 def _defaultdict_oset():
     return collections.defaultdict(oset)
 
@@ -92,6 +86,11 @@ class Cache:
             self.bibliographies[docname] = other.bibliographies[docname]
             self.cited[docname] = other.cited[docname]
             self.current_id[docname] = other.current_id[docname]
+
+    def new_current_id(self, env):
+        """Generate a new footbib id for the given build environment."""
+        self.current_id[env.docname] = 'footbib-bibliography-%s-%s' % (
+            env.docname, env.new_serialno('footbib'))
 
     def get_bibliography_entries(self, docname, id_):
         """Return filtered footnote bibliography entries, sorted by

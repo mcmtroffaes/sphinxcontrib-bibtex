@@ -10,7 +10,7 @@ import re
 import sphinx.util
 from sphinx.errors import ExtensionError
 from ..bibtex.cache import normpath_bibfile, process_bibfile
-from .cache import Cache, new_id
+from .cache import Cache
 from .nodes import bibliography
 from .roles import CiteRole
 from .directives import BibliographyDirective
@@ -86,7 +86,7 @@ def add_footbibliography(app, docname, source):
 
 
 def init_current_id(app, docname, source):
-    app.env.footbib_cache.current_id[docname] = new_id(app.env)
+    app.env.footbib_cache.new_current_id(app.env)
 
 
 def setup(app):
