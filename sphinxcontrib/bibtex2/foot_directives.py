@@ -13,14 +13,14 @@ class BibliographyDirective(Directive):
 
     """Class for processing the :rst:dir:`footbibliography` directive.
 
-    Produces a :class:`~sphinxcontrib.footbib.nodes.bibliography` node.
+    Produces a :class:`~sphinxcontrib.bibtex2.nodes.bibliography` node.
 
     .. seealso::
 
        Further processing of the resulting
-       :class:`~sphinxcontrib.footbib.nodes.bibliography` node is done
+       :class:`~sphinxcontrib.bibtex2.nodes.bibliography` node is done
        by
-       :class:`~sphinxcontrib.footbib.transforms.BibliographyTransform`.
+       :class:`~sphinxcontrib.bibtex2.foot_transforms.BibliographyTransform`.
     """
 
     required_arguments = 0
