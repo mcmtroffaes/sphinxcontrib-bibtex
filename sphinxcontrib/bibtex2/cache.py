@@ -5,17 +5,12 @@
 
     .. autoclass:: Cache
         :members:
-
-    .. autoclass:: BibliographyCache
-        :members:
 """
 
 import collections
 import copy
 from oset import oset
-
 import sphinx.util
-from sphinx.util.console import standout
 
 
 logger = sphinx.util.logging.getLogger(__name__)
