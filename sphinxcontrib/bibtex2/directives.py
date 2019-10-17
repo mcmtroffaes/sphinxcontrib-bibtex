@@ -38,21 +38,13 @@ class BibliographyDirective(Directive):
         bibliography.
         """
         env = self.state.document.settings.env
-        # create id and cache for this node
-        # this id will be stored with the node
-        # and is used to look up additional data in env.footbib_cache
-        # (implementation note: new_serialno only guarantees unique
-        # ids within a single document, but we need the id to be
-        # unique across all documents, so we also include the docname
-        # in the id)
-        bibcache = BibliographyCache(
+        for bibfile in env.bibtex_bibfiles:
+            env.note_dependency(bibfile)
+        cache = env.footbib_cache
+        id_ = cache.current_id[env.docname]
+        cache.bibliographies[env.docname][id_] = BibliographyCache(
             style=self.options.get(
                 "style", env.app.config.bibtex_style),
         )
-        cache = env.footbib_cache
-        for bibfile in cache.bibfiles:
-            env.note_dependency(bibfile)
-        id_ = cache.current_id[env.docname]
-        cache.bibliographies[env.docname][id_] = bibcache
         cache.new_current_id(env)
         return [bibliography('', ids=[id_])]

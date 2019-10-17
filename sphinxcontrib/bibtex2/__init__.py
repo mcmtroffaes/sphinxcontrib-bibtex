@@ -32,10 +32,12 @@ def init_footbib_cache(app):
     # add cache if not already present
     if not hasattr(app.env, "footbib_cache"):
         app.env.footbib_cache = Cache()
+    if not hasattr(app.env, "bibtex_bibfiles"):
+        app.env.bibtex_bibfiles = {}
     # update bib file information in the cache
     for bibfile in app.config.bibtex_bibfiles:
         process_bibfile(
-            app.env.footbib_cache.bibfiles,
+            app.env.bibtex_bibfiles,
             normpath_bibfile(app.env, bibfile),
             app.config.bibtex_encoding)
 
@@ -77,7 +79,6 @@ def add_footbib_footer(app, docname, source):
     :param source: The source, as a list containing a single string.
     :type source: :class:`list`
     """
-
     before, _, after = source[0].rpartition("footbibliography::")
     cites_before = set(re.findall(":footcite:`[^`]*`", before))
     cites_after = set(re.findall(":footcite:`[^`]*`", after))

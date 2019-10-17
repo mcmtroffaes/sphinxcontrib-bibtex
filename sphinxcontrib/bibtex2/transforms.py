@@ -38,7 +38,7 @@ class BibliographyTransform(docutils.transforms.Transform):
             id_ = bibnode['ids'][0]
             bibcache = env.footbib_cache.bibliographies[docname][id_]
             entries = env.footbib_cache.get_bibliography_entries(
-                docname=docname, id_=id_)
+                docname, id_, env.bibtex_bibfiles)
             # locate and instantiate style and backend plugins
             style = find_plugin('pybtex.style.formatting', bibcache.style)()
             backend = find_plugin('pybtex.backends', 'docutils')()
