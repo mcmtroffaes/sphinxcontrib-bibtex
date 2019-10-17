@@ -49,7 +49,7 @@ def get_bibliography_entries(bibdatas, keys):
 
 class BibliographyTransform(docutils.transforms.Transform):
 
-    """A docutils transform to generate citation entries for
+    """A docutils transform to generate footnotes for
     bibliography nodes.
     """
 
