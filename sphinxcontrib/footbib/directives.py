@@ -47,7 +47,7 @@ class BibliographyDirective(Directive):
         # in the id)
         bibcache = BibliographyCache(
             style=self.options.get(
-                "style", env.app.config.footbib_default_style),
+                "style", env.app.config.bibtex_style),
         )
         cache = env.footbib_cache
         for bibfile in cache.bibfiles:
