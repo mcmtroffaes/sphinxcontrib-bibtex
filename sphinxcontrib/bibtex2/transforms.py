@@ -75,7 +75,7 @@ class BibliographyTransform(docutils.transforms.Transform):
             style = find_plugin(
                 'pybtex.style.formatting', env.app.config.bibtex_style)()
             backend = find_plugin('pybtex.backends', 'docutils')()
-            # create citation nodes for all references
+            # create footnote nodes for all references
             nodes = docutils.nodes.paragraph()
             # remind: style.format_entries modifies entries in unpickable way
             for entry in style.format_entries(entries):
