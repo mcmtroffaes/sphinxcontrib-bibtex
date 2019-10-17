@@ -9,7 +9,7 @@
 import re
 import sphinx.util
 from sphinx.errors import ExtensionError
-from ..bibtex.cache import normpath_bibfile, process_bibfile
+from .bibfile import normpath_bibfile, process_bibfile
 from .foot_cache import Cache
 from .foot_nodes import bibliography
 from .foot_roles import CiteRole
