@@ -114,16 +114,3 @@ class Cache:
             else:
                 logger.warning("could not find bibtex key {0}.".format(key))
         return sorted_entries
-
-
-class BibliographyCache(collections.namedtuple(
-    'BibliographyCache',
-    """style
-""")):
-
-    """Contains information about a footbibliography directive.
-
-    .. attribute:: style
-
-        The bibtex style.
-    """
