@@ -98,7 +98,6 @@ class Cache:
         """
         # order entries according to which were cited first
         sorted_entries = []
-        bibcache = self.bibliographies[docname][id_]
         for key in self.cited[docname][id_]:
             for bibfile_cache in self.bibfiles.values():
                 data = bibfile_cache.data

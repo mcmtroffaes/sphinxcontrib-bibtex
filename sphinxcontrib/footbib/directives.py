@@ -6,7 +6,6 @@
 
 from docutils.parsers.rst import Directive, directives
 
-from ..bibtex.cache import normpath_bibfile, process_bibfile
 from .cache import BibliographyCache
 from .nodes import bibliography
 
