@@ -9,8 +9,8 @@ or
 
 .. code-block:: python
 
-   extensions = ['sphinxcontrib.footbib']
-   footbib_bibfiles = ['refs.bib']
+   extensions = ['sphinxcontrib.bibtex2']
+   bibtex_bibfiles = ['refs.bib']
 
 to your project's Sphinx configuration file ``conf.py``.
 
@@ -40,7 +40,7 @@ See [Nel87a]_ for an introduction to non-standard analysis.
 
 .. [Nel87a] Edward Nelson. *Radically Elementary Probability Theory*. Princeton University Press, 1987.
 
-Similarly, with footbib:
+Similarly, with bibtex2:
 
 .. code-block:: rest
 

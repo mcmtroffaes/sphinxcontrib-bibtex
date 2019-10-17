@@ -1,16 +1,22 @@
-Footbib Extension Usage
+Bibtex2 Extension Usage
 =======================
+
+The bibtex2 extension is currently in an experimental state.
+You can use it but things might still break in future releases.
+The extension aims to be fully parallel safe, and aims to address
+the long standing issue of unresolved citations across documents.
+This needs a more drastic redesign, whence why it is developed
+as a separate extension.
 
 Configuration
 -------------
 
-* ``footbib_bibfiles``: a list of bib files, must be set
+* ``bibtex_bibfiles``: a list of bib files, must be set
 
-* ``footbib_encoding``: encoding of the bib files (default:
+* ``bibtex_encoding``: encoding of the bib files (default:
   "utf-8-sig")
 
-* ``footbib_default_style``: the default pybtex citation style
-  (default: "alpha")
+* ``bibtex_style``: the pybtex citation style (default: "alpha")
 
 Roles and Directives
 --------------------
