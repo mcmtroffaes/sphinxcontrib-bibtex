@@ -15,10 +15,4 @@ Cite it twice: :footcite:`1657:huygens`.
 
 Bad citation: :footcite:`keydoesnotexist`.
 
-.. rubric:: Footnotes
-
 .. [#note] A footnote.
-
-.. rubric:: References
-
-.. footbibliography:: test.bib test2.bib subfolder/test.bib

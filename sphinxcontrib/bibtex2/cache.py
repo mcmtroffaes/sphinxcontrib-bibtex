@@ -5,20 +5,19 @@
 
     .. autoclass:: Cache
         :members:
-
-    .. autoclass:: BibliographyCache
-        :members:
 """
 
 import collections
 import copy
 from oset import oset
-
 import sphinx.util
-from sphinx.util.console import standout
 
 
 logger = sphinx.util.logging.getLogger(__name__)
+
+
+def _defaultdict_oset():
+    return collections.defaultdict(oset)
 
 
 class Cache:
@@ -27,32 +26,31 @@ class Cache:
     ``app.env.footbib_cache``, so must be picklable.
     """
 
-    bibfiles = None
-    """A :class:`dict` mapping .bib file names (relative to the top
-    source folder) to :class:`~sphinxcontrib.bibtex.BibfileCache`
-    instances.
-    """
-
     bibliographies = None
     """Each bibliography directive is assigned an id of the form
-    footbib-bibliography-xxx. This :class:`dict` maps each docname
+    bibtex-footbibliography-xxx. This :class:`dict` maps each docname
     to another :class:`dict` which maps each id
     to information about the bibliography directive,
     :class:`BibliographyCache`. We need to store this extra
     information separately because it cannot be stored in the
-    :class:`~sphinxcontrib.footbib.nodes.bibliography` nodes
+    :class:`~sphinxcontrib.bibtex2.nodes.bibliography` nodes
     themselves.
     """
 
     cited = None
-    """A :class:`dict` mapping each docname to a :class:`set` of
-    footnote keys.
+    """A :class:`dict` mapping each docname to another :class:`dict`
+    which maps each id to a :class:`set` of footnote keys.
+    """
+
+    current_id = None
+    """A :class:`dict` mapping each docname to the currently active
+    bibtex-footbibliography-xxx id.
     """
 
     def __init__(self):
-        self.bibfiles = {}
         self.bibliographies = collections.defaultdict(dict)
-        self.cited = collections.defaultdict(oset)
+        self.cited = collections.defaultdict(_defaultdict_oset)
+        self.current_id = collections.defaultdict(dict)
 
     def purge(self, docname):
         """Remove all information related to *docname*.
@@ -62,6 +60,7 @@ class Cache:
         """
         self.bibliographies.pop(docname, None)
         self.cited.pop(docname, None)
+        self.current_id.pop(docname, None)
 
     def merge(self, docnames, other):
         """Merge information from *other* cache related to *docnames*.
@@ -71,21 +70,25 @@ class Cache:
         :param other: The other cache.
         :type other: :class:`Cache`
         """
-        self.bibfiles.update(other.bibfiles)
         for docname in docnames:
             self.bibliographies[docname] = other.bibliographies[docname]
             self.cited[docname] = other.cited[docname]
+            self.current_id[docname] = other.current_id[docname]
 
-    def get_bibliography_entries(self, docname, id_):
+    def new_current_id(self, env):
+        """Generate a new footbib id for the given build environment."""
+        self.current_id[env.docname] = 'bibtex-footbibliography-%s-%s' % (
+            env.docname, env.new_serialno('bibtex'))
+
+    def get_bibliography_entries(self, docname, id_, bibfiles):
         """Return filtered footnote bibliography entries, sorted by
         citation order.
         """
         # order entries according to which were cited first
         sorted_entries = []
-        bibcache = self.bibliographies[docname][id_]
-        for key in self.cited[docname]:
-            for bibfile in bibcache.bibfiles:
-                data = self.bibfiles[bibfile].data
+        for key in self.cited[docname][id_]:
+            for bibfile_cache in bibfiles.values():
+                data = bibfile_cache.data
                 try:
                     entry = data.entries[key]
                 except KeyError:
@@ -104,25 +107,5 @@ class Cache:
                     sorted_entries.append(entry)
                     break
             else:
-                logger.warning(
-                    standout("could not find bibtex key {0}.".format(key)))
+                logger.warning("could not find bibtex key {0}.".format(key))
         return sorted_entries
-
-
-class BibliographyCache(collections.namedtuple(
-    'BibliographyCache',
-    """bibfiles style encoding
-""")):
-
-    """Contains information about a footbibliography directive.
-
-    .. attribute:: bibfiles
-
-        A :class:`list` of :class:`str`\\ s containing the .bib file
-        names (relative to the top source folder) that contain the
-        references.
-
-    .. attribute:: style
-
-        The bibtex style.
-    """

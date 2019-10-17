@@ -2,4 +2,4 @@ Cached Information
 ==================
 
 .. automodule:: sphinxcontrib.bibtex.cache
-.. automodule:: sphinxcontrib.footbib.cache
+.. automodule:: sphinxcontrib.bibtex2.cache

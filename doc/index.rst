@@ -12,7 +12,7 @@ Contents
 
    quickstart
    usage
-   usage-footbib
+   usage-bibtex2
    api
    changes
    license

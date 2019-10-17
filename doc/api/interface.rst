@@ -2,4 +2,4 @@ Sphinx Interface
 ================
 
 .. automodule:: sphinxcontrib.bibtex
-.. automodule:: sphinxcontrib.footbib
+.. automodule:: sphinxcontrib.bibtex2

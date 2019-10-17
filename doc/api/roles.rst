@@ -2,4 +2,4 @@ New Roles
 =========
 
 .. automodule:: sphinxcontrib.bibtex.roles
-.. automodule:: sphinxcontrib.footbib.roles
+.. automodule:: sphinxcontrib.bibtex2.roles

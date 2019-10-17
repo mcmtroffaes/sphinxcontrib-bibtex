@@ -7,13 +7,12 @@
 """
 
 import ast  # parse(), used for filter
-import os.path  # getmtime()
 import sphinx.util
 
 from docutils.parsers.rst import Directive, directives
 from sphinx.util.console import standout
 
-from .cache import BibliographyCache, process_bibfile
+from .cache import BibliographyCache, normpath_bibfile, process_bibfile
 from .nodes import bibliography
 
 
@@ -118,7 +117,7 @@ class BibliographyDirective(Directive):
             labels={},
             # convert to normalized absolute path to ensure that the same file
             # only occurs once in the cache
-            bibfiles=[os.path.normpath(env.relfn2path(bibfile.strip())[1])
+            bibfiles=[normpath_bibfile(env, bibfile)
                       for bibfile in self.arguments[0].split()],
         )
         if (bibcache.list_ not in set(["bullet", "enumerated", "citation"])):

@@ -27,8 +27,13 @@ class CiteRole(XRefRole):
         refnodes = [
             self.backend.footnote_reference(_fake_entry(key), document)
             for key in keys]
+        cited = env.footbib_cache.cited[env.docname]
         for key in keys:
-            env.footbib_cache.cited[env.docname].add(key)
+            for otherkeys in cited.values():
+                if key in otherkeys:
+                    break
+            else:
+                cited[env.footbib_cache.current_id[env.docname]].add(key)
         return refnodes, []
 
 

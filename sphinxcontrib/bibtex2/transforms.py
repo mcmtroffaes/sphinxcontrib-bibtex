@@ -36,11 +36,11 @@ class BibliographyTransform(docutils.transforms.Transform):
         docname = env.docname
         for bibnode in self.document.traverse(bibliography):
             id_ = bibnode['ids'][0]
-            bibcache = env.footbib_cache.bibliographies[docname][id_]
             entries = env.footbib_cache.get_bibliography_entries(
-                docname=docname, id_=id_)
+                docname, id_, env.bibtex_bibfiles)
             # locate and instantiate style and backend plugins
-            style = find_plugin('pybtex.style.formatting', bibcache.style)()
+            style = find_plugin(
+                'pybtex.style.formatting', env.app.config.bibtex_style)()
             backend = find_plugin('pybtex.backends', 'docutils')()
             # create citation nodes for all references
             nodes = docutils.nodes.paragraph()
