@@ -11,30 +11,26 @@ from sphinx.roles import XRefRole
 
 
 class CiteRole(XRefRole):
-
     """Class for processing the :rst:role:`footcite` role."""
+
     backend = find_plugin('pybtex.backends', 'docutils')()
+
+    def make_refnode(self, document, env, key):
+        cited = env.footbib_cache.cited[env.docname]
+        for otherkeys in cited.values():
+            if key in otherkeys:
+                break
+        else:
+            cited[env.footbib_cache.current_id[env.docname]].add(key)
+        # TODO get the actual entry
+        return self.backend.footnote_reference(_fake_entry(key), document)
 
     def result_nodes(self, document, env, node, is_ref):
         """Transform reference node into a footnote reference,
         and note that the reference was cited.
         """
         keys = node['reftarget'].split(',')
-        # Note that at this point, usually, env.footbib_cache.bibfiles
-        # is still empty because the bibliography directive may not
-        # have been processed yet, so we cannot get the actual entry.
-        # Instead, we simply fake an entry with the desired key.
-        refnodes = [
-            self.backend.footnote_reference(_fake_entry(key), document)
-            for key in keys]
-        cited = env.footbib_cache.cited[env.docname]
-        for key in keys:
-            for otherkeys in cited.values():
-                if key in otherkeys:
-                    break
-            else:
-                cited[env.footbib_cache.current_id[env.docname]].add(key)
-        return refnodes, []
+        return [self.make_refnode(document, env, key) for key in keys], []
 
 
 def _fake_entry(key):
