@@ -12,7 +12,7 @@ import docutils.transforms
 import sphinx.util
 from pybtex.plugin import find_plugin
 from ..bibtex.transforms import node_text_transform, transform_url_command
-from .nodes import bibliography
+from .foot_nodes import bibliography
 
 
 logger = sphinx.util.logging.getLogger(__name__)

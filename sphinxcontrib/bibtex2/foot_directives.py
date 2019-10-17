@@ -6,7 +6,7 @@
 
 from docutils.parsers.rst import Directive
 
-from .nodes import bibliography
+from .foot_nodes import bibliography
 
 
 class BibliographyDirective(Directive):

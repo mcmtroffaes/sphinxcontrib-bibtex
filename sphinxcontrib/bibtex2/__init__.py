@@ -10,11 +10,11 @@ import re
 import sphinx.util
 from sphinx.errors import ExtensionError
 from ..bibtex.cache import normpath_bibfile, process_bibfile
-from .cache import Cache
-from .nodes import bibliography
-from .roles import CiteRole
-from .directives import BibliographyDirective
-from .transforms import BibliographyTransform
+from .foot_cache import Cache
+from .foot_nodes import bibliography
+from .foot_roles import CiteRole
+from .foot_directives import BibliographyDirective
+from .foot_transforms import BibliographyTransform
 
 
 logger = sphinx.util.logging.getLogger(__name__)
