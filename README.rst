@@ -12,11 +12,6 @@ a ``bibliography`` directive, and a ``cite`` role, which
 work similarly to LaTeX's ``thebibliography`` environment
 and ``\cite`` command.
 
-The footbib extension is similar but generates footnotes rather than
-citations, and may be more appropriate for local (per document)
-bibliographies. It provides a ``footbibliography`` directive, and a
-``footcite`` role, similar to LaTeX's footbib package.
-
 For formatting, the extension relies on
 `pybtex <http://pybtex.org/>`_
 written by Andrey Golovizin.
