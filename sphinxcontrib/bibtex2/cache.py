@@ -8,12 +8,7 @@
 """
 
 import collections
-import copy
 from oset import oset
-import sphinx.util
-
-
-logger = sphinx.util.logging.getLogger(__name__)
 
 
 def _defaultdict_oset():
@@ -79,33 +74,3 @@ class Cache:
         """Generate a new footbib id for the given build environment."""
         self.current_id[env.docname] = 'bibtex-footbibliography-%s-%s' % (
             env.docname, env.new_serialno('bibtex'))
-
-    def get_bibliography_entries(self, docname, id_, bibfiles):
-        """Return filtered footnote bibliography entries, sorted by
-        citation order.
-        """
-        # order entries according to which were cited first
-        sorted_entries = []
-        for key in self.cited[docname][id_]:
-            for bibfile_cache in bibfiles.values():
-                data = bibfile_cache.data
-                try:
-                    entry = data.entries[key]
-                except KeyError:
-                    pass
-                else:
-                    # entries are modified in an unpickable way
-                    # when formatting, so fetch a deep copy
-                    # and return this copy
-                    # we do not deep copy entry.collection because that
-                    # consumes enormous amounts of memory
-                    entry.collection = None
-                    entry2 = copy.deepcopy(entry)
-                    entry2.key = entry.key
-                    entry2.collection = data
-                    entry.collection = data
-                    sorted_entries.append(entry)
-                    break
-            else:
-                logger.warning("could not find bibtex key {0}.".format(key))
-        return sorted_entries
