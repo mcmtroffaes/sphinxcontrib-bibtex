@@ -72,12 +72,12 @@ Custom Footnote Paragraph Footer
 
 By default, every document containing a ``:footcite:`` gets a
 ``.. footbibliography::`` directive inserted at the end. The
-``bibtex_footbib_footer`` configuration value can be set to change
+``bibtex_footbibliography_footer`` configuration value can be set to change
 this. For example, in your ``conf.py`` you could have:
 
 .. code-block:: python
 
-   bibtex_footbib_footer = """
+   bibtex_footbibliography_footer = """
    .. rubric:: Citations
 
    .. footbibliography::
