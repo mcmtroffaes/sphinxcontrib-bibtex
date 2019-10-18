@@ -6,6 +6,9 @@
     .. autofunction:: merge_footbib_cache
 """
 
+import docutils.frontend
+import docutils.parsers.rst
+import docutils.utils
 import re
 import sphinx.util
 from sphinx.errors import ExtensionError
@@ -40,6 +43,15 @@ def init_footbib_cache(app):
             app.env.bibtex_bibfiles,
             normpath_bibfile(app.env, bibfile),
             app.config.bibtex_encoding)
+    # parse footbibliography header
+    parser = docutils.parsers.rst.Parser()
+    settings = docutils.frontend.OptionParser(
+        components=(docutils.parsers.rst.Parser,)).get_default_values()
+    document = docutils.utils.new_document(
+        "footbibliography_header", settings)
+    parser.parse(app.config.bibtex_footbibliography_header, document)
+    app.env.bibtex_footbibliography_header = (
+        document[0] if len(document) > 0 else None)
 
 
 def purge_footbib_cache(app, env, docname):

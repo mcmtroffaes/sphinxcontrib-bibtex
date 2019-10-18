@@ -46,10 +46,14 @@ class BibliographyTransform(docutils.transforms.Transform):
                 'pybtex.style.formatting', env.app.config.bibtex_style)()
             backend = find_plugin('pybtex.backends', 'docutils')()
             # create footnote nodes for all references
-            nodes = docutils.nodes.paragraph()
+            footnotes = docutils.nodes.paragraph()
             # remind: style.format_entries modifies entries in unpickable way
             for entry in style.format_entries(entries2):
                 footnote = backend.footnote(entry, self.document)
                 node_text_transform(footnote, transform_url_command)
-                nodes += footnote
+                footnotes += footnote
+            if env.bibtex_footbibliography_header is not None:
+                nodes = [env.bibtex_footbibliography_header, footnotes]
+            else:
+                nodes = footnotes
             bibnode.replace_self(nodes)
