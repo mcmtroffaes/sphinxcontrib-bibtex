@@ -67,21 +67,17 @@ following directive:
    in the current document, but that have no corresponding footnotes
    yet earlier in the document.
 
-Custom Footnote Paragraph Footer
+Custom Footnote Paragraph Header
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-By default, every document containing a ``:footcite:`` gets a
-``.. footbibliography::`` directive inserted at the end. The
-``bibtex_footbibliography_footer`` configuration value can be set to change
-this. For example, in your ``conf.py`` you could have:
+By default, the ``.. footbibliography::`` simply inserts a paragraph.
+The ``bibtex_footbibliography_header`` configuration value can be set
+to add a header to this. For example, in your ``conf.py`` you could
+have:
 
 .. code-block:: python
 
-   bibtex_footbibliography_footer = """
-   .. rubric:: Citations
+   bibtex_footbibliography_header = ".. rubric:: Citations"
 
-   .. footbibliography::
-   """
-
-will ensure that every document containing footnote citations will
-have a rubric for these citations.
+will ensure that every paragraph of footnote citations will have a
+rubric.

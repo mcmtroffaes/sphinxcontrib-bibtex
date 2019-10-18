@@ -68,7 +68,7 @@ def merge_footbib_cache(app, env, docnames, other):
     env.footbib_cache.merge(docnames, other.footbib_cache)
 
 
-def add_footbib_footer(app, docname, source):
+def add_footbibliography_footer(app, docname, source):
     """Add a footer containing a single footbibliography directive, if
     need be.
 
@@ -83,8 +83,7 @@ def add_footbib_footer(app, docname, source):
     cites_before = set(re.findall(":footcite:`[^`]*`", before))
     cites_after = set(re.findall(":footcite:`[^`]*`", after))
     if cites_after - cites_before:
-        source[0] += "\n\n"
-        source[0] += app.config.bibtex_footbibliography_footer
+        source[0] += "\n\n.. footbibliography::"
 
 
 def init_current_id(app, docname, source):
@@ -109,11 +108,11 @@ def setup(app):
     app.add_config_value("bibtex_bibfiles", [], "html")
     app.add_config_value("bibtex_encoding", "utf-8-sig", "html")
     app.add_config_value(
-        "bibtex_footbibliography_footer", ".. footbibliography::", "html")
+        "bibtex_footbibliography_header", "", "html")
     app.connect("builder-inited", init_footbib_cache)
     app.connect("env-merge-info", merge_footbib_cache)
     app.connect("env-purge-doc", purge_footbib_cache)
-    app.connect("source-read", add_footbib_footer)
+    app.connect("source-read", add_footbibliography_footer)
     app.connect("source-read", init_current_id)
     app.add_directive("footbibliography", BibliographyDirective)
     app.add_role("footcite", CiteRole())
