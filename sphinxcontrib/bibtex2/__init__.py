@@ -44,14 +44,15 @@ def init_footbib_cache(app):
             normpath_bibfile(app.env, bibfile),
             app.config.bibtex_encoding)
     # parse footbibliography header
-    parser = docutils.parsers.rst.Parser()
-    settings = docutils.frontend.OptionParser(
-        components=(docutils.parsers.rst.Parser,)).get_default_values()
-    document = docutils.utils.new_document(
-        "footbibliography_header", settings)
-    parser.parse(app.config.bibtex_footbibliography_header, document)
-    app.env.bibtex_footbibliography_header = (
-        document[0] if len(document) > 0 else None)
+    if not hasattr(app.env, "bibtex_footbibliography_header"):
+        parser = docutils.parsers.rst.Parser()
+        settings = docutils.frontend.OptionParser(
+            components=(docutils.parsers.rst.Parser,)).get_default_values()
+        document = docutils.utils.new_document(
+            "footbibliography_header", settings)
+        parser.parse(app.config.bibtex_footbibliography_header, document)
+        app.env.bibtex_footbibliography_header = (
+            document[0] if len(document) > 0 else None)
 
 
 def purge_footbib_cache(app, env, docname):
@@ -119,8 +120,7 @@ def setup(app):
     app.add_config_value("bibtex_style", "alpha", "html")
     app.add_config_value("bibtex_bibfiles", [], "html")
     app.add_config_value("bibtex_encoding", "utf-8-sig", "html")
-    app.add_config_value(
-        "bibtex_footbibliography_header", "", "html")
+    app.add_config_value("bibtex_footbibliography_header", "", "html")
     app.connect("builder-inited", init_footbib_cache)
     app.connect("env-merge-info", merge_footbib_cache)
     app.connect("env-purge-doc", purge_footbib_cache)
