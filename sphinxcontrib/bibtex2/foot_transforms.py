@@ -53,7 +53,8 @@ class BibliographyTransform(docutils.transforms.Transform):
                 node_text_transform(footnote, transform_url_command)
                 footnotes += footnote
             if env.bibtex_footbibliography_header is not None:
-                nodes = [env.bibtex_footbibliography_header.copy(), footnotes]
+                nodes = [env.bibtex_footbibliography_header.deepcopy(),
+                         footnotes]
             else:
                 nodes = footnotes
             bibnode.replace_self(nodes)
