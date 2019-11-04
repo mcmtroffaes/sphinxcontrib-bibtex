@@ -131,4 +131,8 @@ def setup(app):
     app.add_node(bibliography, override=True)
     app.add_transform(BibliographyTransform)
 
-    return {'parallel_read_safe': True}
+    return {
+        'env_version': 1,
+        'parallel_read_safe': True,
+        'parallel_write_safe': True,
+        }

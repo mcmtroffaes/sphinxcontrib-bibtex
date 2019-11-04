@@ -126,4 +126,8 @@ def setup(app):
     # Parallel read is not safe at the moment: in the current design,
     # the document that contains references must be read last for all
     # references to be resolved.
-    return {'parallel_read_safe': False}
+    return {
+        'env_version': 1,
+        'parallel_read_safe': False,
+        'parallel_write_safe': True,
+        }
