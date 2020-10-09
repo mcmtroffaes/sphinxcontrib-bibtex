@@ -45,7 +45,7 @@ setup(
     platforms='any',
     packages=find_packages(),
     include_package_data=True,
-    python_requires='>=3.5',
+    python_requires='>=3.6',
     install_requires=requires,
     namespace_packages=['sphinxcontrib'],
 )
