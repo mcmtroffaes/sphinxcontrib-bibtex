@@ -2,7 +2,7 @@ language: python
 dist: focal
 sudo: false
 python:
-  - "3.9"
+  - "3.9-dev"
   - "3.8"
   - "3.7"
   - "3.6"
@@ -16,12 +16,12 @@ install:
   - "pip install git+https://bitbucket.org/pybtex-devs/pybtex"
   - "pip install codecov sphinx-testing" # required for tests
   - "pip install ."
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then pip install check-manifest flake8; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.8' ]]; then pip install check-manifest flake8; fi"
 script:
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then check-manifest; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then flake8; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.8' ]]; then check-manifest; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.8' ]]; then flake8; fi"
   - "pushd doc"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.7' ]]; then make html; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.8' ]]; then make html; fi"
   - "popd"
   - "pushd test"
   - "nosetests --with-coverage --cover-package=sphinxcontrib.bibtex,sphinxcontrib.bibtex2"
