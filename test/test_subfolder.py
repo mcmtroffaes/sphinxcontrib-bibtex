@@ -6,7 +6,6 @@
     Test bib files in subfolder.
 """
 
-import nose.tools
 from sphinx_testing.util import path, with_app
 
 
