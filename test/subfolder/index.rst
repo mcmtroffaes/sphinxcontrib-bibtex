@@ -1,0 +1,6 @@
+Contents
+========
+
+.. toctree::
+
+   subfolder/doc
