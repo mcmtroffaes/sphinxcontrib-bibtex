@@ -41,7 +41,7 @@ def init_footbib_cache(app):
     for bibfile in app.config.bibtex_bibfiles:
         process_bibfile(
             app.env.bibtex_bibfiles,
-            normpath_bibfile(app.env, bibfile),
+            normpath_bibfile(app.env, bibfile, app.config.master_doc),
             app.config.bibtex_encoding)
     # parse footbibliography header
     if not hasattr(app.env, "bibtex_footbibliography_header"):
