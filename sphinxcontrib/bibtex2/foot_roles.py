@@ -29,7 +29,7 @@ class CiteRole(XRefRole):
         """Transform reference node into a footnote reference,
         and note that the reference was cited.
         """
-        keys = node['reftarget'].split(',')
+        keys = [key.strip() for key in node['reftarget'].split(',')]
         return [self.make_refnode(document, env, key) for key in keys], []
 
 
