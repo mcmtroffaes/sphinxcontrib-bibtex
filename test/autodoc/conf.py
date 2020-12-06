@@ -5,3 +5,4 @@ extensions = [
     'sphinxcontrib.bibtex', 'sphinxcontrib.bibtex2', 'sphinx.ext.autodoc']
 exclude_patterns = ['_build']
 bibtex_bibfiles = ['test.bib']
+autoclass_content = 'both'  # document __init__ method too

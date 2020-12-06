@@ -31,6 +31,8 @@ def test_autodoc(app, status, warning):
         assert len(re.findall("\\[Sev\\]", output)) == 1
         assert len(re.findall("\\[Eig\\]", output)) == 1
         assert len(re.findall("\\[Nin\\]", output)) == 1
+        assert len(re.findall("\\[Ten\\]", output)) == 1
+        assert len(re.findall("\\[Ele\\]", output)) == 1
         assert len(re.findall("Een", output)) == 1
         assert len(re.findall("Twee", output)) == 1
         assert len(re.findall("Drie", output)) == 1
@@ -40,6 +42,8 @@ def test_autodoc(app, status, warning):
         assert len(re.findall("Zeven", output)) == 1
         assert len(re.findall("Acht", output)) == 1
         assert len(re.findall("Negen", output)) == 1
+        assert len(re.findall("Tien", output)) == 1
+        assert len(re.findall("Elf", output)) == 1
     with open(os.path.join(app.outdir, "doc_footcite.html")) as stream:
         output = stream.read()
         assert len(re.findall(">1<", output)) == 2
@@ -51,6 +55,8 @@ def test_autodoc(app, status, warning):
         assert len(re.findall(">7<", output)) == 2
         assert len(re.findall(">8<", output)) == 2
         assert len(re.findall(">9<", output)) == 2
+        assert len(re.findall(">10<", output)) == 2
+        assert len(re.findall(">11<", output)) == 2
         assert len(re.findall("Een", output)) == 1
         assert len(re.findall("Twee", output)) == 1
         assert len(re.findall("Drie", output)) == 1
@@ -60,3 +66,5 @@ def test_autodoc(app, status, warning):
         assert len(re.findall("Zeven", output)) == 1
         assert len(re.findall("Acht", output)) == 1
         assert len(re.findall("Negen", output)) == 1
+        assert len(re.findall("Tien", output)) == 1
+        assert len(re.findall("Elf", output)) == 1
