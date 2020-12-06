@@ -1,13 +1,16 @@
 """Docstring for some_module. :footcite:`testmodule`"""
 
+
 def func(funcarg):
     """Docstring for function func. :footcite:`testfunc`
 
     :param funcarg: Docstring for parameter. :footcite:`testfuncarg`
     """
 
+
 a = 1
 """Docstring for variable a. :footcite:`testdata`"""
+
 
 class Foo:
     """Docstring for class Foo. :footcite:`testclass`"""
