@@ -19,7 +19,7 @@ class CiteRole(XRefRole):
         """Transform reference node into a citation reference,
         and note that the reference was cited.
         """
-        keys = node['reftarget'].split(',')
+        keys = [key.strip() for key in node['reftarget'].split(',')]
         # Note that at this point, usually, env.bibtex_cache.bibfiles
         # is still empty because the bibliography directive may not
         # have been processed yet, so we cannot get the actual entry.
