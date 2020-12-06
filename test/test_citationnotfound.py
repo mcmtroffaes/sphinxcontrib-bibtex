@@ -20,5 +20,7 @@ def teardown_module():
 @with_app(srcdir=srcdir)
 def test_citationnotfound(app, status, warning):
     app.builder.build_all()
-    assert re.search('citation not found: nosuchkey1', warning.getvalue())
-    assert re.search('could not find bibtex key nosuchkey2', warning.getvalue())
+    assert re.search(
+        'citation not found: nosuchkey1', warning.getvalue())
+    assert re.search(
+        'could not find bibtex key nosuchkey2', warning.getvalue())

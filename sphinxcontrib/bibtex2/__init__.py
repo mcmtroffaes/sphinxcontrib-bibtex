@@ -9,7 +9,6 @@
 import docutils.frontend
 import docutils.parsers.rst
 import docutils.utils
-import re
 import sphinx.util
 from sphinx.errors import ExtensionError
 from .bibfile import normpath_bibfile, process_bibfile
