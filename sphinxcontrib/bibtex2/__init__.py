@@ -81,24 +81,6 @@ def merge_footbib_cache(app, env, docnames, other):
     env.footbib_cache.merge(docnames, other.footbib_cache)
 
 
-def add_footbibliography_footer(app, docname, source):
-    """Add a footer containing a single footbibliography directive, if
-    need be.
-
-    :param app: The sphinx application.
-    :type app: :class:`sphinx.application.Sphinx`
-    :param docname: The document name.
-    :type docname: :class:`str`
-    :param source: The source, as a list containing a single string.
-    :type source: :class:`list`
-    """
-    before, _, after = source[0].rpartition("footbibliography::")
-    cites_before = set(re.findall(":footcite:`[^`]*`", before))
-    cites_after = set(re.findall(":footcite:`[^`]*`", after))
-    if cites_after - cites_before:
-        source[0] += "\n\n.. footbibliography::"
-
-
 def init_current_id(app, docname, source):
     app.env.footbib_cache.new_current_id(app.env)
 
@@ -124,7 +106,6 @@ def setup(app):
     app.connect("builder-inited", init_footbib_cache)
     app.connect("env-merge-info", merge_footbib_cache)
     app.connect("env-purge-doc", purge_footbib_cache)
-    app.connect("source-read", add_footbibliography_footer)
     app.connect("source-read", init_current_id)
     app.add_directive("footbibliography", BibliographyDirective)
     app.add_role("footcite", CiteRole())

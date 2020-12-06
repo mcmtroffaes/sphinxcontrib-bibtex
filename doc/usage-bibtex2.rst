@@ -36,6 +36,16 @@ Roles and Directives
 
       See :footcite:`1987:nelson,2001:schechter`.
 
+.. rst:directive:: .. footbibliography::
+
+   Create footnotes at this location for all references that are cited
+   in the current document. You normally add this once at the very bottom
+   of any document with footnote citations.
+
+   If specified multiple times in the same document, footnotes are only
+   created for references that do not yet have a footnote earlier in the
+   document.
+
 Advanced Features
 -----------------
 
@@ -52,20 +62,6 @@ Set the ``bibtex_style`` configuration value to control the pybtex
 formatting style. The default is ``alpha``. Other supported styles are
 ``plain``, ``unsrt``, and ``unsrtalpha``. You can also create your own
 style (see :ref:`bibtex-custom-formatting`).
-
-Multiple Footnote Paragraphs
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Sometimes you may want to have multiple footnote paragraphs in the
-same document, rather than just a single paragraph with footnotes at
-the bottom of the document. For this purpose, you can use the
-following directive:
-
-.. rst:directive:: .. footbibliography::
-
-   Create footnotes at this location for all references that are cited
-   in the current document, but that have no corresponding footnotes
-   yet earlier in the document.
 
 Custom Footnote Paragraph Header
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
