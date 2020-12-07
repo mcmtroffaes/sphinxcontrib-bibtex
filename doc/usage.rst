@@ -413,8 +413,11 @@ No Parallel Builds
 Because the extension needs to process documents in sequential order
 to know what citation entries are cited, in the current design,
 parallel builds are not supported. If parallel builds are important
-for you, you can use the footbib extension, which converts citations
-into footnotes, which are local to each document, and which therefore
+for you, you can use the experimental :rst:role:`footcite` role
+and :rst:dir:`footbibliography` directive
+currently residing in the bibtex2 extension.
+These convert citations into footnotes,
+which are local to each document, and which therefore
 do not have this limitation.
 
 Encoding: Percent Signs
@@ -446,6 +449,11 @@ There are a few ways to work around this problem:
   alphabetical manner. For instance, in case you have only one file
   containing a :rst:dir:`bibliography` directive, simply name that
   file :file:`zreferences.rst`.
+  Similarly, if you use the :rst:dir:`autosummary` directive, use the
+  ``:toctree: _toctree/...`` option. Instead of ``_toctree`` you can
+  use any prefix that comes alphabetically first in your project.
+  This ensures that all :rst:dir:`autosummary` generated documents
+  are processed first.
 
 Hopefully, this limitation can be lifted in a future release.
 
