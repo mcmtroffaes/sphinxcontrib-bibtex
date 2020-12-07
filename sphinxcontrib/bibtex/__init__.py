@@ -123,7 +123,8 @@ def save_bibtex_json(app, exc):
     if json_string_old != json_string_new:
         with open(json_filename, 'w') as json_file:
             json_file.write(json_string_new)
-        logger.error("bibtex citations have changed, please rerun sphinx build")
+        logger.error(
+            "bibtex citations have changed, please rerun sphinx build")
 
 
 def setup(app):

@@ -191,7 +191,8 @@ class Cache:
         self.bibfiles = {}
         self.bibliographies = collections.defaultdict(dict)
         self.cited = collections.defaultdict(oset)
-        self.cited_previous = {key: oset(value) for key, value in cited_previous.items()}
+        self.cited_previous = {
+            key: oset(value) for key, value in cited_previous.items()}
         self.enum_count = {}
 
     def purge(self, docname):
