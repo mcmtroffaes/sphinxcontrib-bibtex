@@ -5,7 +5,7 @@
     .. autoclass:: BibfileCache
         :members:
 
-    .. autofunction:: normpath_bibfile
+    .. autofunction:: normpath_filename
 
     .. autofunction:: parse_bibfile
 
@@ -43,21 +43,21 @@ class BibfileCache(collections.namedtuple('BibfileCache', 'mtime data')):
     """
 
 
-def normpath_bibfile(env, bibfile, docname=None):
+def normpath_filename(env, filename, docname=None):
     """Return normalised path to *bibfile* for the given environment
     *env*.
 
     :param env: The sphinx build environment.
     :type env: :class:`sphinx.environment.BuildEnvironment`
-    :param bibfile: The bib file name.
-    :type bibfile: ``str``
+    :param filename: The file name.
+    :type filename: ``str``
     :param docname: The document name from which the bib file is referenced.
     :type docname: ``str``
     :return: A normalised path to the bib file.
     :rtype: ``str``
     """
     return os.path.normpath(
-        env.relfn2path(bibfile.strip(), docname)[1])
+        env.relfn2path(filename.strip(), docname)[1])
 
 
 def parse_bibfile(bibfile, encoding):

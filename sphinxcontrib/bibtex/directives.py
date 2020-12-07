@@ -12,7 +12,7 @@ import sphinx.util
 from docutils.parsers.rst import Directive, directives
 from sphinx.util.console import standout
 
-from ..bibtex2.bibfile import normpath_bibfile, process_bibfile
+from ..bibtex2.bibfile import normpath_filename, process_bibfile
 from .cache import BibliographyCache
 from .nodes import bibliography
 
@@ -118,7 +118,7 @@ class BibliographyDirective(Directive):
             labels={},
             # convert to normalized absolute path to ensure that the same file
             # only occurs once in the cache
-            bibfiles=[normpath_bibfile(env, bibfile)
+            bibfiles=[normpath_filename(env, bibfile)
                       for bibfile in self.arguments[0].split()],
         )
         if (bibcache.list_ not in set(["bullet", "enumerated", "citation"])):

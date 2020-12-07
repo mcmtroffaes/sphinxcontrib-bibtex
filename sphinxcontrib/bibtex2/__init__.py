@@ -11,7 +11,7 @@ import docutils.parsers.rst
 import docutils.utils
 import sphinx.util
 from sphinx.errors import ExtensionError
-from .bibfile import normpath_bibfile, process_bibfile
+from .bibfile import normpath_filename, process_bibfile
 from .foot_cache import Cache
 from .foot_nodes import bibliography
 from .foot_roles import CiteRole
@@ -40,7 +40,7 @@ def init_footbib_cache(app):
     for bibfile in app.config.bibtex_bibfiles:
         process_bibfile(
             app.env.bibtex_bibfiles,
-            normpath_bibfile(app.env, bibfile, app.config.master_doc),
+            normpath_filename(app.env, bibfile, app.config.master_doc),
             app.config.bibtex_encoding)
     # parse footbibliography header
     if not hasattr(app.env, "bibtex_footbibliography_header"):
