@@ -6,15 +6,8 @@
     Test the ``:list: citation`` option.
 """
 
+import pytest
 import re
-
-from sphinx_testing.util import path, with_app
-
-srcdir = path(__file__).dirname().joinpath('list_citation').abspath()
-
-
-def teardown_module():
-    (srcdir / '_build').rmtree(True)
 
 
 def htmlbibitem(label, text):
@@ -23,10 +16,11 @@ def htmlbibitem(label, text):
         '<a.*>{0}</a></span></dt>\\s*<dd>.*{1}.*</dd>'.format(label, text))
 
 
-@with_app(srcdir=srcdir, warningiserror=True)
-def test_list_citation(app, status, warning):
+@pytest.mark.sphinx('html', testroot='list_citation')
+def test_list_citation(app, warning):
     app.builder.build_all()
-    output = (path(app.outdir) / "index.html").read_text()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
     assert re.search(
         '<p id="bibtex-bibliography-index-0">'
         + htmlbibitem("1", "Akkerdju")

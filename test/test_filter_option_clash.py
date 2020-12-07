@@ -6,19 +6,12 @@
     Test filter option clash with all, cited, and notcited.
 """
 
+import pytest
 import re
-from sphinx_testing.util import path, with_app
 
 
-srcdir = path(__file__).dirname().joinpath('filter_option_clash').abspath()
-
-
-def teardown_module():
-    (srcdir / '_build').rmtree(True)
-
-
-@with_app(srcdir=srcdir)
-def test_filter_option_clash(app, status, warning):
+@pytest.mark.sphinx('html', testroot='filter_option_clash')
+def test_filter_option_clash(app, warning):
     app.builder.build_all()
     warnings = warning.getvalue()
     assert re.search(':filter: overrides :all:', warnings)

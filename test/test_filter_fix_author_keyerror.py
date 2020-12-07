@@ -6,17 +6,9 @@
     Test for a bug in the filter option.
 """
 
-from sphinx_testing.util import path, with_app
+import pytest
 
 
-srcdir = path(__file__).dirname().joinpath(
-    'filter_fix_author_keyerror').abspath()
-
-
-def teardown_module():
-    (srcdir / '_build').rmtree(True)
-
-
-@with_app(srcdir=srcdir, warningiserror=True)
-def test_filter_fix_author_keyerror(app, status, warning):
+@pytest.mark.sphinx('html', testroot='filter_fix_author_keyerror')
+def test_filter_fix_author_keyerror(app):
     app.builder.build_all()

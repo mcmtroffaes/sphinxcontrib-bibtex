@@ -6,19 +6,14 @@
     Test the ``:encoding:`` option.
 """
 
+import latexcodec
+import pytest
 import re
 
-from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).dirname().joinpath('issue4').abspath()
-
-
-def teardown_module():
-    (srcdir / '_build').rmtree(True)
-
-
-@with_app(srcdir=srcdir, warningiserror=True)
-def test_encoding(app, status, warning):
+@pytest.mark.sphinx('html', testroot='issue4')
+def test_encoding(app, warning):
     app.builder.build_all()
-    output = (path(app.outdir) / "index.html").read_text(encoding='utf-8')
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text(encoding='utf-8')
     assert re.search(u"Tést☺", output)

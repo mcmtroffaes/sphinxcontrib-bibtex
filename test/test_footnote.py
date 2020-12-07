@@ -6,16 +6,11 @@
     Test for footbib.
 """
 
-from sphinx_testing.util import path, with_app
-
-srcdir = path(__file__).dirname().joinpath('footnote').abspath()
+import pytest
 
 
-def teardown_module():
-    (srcdir / '_build').rmtree(True)
-
-
-@with_app(srcdir=srcdir, warningiserror=True)
-def test_footnote(app, status, warning):
+@pytest.mark.sphinx('html', testroot='footnote')
+def test_footnote(app, warning):
     app.parallel = 4
     app.builder.build_all()
+    assert not warning.getvalue()

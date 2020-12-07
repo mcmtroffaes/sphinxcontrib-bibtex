@@ -6,18 +6,13 @@
     Check that LaTeX backend produces correct references.
 """
 
-from sphinx_testing.util import path, with_app
-
-srcdir = path(__file__).dirname().joinpath('latex_refs').abspath()
+import pytest
 
 
-def teardown_module():
-    (srcdir / '_build').rmtree(True)
-
-
-@with_app(srcdir=srcdir, warningiserror=True, buildername='latex')
-def test_latex_refs(app, status, warning):
+@pytest.mark.sphinx('latex', testroot='latex_refs')
+def test_latex_refs(app, warning):
     app.builder.build_all()
-    output = (path(app.outdir) / "test.tex").read_text(encoding='utf-8')
+    assert not warning.getvalue()
+    output = (app.outdir / "test.tex").read_text(encoding='utf-8')
     assert r'\sphinxcite{index:huygens}' in output
     assert r'\bibitem[Huy57]{index:huygens}' in output

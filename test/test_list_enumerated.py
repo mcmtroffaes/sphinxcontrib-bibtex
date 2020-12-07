@@ -6,21 +6,15 @@
     Test the ``:list: enumerated`` option.
 """
 
+import pytest
 import re
-from sphinx_testing.util import path, with_app
 
 
-srcdir = path(__file__).dirname().joinpath('list_enumerated').abspath()
-
-
-def teardown_module():
-    (srcdir / '_build').rmtree(True)
-
-
-@with_app(srcdir=srcdir, warningiserror=True)
-def test_list_enumerated(app, status, warning):
+@pytest.mark.sphinx('html', testroot='list_enumerated')
+def test_list_enumerated(app, warning):
     app.builder.build_all()
-    output = (path(app.outdir) / "index.html").read_text()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
     assert re.search(
         '<ol .*id="bibtex-bibliography-index-0".* start="1".*>'
         '.*<li>.*Akkerdju.*</li>'
