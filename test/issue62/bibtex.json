@@ -1,0 +1,21 @@
+{
+    "cited": {
+        "doc1": [
+            "fuhrmans_molecular_2012",
+            "blume_apparent_1983",
+            "grabitz_relaxation_2002",
+            "wustner_atomistic_2014"
+        ],
+        "doc2": [
+            "shirts_simple_2013"
+        ],
+        "summary": [
+            "mcmahon_membrane_2010",
+            "hu_gaussian_2013",
+            "fuhrmans_molecular_2012",
+            "risselada_curvature-dependent_2011",
+            "risselada_curvature_2009",
+            "marrink_mechanism_2003"
+        ]
+    }
+}

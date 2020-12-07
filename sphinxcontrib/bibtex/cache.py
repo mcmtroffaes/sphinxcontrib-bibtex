@@ -205,7 +205,7 @@ class Cache:
         """
         self.bibliographies.pop(docname, None)
         self.cited.pop(docname, None)
-        self.cited_previous.pop(docname, None)
+        # note: intentionally do not clear cited_previous
         self.enum_count.pop(docname, None)
 
     def get_label_from_key(self, key):

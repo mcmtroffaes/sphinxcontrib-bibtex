@@ -28,12 +28,12 @@ def init_bibtex_cache(app):
     :param app: The sphinx application.
     :type app: :class:`sphinx.application.Sphinx`
     """
-    json_filename = normpath_filename(app.env, "bibtex.json", app.config.master_doc)
+    json_filename = normpath_filename(
+        app.env, "bibtex.json", app.config.master_doc)
     try:
         with open(json_filename) as json_file:
             json_dict = json.load(json_file)
     except FileNotFoundError:
-        logger.warning("bibtex.json not found, please rerun sphinx build")
         json_dict = {"cited": {}}
     if not hasattr(app.env, "bibtex_cache"):
         app.env.bibtex_cache = Cache(cited_previous=json_dict["cited"])
@@ -110,12 +110,13 @@ def check_duplicate_labels(app, env):
 def save_bibtex_json(app, exc):
     if exc is not None:
         return
-    json_filename = normpath_filename(app.env, "bibtex.json", app.config.master_doc)
+    json_filename = normpath_filename(
+        app.env, "bibtex.json", app.config.master_doc)
     try:
         with open(json_filename) as json_file:
             json_string_old = json_file.read()
     except FileNotFoundError:
-        json_string_old = ''
+        json_string_old = json.dumps({"cited": {}}, indent=4, sort_keys=True)
     cited = {
         key: list(value) for key, value in app.env.bibtex_cache.cited.items()}
     json_string_new = json.dumps({"cited": cited}, indent=4, sort_keys=True)

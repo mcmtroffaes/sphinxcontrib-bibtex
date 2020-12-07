@@ -1,6 +1,6 @@
 """
     test_issue205
-    ~~~~~~~~~~~~
+    ~~~~~~~~~~~~~
 
     Test cites spanning multiple lines.
 """
@@ -10,7 +10,7 @@ import pytest
 
 
 @pytest.mark.sphinx('html', testroot='issue205')
-def test_issue91(app, warning):
+def test_issue205(app, warning):
     app.builder.build_all()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
