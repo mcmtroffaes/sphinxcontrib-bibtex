@@ -7,18 +7,10 @@
     Sphinx is run again.
 """
 
-import shutil
+import pytest
 import re
+import shutil
 import time
-from sphinx_testing.util import path, with_app
-
-
-srcdir = path(__file__).dirname().joinpath('bibfile_out_of_date').abspath()
-
-
-def teardown_module():
-    (srcdir / '_build').rmtree(True)
-    (srcdir / 'test.bib').rmtree(True)
 
 
 def htmlbibitem(label, text):
@@ -27,11 +19,11 @@ def htmlbibitem(label, text):
         '<a.*>{0}</a></span></dt>\\s*<dd>.*{1}.*</dd>'.format(label, text))
 
 
-@with_app(srcdir=srcdir, warningiserror=True)
-def test_bibfile_out_of_date(app, status, warning):
-    shutil.copyfile((srcdir / 'test_old.bib'), (srcdir / 'test.bib'))
+@pytest.mark.sphinx('html', testroot='bibfile_out_of_date')
+def test_bibfile_out_of_date(app, warning):
+    shutil.copyfile((app.srcdir / 'test_old.bib'), (app.srcdir / 'test.bib'))
     app.builder.build_all()
-    output = (path(app.outdir) / "index.html").read_text()
+    output = (app.outdir / "index.html").read_text()
     assert re.search(
         '<p id="bibtex-bibliography-index-0">'
         + htmlbibitem("1", "Akkerdju")
@@ -42,9 +34,9 @@ def test_bibfile_out_of_date(app, status, warning):
         output, re.MULTILINE | re.DOTALL)
     # wait to ensure different timestamp
     time.sleep(0.1)
-    shutil.copyfile((srcdir / 'test_new.bib'), (srcdir / 'test.bib'))
+    shutil.copyfile((app.srcdir / 'test_new.bib'), (app.srcdir / 'test.bib'))
     app.builder.build_all()
-    output = (path(app.outdir) / "index.html").read_text()
+    output = (app.outdir / "index.html").read_text()
     assert re.search(
         '<p id="bibtex-bibliography-index-0">'
         + htmlbibitem("1", "Eminence")
