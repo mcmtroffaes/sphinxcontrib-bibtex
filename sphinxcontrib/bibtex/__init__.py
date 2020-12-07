@@ -108,23 +108,25 @@ def check_duplicate_labels(app, env):
 
 
 def save_bibtex_json(app, exc):
-    if exc is not None:
-        return
-    json_filename = normpath_filename(
-        app.env, "bibtex.json", app.config.master_doc)
-    try:
-        with open(json_filename) as json_file:
-            json_string_old = json_file.read()
-    except FileNotFoundError:
-        json_string_old = json.dumps({"cited": {}}, indent=4, sort_keys=True)
-    cited = {
-        key: list(value) for key, value in app.env.bibtex_cache.cited.items()}
-    json_string_new = json.dumps({"cited": cited}, indent=4, sort_keys=True)
-    if json_string_old != json_string_new:
-        with open(json_filename, 'w') as json_file:
-            json_file.write(json_string_new)
-        logger.error(
-            "bibtex citations have changed, please rerun sphinx build")
+    if exc is None:
+        json_filename = normpath_filename(
+            app.env, "bibtex.json", app.config.master_doc)
+        try:
+            with open(json_filename) as json_file:
+                json_string_old = json_file.read()
+        except FileNotFoundError:
+            json_string_old = json.dumps(
+                {"cited": {}}, indent=4, sort_keys=True)
+        cited = {
+            key: list(value)
+            for key, value in app.env.bibtex_cache.cited.items()}
+        json_string_new = json.dumps(
+            {"cited": cited}, indent=4, sort_keys=True)
+        if json_string_old != json_string_new:
+            with open(json_filename, 'w') as json_file:
+                json_file.write(json_string_new)
+            logger.error(
+                "bibtex citations have changed, please rerun sphinx build")
 
 
 def setup(app):
