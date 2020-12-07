@@ -107,18 +107,16 @@ def check_duplicate_labels(app, env):
                     label_to_key[label] = key
 
 
-def save_bibtex_json(app, exc):
-    if exc is not None:
-        return
+def save_bibtex_json(app, env):
     json_filename = normpath_filename(
-        app.env, "bibtex.json", app.config.master_doc)
+        env, "bibtex.json", app.config.master_doc)
     try:
         with open(json_filename) as json_file:
             json_string_old = json_file.read()
     except FileNotFoundError:
         json_string_old = json.dumps({"cited": {}}, indent=4, sort_keys=True)
     cited = {
-        key: list(value) for key, value in app.env.bibtex_cache.cited.items()}
+        key: list(value) for key, value in env.bibtex_cache.cited.items()}
     json_string_new = json.dumps({"cited": cited}, indent=4, sort_keys=True)
     if json_string_old != json_string_new:
         with open(json_filename, 'w') as json_file:
@@ -147,7 +145,7 @@ def setup(app):
     app.connect("doctree-resolved", process_citation_references)
     app.connect("env-purge-doc", purge_bibtex_cache)
     app.connect("env-updated", check_duplicate_labels)
-    app.connect("build-finished", save_bibtex_json)
+    app.connect("env-updated", save_bibtex_json)
     app.add_directive("bibliography", BibliographyDirective)
     app.add_role("cite", CiteRole())
     app.add_node(bibliography, override=True)
