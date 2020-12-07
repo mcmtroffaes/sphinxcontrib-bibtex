@@ -11,7 +11,7 @@ import pytest
 
 
 @pytest.mark.sphinx('html', testroot='custom_style')
-def test_custom_style(app, status, warning):
+def test_custom_style(app, warning):
     app.builder.build_all()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding='utf-8')

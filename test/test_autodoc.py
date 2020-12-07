@@ -11,7 +11,7 @@ import re
 
 
 @pytest.mark.sphinx('html', testroot='autodoc')
-def test_autodoc(app, status, warning):
+def test_autodoc(app, warning):
     app.builder.build_all()
     assert not warning.getvalue()
     output = (app.outdir / "doc_cite.html").read_text()

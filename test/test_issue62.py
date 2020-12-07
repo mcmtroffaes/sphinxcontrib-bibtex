@@ -32,7 +32,7 @@ def check_code(code, refs, cites, otherrefs, othercites):
 
 
 @pytest.mark.sphinx('html', testroot='issue62')
-def test_local_bibliographies(app, status, warning):
+def test_local_bibliographies(app, warning):
     doc1_refs = frozenset([
         '#wustner-atomistic-2014',
         '#fuhrmans-molecular-2012',

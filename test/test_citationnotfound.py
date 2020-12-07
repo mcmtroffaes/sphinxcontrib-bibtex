@@ -11,7 +11,7 @@ import re
 
 
 @pytest.mark.sphinx('html', testroot='citationnotfound')
-def test_citationnotfound(app, status, warning):
+def test_citationnotfound(app, warning):
     app.builder.build_all()
     assert re.search(
         'citation not found: nosuchkey1', warning.getvalue())
