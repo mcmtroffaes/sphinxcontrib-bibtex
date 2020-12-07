@@ -6,18 +6,12 @@
     Test missing bibfiles configuration variable.
 """
 
-import nose.tools
+import pytest
 from sphinx.errors import ExtensionError
-from sphinx_testing.util import path, with_app
-
-srcdir = path(__file__).dirname().joinpath('conf_missing_bibfiles').abspath()
 
 
-def teardown_module():
-    (srcdir / '_build').rmtree(True)
-
-
-@nose.tools.raises(ExtensionError)
-@with_app(srcdir=srcdir, warningiserror=True)
-def test_conf_missing_bibfiles(app, status, warning):
-    pass
+@pytest.mark.sphinx('html', testroot='conf_missing_bibfiles')
+def test_conf_missing_bibfiles(make_app, app_params):
+    args, kwargs = app_params
+    with pytest.raises(ExtensionError):
+        make_app(*args, **kwargs)
