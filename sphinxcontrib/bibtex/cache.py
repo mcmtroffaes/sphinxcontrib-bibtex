@@ -187,14 +187,11 @@ class Cache:
     representing the current bibliography enumeration counter.
     """
 
-    def __init__(self, cited_previous=None):
+    def __init__(self, cited_previous):
         self.bibfiles = {}
         self.bibliographies = collections.defaultdict(dict)
         self.cited = collections.defaultdict(oset)
-        if cited_previous is None:
-            self.cited_previous = {}
-        else:
-            self.cited_previous = {key: oset(value) for key, value in cited_previous.items()}
+        self.cited_previous = {key: oset(value) for key, value in cited_previous.items()}
         self.enum_count = {}
 
     def purge(self, docname):
