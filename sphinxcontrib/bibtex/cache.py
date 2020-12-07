@@ -187,11 +187,14 @@ class Cache:
     representing the current bibliography enumeration counter.
     """
 
-    def __init__(self):
-
+    def __init__(self, cited_previous=None):
         self.bibfiles = {}
         self.bibliographies = collections.defaultdict(dict)
         self.cited = collections.defaultdict(oset)
+        if cited_previous is None:
+            self.cited_previous = {}
+        else:
+            self.cited_previous = {key: oset(value) for key, value in cited_previous.items()}
         self.enum_count = {}
 
     def purge(self, docname):
@@ -202,6 +205,7 @@ class Cache:
         """
         self.bibliographies.pop(docname, None)
         self.cited.pop(docname, None)
+        self.cited_previous.pop(docname, None)
         self.enum_count.pop(docname, None)
 
     def get_label_from_key(self, key):
@@ -218,7 +222,7 @@ class Cache:
         ordered by citation order.
         """
         for docname in docnames:
-            for key in self.cited.get(docname, []):
+            for key in self.cited_previous.get(docname, []):
                 yield key
 
     def _get_bibliography_entries(self, docname, id_, warn):
@@ -235,7 +239,7 @@ class Cache:
                 # to allow reusing the data for multiple bibliographies
                 key = bibcache.keyprefix + entry.key
                 cited_docnames = frozenset([
-                    docname for docname, keys in self.cited.items()
+                    docname for docname, keys in self.cited_previous.items()
                     if key in keys])
                 visitor = _FilterVisitor(
                     entry=entry,

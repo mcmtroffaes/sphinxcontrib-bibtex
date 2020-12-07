@@ -28,8 +28,15 @@ def init_bibtex_cache(app):
     :param app: The sphinx application.
     :type app: :class:`sphinx.application.Sphinx`
     """
+    json_filename = normpath_filename(app.env, "bibtex.json", app.config.master_doc)
+    try:
+        with open(json_filename) as json_file:
+            json_dict = json.load(json_file)
+    except FileNotFoundError:
+        logger.warning("bibtex.json not found, please rerun sphinx build")
+        json_dict = {"cited": {}}
     if not hasattr(app.env, "bibtex_cache"):
-        app.env.bibtex_cache = Cache()
+        app.env.bibtex_cache = Cache(cited_previous=json_dict["cited"])
 
 
 def purge_bibtex_cache(app, env, docname):
@@ -104,9 +111,18 @@ def save_bibtex_json(app, exc):
     if exc is not None:
         return
     json_filename = normpath_filename(app.env, "bibtex.json", app.config.master_doc)
-    cited = {key: list(value) for key, value in app.env.bibtex_cache.cited.items()}
-    with open(json_filename, 'w') as json_file:
-        json.dump({"cited": cited}, json_file, indent=4, sort_keys=True)
+    try:
+        with open(json_filename) as json_file:
+            json_string_old = json_file.read()
+    except FileNotFoundError:
+        json_string_old = ''
+    cited = {
+        key: list(value) for key, value in app.env.bibtex_cache.cited.items()}
+    json_string_new = json.dumps({"cited": cited}, indent=4, sort_keys=True)
+    if json_string_old != json_string_new:
+        with open(json_filename, 'w') as json_file:
+            json_file.write(json_string_new)
+        logger.error("bibtex citations have changed, please rerun sphinx build")
 
 
 def setup(app):
@@ -139,7 +155,7 @@ def setup(app):
     # the document that contains references must be read last for all
     # references to be resolved.
     return {
-        'env_version': 1,
+        'env_version': 2,
         'parallel_read_safe': False,
         'parallel_write_safe': True,
         }
