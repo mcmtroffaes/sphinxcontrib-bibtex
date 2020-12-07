@@ -6,21 +6,15 @@
     Test the ``:list: bullet`` option.
 """
 
+import pytest
 import re
 
-from sphinx_testing.util import path, with_app
 
-srcdir = path(__file__).dirname().joinpath('list_bullet').abspath()
-
-
-def teardown_module():
-    (srcdir / '_build').rmtree(True)
-
-
-@with_app(srcdir=srcdir, warningiserror=True)
-def test_list_bullet(app, status, warning):
+@pytest.mark.sphinx('html', testroot='list_bullet')
+def test_list_bullet(app, warning):
     app.builder.build_all()
-    output = (path(app.outdir) / "index.html").read_text()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
     assert re.search(
         '<ul .* id="bibtex-bibliography-index-0">'
         '.*<li>.*Akkerdju.*</li>'

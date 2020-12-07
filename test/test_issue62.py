@@ -6,14 +6,8 @@
     Test local bibliographies.
 """
 
+import pytest
 import re
-from sphinx_testing.util import path, with_app
-
-srcdir = path(__file__).dirname().joinpath('issue62').abspath()
-
-
-def teardown_module():
-    (srcdir / '_build').rmtree(True)
 
 
 def extract_references(code):
@@ -37,7 +31,7 @@ def check_code(code, refs, cites, otherrefs, othercites):
     assert not(othercites & code_cites)
 
 
-@with_app(srcdir=srcdir, warningiserror=True)
+@pytest.mark.sphinx('html', testroot='issue62')
 def test_local_bibliographies(app, status, warning):
     doc1_refs = frozenset([
         '#wustner-atomistic-2014',
@@ -73,12 +67,13 @@ def test_local_bibliographies(app, status, warning):
         'mcmahon-membrane-2010',
         ])
     app.builder.build_all()
-    output = (path(app.outdir) / "doc1.html").read_text(encoding='utf-8')
+    assert not warning.getvalue()
+    output = (app.outdir / "doc1.html").read_text(encoding='utf-8')
     check_code(output, doc1_refs, doc1_cites,
                doc2_refs | sum_refs, doc2_cites | sum_cites)
-    output = (path(app.outdir) / "doc2.html").read_text(encoding='utf-8')
+    output = (app.outdir / "doc2.html").read_text(encoding='utf-8')
     check_code(output, doc2_refs, doc2_cites,
                doc1_refs | sum_refs, doc1_cites | sum_cites)
-    output = (path(app.outdir) / "summary.html").read_text(encoding='utf-8')
+    output = (app.outdir / "summary.html").read_text(encoding='utf-8')
     check_code(output, sum_refs, sum_cites,
                doc1_refs | doc2_refs, doc1_cites | doc2_cites)

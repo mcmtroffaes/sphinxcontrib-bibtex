@@ -6,16 +6,10 @@
     Test bib files in subfolder.
 """
 
-from sphinx_testing.util import path, with_app
+import pytest
 
 
-srcdir = path(__file__).dirname().joinpath('subfolder').abspath()
-
-
-def teardown_module():
-    (srcdir / '_build').rmtree(True)
-
-
-@with_app(srcdir=srcdir, warningiserror=True)
-def test_sphinx(app, status, warning):
+@pytest.mark.sphinx('html', testroot='subfolder')
+def test_sphinx(app, warning):
     app.builder.build_all()
+    assert not warning.getvalue()
