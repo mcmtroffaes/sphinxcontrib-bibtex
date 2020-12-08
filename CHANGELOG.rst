@@ -13,7 +13,7 @@
   to make use of it. The file is automatically kept up to date,
   with a warning whenever you need to rerun the build.
   Thanks to dizcza for help with testing.
-  See issue #204 and pull request #208.
+  See issues #197 and #204. Also see pull request #208.
 
 * Improve citation ordering code (reported by ukos-git, see issue
   #182).
