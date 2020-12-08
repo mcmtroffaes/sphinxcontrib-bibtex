@@ -125,9 +125,18 @@ def save_bibtex_json(app, exc):
         if json_string_old != json_string_new:
             with open(json_filename, 'w') as json_file:
                 json_file.write(json_string_new)
-            logger.error(
-                "bibtex citations changed, "
-                "run 'sphinx-build -E ...' for a fresh rebuild")
+            logger.error("""Bibtex citations have changed.
+Please run a fresh sphinx build with
+
+  sphinx-build -E ...
+
+where you should make sure you use the -E flag this time to force a fresh
+build, or with
+
+  make clean
+  make html
+
+if you prefer to use make.""")
 
 
 def setup(app):
