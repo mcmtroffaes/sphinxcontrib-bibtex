@@ -22,18 +22,20 @@ def test_json(make_app, app_params):
     output = (app1.outdir / "index.html").read_text()
     warnings = app1._warning.getvalue()
     assert "citation not found: first" in warnings
+    assert "citation not found: second" in warnings
     assert "bibtex citations changed, rerun sphinx" in warnings
     assert "[first]" in output
     assert "[1]" not in output
     assert "A. First. Test 1." not in output
     assert \
         json.loads((app1.srcdir / "bibtex.json").read_text()) \
-        == {'cited': {'index': ['first']}}
+        == {'cited': {'index': ['first', 'second']}}
     app2 = make_app(*args, **kwargs)
     app2.build()
     output2 = (app2.outdir / "index.html").read_text()
     warnings2 = app2._warning.getvalue()
     assert "citation not found: first" not in warnings2
+    assert "citation not found: second" not in warnings2
     assert "bibtex citations changed, rerun sphinx" not in warnings2
     assert "[first]" not in output2
     assert "[1]" in output2
