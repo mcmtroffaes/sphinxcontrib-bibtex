@@ -1,0 +1,17 @@
+{
+    "cited": {
+        "doc_cite": [
+            "testmodule",
+            "testclass",
+            "testinit",
+            "testinitarg",
+            "testclassattr",
+            "testinstanceattr",
+            "testmethod",
+            "testmethodarg",
+            "testdata",
+            "testfunc",
+            "testfuncarg"
+        ]
+    }
+}

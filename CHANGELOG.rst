@@ -1,6 +1,15 @@
 1.1.0 (in development)
 ----------------------
 
+* The unresolved citations across documents issue has been resolved.
+  The extension stores all citation information in a ``bibtex.json`` file.
+  If it does not exist, the file will be created on
+  your first sphinx build, and you will have to rerun the build
+  to make use of it. The file is automatically kept up to date,
+  with a warning whenever you need to rerun the build.
+  Thanks to dizcza for help with testing.
+  See issue #204 and pull request #208.
+
 * Improve citation ordering code (reported by ukos-git, see issue
   #182).
 
@@ -10,7 +19,7 @@
   so they can be more easily reused.
 
 * **EXPERIMENTAL FEATURE**
-  The package now ships with a new extension, called footbib. This
+  The package now ships with a new extension, called bibtex2. This
   extension adds a ``footcite`` role and ``footbibliography``
   directive, to allow easy and simple local (per document)
   bibliographies through footnotes. Supports parallel builds. This

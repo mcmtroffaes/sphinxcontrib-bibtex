@@ -8,13 +8,17 @@
     .. autofunction:: check_duplicate_labels
 """
 
+import collections
 import docutils.nodes
+import json
 import sphinx.util
 from .cache import Cache
+from ..bibtex2.bibfile import normpath_filename
 from .nodes import bibliography
 from .roles import CiteRole
 from .directives import BibliographyDirective
 from .transforms import BibliographyTransform
+from oset import oset
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -26,8 +30,19 @@ def init_bibtex_cache(app):
     :param app: The sphinx application.
     :type app: :class:`sphinx.application.Sphinx`
     """
+    json_filename = normpath_filename(
+        app.env, "bibtex.json", app.config.master_doc)
+    try:
+        with open(json_filename) as json_file:
+            json_dict = json.load(json_file)
+    except FileNotFoundError:
+        json_dict = {"cited": {}}
     if not hasattr(app.env, "bibtex_cache"):
         app.env.bibtex_cache = Cache()
+    # import cited_previous from json data
+    app.env.bibtex_cache.cited_previous = collections.defaultdict(oset)
+    app.env.bibtex_cache.cited_previous.update({
+        key: oset(value) for key, value in json_dict["cited"].items()})
 
 
 def purge_bibtex_cache(app, env, docname):
@@ -98,6 +113,27 @@ def check_duplicate_labels(app, env):
                     label_to_key[label] = key
 
 
+def save_bibtex_json(app, exc):
+    if exc is None:
+        json_filename = normpath_filename(
+            app.env, "bibtex.json", app.config.master_doc)
+        try:
+            with open(json_filename) as json_file:
+                json_string_old = json_file.read()
+        except FileNotFoundError:
+            json_string_old = json.dumps(
+                {"cited": {}}, indent=4, sort_keys=True)
+        cited = {
+            key: list(value)
+            for key, value in app.env.bibtex_cache.cited.items()}
+        json_string_new = json.dumps(
+            {"cited": cited}, indent=4, sort_keys=True)
+        if json_string_old != json_string_new:
+            with open(json_filename, 'w') as json_file:
+                json_file.write(json_string_new)
+            logger.error("""bibtex citations changed, rerun sphinx""")
+
+
 def setup(app):
     """Set up the bibtex extension:
 
@@ -118,6 +154,7 @@ def setup(app):
     app.connect("doctree-resolved", process_citation_references)
     app.connect("env-purge-doc", purge_bibtex_cache)
     app.connect("env-updated", check_duplicate_labels)
+    app.connect("build-finished", save_bibtex_json)
     app.add_directive("bibliography", BibliographyDirective)
     app.add_role("cite", CiteRole())
     app.add_node(bibliography, override=True)
@@ -127,7 +164,7 @@ def setup(app):
     # the document that contains references must be read last for all
     # references to be resolved.
     return {
-        'env_version': 1,
+        'env_version': 2,
         'parallel_read_safe': False,
         'parallel_write_safe': True,
         }

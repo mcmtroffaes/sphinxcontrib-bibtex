@@ -6,7 +6,6 @@
     Test the ``:encoding:`` option.
 """
 
-import latexcodec
 import pytest
 import re
 

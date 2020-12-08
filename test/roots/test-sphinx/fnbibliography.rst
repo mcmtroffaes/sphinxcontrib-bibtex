@@ -16,3 +16,5 @@ Cite it twice: :footcite:`1657:huygens`.
 Bad citation: :footcite:`keydoesnotexist`.
 
 .. [#note] A footnote.
+
+.. footbibliography::

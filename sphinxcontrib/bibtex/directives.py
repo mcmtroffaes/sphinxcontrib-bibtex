@@ -128,5 +128,8 @@ class BibliographyDirective(Directive):
             process_bibfile(
                 env.bibtex_cache.bibfiles, bibfile, bibcache.encoding)
             env.note_dependency(bibfile)
+        # if citations change, bibtex.json changes, and so might entries
+        env.note_dependency(
+            normpath_filename(env, "bibtex.json", env.app.config.master_doc))
         env.bibtex_cache.bibliographies[env.docname][id_] = bibcache
         return [bibliography('', ids=[id_])]
