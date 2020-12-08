@@ -33,6 +33,8 @@ class CiteRole(XRefRole):
             refnode['classes'].append('bibtex')
         for key in keys:
             env.bibtex_cache.cited[env.docname].add(key)
+        if key not in env.bibtex_cache.cited_previous[env.docname]:
+            env.note_reread()
         return refnodes, []
 
 

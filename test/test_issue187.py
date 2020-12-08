@@ -9,6 +9,7 @@
 import pytest
 import re
 
+
 @pytest.mark.sphinx('html', testroot='issue187')
 def test_issue187(app, warning):
     app.builder.build_all()
