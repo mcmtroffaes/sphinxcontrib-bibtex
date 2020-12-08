@@ -1,6 +1,16 @@
 Bibtex Extension Usage
 ======================
 
+The extension stores all citation information in a ``bibtex.json`` file
+in the source folder.
+If it does not exist, the file will be created on
+your first sphinx build, and you will have to rerun the build
+to make use of it. The file is automatically kept up to date,
+with a warning whenever you need to rerun the build
+(i.e. whenever your citations change).
+The file can be stored in version control
+if you do not want your users to have to run sphinx twice.
+
 Roles and Directives
 --------------------
 
@@ -47,14 +57,6 @@ Roles and Directives
         \newblock {\em Radically Elementary Probability Theory}.
         \newblock Princeton University Press, 1987.
       \end{thebibliography}
-
-   .. warning::
-
-      Sphinx may not be able to create an entry for :rst:role:`cite` keys
-      when your :rst:dir:`bibliography` directive
-      resides in a different document;
-      see :ref:`issue-unresolved-citations`
-      for more information and workarounds.
 
    You can also pick a bibliography style, using the ``style`` option.
    The ``alpha`` style is the default.
@@ -430,32 +432,6 @@ of the line.
 
 If you don't want any LaTeX symbols to be reinterpreted as unicode,
 use the option ``:encoding: utf`` (without the ``latex+`` prefix).
-
-.. _issue-unresolved-citations:
-
-Unresolved Citations Across Documents
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-If you cite something that has its bibliography in another document,
-then, at the moment, the extension may, or may not, realise that it
-has to add this citation.
-There are a few ways to work around this problem:
-
-* Use the option ``:all:`` in the :rst:dir:`bibliography`
-  directive (which will simply cause all entries to be included).
-
-* Ensure that the :rst:dir:`bibliography` directive is processed after
-  all :rst:role:`cite`\ s. Sphinx appears to process files in an
-  alphabetical manner. For instance, in case you have only one file
-  containing a :rst:dir:`bibliography` directive, simply name that
-  file :file:`zreferences.rst`.
-  Similarly, if you use the :rst:dir:`autosummary` directive, use the
-  ``:toctree: _toctree/...`` option. Instead of ``_toctree`` you can
-  use any prefix that comes alphabetically first in your project.
-  This ensures that all :rst:dir:`autosummary` generated documents
-  are processed first.
-
-Hopefully, this limitation can be lifted in a future release.
 
 Duplicate Labels When Using ``:style: plain``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
