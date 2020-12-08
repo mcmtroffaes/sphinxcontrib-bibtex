@@ -1,4 +1,4 @@
-1.1.0 (in development)
+2.0.0 (in development)
 ----------------------
 
 * The unresolved citations across documents issue has been resolved.
@@ -13,10 +13,7 @@
 * Improve citation ordering code (reported by ukos-git, see issue
   #182).
 
-* **BACKWARD INCOMPATIBLE**
-  Functions for processing bib files have been moved to the cache
-  module. They are no longer class methods but standalone functions,
-  so they can be more easily reused.
+* Migrate test suite to pytest, using sphinx's testing fixtures.
 
 * **EXPERIMENTAL FEATURE**
   The package now ships with a new extension, called bibtex2. This
@@ -25,6 +22,11 @@
   bibliographies through footnotes. Supports parallel builds. This
   extension should be considered experimental. Feedback is
   welcome. See issues #184 and #185.
+
+* **BACKWARD INCOMPATIBLE**
+  Functions for processing bib files have been moved to the cache
+  module. They are no longer class methods but standalone functions,
+  so they can be more easily reused.
 
 1.0.0 (20 September 2019)
 -------------------------
