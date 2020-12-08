@@ -33,6 +33,10 @@
   module. They are no longer class methods but standalone functions,
   so they can be more easily reused.
 
+* Drop Python 3.5 support.
+
+* Add Python 3.9 support.
+
 1.0.0 (20 September 2019)
 -------------------------
 
