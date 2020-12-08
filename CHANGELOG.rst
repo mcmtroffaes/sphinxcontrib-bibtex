@@ -10,7 +10,7 @@
   so they can be more easily reused.
 
 * **EXPERIMENTAL FEATURE**
-  The package now ships with a new extension, called footbib. This
+  The package now ships with a new extension, called bibtex2. This
   extension adds a ``footcite`` role and ``footbibliography``
   directive, to allow easy and simple local (per document)
   bibliographies through footnotes. Supports parallel builds. This
