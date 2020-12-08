@@ -1,6 +1,11 @@
 2.0.0 (in development)
 ----------------------
 
+* Support newlines/whitespace around cite keys when multiple keys are
+  specified.
+  Thanks to dizcza for help with testing.
+  See issue #205 and pull request #206.
+
 * The unresolved citations across documents issue has been resolved.
   The extension stores all citation information in a ``bibtex.json`` file.
   If it does not exist, the file will be created on
