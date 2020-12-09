@@ -68,6 +68,21 @@ def purge_bibtex_cache(app, env, docname):
     env.bibtex_cache.purge(docname)
 
 
+def merge_bibtex_cache(app, env, docnames, other):
+    """Merge environment information related to *docnames*.
+
+    :param app: The sphinx application.
+    :type app: :class:`sphinx.application.Sphinx`
+    :param env: The sphinx build environment.
+    :type env: :class:`sphinx.environment.BuildEnvironment`
+    :param docnames: The document names.
+    :type docnames: :class:`str`
+    :param other: The other environment.
+    :type other: :class:`sphinx.environment.BuildEnvironment`
+    """
+    env.bibtex_cache.merge(docnames, other.bibtex_cache)
+
+
 def process_citations(app, doctree, docname):
     """Replace labels of citation nodes by actual labels.
 
@@ -166,6 +181,7 @@ def setup(app):
     app.connect("builder-inited", init_bibtex_cache)
     app.connect("doctree-resolved", process_citations)
     app.connect("doctree-resolved", process_citation_references)
+    app.connect("env-merge-info", merge_bibtex_cache)
     app.connect("env-purge-doc", purge_bibtex_cache)
     app.connect("env-updated", check_duplicate_labels)
     app.connect("build-finished", save_bibtex_json)
