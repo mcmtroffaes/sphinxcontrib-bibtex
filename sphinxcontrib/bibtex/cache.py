@@ -302,7 +302,7 @@ class Cache:
 
 class BibliographyCache(collections.namedtuple(
     'BibliographyCache',
-    """bibfiles style encoding
+    """bibfiles style
 list_ enumtype start labels labelprefix
 filter_ keyprefix
 """)):

@@ -60,7 +60,6 @@ class BibliographyDirective(Directive):
         'list': directives.unchanged,
         'enumtype': directives.unchanged,
         'start': process_start_option,
-        'encoding': directives.encoding,
         'labelprefix': directives.unchanged,
         'keyprefix': directives.unchanged,
     }
@@ -110,9 +109,6 @@ class BibliographyDirective(Directive):
             style=self.options.get(
                 "style", env.app.config.bibtex_default_style),
             filter_=filter_,
-            encoding=self.options.get(
-                'encoding',
-                self.state.document.settings.input_encoding),
             labelprefix=self.options.get("labelprefix", ""),
             keyprefix=self.options.get("keyprefix", ""),
             labels={},
