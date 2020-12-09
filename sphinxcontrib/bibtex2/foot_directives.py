@@ -34,6 +34,6 @@ class BibliographyDirective(Directive):
         env = self.state.document.settings.env
         for bibfile in env.bibtex_cache.bibfiles:
             env.note_dependency(bibfile)
-        id_ = env.footbib_cache.current_id[env.docname]
-        env.footbib_cache.new_current_id(env)
+        id_ = env.footbib_cache.foot_current_id[env.docname]
+        env.footbib_cache.new_foot_current_id(env)
         return [bibliography('', ids=[id_])]

@@ -68,7 +68,7 @@ def merge_footbib_cache(app, env, docnames, other):
 
 
 def init_current_id(app, docname, source):
-    app.env.footbib_cache.new_current_id(app.env)
+    app.env.footbib_cache.new_foot_current_id(app.env)
 
 
 def setup(app):

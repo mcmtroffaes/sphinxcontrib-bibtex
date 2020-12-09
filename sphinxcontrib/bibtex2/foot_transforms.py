@@ -39,7 +39,7 @@ class BibliographyTransform(docutils.transforms.Transform):
         for bibnode in self.document.traverse(bibliography):
             id_ = bibnode['ids'][0]
             entries = [get_bibliography_entry(env.bibtex_cache.bibfiles, key)
-                       for key in env.footbib_cache.cited[env.docname][id_]]
+                       for key in env.footbib_cache.foot_cited[env.docname][id_]]
             entries2 = [entry for entry in entries if entry is not None]
             # locate and instantiate style and backend plugins
             style = find_plugin(
