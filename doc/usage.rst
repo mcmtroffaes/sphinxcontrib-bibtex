@@ -519,7 +519,8 @@ you can tell Sphinx to generate a rubric title only for html:
 
    .. bibliography::
 
-This code could be placed in your :file:`zreferences.rst`.
+This code could be placed in a :file:`references.rst` file that
+you include at the end of your toctree.
 
 Alternatively, to remove the bibliography section title from the
 LaTeX output, you can add the following to your LaTeX preamble:
