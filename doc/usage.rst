@@ -98,7 +98,7 @@ Roles and Directives
 
    .. code-block:: rest
 
-     .. bibliography:: refs.bib
+     .. bibliography::
         :disable-curly-bracket-strip:
 
 Advanced Features
@@ -152,11 +152,11 @@ or an enumerated list.
 
 .. code-block:: rest
 
-   .. bibliography:: refs1.bib
+   .. bibliography::
       :list: bullet
       :all:
 
-   .. bibliography:: refs2.bib
+   .. bibliography::
       :list: enumerated
       :all:
 
@@ -168,7 +168,7 @@ For enumerated lists, you can also specify the type (default is
 
 .. code-block:: rest
 
-   .. bibliography:: refs2.bib
+   .. bibliography::
       :list: enumerated
       :enumtype: upperroman
       :start: 3
@@ -199,13 +199,13 @@ use the ``labelprefix`` option.
 
    .. rubric:: References
 
-   .. bibliography:: refs.bib
+   .. bibliography::
       :cited:
       :labelprefix: A
 
    .. rubric:: Further reading
 
-   .. bibliography:: refs.bib
+   .. bibliography::
       :notcited:
       :labelprefix: B
 
@@ -227,7 +227,7 @@ showing in both of the documents. In one document you could have:
 
    See :cite:`a-boole1854`
 
-   .. bibliography:: refs.bib
+   .. bibliography::
       :labelprefix: A
       :keyprefix: a-
 
@@ -237,7 +237,7 @@ whilst in the other document you could have:
 
    See :cite:`b-boole1854`
 
-   .. bibliography:: refs.bib
+   .. bibliography::
       :labelprefix: B
       :keyprefix: b-
 
@@ -260,7 +260,7 @@ For this purpose, you can use the ``filter`` option:
 
 .. code-block:: rest
 
-   .. bibliography:: refs.bib
+   .. bibliography::
       :list: bullet
       :filter: author % "Einstein"
 
@@ -287,7 +287,7 @@ The filter expression supports:
 
     .. code-block:: rest
 
-       .. bibliography:: refs.bib
+       .. bibliography::
           :list: bullet
           :filter: title % "relativity"
 
@@ -341,7 +341,7 @@ The filter expression supports:
 
     .. code-block:: rest
 
-       .. bibliography:: refs.bib
+       .. bibliography::
           :list: bullet
           :filter: cited and year and (year <= "2003")
 
@@ -370,7 +370,7 @@ in the current document, use the following filter:
 
 .. code-block:: rest
                 
-   .. bibliography:: refs.bib
+   .. bibliography::
       :filter: docname in docnames
 
 More generally, you can create bibliographies for
@@ -378,7 +378,7 @@ citations that were cited from specific documents only:
 
 .. code-block:: rest
 
-   .. bibliography:: refs.bib
+   .. bibliography::
       :filter: {"doc1", "doc2"} & docnames
 
 This bibliography will include all citations that were cited from
@@ -386,7 +386,7 @@ This bibliography will include all citations that were cited from
 
 .. code-block:: rest
 
-   .. bibliography:: refs.bib
+   .. bibliography::
       :filter: cited and ({"doc1", "doc2"} >= docnames)
 
 This bibliography will include all citations that were cited
@@ -423,7 +423,7 @@ Now ``mystyle`` will be available to you as a formatting style:
 
 .. code-block:: rest
 
-   .. bibliography:: refs.bib
+   .. bibliography::
       :style: mystyle
 
 An minimal example is available here:
@@ -524,7 +524,7 @@ you can tell Sphinx to generate a rubric title only for html:
 
       .. rubric:: References
 
-   .. bibliography:: refs.bib
+   .. bibliography::
 
 This code could be placed in your :file:`zreferences.rst`.
 
