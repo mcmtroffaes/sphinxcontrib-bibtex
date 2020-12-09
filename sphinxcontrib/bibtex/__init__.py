@@ -178,7 +178,7 @@ def setup(app):
     # the document that contains references must be read last for all
     # references to be resolved.
     return {
-        'env_version': 2,
-        'parallel_read_safe': False,
+        'env_version': 3,
+        'parallel_read_safe': True,
         'parallel_write_safe': True,
         }
