@@ -77,7 +77,7 @@ Roles and Directives
 
    .. code-block:: rest
 
-     .. bibliography:: refs.bib
+     .. bibliography::
         :style: unsrt
 
    .. warning::
@@ -86,17 +86,9 @@ Roles and Directives
       across all documents, so you must take care that no citation key
       is included more than once.
 
-   You can also set the encoding of the bibliography files, using the
-   ``encoding`` option.
-
-   .. code-block:: rest
-
-     .. bibliography:: refs.bib
-        :encoding: latin
-
-   LaTeX control characters are automatically converted to unicode 
-   characters (for instance, to convert ``\'e`` into ``é``). Be sure 
-   to write ``\%`` when you intend to format a percent sign.
+   In bib files, LaTeX control characters are automatically converted
+   to unicode characters (for instance, to convert ``\'e`` into ``é``).
+   Be sure to write ``\%`` when you intend to format a percent sign.
 
 .. XXX not documenting disable-curly-bracket-strip for now; might remove it
 
@@ -111,6 +103,18 @@ Roles and Directives
 
 Advanced Features
 -----------------
+
+Bib File Encoding
+~~~~~~~~~~~~~~~~~
+
+You can also set the encoding of the bibliography files, using the
+``bibtex_encoding`` configuration variable in your ``conf.py``.
+
+.. code-block:: rest
+
+   extensions = ['sphinxcontrib.bibtex']
+   bibtex_bibfiles = ['refs.bib']
+   bibtex_encoding = 'latin'
 
 Splitting Bibliographies Per Bib File
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -461,13 +465,10 @@ do not have this limitation.
 Encoding: Percent Signs
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-When using the LaTeX codec (which is by default), be sure to write
+Be sure to write
 ``\%`` for percent signs at all times (unless your file contains a
-genuine comment), otherwise the bibtex lexer will ignore the remainder
+genuine comment), otherwise the parser will ignore the remainder
 of the line.
-
-If you don't want any LaTeX symbols to be reinterpreted as unicode,
-use the option ``:encoding: utf`` (without the ``latex+`` prefix).
 
 Duplicate Labels When Using ``:style: plain``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
