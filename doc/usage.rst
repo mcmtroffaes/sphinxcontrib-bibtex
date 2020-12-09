@@ -18,7 +18,7 @@ To configure the extension, in your ``conf.py`` file,
 set ``bibtex_bibfiles`` to your list of bib files.
 For instance, a minimal configuration may look as follows:
 
-.. code-block:: rest
+.. code-block:: python
 
    extensions = ['sphinxcontrib.bibtex']
    bibtex_bibfiles = ['refs.bib']
@@ -110,7 +110,7 @@ Bib File Encoding
 You can also set the encoding of the bibliography files, using the
 ``bibtex_encoding`` configuration variable in your ``conf.py``.
 
-.. code-block:: rest
+.. code-block:: python
 
    extensions = ['sphinxcontrib.bibtex']
    bibtex_bibfiles = ['refs.bib']
