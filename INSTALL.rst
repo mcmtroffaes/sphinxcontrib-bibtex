@@ -36,9 +36,10 @@ See [Nel87a]_ for an introduction to non-standard analysis.
 
 Citations in sphinx are resolved globally across all documents.
 Typically, you have a single :rst:dir:`bibliography` directive across
-your entire project which collects all bibliographies.
+your entire project which collects all citations.
 Advanced use cases with multiple :rst:dir:`bibliography` directives
-across your project are also supported.
+across your project are also supported, but some care
+needs to be taken from your end to avoid duplicate citations.
 
 In contrast, footnotes in sphinx are resolved locally per document.
 To achieve local bibliographies per document, you can use citations
@@ -59,4 +60,5 @@ Non-standard analysis is lovely. [#Nel87b]_
 Typically, you have a single :rst:dir:`footbibliography` directive
 at the bottom of each document that has :rst:role:`footcite` citations.
 Advanced use cases with multiple :rst:dir:`footbibliography` directives
-per document are also supported.
+per document are also supported. Since everything is local,
+there is no concern with duplicate citations when using footnotes.
