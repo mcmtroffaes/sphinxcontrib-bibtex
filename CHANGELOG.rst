@@ -15,6 +15,14 @@
   Thanks to dizcza for help with testing.
   See issues #197 and #204. Also see pull request #208.
 
+* **BACKWARD INCOMPATIBLE**
+  Parallel builds are now supported. To enable this, a new mandatory
+  config setting ``bibtex_bibfiles`` has been added. In this file,
+  you must specify all bib files used throughout the project.
+  You also no longer need to specify the bib files in the
+  ``bibliography`` directive. If you do, citations will
+  be simply constrained to those bib files.
+
 * Improve citation ordering code (reported by ukos-git, see issue
   #182).
 
