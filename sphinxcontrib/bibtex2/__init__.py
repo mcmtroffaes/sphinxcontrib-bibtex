@@ -10,8 +10,6 @@ import docutils.frontend
 import docutils.parsers.rst
 import docutils.utils
 import sphinx.util
-from sphinx.errors import ExtensionError
-from .bibfile import normpath_filename, process_bibfile
 from .foot_cache import Cache
 from .foot_nodes import bibliography
 from .foot_roles import CiteRole

@@ -43,7 +43,8 @@ class BibliographyTransform(docutils.transforms.Transform):
             entries2 = [entry for entry in entries if entry is not None]
             # locate and instantiate style and backend plugins
             style = find_plugin(
-                'pybtex.style.formatting', env.app.config.bibtex_default_style)()
+                'pybtex.style.formatting',
+                env.app.config.bibtex_default_style)()
             backend = find_plugin('pybtex.backends', 'docutils')()
             # create footnote nodes for all references
             footnotes = docutils.nodes.paragraph()

@@ -12,7 +12,7 @@ import sphinx.util
 from docutils.parsers.rst import Directive, directives
 from sphinx.util.console import standout
 
-from ..bibtex2.bibfile import normpath_filename, process_bibfile
+from ..bibtex2.bibfile import normpath_filename
 from .cache import BibliographyCache
 from .nodes import bibliography
 
