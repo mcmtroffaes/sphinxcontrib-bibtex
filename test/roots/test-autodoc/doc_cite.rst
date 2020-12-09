@@ -4,5 +4,5 @@ cite
 .. automodule:: some_module_cite
    :members:
 
-.. bibliography:: test.bib
+.. bibliography::
    :style: alpha
