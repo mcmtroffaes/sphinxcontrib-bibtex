@@ -32,7 +32,7 @@ class BibliographyDirective(Directive):
         that is to be transformed to the entries of the bibliography.
         """
         env = self.state.document.settings.env
-        for bibfile in env.bibtex_bibfiles:
+        for bibfile in env.bibtex_cache.bibfiles:
             env.note_dependency(bibfile)
         id_ = env.footbib_cache.current_id[env.docname]
         env.footbib_cache.new_current_id(env)

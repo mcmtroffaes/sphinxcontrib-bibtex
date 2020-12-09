@@ -125,8 +125,6 @@ class BibliographyDirective(Directive):
             logger.warning(
                 "unknown bibliography list type '{0}'.".format(bibcache.list_))
         for bibfile in bibcache.bibfiles:
-            process_bibfile(
-                env.bibtex_cache.bibfiles, bibfile, bibcache.encoding)
             env.note_dependency(bibfile)
         # if citations change, bibtex.json changes, and so might entries
         env.note_dependency(

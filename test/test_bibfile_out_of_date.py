@@ -20,9 +20,10 @@ def htmlbibitem(label, text):
 
 
 @pytest.mark.sphinx('html', testroot='bibfile_out_of_date')
-def test_bibfile_out_of_date(app, warning):
-    shutil.copyfile((app.srcdir / 'test_old.bib'), (app.srcdir / 'test.bib'))
-    app.builder.build_all()
+def test_bibfile_out_of_date(make_app, app_params, warning):
+    args, kwargs = app_params
+    app = make_app(*args, **kwargs)
+    app.build()
     output = (app.outdir / "index.html").read_text()
     assert re.search(
         '<p id="bibtex-bibliography-index-0">'
@@ -35,7 +36,8 @@ def test_bibfile_out_of_date(app, warning):
     # wait to ensure different timestamp
     time.sleep(0.1)
     shutil.copyfile((app.srcdir / 'test_new.bib'), (app.srcdir / 'test.bib'))
-    app.builder.build_all()
+    app = make_app(*args, **kwargs)
+    app.build()
     output = (app.outdir / "index.html").read_text()
     assert re.search(
         '<p id="bibtex-bibliography-index-0">'

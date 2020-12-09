@@ -37,12 +37,10 @@ def init_bibtex_cache(app):
     # add cache if not already present
     if not hasattr(app.env, "bibtex_cache"):
         app.env.bibtex_cache = Cache()
-    if not hasattr(app.env, "bibtex_bibfiles"):
-        app.env.bibtex_bibfiles = {}
     # update bib file information in the cache
     for bibfile in app.config.bibtex_bibfiles:
         process_bibfile(
-            app.env.bibtex_bibfiles,
+            app.env.bibtex_cache.bibfiles,
             normpath_filename(app.env, bibfile, app.config.master_doc),
             app.config.bibtex_encoding)
     # read json
