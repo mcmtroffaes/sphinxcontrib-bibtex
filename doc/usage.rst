@@ -112,6 +112,30 @@ Roles and Directives
 Advanced Features
 -----------------
 
+Splitting Bibliographies Per Bib File
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If want multiple bibliographies each of which only
+contains references from specific bib files, you can specify
+the relevant bib files as an argument to the directive.
+
+The next example shows how to split your citations between
+articles and books, assuming your articles are in ``articles.bib``
+and your books are in ``books1.bib`` and ``books2.bib``.
+
+.. code-block:: rest
+
+   .. rubric:: Articles
+
+   .. bibliography:: articles.bib
+
+   .. rubric:: Books
+
+   .. bibliography:: books1.bib books2.bib
+
+The bib files must be specified as a path that
+is relative to the containing document.
+
 Bullet Lists and Enumerated Lists
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
