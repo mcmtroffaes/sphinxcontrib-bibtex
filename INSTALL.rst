@@ -6,13 +6,6 @@ source using ``python setup.py install``. Then add:
    extensions = ['sphinxcontrib.bibtex']
    bibtex_bibfiles = ['refs.bib']
 
-or
-
-.. code-block:: python
-
-   extensions = ['sphinxcontrib.bibtex2']
-   bibtex_bibfiles = ['refs.bib']
-
 to your project's Sphinx configuration file ``conf.py``.
 
 Minimal Example

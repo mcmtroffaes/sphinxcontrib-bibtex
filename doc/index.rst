@@ -12,7 +12,6 @@ Contents
 
    quickstart
    usage
-   usage-bibtex2
    api
    changes
    license
