@@ -20,12 +20,15 @@
   config setting ``bibtex_bibfiles`` has been added. In this file,
   you must specify all bib files used throughout the project,
   relative to the source folder.
-  You also no longer need to specify the bib files in the
-  ``bibliography`` directive, but if you do, citations will
-  be constrained to those bib files.
+
+* **BACKWARD INCOMPATIBLE**
   The encoding of bib files has been moved to an optional
   config setting ``bibtex_encoding``. The ``:encoding:``
   option is no longer supported.
+
+* You no longer need to specify the bib files in the
+  ``bibliography`` directive, but if you do, citations will
+  be constrained to those bib files.
 
 * Improve citation ordering code (reported by ukos-git, see issue
   #182).
