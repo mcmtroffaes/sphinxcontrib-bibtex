@@ -11,6 +11,18 @@ with a warning whenever you need to rerun the build
 The file can be stored in version control
 if you do not want your users to have to run sphinx twice.
 
+Configuration
+-------------
+
+To configure the extension, in your ``conf.py`` file,
+set ``bibtex_bibfiles`` to your list of bib files.
+For instance, a minimal configuration may look as follows:
+
+.. code-block:: rest
+
+   extensions = ['sphinxcontrib.bibtex']
+   bibtex_bibfiles = ['refs.bib']
+
 Roles and Directives
 --------------------
 
@@ -34,7 +46,7 @@ Roles and Directives
 
       See :cite:`1987:nelson,2001:schechter`.
 
-.. rst:directive:: .. bibliography:: refs.bib [...]
+.. rst:directive:: .. bibliography::
 
    Create bibliography for all cited references. The ``all`` flag
    forces all references to be included (equivalent to ``\nocite{*}``
@@ -44,7 +56,7 @@ Roles and Directives
 
    .. code-block:: rest
 
-     .. bibliography:: refs.bib
+     .. bibliography::
         :cited:
 
    which would be roughly equivalent to the following LaTeX code:

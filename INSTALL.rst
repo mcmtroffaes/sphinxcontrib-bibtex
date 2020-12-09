@@ -4,6 +4,7 @@ source using ``python setup.py install``. Then add:
 .. code-block:: python
 
    extensions = ['sphinxcontrib.bibtex']
+   bibtex_bibfiles = ['refs.bib']
 
 or
 
@@ -23,7 +24,7 @@ In your project's documentation, you can then write for instance:
 
    See :cite:`1987:nelson` for an introduction to non-standard analysis.
 
-   .. bibliography:: refs.bib
+   .. bibliography::
 
 where refs.bib would contain an entry::
 
