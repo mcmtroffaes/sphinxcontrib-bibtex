@@ -87,7 +87,6 @@ def setup(app):
     :type app: :class:`sphinx.application.Sphinx`
     """
 
-    app.add_config_value("bibtex_style", "alpha", "html")
     app.add_config_value("bibtex_footbibliography_header", "", "html")
     app.connect("builder-inited", init_footbib_cache)
     app.connect("env-merge-info", merge_footbib_cache)
