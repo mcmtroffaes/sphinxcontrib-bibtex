@@ -15,8 +15,11 @@
   Thanks to dizcza for help with testing.
   See issues #197 and #204. Also see pull request #208.
 
+* Parallel builds are now finally supported.
+  See issues #80, #96, and #164, as well as pull request #210.
+
 * **BACKWARD INCOMPATIBLE**
-  Parallel builds are now supported. To enable this, a new mandatory
+  To enable parallel builds, a new mandatory
   config setting ``bibtex_bibfiles`` has been added. In this file,
   you must specify all bib files used throughout the project,
   relative to the source folder.
@@ -36,12 +39,10 @@
 * Migrate test suite to pytest, using sphinx's testing fixtures.
 
 * **EXPERIMENTAL FEATURE**
-  The package now ships with a new extension, called bibtex2. This
-  extension adds a ``footcite`` role and ``footbibliography``
+  There is a new ``footcite`` role and a new ``footbibliography``
   directive, to allow easy and simple local (per document)
-  bibliographies through footnotes. Supports parallel builds. This
-  extension should be considered experimental. Feedback is
-  welcome. See issues #184 and #185.
+  bibliographies through footnotes.
+  See issues #184 and #185.
 
 * **BACKWARD INCOMPATIBLE**
   Functions for processing bib files have been moved to the cache
