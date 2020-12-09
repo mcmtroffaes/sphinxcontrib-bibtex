@@ -34,13 +34,15 @@ See [Nel87a]_ for an introduction to non-standard analysis.
 
 .. [Nel87a] Edward Nelson. *Radically Elementary Probability Theory*. Princeton University Press, 1987.
 
+Citations in sphinx are resolved globally across all documents.
 Typically, you have a single :rst:dir:`bibliography` directive across
 your entire project which collects all bibliographies.
 Advanced use cases with multiple :rst:dir:`bibliography` directives
 across your project are also supported.
 
-For local bibliographies per document, you can use citations represented by
-footnotes as follows:
+In contrast, footnotes in sphinx are resolved locally per document.
+To achieve local bibliographies per document, you can use citations
+represented by footnotes as follows:
 
 .. code-block:: rest
 
