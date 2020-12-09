@@ -14,6 +14,8 @@ if you do not want your users to have to run sphinx twice.
 Configuration
 -------------
 
+.. versionadded:: 2.0.0
+
 To configure the extension, in your ``conf.py`` file,
 set ``bibtex_bibfiles`` to your list of bib files.
 For instance, a minimal configuration may look as follows:
@@ -107,6 +109,8 @@ Advanced Features
 Bib File Encoding
 ~~~~~~~~~~~~~~~~~
 
+.. versionadded:: 2.0.0
+
 You can also set the encoding of the bibliography files, using the
 ``bibtex_encoding`` configuration variable in your ``conf.py``.
 
@@ -119,9 +123,11 @@ You can also set the encoding of the bibliography files, using the
 Splitting Bibliographies Per Bib File
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. versionadded:: 2.0.0
+
 If want multiple bibliographies each of which only
 contains references from specific bib files, you can specify
-the relevant bib files as an argument to the directive.
+the relevant bib files as an optional argument to the directive.
 
 The next example shows how to split your citations between
 articles and books, assuming your articles are in ``articles.bib``
@@ -448,19 +454,6 @@ are available here:
 
 Known Issues and Workarounds
 ----------------------------
-
-No Parallel Builds
-~~~~~~~~~~~~~~~~~~
-
-Because the extension needs to process documents in sequential order
-to know what citation entries are cited, in the current design,
-parallel builds are not supported. If parallel builds are important
-for you, you can use the experimental :rst:role:`footcite` role
-and :rst:dir:`footbibliography` directive
-currently residing in the bibtex2 extension.
-These convert citations into footnotes,
-which are local to each document, and which therefore
-do not have this limitation.
 
 Encoding: Percent Signs
 ~~~~~~~~~~~~~~~~~~~~~~~
