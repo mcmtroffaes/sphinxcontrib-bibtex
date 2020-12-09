@@ -12,7 +12,7 @@ import sphinx.util
 from docutils.parsers.rst import Directive, directives
 from sphinx.util.console import standout
 
-from ..bibtex2.bibfile import normpath_filename, process_bibfile
+from ..bibtex2.bibfile import normpath_filename
 from .cache import BibliographyCache
 from .nodes import bibliography
 
@@ -47,8 +47,8 @@ class BibliographyDirective(Directive):
        :class:`~sphinxcontrib.bibtex.transforms.BibliographyTransform`.
     """
 
-    required_arguments = 1
-    optional_arguments = 0
+    required_arguments = 0
+    optional_arguments = 1
     final_argument_whitespace = True
     has_content = False
     option_spec = {
@@ -60,7 +60,6 @@ class BibliographyDirective(Directive):
         'list': directives.unchanged,
         'enumtype': directives.unchanged,
         'start': process_start_option,
-        'encoding': directives.encoding,
         'labelprefix': directives.unchanged,
         'keyprefix': directives.unchanged,
     }
@@ -103,6 +102,11 @@ class BibliographyDirective(Directive):
         else:
             # the default filter: include only cited entries
             filter_ = ast.parse("cited")
+        if self.arguments:
+            bibfiles = [normpath_filename(env, bibfile)
+                        for bibfile in self.arguments[0].split()]
+        else:
+            bibfiles = list(env.bibtex_cache.bibfiles.keys())
         bibcache = BibliographyCache(
             list_=self.options.get("list", "citation"),
             enumtype=self.options.get("enumtype", "arabic"),
@@ -110,23 +114,15 @@ class BibliographyDirective(Directive):
             style=self.options.get(
                 "style", env.app.config.bibtex_default_style),
             filter_=filter_,
-            encoding=self.options.get(
-                'encoding',
-                self.state.document.settings.input_encoding),
             labelprefix=self.options.get("labelprefix", ""),
             keyprefix=self.options.get("keyprefix", ""),
             labels={},
-            # convert to normalized absolute path to ensure that the same file
-            # only occurs once in the cache
-            bibfiles=[normpath_filename(env, bibfile)
-                      for bibfile in self.arguments[0].split()],
+            bibfiles=bibfiles,
         )
         if (bibcache.list_ not in set(["bullet", "enumerated", "citation"])):
             logger.warning(
                 "unknown bibliography list type '{0}'.".format(bibcache.list_))
-        for bibfile in bibcache.bibfiles:
-            process_bibfile(
-                env.bibtex_cache.bibfiles, bibfile, bibcache.encoding)
+        for bibfile in bibfiles:
             env.note_dependency(bibfile)
         # if citations change, bibtex.json changes, and so might entries
         env.note_dependency(

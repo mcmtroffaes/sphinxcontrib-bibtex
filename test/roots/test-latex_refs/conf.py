@@ -5,3 +5,4 @@ latex_documents = [
      u'Test',
      u'Mr. Test', 'manual'),
 ]
+bibtex_bibfiles = ['test.bib']

@@ -12,8 +12,9 @@ import collections
 import docutils.nodes
 import json
 import sphinx.util
+from sphinx.errors import ExtensionError
 from .cache import Cache
-from ..bibtex2.bibfile import normpath_filename
+from ..bibtex2.bibfile import normpath_filename, process_bibfile
 from .nodes import bibliography
 from .roles import CiteRole
 from .directives import BibliographyDirective
@@ -30,6 +31,19 @@ def init_bibtex_cache(app):
     :param app: The sphinx application.
     :type app: :class:`sphinx.application.Sphinx`
     """
+    # check config
+    if app.config.bibtex_bibfiles is None:
+        raise ExtensionError("You must configure the bibtex_bibfiles setting")
+    # add cache if not already present
+    if not hasattr(app.env, "bibtex_cache"):
+        app.env.bibtex_cache = Cache()
+    # update bib file information in the cache
+    for bibfile in app.config.bibtex_bibfiles:
+        process_bibfile(
+            app.env.bibtex_cache.bibfiles,
+            normpath_filename(app.env, bibfile, app.config.master_doc),
+            app.config.bibtex_encoding)
+    # read json
     json_filename = normpath_filename(
         app.env, "bibtex.json", app.config.master_doc)
     try:
@@ -37,8 +51,6 @@ def init_bibtex_cache(app):
             json_dict = json.load(json_file)
     except FileNotFoundError:
         json_dict = {"cited": {}}
-    if not hasattr(app.env, "bibtex_cache"):
-        app.env.bibtex_cache = Cache()
     # import cited_previous from json data
     app.env.bibtex_cache.cited_previous = collections.defaultdict(oset)
     app.env.bibtex_cache.cited_previous.update({
@@ -54,6 +66,21 @@ def purge_bibtex_cache(app, env, docname):
     :type env: :class:`sphinx.environment.BuildEnvironment`
     """
     env.bibtex_cache.purge(docname)
+
+
+def merge_bibtex_cache(app, env, docnames, other):
+    """Merge environment information related to *docnames*.
+
+    :param app: The sphinx application.
+    :type app: :class:`sphinx.application.Sphinx`
+    :param env: The sphinx build environment.
+    :type env: :class:`sphinx.environment.BuildEnvironment`
+    :param docnames: The document names.
+    :type docnames: :class:`str`
+    :param other: The other environment.
+    :type other: :class:`sphinx.environment.BuildEnvironment`
+    """
+    env.bibtex_cache.merge(docnames, other.bibtex_cache)
 
 
 def process_citations(app, doctree, docname):
@@ -149,9 +176,12 @@ def setup(app):
     """
 
     app.add_config_value("bibtex_default_style", "alpha", "html")
+    app.add_config_value("bibtex_bibfiles", None, "html")
+    app.add_config_value("bibtex_encoding", "utf-8-sig", "html")
     app.connect("builder-inited", init_bibtex_cache)
     app.connect("doctree-resolved", process_citations)
     app.connect("doctree-resolved", process_citation_references)
+    app.connect("env-merge-info", merge_bibtex_cache)
     app.connect("env-purge-doc", purge_bibtex_cache)
     app.connect("env-updated", check_duplicate_labels)
     app.connect("build-finished", save_bibtex_json)
@@ -164,7 +194,7 @@ def setup(app):
     # the document that contains references must be read last for all
     # references to be resolved.
     return {
-        'env_version': 2,
-        'parallel_read_safe': False,
+        'env_version': 3,
+        'parallel_read_safe': True,
         'parallel_write_safe': True,
         }

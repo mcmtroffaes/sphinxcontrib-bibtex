@@ -11,6 +11,18 @@ with a warning whenever you need to rerun the build
 The file can be stored in version control
 if you do not want your users to have to run sphinx twice.
 
+Configuration
+-------------
+
+To configure the extension, in your ``conf.py`` file,
+set ``bibtex_bibfiles`` to your list of bib files.
+For instance, a minimal configuration may look as follows:
+
+.. code-block:: rest
+
+   extensions = ['sphinxcontrib.bibtex']
+   bibtex_bibfiles = ['refs.bib']
+
 Roles and Directives
 --------------------
 
@@ -34,7 +46,7 @@ Roles and Directives
 
       See :cite:`1987:nelson,2001:schechter`.
 
-.. rst:directive:: .. bibliography:: refs.bib [...]
+.. rst:directive:: .. bibliography::
 
    Create bibliography for all cited references. The ``all`` flag
    forces all references to be included (equivalent to ``\nocite{*}``
@@ -44,7 +56,7 @@ Roles and Directives
 
    .. code-block:: rest
 
-     .. bibliography:: refs.bib
+     .. bibliography::
         :cited:
 
    which would be roughly equivalent to the following LaTeX code:
@@ -99,6 +111,30 @@ Roles and Directives
 
 Advanced Features
 -----------------
+
+Splitting Bibliographies Per Bib File
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If want multiple bibliographies each of which only
+contains references from specific bib files, you can specify
+the relevant bib files as an argument to the directive.
+
+The next example shows how to split your citations between
+articles and books, assuming your articles are in ``articles.bib``
+and your books are in ``books1.bib`` and ``books2.bib``.
+
+.. code-block:: rest
+
+   .. rubric:: Articles
+
+   .. bibliography:: articles.bib
+
+   .. rubric:: Books
+
+   .. bibliography:: books1.bib books2.bib
+
+The bib files must be specified as a path that
+is relative to the containing document.
 
 Bullet Lists and Enumerated Lists
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

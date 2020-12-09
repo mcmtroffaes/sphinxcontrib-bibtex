@@ -1,0 +1,4 @@
+allrefs
+=======
+
+.. bibliography:: ../listb.bib

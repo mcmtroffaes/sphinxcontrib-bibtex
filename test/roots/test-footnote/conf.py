@@ -1,3 +1,3 @@
-extensions = ['sphinxcontrib.bibtex2']
+extensions = ['sphinxcontrib.bibtex', 'sphinxcontrib.bibtex2']
 exclude_patterns = ['_build']
 bibtex_bibfiles = ["listb.bib"]

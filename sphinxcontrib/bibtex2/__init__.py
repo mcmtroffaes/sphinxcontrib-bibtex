@@ -10,8 +10,6 @@ import docutils.frontend
 import docutils.parsers.rst
 import docutils.utils
 import sphinx.util
-from sphinx.errors import ExtensionError
-from .bibfile import normpath_filename, process_bibfile
 from .foot_cache import Cache
 from .foot_nodes import bibliography
 from .foot_roles import CiteRole
@@ -28,20 +26,9 @@ def init_footbib_cache(app):
     :param app: The sphinx application.
     :type app: :class:`sphinx.application.Sphinx`
     """
-    # check config
-    if not app.config.bibtex_bibfiles:
-        raise ExtensionError("You must configure the bibtex_bibfiles setting")
     # add cache if not already present
     if not hasattr(app.env, "footbib_cache"):
         app.env.footbib_cache = Cache()
-    if not hasattr(app.env, "bibtex_bibfiles"):
-        app.env.bibtex_bibfiles = {}
-    # update bib file information in the cache
-    for bibfile in app.config.bibtex_bibfiles:
-        process_bibfile(
-            app.env.bibtex_bibfiles,
-            normpath_filename(app.env, bibfile, app.config.master_doc),
-            app.config.bibtex_encoding)
     # parse footbibliography header
     if not hasattr(app.env, "bibtex_footbibliography_header"):
         parser = docutils.parsers.rst.Parser()
@@ -98,9 +85,6 @@ def setup(app):
     :type app: :class:`sphinx.application.Sphinx`
     """
 
-    app.add_config_value("bibtex_style", "alpha", "html")
-    app.add_config_value("bibtex_bibfiles", [], "html")
-    app.add_config_value("bibtex_encoding", "utf-8-sig", "html")
     app.add_config_value("bibtex_footbibliography_header", "", "html")
     app.connect("builder-inited", init_footbib_cache)
     app.connect("env-merge-info", merge_footbib_cache)

@@ -205,6 +205,23 @@ class Cache:
         # note: intentionally do not clear cited_previous
         self.enum_count.pop(docname, None)
 
+    def merge(self, docnames, other):
+        """Merge information from *other* cache related to *docnames*.
+
+        :param docnames: The document names.
+        :type docnames: :class:`str`
+        :param other: The other cache.
+        :type other: :class:`Cache`
+        """
+        for docname in docnames:
+            # bibfiles and cited_previous are global, no need to merge
+            if docname in other.cited:
+                self.cited[docname] = other.cited[docname]
+            if docname in other.bibliographies:
+                self.bibliographies[docname] = other.bibliographies[docname]
+            if docname in other.enum_count:
+                self.enum_count[docname] = other.enum_count[docname]
+
     def get_label_from_key(self, key):
         """Return label for the given key."""
         for bibcaches in self.bibliographies.values():
@@ -285,7 +302,7 @@ class Cache:
 
 class BibliographyCache(collections.namedtuple(
     'BibliographyCache',
-    """bibfiles style encoding
+    """bibfiles style
 list_ enumtype start labels labelprefix
 filter_ keyprefix
 """)):
