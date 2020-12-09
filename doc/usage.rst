@@ -1,16 +1,6 @@
 Bibtex Extension Usage
 ======================
 
-The extension stores all citation information in a ``bibtex.json`` file
-in the source folder.
-If it does not exist, the file will be created on
-your first sphinx build, and you will have to rerun the build
-to make use of it. The file is automatically kept up to date,
-with a warning whenever you need to rerun the build
-(i.e. whenever your citations change).
-The file can be stored in version control
-if you do not want your users to have to run sphinx twice.
-
 Configuration
 -------------
 
@@ -24,6 +14,23 @@ For instance, a minimal configuration may look as follows:
 
    extensions = ['sphinxcontrib.bibtex']
    bibtex_bibfiles = ['refs.bib']
+
+Running Sphinx
+--------------
+
+It is good to be aware that
+the extension stores all citation information in a
+:file:`bibtex.json` file in the source folder.
+If it does not exist, the file will be created on
+your first sphinx build, and you will have to rerun the build
+to make use of it. The file is automatically kept up to date,
+with a warning whenever you need to rerun the build
+(i.e. whenever your citations change).
+The file can be stored in version control
+if you do not want your users to have to run sphinx twice
+when they clone your project, or when you need your
+documentation to be built on an external service which
+only runs sphinx once.
 
 Roles and Directives
 --------------------
