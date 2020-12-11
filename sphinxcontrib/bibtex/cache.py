@@ -17,6 +17,10 @@ from oset import oset
 import re
 
 
+def _defaultdict_oset():
+    return collections.defaultdict(oset)
+
+
 def _raise_invalid_node(node):
     """Helper method to raise an exception when an invalid node is
     visited.
@@ -187,12 +191,22 @@ class Cache:
     representing the current bibliography enumeration counter.
     """
 
+    foot_cited = None
+    """A :class:`dict` mapping each docname to another :class:`dict`
+    which maps each id to a :class:`set` of footnote keys.
+    """
+
+    foot_current_id = None
+    """A :class:`dict` mapping each docname to the currently active id."""
+
     def __init__(self):
         self.bibfiles = {}
         self.bibliographies = collections.defaultdict(dict)
         self.cited = collections.defaultdict(oset)
         self.cited_previous = collections.defaultdict(oset)
         self.enum_count = {}
+        self.foot_cited = collections.defaultdict(_defaultdict_oset)
+        self.foot_current_id = {}
 
     def purge(self, docname):
         """Remove  all information related to *docname*.
@@ -204,6 +218,8 @@ class Cache:
         self.cited.pop(docname, None)
         # note: intentionally do not clear cited_previous
         self.enum_count.pop(docname, None)
+        self.foot_cited.pop(docname, None)
+        self.foot_current_id.pop(docname, None)
 
     def merge(self, docnames, other):
         """Merge information from *other* cache related to *docnames*.
@@ -221,6 +237,8 @@ class Cache:
                 self.bibliographies[docname] = other.bibliographies[docname]
             if docname in other.enum_count:
                 self.enum_count[docname] = other.enum_count[docname]
+            self.foot_cited[docname] = other.foot_cited[docname]
+            self.foot_current_id[docname] = other.foot_current_id[docname]
 
     def get_label_from_key(self, key):
         """Return label for the given key."""
@@ -298,6 +316,11 @@ class Cache:
                 sorted_entries.append(entry)
         sorted_entries += entries.values()
         return sorted_entries
+
+    def new_foot_current_id(self, env):
+        """Generate a new id for the given build environment."""
+        self.foot_current_id[env.docname] = 'bibtex-footbibliography-%s-%s' % (
+            env.docname, env.new_serialno('bibtex'))
 
 
 class BibliographyCache(collections.namedtuple(

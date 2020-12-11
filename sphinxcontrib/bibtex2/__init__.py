@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 """
     .. autofunction:: setup
-    .. autofunction:: init_footbib_cache
-    .. autofunction:: purge_footbib_cache
-    .. autofunction:: merge_footbib_cache
+    .. autofunction:: init_bibtex_cache
 """
 
 import docutils.frontend
 import docutils.parsers.rst
 import docutils.utils
 import sphinx.util
-from .foot_cache import Cache
 from .foot_nodes import bibliography
 from .foot_roles import CiteRole
 from .foot_directives import BibliographyDirective
@@ -20,15 +17,12 @@ from .foot_transforms import BibliographyTransform
 logger = sphinx.util.logging.getLogger(__name__)
 
 
-def init_footbib_cache(app):
-    """Create ``app.env.footbib_cache`` if it does not exist yet.
+def init_bibtex_cache(app):
+    """Initialize the extension cache.
 
     :param app: The sphinx application.
     :type app: :class:`sphinx.application.Sphinx`
     """
-    # add cache if not already present
-    if not hasattr(app.env, "footbib_cache"):
-        app.env.footbib_cache = Cache()
     # parse footbibliography header
     if not hasattr(app.env, "bibtex_footbibliography_header"):
         parser = docutils.parsers.rst.Parser()
@@ -41,38 +35,12 @@ def init_footbib_cache(app):
             document[0] if len(document) > 0 else None)
 
 
-def purge_footbib_cache(app, env, docname):
-    """Remove all information related to *docname* from the cache.
-
-    :param app: The sphinx application.
-    :type app: :class:`sphinx.application.Sphinx`
-    :param env: The sphinx build environment.
-    :type env: :class:`sphinx.environment.BuildEnvironment`
-    """
-    env.footbib_cache.purge(docname)
-
-
-def merge_footbib_cache(app, env, docnames, other):
-    """Merge environment information related to *docnames*.
-
-    :param app: The sphinx application.
-    :type app: :class:`sphinx.application.Sphinx`
-    :param env: The sphinx build environment.
-    :type env: :class:`sphinx.environment.BuildEnvironment`
-    :param docnames: The document names.
-    :type docnames: :class:`str`
-    :param other: The other environment.
-    :type other: :class:`sphinx.environment.BuildEnvironment`
-    """
-    env.footbib_cache.merge(docnames, other.footbib_cache)
-
-
 def init_current_id(app, docname, source):
-    app.env.footbib_cache.new_foot_current_id(app.env)
+    app.env.bibtex_cache.new_foot_current_id(app.env)
 
 
 def setup(app):
-    """Set up the footbib extension:
+    """Set up the bibtex2 extension:
 
     * register config values
     * register directives
@@ -86,9 +54,7 @@ def setup(app):
     """
 
     app.add_config_value("bibtex_footbibliography_header", "", "html")
-    app.connect("builder-inited", init_footbib_cache)
-    app.connect("env-merge-info", merge_footbib_cache)
-    app.connect("env-purge-doc", purge_footbib_cache)
+    app.connect("builder-inited", init_bibtex_cache)
     app.connect("source-read", init_current_id)
     app.add_directive("footbibliography", BibliographyDirective)
     app.add_role("footcite", CiteRole())
@@ -96,7 +62,7 @@ def setup(app):
     app.add_transform(BibliographyTransform)
 
     return {
-        'env_version': 1,
+        'env_version': 2,
         'parallel_read_safe': True,
         'parallel_write_safe': True,
         }
