@@ -1,19 +1,10 @@
 2.0.0 (in development)
 ----------------------
 
-* Support newlines/whitespace around cite keys when multiple keys are
-  specified.
-  Thanks to dizcza for help with testing.
-  See issue #205 and pull request #206.
-
-* The unresolved citations across documents issue has been resolved.
-  The extension stores all citation information in a ``bibtex.json`` file.
-  If it does not exist, the file will be created on
-  your first sphinx build, and you will have to rerun the build
-  to make use of it. The file is automatically kept up to date,
-  with a warning whenever you need to rerun the build.
-  Thanks to dizcza for help with testing.
-  See issues #197 and #204. Also see pull request #208.
+* There is a new ``footcite`` role and a new ``footbibliography``
+  directive, to allow easy and simple local (per document)
+  bibliographies through footnotes.
+  See issues #184 and #185.
 
 * Parallel builds are now finally supported.
   See issues #80, #96, and #164, as well as pull request #210.
@@ -29,25 +20,37 @@
   config setting ``bibtex_encoding``. The ``:encoding:``
   option is no longer supported.
 
+* Headers for ``bibliography`` and ``footbibliography`` directives
+  can be configured via the ``bibtex_bibliography_header`` and
+  ``bibtex_footbibliography_header`` config setting.
+
 * You no longer need to specify the bib files in the
   ``bibliography`` directive, but if you do, citations will
   be constrained to those bib files.
 
+* Support newlines/whitespace around cite keys when multiple keys are
+  specified.
+  Thanks to dizcza for help with testing.
+  See issue #205 and pull request #206.
+
 * Improve citation ordering code (reported by ukos-git, see issue
   #182).
 
+* The unresolved citations across documents issue has been resolved.
+  The extension stores all citation information in a ``bibtex.json`` file.
+  If it does not exist, the file will be created on
+  your first sphinx build, and you will have to rerun the build
+  to make use of it. The file is automatically kept up to date,
+  with a warning whenever you need to rerun the build.
+  Thanks to dizcza for help with testing.
+  See issues #197 and #204. Also see pull request #208.
+
 * Migrate test suite to pytest, using sphinx's testing fixtures.
 
-* **EXPERIMENTAL FEATURE**
-  There is a new ``footcite`` role and a new ``footbibliography``
-  directive, to allow easy and simple local (per document)
-  bibliographies through footnotes.
-  See issues #184 and #185.
-
 * **BACKWARD INCOMPATIBLE**
-  Functions for processing bib files have been moved to the cache
-  module. They are no longer class methods but standalone functions,
-  so they can be more easily reused.
+  The API has been refactored.
+  Some functions have moved to different modules.
+  Refer to the API documentation for details.
 
 * Drop Python 3.5 support.
 
