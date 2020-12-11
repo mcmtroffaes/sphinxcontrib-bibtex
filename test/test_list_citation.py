@@ -22,7 +22,7 @@ def test_list_citation(app, warning):
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     assert re.search(
-        '<p id="bibtex-bibliography-index-0">'
+        '<p id="bibtex-bibliography-index-[0-9]+">'
         + htmlbibitem("1", "Akkerdju")
         + htmlbibitem("2", "Bro")
         + htmlbibitem("3", "Chap")

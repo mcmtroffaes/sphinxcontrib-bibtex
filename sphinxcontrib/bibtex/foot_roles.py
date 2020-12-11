@@ -1,5 +1,5 @@
 """
-    .. autoclass:: CiteRole
+    .. autoclass:: FootCiteRole
         :show-inheritance:
 
         .. automethod:: result_nodes
@@ -10,18 +10,18 @@ import pybtex.database
 from sphinx.roles import XRefRole
 
 
-class CiteRole(XRefRole):
+class FootCiteRole(XRefRole):
     """Class for processing the :rst:role:`footcite` role."""
 
     backend = find_plugin('pybtex.backends', 'docutils')()
 
     def make_refnode(self, document, env, key):
-        cited = env.footbib_cache.cited[env.docname]
+        cited = env.bibtex_cache.foot_cited[env.docname]
         for otherkeys in cited.values():
             if key in otherkeys:
                 break
         else:
-            cited[env.footbib_cache.current_id[env.docname]].add(key)
+            cited[env.bibtex_cache.foot_current_id[env.docname]].add(key)
         # TODO get the actual entry
         return self.backend.footnote_reference(_fake_entry(key), document)
 

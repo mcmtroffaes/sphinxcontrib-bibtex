@@ -1,5 +1,5 @@
 """
-    .. autoclass:: BibliographyTransform
+    .. autoclass:: FootBibliographyTransform
         :show-inheritance:
 
         .. autoattribute:: default_priority
@@ -10,15 +10,15 @@ import docutils.nodes
 import docutils.transforms
 import sphinx.util
 from pybtex.plugin import find_plugin
-from ..bibtex.transforms import node_text_transform, transform_url_command
-from .foot_nodes import bibliography
+from .transforms import node_text_transform, transform_url_command
+from .foot_nodes import footbibliography
 from .bibfile import get_bibliography_entry
 
 
 logger = sphinx.util.logging.getLogger(__name__)
 
 
-class BibliographyTransform(docutils.transforms.Transform):
+class FootBibliographyTransform(docutils.transforms.Transform):
 
     """A docutils transform to generate footnotes for
     bibliography nodes.
@@ -32,14 +32,15 @@ class BibliographyTransform(docutils.transforms.Transform):
 
     def apply(self):
         """Transform each
-        :class:`~sphinxcontrib.bibtex2.foot_nodes.bibliography` node into a
+        :class:`~sphinxcontrib.bibtex.foot_nodes.footbibliography` node into a
         list of citations.
         """
         env = self.document.settings.env
-        for bibnode in self.document.traverse(bibliography):
+        for bibnode in self.document.traverse(footbibliography):
             id_ = bibnode['ids'][0]
-            entries = [get_bibliography_entry(env.bibtex_cache.bibfiles, key)
-                       for key in env.footbib_cache.cited[env.docname][id_]]
+            entries = [
+                get_bibliography_entry(env.bibtex_cache.bibfiles, key)
+                for key in env.bibtex_cache.foot_cited[env.docname][id_]]
             entries2 = [entry for entry in entries if entry is not None]
             # locate and instantiate style and backend plugins
             style = find_plugin(

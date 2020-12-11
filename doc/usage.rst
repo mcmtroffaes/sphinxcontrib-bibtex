@@ -1,5 +1,5 @@
-Bibtex Extension Usage
-======================
+Usage
+=====
 
 Configuration
 -------------
@@ -14,6 +14,10 @@ For instance, a minimal configuration may look as follows:
 
    extensions = ['sphinxcontrib.bibtex']
    bibtex_bibfiles = ['refs.bib']
+
+In bib files, LaTeX control characters are automatically converted
+to unicode characters (for instance, to convert ``\'e`` into ``é``).
+Be sure to write ``\%`` when you intend to format a percent sign.
 
 Running Sphinx
 --------------
@@ -59,7 +63,12 @@ Roles and Directives
 
 .. rst:directive:: .. bibliography::
 
-   Create bibliography for all cited references. The ``all`` flag
+   Create bibliography for all cited references.
+   Citations in sphinx are resolved globally across all documents.
+   Typically, you have a single bibliography directive across your
+   entire project which collects all citations.
+
+   The ``all`` flag
    forces all references to be included (equivalent to ``\nocite{*}``
    in LaTeX). The ``notcited`` flag causes all references that were
    not cited to be included. The ``cited`` flag is recognized as well
@@ -97,10 +106,6 @@ Roles and Directives
       across all documents, so you must take care that no citation key
       is included more than once.
 
-   In bib files, LaTeX control characters are automatically converted
-   to unicode characters (for instance, to convert ``\'e`` into ``é``).
-   Be sure to write ``\%`` when you intend to format a percent sign.
-
 .. XXX not documenting disable-curly-bracket-strip for now; might remove it
 
    Finally, curly brackets are automatically removed when the bib file
@@ -111,6 +116,42 @@ Roles and Directives
 
      .. bibliography::
         :disable-curly-bracket-strip:
+
+.. rst:role:: footcite
+
+   .. versionadded:: 2.0.0
+
+   Create a footnote reference to a bibliographic entry. For example:
+
+   .. code-block:: rest
+
+      See :footcite:`1987:nelson` for an introduction to non-standard analysis.
+
+   which would be equivalent to the following LaTeX code:
+
+   .. code-block:: latex
+
+      See \footcite{1987:nelson} for an introduction to non-standard analysis.
+
+   As with :rst:role:`cite`,
+   multiple comma-separated keys can be specified at once:
+
+   .. code-block:: rest
+
+      See :footcite:`1987:nelson,2001:schechter`.
+
+.. rst:directive:: .. footbibliography::
+
+   .. versionadded:: 2.0.0
+
+   Create footnotes at this location for all references that are cited
+   in the current document up to this point.
+   Typically, you have a single footbibliography directive at the bottom of
+   each document that has footcite citations.
+
+   If specified multiple times in the same document, footnotes are only
+   created for references that do not yet have a footnote earlier in the
+   document.
 
 Advanced Features
 -----------------
@@ -369,11 +410,16 @@ The filter expression supports:
 Local Bibliographies
 ~~~~~~~~~~~~~~~~~~~~
 
-Both the ``keyprefix`` and ``filter`` options can be used
-to achieve local bibliographies.
+The easiest way to have a local bibliography per
+document is to use
+:rst:role:`footcite` along with :rst:dir:`footbibliography`.
 
-The ``filter`` system for local bibliographies is the simplest one to
-use, but offers the least amount of flexibility.  In particular, it
+If you prefer to have regular citations instead of footnotes,
+both the ``keyprefix`` and ``filter`` options can be used
+to achieve local bibliographies
+with :rst:role:`cite` and :rst:dir:`bibliography`.
+
+The ``filter`` system for local bibliographies
 can only be used if no citation key is used in more than one
 document. This is not always satisfied. If you need to cite the same
 reference in multiple documents with references to multiple local
@@ -460,6 +506,26 @@ are available here:
 
 * https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/issue77
 * https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/custom_labels
+
+Custom Bibliography Header
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default, the :rst:dir:`bibliography``
+and :rst:dir:`footbibliography` directives
+simply insert a paragraph.
+The ``bibtex_bibliography_header``
+and ``bibtex_footbibliography_header``
+configuration values can be set
+to add a header to this. For example, in your ``conf.py`` you could
+have:
+
+.. code-block:: python
+
+   bibtex_bibliography_header = ".. rubric:: References"
+   bibtex_footbibliography_header = bibtex_bibliography_header
+
+will ensure that every bibliography will have a
+rubric.
 
 Known Issues and Workarounds
 ----------------------------

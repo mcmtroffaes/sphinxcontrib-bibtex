@@ -1,26 +1,26 @@
 """
-    .. autoclass:: BibliographyDirective
+    .. autoclass:: FootBibliographyDirective
 
         .. automethod:: run
 """
 
 from docutils.parsers.rst import Directive
 
-from .foot_nodes import bibliography
+from .foot_nodes import footbibliography
 
 
-class BibliographyDirective(Directive):
+class FootBibliographyDirective(Directive):
 
     """Class for processing the :rst:dir:`footbibliography` directive.
 
-    Produces a :class:`~sphinxcontrib.bibtex2.foot_nodes.bibliography` node.
+    Produces a :class:`~sphinxcontrib.bibtex.foot_nodes.footbibliography` node.
 
     .. seealso::
 
        Further processing of the resulting
-       :class:`~sphinxcontrib.bibtex2.foot_nodes.bibliography` node is done
+       :class:`~sphinxcontrib.bibtex.foot_nodes.footbibliography` node is done
        by
-       :class:`~sphinxcontrib.bibtex2.foot_transforms.BibliographyTransform`.
+       :class:`~sphinxcontrib.bibtex.foot_transforms.FootBibliographyTransform`.
     """
 
     required_arguments = 0
@@ -34,6 +34,6 @@ class BibliographyDirective(Directive):
         env = self.state.document.settings.env
         for bibfile in env.bibtex_cache.bibfiles:
             env.note_dependency(bibfile)
-        id_ = env.footbib_cache.current_id[env.docname]
-        env.footbib_cache.new_current_id(env)
-        return [bibliography('', ids=[id_])]
+        id_ = env.bibtex_cache.foot_current_id[env.docname]
+        env.bibtex_cache.new_foot_current_id(env)
+        return [footbibliography('', ids=[id_])]
