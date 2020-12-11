@@ -3,6 +3,8 @@
     .. autofunction:: setup
     .. autofunction:: init_bibtex_cache
     .. autofunction:: purge_bibtex_cache
+    .. autofunction:: merge_bibtex_cache
+    .. autofunction:: init_foot_current_id
     .. autofunction:: process_citations
     .. autofunction:: process_citation_references
     .. autofunction:: check_duplicate_labels
@@ -76,7 +78,7 @@ def init_bibtex_cache(app):
                     document[0] if len(document) > 0 else None)
 
 
-def init_current_id(app, docname, source):
+def init_foot_current_id(app, docname, source):
     """Initialize current footbibliography id for *docname*.
 
     :param app: The sphinx application.
@@ -213,11 +215,11 @@ def setup(app):
     app.add_config_value("bibtex_bibliography_header", "", "html")
     app.add_config_value("bibtex_footbibliography_header", "", "html")
     app.connect("builder-inited", init_bibtex_cache)
-    app.connect("source-read", init_current_id)
-    app.connect("doctree-resolved", process_citations)
-    app.connect("doctree-resolved", process_citation_references)
     app.connect("env-merge-info", merge_bibtex_cache)
     app.connect("env-purge-doc", purge_bibtex_cache)
+    app.connect("source-read", init_foot_current_id)
+    app.connect("doctree-resolved", process_citations)
+    app.connect("doctree-resolved", process_citation_references)
     app.connect("env-updated", check_duplicate_labels)
     app.connect("build-finished", save_bibtex_json)
     app.add_directive("bibliography", BibliographyDirective)
