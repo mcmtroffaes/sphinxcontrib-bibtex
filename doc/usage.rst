@@ -18,6 +18,8 @@ For instance, a minimal configuration may look as follows:
 Running Sphinx
 --------------
 
+.. versionadded:: 2.0.0
+
 It is good to be aware that
 the extension stores all citation information in a
 :file:`bibtex.json` file in the source folder.
