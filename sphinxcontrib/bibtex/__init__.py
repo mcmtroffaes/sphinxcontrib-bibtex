@@ -231,9 +231,6 @@ def setup(app):
     app.add_node(footbibliography, override=True)
     app.add_transform(FootBibliographyTransform)
 
-    # Parallel read is not safe at the moment: in the current design,
-    # the document that contains references must be read last for all
-    # references to be resolved.
     return {
         'env_version': 4,
         'parallel_read_safe': True,
