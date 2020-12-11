@@ -12,7 +12,7 @@ import sphinx.util
 from pybtex.plugin import find_plugin
 from ..bibtex.transforms import node_text_transform, transform_url_command
 from .foot_nodes import bibliography
-from .bibfile import get_bibliography_entry
+from ..bibtex.bibfile import get_bibliography_entry
 
 
 logger = sphinx.util.logging.getLogger(__name__)

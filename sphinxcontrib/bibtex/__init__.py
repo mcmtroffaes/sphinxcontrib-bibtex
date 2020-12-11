@@ -14,7 +14,7 @@ import json
 import sphinx.util
 from sphinx.errors import ExtensionError
 from .cache import Cache
-from ..bibtex2.bibfile import normpath_filename, process_bibfile
+from .bibfile import normpath_filename, process_bibfile
 from .nodes import bibliography
 from .roles import CiteRole
 from .directives import BibliographyDirective
