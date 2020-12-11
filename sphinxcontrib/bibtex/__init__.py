@@ -72,7 +72,8 @@ def init_bibtex_cache(app):
             document = docutils.utils.new_document(
                 "{0}_header".format(directive), settings)
             parser.parse(getattr(app.config, conf_name), document)
-            setattr(app.env, conf_name, document[0] if len(document) > 0 else None)
+            setattr(app.env, conf_name,
+                    document[0] if len(document) > 0 else None)
 
 
 def init_current_id(app, docname, source):
