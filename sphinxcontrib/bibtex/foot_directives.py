@@ -18,7 +18,7 @@ class FootBibliographyDirective(Directive):
     .. seealso::
 
        Further processing of the resulting
-       :class:`~sphinxcontrib.bibtex.foot_nodes.bibliography` node is done
+       :class:`~sphinxcontrib.bibtex.foot_nodes.footbibliography` node is done
        by
        :class:`~sphinxcontrib.bibtex.foot_transforms.FootBibliographyTransform`.
     """
