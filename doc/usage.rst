@@ -410,11 +410,16 @@ The filter expression supports:
 Local Bibliographies
 ~~~~~~~~~~~~~~~~~~~~
 
-Both the ``keyprefix`` and ``filter`` options can be used
-to achieve local bibliographies.
+The easiest way to have a local bibliography per
+document is to use
+:rst:role:`footcite` along with :rst:dir:`footbibliography`.
 
-The ``filter`` system for local bibliographies is the simplest one to
-use, but offers the least amount of flexibility.  In particular, it
+If you prefer to have regular citations instead of footnotes,
+both the ``keyprefix`` and ``filter`` options can be used
+to achieve local bibliographies
+with :rst:role:`cite` and :rst:dir:`bibliography`.
+
+The ``filter`` system for local bibliographies
 can only be used if no citation key is used in more than one
 document. This is not always satisfied. If you need to cite the same
 reference in multiple documents with references to multiple local
