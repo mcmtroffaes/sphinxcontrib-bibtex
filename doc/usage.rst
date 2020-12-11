@@ -15,6 +15,10 @@ For instance, a minimal configuration may look as follows:
    extensions = ['sphinxcontrib.bibtex']
    bibtex_bibfiles = ['refs.bib']
 
+In bib files, LaTeX control characters are automatically converted
+to unicode characters (for instance, to convert ``\'e`` into ``é``).
+Be sure to write ``\%`` when you intend to format a percent sign.
+
 Running Sphinx
 --------------
 
@@ -96,10 +100,6 @@ Roles and Directives
       Sphinx will attempt to resolve references to the bibliography
       across all documents, so you must take care that no citation key
       is included more than once.
-
-   In bib files, LaTeX control characters are automatically converted
-   to unicode characters (for instance, to convert ``\'e`` into ``é``).
-   Be sure to write ``\%`` when you intend to format a percent sign.
 
 .. XXX not documenting disable-curly-bracket-strip for now; might remove it
 
