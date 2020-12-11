@@ -1,5 +1,5 @@
-Bibtex Extension Usage
-======================
+Usage
+=====
 
 Configuration
 -------------
