@@ -32,7 +32,7 @@ class FootBibliographyTransform(docutils.transforms.Transform):
 
     def apply(self):
         """Transform each
-        :class:`~sphinxcontrib.bibtex.foot_nodes.bibliography` node into a
+        :class:`~sphinxcontrib.bibtex.foot_nodes.footbibliography` node into a
         list of citations.
         """
         env = self.document.settings.env

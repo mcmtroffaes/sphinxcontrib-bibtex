@@ -13,7 +13,7 @@ class FootBibliographyDirective(Directive):
 
     """Class for processing the :rst:dir:`footbibliography` directive.
 
-    Produces a :class:`~sphinxcontrib.bibtex.foot_nodes.bibliography` node.
+    Produces a :class:`~sphinxcontrib.bibtex.foot_nodes.footbibliography` node.
 
     .. seealso::
 
