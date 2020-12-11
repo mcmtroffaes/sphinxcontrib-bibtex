@@ -63,7 +63,12 @@ Roles and Directives
 
 .. rst:directive:: .. bibliography::
 
-   Create bibliography for all cited references. The ``all`` flag
+   Create bibliography for all cited references.
+   Citations in sphinx are resolved globally across all documents.
+   Typically, you have a single bibliography directive across your
+   entire project which collects all citations.
+
+   The ``all`` flag
    forces all references to be included (equivalent to ``\nocite{*}``
    in LaTeX). The ``notcited`` flag causes all references that were
    not cited to be included. The ``cited`` flag is recognized as well
@@ -140,8 +145,9 @@ Roles and Directives
    .. versionadded:: 2.0.0
 
    Create footnotes at this location for all references that are cited
-   in the current document. You normally add this once at the very bottom
-   of any document with footnote citations.
+   in the current document up to this point.
+   Typically, you have a single footbibliography directive at the bottom of
+   each document that has footcite citations.
 
    If specified multiple times in the same document, footnotes are only
    created for references that do not yet have a footnote earlier in the
