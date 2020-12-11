@@ -1,5 +1,5 @@
 """
-    .. autoclass:: bibliography
+    .. autoclass:: footbibliography
 """
 
 from docutils import nodes
