@@ -510,16 +510,21 @@ are available here:
 Custom Bibliography Header
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-By default, the ``.. footbibliography::`` simply inserts a paragraph.
-The ``bibtex_footbibliography_header`` configuration value can be set
+By default, the :rst:dir:`bibliography``
+and :rst:dir:`footbibliography` directives
+simply insert a paragraph.
+The ``bibtex_bibliography_header``
+and ``bibtex_footbibliography_header``
+configuration values can be set
 to add a header to this. For example, in your ``conf.py`` you could
 have:
 
 .. code-block:: python
 
-   bibtex_footbibliography_header = ".. rubric:: Citations"
+   bibtex_bibliography_header = ".. rubric:: References"
+   bibtex_footbibliography_header = bibtex_bibliography_header
 
-will ensure that every paragraph of footnote citations will have a
+will ensure that every bibliography will have a
 rubric.
 
 Known Issues and Workarounds

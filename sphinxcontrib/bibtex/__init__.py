@@ -62,16 +62,17 @@ def init_bibtex_cache(app):
     app.env.bibtex_cache.cited_previous = collections.defaultdict(oset)
     app.env.bibtex_cache.cited_previous.update({
         key: oset(value) for key, value in json_dict["cited"].items()})
-    # parse footbibliography header
-    if not hasattr(app.env, "bibtex_footbibliography_header"):
-        parser = docutils.parsers.rst.Parser()
-        settings = docutils.frontend.OptionParser(
-            components=(docutils.parsers.rst.Parser,)).get_default_values()
-        document = docutils.utils.new_document(
-            "footbibliography_header", settings)
-        parser.parse(app.config.bibtex_footbibliography_header, document)
-        app.env.bibtex_footbibliography_header = (
-            document[0] if len(document) > 0 else None)
+    # parse bibliography headers
+    for directive in ("bibliography", "footbibliography"):
+        conf_name = "bibtex_{0}_header".format(directive)
+        if not hasattr(app.env, conf_name):
+            parser = docutils.parsers.rst.Parser()
+            settings = docutils.frontend.OptionParser(
+                components=(docutils.parsers.rst.Parser,)).get_default_values()
+            document = docutils.utils.new_document(
+                "{0}_header".format(directive), settings)
+            parser.parse(getattr(app.config, conf_name), document)
+            setattr(app.env, conf_name, document[0] if len(document) > 0 else None)
 
 
 def init_current_id(app, docname, source):
@@ -199,6 +200,7 @@ def setup(app):
     app.add_config_value("bibtex_default_style", "alpha", "html")
     app.add_config_value("bibtex_bibfiles", None, "html")
     app.add_config_value("bibtex_encoding", "utf-8-sig", "html")
+    app.add_config_value("bibtex_bibliography_header", "", "html")
     app.add_config_value("bibtex_footbibliography_header", "", "html")
     app.connect("builder-inited", init_bibtex_cache)
     app.connect("source-read", init_current_id)
