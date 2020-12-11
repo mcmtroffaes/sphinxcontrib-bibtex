@@ -1,5 +1,5 @@
 """
-    .. autoclass:: BibliographyTransform
+    .. autoclass:: FootBibliographyTransform
         :show-inheritance:
 
         .. autoattribute:: default_priority
@@ -18,7 +18,7 @@ from ..bibtex.bibfile import get_bibliography_entry
 logger = sphinx.util.logging.getLogger(__name__)
 
 
-class BibliographyTransform(docutils.transforms.Transform):
+class FootBibliographyTransform(docutils.transforms.Transform):
 
     """A docutils transform to generate footnotes for
     bibliography nodes.

@@ -9,9 +9,9 @@ import docutils.parsers.rst
 import docutils.utils
 import sphinx.util
 from .foot_nodes import bibliography
-from .foot_roles import CiteRole
-from .foot_directives import BibliographyDirective
-from .foot_transforms import BibliographyTransform
+from .foot_roles import FootCiteRole
+from .foot_directives import FootBibliographyDirective
+from .foot_transforms import FootBibliographyTransform
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -56,10 +56,10 @@ def setup(app):
     app.add_config_value("bibtex_footbibliography_header", "", "html")
     app.connect("builder-inited", init_bibtex_cache)
     app.connect("source-read", init_current_id)
-    app.add_directive("footbibliography", BibliographyDirective)
-    app.add_role("footcite", CiteRole())
+    app.add_directive("footbibliography", FootBibliographyDirective)
+    app.add_role("footcite", FootCiteRole())
     app.add_node(bibliography, override=True)
-    app.add_transform(BibliographyTransform)
+    app.add_transform(FootBibliographyTransform)
 
     return {
         'env_version': 2,

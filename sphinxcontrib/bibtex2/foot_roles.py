@@ -1,5 +1,5 @@
 """
-    .. autoclass:: CiteRole
+    .. autoclass:: FootCiteRole
         :show-inheritance:
 
         .. automethod:: result_nodes
@@ -10,7 +10,7 @@ import pybtex.database
 from sphinx.roles import XRefRole
 
 
-class CiteRole(XRefRole):
+class FootCiteRole(XRefRole):
     """Class for processing the :rst:role:`footcite` role."""
 
     backend = find_plugin('pybtex.backends', 'docutils')()

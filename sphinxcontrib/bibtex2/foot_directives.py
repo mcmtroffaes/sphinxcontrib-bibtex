@@ -1,5 +1,5 @@
 """
-    .. autoclass:: BibliographyDirective
+    .. autoclass:: FootBibliographyDirective
 
         .. automethod:: run
 """
@@ -9,7 +9,7 @@ from docutils.parsers.rst import Directive
 from .foot_nodes import bibliography
 
 
-class BibliographyDirective(Directive):
+class FootBibliographyDirective(Directive):
 
     """Class for processing the :rst:dir:`footbibliography` directive.
 
@@ -20,7 +20,7 @@ class BibliographyDirective(Directive):
        Further processing of the resulting
        :class:`~sphinxcontrib.bibtex2.foot_nodes.bibliography` node is done
        by
-       :class:`~sphinxcontrib.bibtex2.foot_transforms.BibliographyTransform`.
+       :class:`~sphinxcontrib.bibtex2.foot_transforms.FootBibliographyTransform`.
     """
 
     required_arguments = 0
