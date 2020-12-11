@@ -510,7 +510,7 @@ are available here:
 Custom Bibliography Header
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-By default, the :rst:dir:`bibliography``
+By default, the :rst:dir:`bibliography`
 and :rst:dir:`footbibliography` directives
 simply insert a paragraph.
 The ``bibtex_bibliography_header``
