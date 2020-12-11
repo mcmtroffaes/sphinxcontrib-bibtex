@@ -11,7 +11,7 @@ import docutils.transforms
 import sphinx.util
 from pybtex.plugin import find_plugin
 from ..bibtex.transforms import node_text_transform, transform_url_command
-from .foot_nodes import bibliography
+from .foot_nodes import footbibliography
 from ..bibtex.bibfile import get_bibliography_entry
 
 
@@ -36,7 +36,7 @@ class FootBibliographyTransform(docutils.transforms.Transform):
         list of citations.
         """
         env = self.document.settings.env
-        for bibnode in self.document.traverse(bibliography):
+        for bibnode in self.document.traverse(footbibliography):
             id_ = bibnode['ids'][0]
             entries = [
                 get_bibliography_entry(env.bibtex_cache.bibfiles, key)

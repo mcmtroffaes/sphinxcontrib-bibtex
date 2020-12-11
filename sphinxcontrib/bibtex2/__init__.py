@@ -8,7 +8,7 @@ import docutils.frontend
 import docutils.parsers.rst
 import docutils.utils
 import sphinx.util
-from .foot_nodes import bibliography
+from .foot_nodes import footbibliography
 from .foot_roles import FootCiteRole
 from .foot_directives import FootBibliographyDirective
 from .foot_transforms import FootBibliographyTransform
@@ -58,7 +58,7 @@ def setup(app):
     app.connect("source-read", init_current_id)
     app.add_directive("footbibliography", FootBibliographyDirective)
     app.add_role("footcite", FootCiteRole())
-    app.add_node(bibliography, override=True)
+    app.add_node(footbibliography, override=True)
     app.add_transform(FootBibliographyTransform)
 
     return {

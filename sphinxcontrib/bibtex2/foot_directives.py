@@ -6,7 +6,7 @@
 
 from docutils.parsers.rst import Directive
 
-from .foot_nodes import bibliography
+from .foot_nodes import footbibliography
 
 
 class FootBibliographyDirective(Directive):
@@ -36,4 +36,4 @@ class FootBibliographyDirective(Directive):
             env.note_dependency(bibfile)
         id_ = env.bibtex_cache.foot_current_id[env.docname]
         env.bibtex_cache.new_foot_current_id(env)
-        return [bibliography('', ids=[id_])]
+        return [footbibliography('', ids=[id_])]
