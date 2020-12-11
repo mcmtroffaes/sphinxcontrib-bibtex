@@ -23,7 +23,7 @@ script:
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.8' ]]; then make html; fi"
   - "popd"
   - "pushd test"
-  - "pytest --cov=sphinxcontrib.bibtex --cov=sphinxcontrib.bibtex2"
+  - "pytest --cov=sphinxcontrib.bibtex"
   - "popd"
 after_success:
   - "pushd test"

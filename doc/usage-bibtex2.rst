@@ -1,17 +1,5 @@
-Bibtex2 Extension Usage
-=======================
-
-The bibtex2 extension is currently in an experimental state.
-You can use it but things might still break in future releases.
-The extension aims to be fully parallel safe, and aims to address
-the long standing issue of unresolved citations across documents.
-This needs a more drastic redesign, whence why it is developed
-as a separate extension.
-
-Configuration
--------------
-
-* ``bibtex_bibfiles``: a list of bib files, must be set
+Footnote Citations Usage
+========================
 
 Roles and Directives
 --------------------
@@ -48,20 +36,6 @@ Roles and Directives
 
 Advanced Features
 -----------------
-
-Bib File Encoding
-~~~~~~~~~~~~~~~~~
-
-Set the ``bibtex_encoding`` configuration value to change the bib file
-encoding. The default encoding is ``utf-8-sig``.
-
-Custom Formatting
-~~~~~~~~~~~~~~~~~
-
-Set the ``bibtex_style`` configuration value to control the pybtex
-formatting style. The default is ``alpha``. Other supported styles are
-``plain``, ``unsrt``, and ``unsrtalpha``. You can also create your own
-style (see :ref:`bibtex-custom-formatting`).
 
 Custom Footnote Paragraph Header
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

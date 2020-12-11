@@ -10,9 +10,9 @@ import docutils.nodes
 import docutils.transforms
 import sphinx.util
 from pybtex.plugin import find_plugin
-from ..bibtex.transforms import node_text_transform, transform_url_command
+from .transforms import node_text_transform, transform_url_command
 from .foot_nodes import footbibliography
-from ..bibtex.bibfile import get_bibliography_entry
+from .bibfile import get_bibliography_entry
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -32,7 +32,7 @@ class FootBibliographyTransform(docutils.transforms.Transform):
 
     def apply(self):
         """Transform each
-        :class:`~sphinxcontrib.bibtex2.foot_nodes.bibliography` node into a
+        :class:`~sphinxcontrib.bibtex.foot_nodes.bibliography` node into a
         list of citations.
         """
         env = self.document.settings.env

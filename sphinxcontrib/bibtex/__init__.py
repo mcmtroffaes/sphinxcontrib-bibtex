@@ -11,6 +11,9 @@
 import collections
 import docutils.nodes
 import json
+import docutils.frontend
+import docutils.parsers.rst
+import docutils.utils
 import sphinx.util
 from sphinx.errors import ExtensionError
 from .cache import Cache
@@ -19,6 +22,10 @@ from .nodes import bibliography
 from .roles import CiteRole
 from .directives import BibliographyDirective
 from .transforms import BibliographyTransform
+from .foot_nodes import footbibliography
+from .foot_roles import FootCiteRole
+from .foot_directives import FootBibliographyDirective
+from .foot_transforms import FootBibliographyTransform
 from oset import oset
 
 
@@ -55,6 +62,20 @@ def init_bibtex_cache(app):
     app.env.bibtex_cache.cited_previous = collections.defaultdict(oset)
     app.env.bibtex_cache.cited_previous.update({
         key: oset(value) for key, value in json_dict["cited"].items()})
+    # parse footbibliography header
+    if not hasattr(app.env, "bibtex_footbibliography_header"):
+        parser = docutils.parsers.rst.Parser()
+        settings = docutils.frontend.OptionParser(
+            components=(docutils.parsers.rst.Parser,)).get_default_values()
+        document = docutils.utils.new_document(
+            "footbibliography_header", settings)
+        parser.parse(app.config.bibtex_footbibliography_header, document)
+        app.env.bibtex_footbibliography_header = (
+            document[0] if len(document) > 0 else None)
+
+
+def init_current_id(app, docname, source):
+    app.env.bibtex_cache.new_foot_current_id(app.env)
 
 
 def purge_bibtex_cache(app, env, docname):
@@ -178,7 +199,9 @@ def setup(app):
     app.add_config_value("bibtex_default_style", "alpha", "html")
     app.add_config_value("bibtex_bibfiles", None, "html")
     app.add_config_value("bibtex_encoding", "utf-8-sig", "html")
+    app.add_config_value("bibtex_footbibliography_header", "", "html")
     app.connect("builder-inited", init_bibtex_cache)
+    app.connect("source-read", init_current_id)
     app.connect("doctree-resolved", process_citations)
     app.connect("doctree-resolved", process_citation_references)
     app.connect("env-merge-info", merge_bibtex_cache)
@@ -189,6 +212,10 @@ def setup(app):
     app.add_role("cite", CiteRole())
     app.add_node(bibliography, override=True)
     app.add_transform(BibliographyTransform)
+    app.add_directive("footbibliography", FootBibliographyDirective)
+    app.add_role("footcite", FootCiteRole())
+    app.add_node(footbibliography, override=True)
+    app.add_transform(FootBibliographyTransform)
 
     # Parallel read is not safe at the moment: in the current design,
     # the document that contains references must be read last for all
