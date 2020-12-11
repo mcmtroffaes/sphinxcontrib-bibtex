@@ -118,4 +118,6 @@ class BibliographyTransform(docutils.transforms.Transform):
                 nodes += citation
                 if bibcache.list_ == "enumerated":
                     env.bibtex_cache.enum_count[env.docname] += 1
+            if env.bibtex_bibliography_header is not None:
+                nodes = [env.bibtex_bibliography_header.deepcopy(), nodes]
             bibnode.replace_self(nodes)
