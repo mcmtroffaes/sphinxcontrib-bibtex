@@ -77,6 +77,15 @@ def init_bibtex_cache(app):
 
 
 def init_current_id(app, docname, source):
+    """Initialize current footbibliography id for *docname*.
+
+    :param app: The sphinx application.
+    :type app: :class:`sphinx.application.Sphinx`
+    :param docname: The document name.
+    :type docname: :class:`str`
+    :param source: The document source.
+    :type source: :class:`str`
+    """
     app.env.bibtex_cache.new_foot_current_id(app.env)
 
 
