@@ -42,6 +42,6 @@ Summary
 Библиография
 ************
 
-.. bibliography:: refs.bib
+.. bibliography::
    :labelprefix: C
    :filter: docname in docnames and key != "fuhrmans_molecular_2012"

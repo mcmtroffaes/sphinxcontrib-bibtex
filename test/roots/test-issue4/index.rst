@@ -1,4 +1,4 @@
 :cite:`Test`
 
-.. bibliography:: test.bib
+.. bibliography::
    :all:

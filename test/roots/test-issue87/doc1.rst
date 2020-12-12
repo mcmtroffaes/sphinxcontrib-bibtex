@@ -3,6 +3,6 @@ doc1
 
 :cite:`tag1-2009:mandel`
 
-.. bibliography:: test.bib
+.. bibliography::
    :labelprefix: B
    :keyprefix: tag1-

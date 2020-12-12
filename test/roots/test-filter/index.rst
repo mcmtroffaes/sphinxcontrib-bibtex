@@ -1,4 +1,4 @@
-.. bibliography:: test.bib
+.. bibliography::
    :list: bullet
    :filter: author % "Second" and type == "misc"
 

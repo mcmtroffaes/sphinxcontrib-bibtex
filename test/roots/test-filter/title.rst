@@ -1,6 +1,6 @@
 Title
 -----
 
-.. bibliography:: test.bib
+.. bibliography::
    :list: bullet
    :filter: title and title % "jakka"

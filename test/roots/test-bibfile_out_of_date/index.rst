@@ -3,6 +3,6 @@
 :cite:`test3`
 :cite:`test4`
 
-.. bibliography:: test.bib
+.. bibliography::
    :style: plain
    :all:

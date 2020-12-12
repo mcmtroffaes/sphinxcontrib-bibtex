@@ -1,2 +1,2 @@
-.. bibliography:: test.bib
+.. bibliography::
    :thisisintentionallyinvalid:

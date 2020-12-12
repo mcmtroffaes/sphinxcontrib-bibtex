@@ -19,6 +19,27 @@ In bib files, LaTeX control characters are automatically converted
 to unicode characters (for instance, to convert ``\'e`` into ``é``).
 Be sure to write ``\%`` when you intend to format a percent sign.
 
+You can change the bibliography style,
+using the ``bibtex_default_style`` variable in your ``conf.py``.
+If none is specified, the ``alpha`` style is used.
+Other supported styles are ``plain``, ``unsrt``, and ``unsrtalpha``.
+You can also create your own style (see :ref:`bibtex-custom-formatting`).
+For example:
+
+.. code-block:: python
+
+   bibtex_default_style = 'unsrt'
+
+You can set the encoding of the bibliography files, using the
+``bibtex_encoding`` variable in your ``conf.py``.
+If no encoding is specified, ``utf-8-sig`` is assumed.
+For example:
+
+.. code-block:: python
+
+   bibtex_encoding = 'latin'
+
+
 Running Sphinx
 --------------
 
@@ -90,10 +111,7 @@ Roles and Directives
         \newblock Princeton University Press, 1987.
       \end{thebibliography}
 
-   You can also pick a bibliography style, using the ``style`` option.
-   The ``alpha`` style is the default.
-   Other supported styles are ``plain``, ``unsrt``, and ``unsrtalpha``.
-   You can also create your own style (see :ref:`bibtex-custom-formatting`).
+   You can also override the default bibliography style:
 
    .. code-block:: rest
 
@@ -155,20 +173,6 @@ Roles and Directives
 
 Advanced Features
 -----------------
-
-Bib File Encoding
-~~~~~~~~~~~~~~~~~
-
-.. versionadded:: 2.0.0
-
-You can also set the encoding of the bibliography files, using the
-``bibtex_encoding`` configuration variable in your ``conf.py``.
-
-.. code-block:: python
-
-   extensions = ['sphinxcontrib.bibtex']
-   bibtex_bibfiles = ['refs.bib']
-   bibtex_encoding = 'latin'
 
 Splitting Bibliographies Per Bib File
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -460,7 +464,7 @@ Custom Formatting, Sorting, and Labelling
 
 :mod:`pybtex` provides a very powerful way to create and register new
 styles, using setuptools entry points,
-as documented here: http://docs.pybtex.org/api/plugins.html
+as documented here: https://docs.pybtex.org/api/plugins.html
 
 Simply add the following code to your ``conf.py``:
 
@@ -482,10 +486,9 @@ Simply add the following code to your ``conf.py``:
 
 Now ``mystyle`` will be available to you as a formatting style:
 
-.. code-block:: rest
+.. code-block:: python
 
-   .. bibliography::
-      :style: mystyle
+   bibtex_default_style = 'mystyle'
 
 An minimal example is available here:
 https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-custom_style
@@ -504,8 +507,8 @@ and sorting plugins
 A few minimal examples demonstrating how to create a custom label styles
 are available here:
 
-* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/issue77
-* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/custom_labels
+* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-issue77
+* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-custom_labels
 
 Custom Bibliography Header
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -515,7 +518,7 @@ and :rst:dir:`footbibliography` directives
 simply insert a paragraph.
 The ``bibtex_bibliography_header``
 and ``bibtex_footbibliography_header``
-configuration values can be set
+configuration variables can be set
 to add a header to this. For example, in your ``conf.py`` you could
 have:
 

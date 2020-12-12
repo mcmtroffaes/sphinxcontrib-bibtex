@@ -1,4 +1,4 @@
-.. bibliography:: test.bib
+.. bibliography::
    :all:
    :cited:
    :notcited:

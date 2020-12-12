@@ -1,6 +1,6 @@
 Key
 ---
 
-.. bibliography:: test.bib
+.. bibliography::
    :list: bullet
    :filter: key == "third"

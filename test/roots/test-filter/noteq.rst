@@ -1,6 +1,6 @@
 NotEq
 -----
 
-.. bibliography:: test.bib
+.. bibliography::
    :list: bullet
    :filter: year != "2011"

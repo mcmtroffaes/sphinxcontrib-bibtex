@@ -1,1 +1,1 @@
-.. bibliography:: unknown.bib
+.. bibliography::

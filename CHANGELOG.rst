@@ -1,5 +1,5 @@
-2.0.0 (in development)
-----------------------
+2.0.0 (12 December 2020)
+------------------------
 
 * There is a new ``footcite`` role and a new ``footbibliography``
   directive, to allow easy and simple local (per document)
@@ -11,8 +11,8 @@
 
 * **BACKWARD INCOMPATIBLE**
   To enable parallel builds, a new mandatory
-  config setting ``bibtex_bibfiles`` has been added. In this file,
-  you must specify all bib files used throughout the project,
+  config setting ``bibtex_bibfiles`` has been added. This setting
+  specifies all bib files used throughout the project,
   relative to the source folder.
 
 * **BACKWARD INCOMPATIBLE**
@@ -24,8 +24,8 @@
   can be configured via the ``bibtex_bibliography_header`` and
   ``bibtex_footbibliography_header`` config setting.
 
-* You no longer need to specify the bib files in the
-  ``bibliography`` directive, but if you do, citations will
+* The ``bibliography`` directive no longer requires the bib files
+  to be specified as an argument. However, if you do, citations will
   be constrained to those bib files.
 
 * Support newlines/whitespace around cite keys when multiple keys are

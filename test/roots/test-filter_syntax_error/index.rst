@@ -1,26 +1,26 @@
-.. bibliography:: test.bib
+.. bibliography::
    :filter: $
 
-.. bibliography:: test.bib
+.. bibliography::
    :filter: yield author
 
-.. bibliography:: test.bib
+.. bibliography::
    :filter: author is title
 
-.. bibliography:: test.bib
+.. bibliography::
    :filter: False % title
 
-.. bibliography:: test.bib
+.. bibliography::
    :filter: title % False
 
-.. bibliography:: test.bib
+.. bibliography::
    :filter: ~title
 
-.. bibliography:: test.bib
+.. bibliography::
    :filter: "2000" <= year <= "2005"
 
-.. bibliography:: test.bib
+.. bibliography::
    :filter: author + title
 
-.. bibliography:: test.bib
+.. bibliography::
    :filter: author; title

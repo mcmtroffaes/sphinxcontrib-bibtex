@@ -51,6 +51,6 @@ Atomistic Monte-Carlo experiments:
 Bibliography
 ************
 
-.. bibliography:: refs.bib
+.. bibliography::
    :labelprefix: A
    :filter: docname in docnames

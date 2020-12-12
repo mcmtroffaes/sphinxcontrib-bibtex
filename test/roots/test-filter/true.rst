@@ -1,6 +1,6 @@
 True
 ----
 
-.. bibliography:: test.bib
+.. bibliography::
    :list: bullet
    :filter: True

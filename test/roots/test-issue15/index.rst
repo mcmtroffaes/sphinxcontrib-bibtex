@@ -1,5 +1,5 @@
 :cite:`first`
 :cite:`second`
 
-.. bibliography:: test.bib
+.. bibliography::
    :style: unsrt

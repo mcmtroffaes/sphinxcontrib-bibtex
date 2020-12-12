@@ -144,7 +144,7 @@ class _FilterVisitor(ast.NodeVisitor):
 
     # NameConstant is Python 3.4 only
     def visit_NameConstant(self, node):
-        return node.value
+        return node.value  # pragma: no cover
 
     # Constant is Python 3.6+ only
     # Since 3.8 Num, Str, Bytes, NameConstant and Ellipsis are just Constant
@@ -153,7 +153,7 @@ class _FilterVisitor(ast.NodeVisitor):
 
     # Not used on 3.8+
     def visit_Str(self, node):
-        return node.s
+        return node.s  # pragma: no cover
 
     def generic_visit(self, node):
         _raise_invalid_node(node)
