@@ -27,7 +27,7 @@ class FootBibliographyTransform(docutils.transforms.Transform):
     # transform must be applied before references are resolved
     default_priority = 10
     """Priority of the transform. See
-    http://docutils.sourceforge.net/docs/ref/transforms.html
+    https://docutils.sourceforge.io/docs/ref/transforms.html
     """
 
     def apply(self):

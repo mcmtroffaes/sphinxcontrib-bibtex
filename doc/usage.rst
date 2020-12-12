@@ -460,7 +460,7 @@ Custom Formatting, Sorting, and Labelling
 
 :mod:`pybtex` provides a very powerful way to create and register new
 styles, using setuptools entry points,
-as documented here: http://docs.pybtex.org/api/plugins.html
+as documented here: https://docs.pybtex.org/api/plugins.html
 
 Simply add the following code to your ``conf.py``:
 
@@ -504,8 +504,8 @@ and sorting plugins
 A few minimal examples demonstrating how to create a custom label styles
 are available here:
 
-* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/issue77
-* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/custom_labels
+* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-issue77
+* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-custom_labels
 
 Custom Bibliography Header
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
