@@ -3,6 +3,6 @@ doc11
 
 :cite:`Sh:1`
 
-.. bibliography:: ../listb.bib
+.. bibliography::
    :list: enumerated
    :filter: title % "Godel case"

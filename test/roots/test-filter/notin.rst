@@ -1,6 +1,6 @@
 Not In
 ------
 
-.. bibliography:: test.bib
+.. bibliography::
    :list: bullet
    :filter: "bla" not in docnames

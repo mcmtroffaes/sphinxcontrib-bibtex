@@ -41,6 +41,6 @@ possible.
 Bibliography
 ============
 
-.. bibliography:: refs.bib
+.. bibliography::
    :labelprefix: B
    :filter: docname in docnames

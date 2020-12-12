@@ -1,3 +1,3 @@
-.. bibliography:: test.bib
+.. bibliography::
    :list: bullet
    :all:

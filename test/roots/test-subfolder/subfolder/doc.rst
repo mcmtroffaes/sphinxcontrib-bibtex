@@ -3,5 +3,5 @@ Doc1
 
 :cite:`Test`
 
-.. bibliography:: ../bibfiles/test.bib
+.. bibliography::
    :style: plain

@@ -1,6 +1,6 @@
 In
 --
 
-.. bibliography:: test.bib
+.. bibliography::
    :list: bullet
    :filter: "bla" in docnames

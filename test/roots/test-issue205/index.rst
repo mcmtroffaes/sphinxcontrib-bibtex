@@ -1,5 +1,5 @@
 :cite:`first,
 second`
 
-.. bibliography:: test.bib
+.. bibliography::
    :style: alpha

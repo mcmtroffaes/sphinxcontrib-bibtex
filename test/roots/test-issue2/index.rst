@@ -6,5 +6,5 @@ Contents
    adoc1
    adoc2
 
-.. bibliography:: test.bib
+.. bibliography::
    :style: plain
