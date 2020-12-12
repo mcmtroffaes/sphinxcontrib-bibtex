@@ -1,5 +1,5 @@
-2.0.0 (in development)
-----------------------
+2.0.0 (12 December 2020)
+------------------------
 
 * There is a new ``footcite`` role and a new ``footbibliography``
   directive, to allow easy and simple local (per document)
