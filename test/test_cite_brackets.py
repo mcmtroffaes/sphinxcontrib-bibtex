@@ -6,7 +6,6 @@
     Test custom cite brackets.
 """
 
-import re
 import pytest
 
 
