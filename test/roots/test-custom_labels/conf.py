@@ -6,6 +6,7 @@ from pybtex.plugin import register_plugin
 extensions = ['sphinxcontrib.bibtex']
 exclude_patterns = ['_build']
 bibtex_bibfiles = ['test.bib']
+bibtex_default_style = 'mystyle'
 
 
 # a simple label style which uses the bibtex keys for labels

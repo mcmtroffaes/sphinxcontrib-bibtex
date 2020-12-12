@@ -486,10 +486,9 @@ Simply add the following code to your ``conf.py``:
 
 Now ``mystyle`` will be available to you as a formatting style:
 
-.. code-block:: rest
+.. code-block:: python
 
-   .. bibliography::
-      :style: mystyle
+   bibtex_default_style = 'mystyle'
 
 An minimal example is available here:
 https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-custom_style

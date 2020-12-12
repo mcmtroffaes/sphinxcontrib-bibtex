@@ -1,4 +1,3 @@
-.. bibliography:: test.bib
-   :style: nowebref
+.. bibliography::
    :all:
    :list: bullet
