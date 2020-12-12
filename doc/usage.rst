@@ -527,8 +527,7 @@ have:
    bibtex_bibliography_header = ".. rubric:: References"
    bibtex_footbibliography_header = bibtex_bibliography_header
 
-will ensure that every bibliography will have a
-rubric.
+This adds a rubric title to every bibliography.
 
 Known Issues and Workarounds
 ----------------------------
