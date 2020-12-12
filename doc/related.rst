@@ -13,7 +13,7 @@ If you know of any other, leave a message on the issue tracker.
   Includes a Sphinx extension similar to sphinxcontrib-bibtex,
   as well as an assorted collection of bibtex tools.
   This is a fork of Dylan W. Schwilk and Alan G. Isaac's
-  `bibstuff <https://github.com/dschwilk/bibstuff>`_.
+  `dschwilk/bibstuff <https://github.com/dschwilk/bibstuff>`_.
 
 * Weston Nielson's
   sphinx-natbib.
