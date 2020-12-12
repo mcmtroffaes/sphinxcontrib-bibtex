@@ -19,6 +19,7 @@ The extension is inspired by Matthew Brett's
 `bibstuff.sphinxext.bibref <https://github.com/matthew-brett/bibstuff>`_.
 
 * Download: https://pypi.org/project/sphinxcontrib-bibtex/#files
+
 * Documentation: https://sphinxcontrib-bibtex.readthedocs.io/en/latest/
 
 * Development: https://github.com/mcmtroffaes/sphinxcontrib-bibtex/
