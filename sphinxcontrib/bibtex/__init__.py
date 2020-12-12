@@ -151,7 +151,10 @@ def process_citation_references(app, doctree, docname):
             text = node[0].astext()
             key = text[1:-1]
             label = app.env.bibtex_cache.get_label_from_key(key)
-            node[0] = docutils.nodes.Text('[' + label + ']')
+            node[0] = docutils.nodes.Text(
+                app.config.bibtex_cite_bracket_left
+                + label
+                + app.config.bibtex_cite_bracket_right)
 
 
 def check_duplicate_labels(app, env):
@@ -214,6 +217,8 @@ def setup(app):
     app.add_config_value("bibtex_encoding", "utf-8-sig", "html")
     app.add_config_value("bibtex_bibliography_header", "", "html")
     app.add_config_value("bibtex_footbibliography_header", "", "html")
+    app.add_config_value("bibtex_cite_bracket_left", "[", "html")
+    app.add_config_value("bibtex_cite_bracket_right", "]", "html")
     app.connect("builder-inited", init_bibtex_cache)
     app.connect("env-merge-info", merge_bibtex_cache)
     app.connect("env-purge-doc", purge_bibtex_cache)
