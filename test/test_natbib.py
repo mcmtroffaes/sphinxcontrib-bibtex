@@ -41,4 +41,4 @@ def test_natbib_norefs(app, warning):
     warning.seek(0)
     warnings = warning.readlines()
     assert len(warnings) == 1
-    assert "WARNING: no `refs` directive found; citations will have dead links" in warnings[0]
+    assert "WARNING: no `refs` directive found" in warnings[0]
