@@ -1,7 +1,6 @@
 doc0
 ----
 
-Using ``cite:t:``:
 :cite:t:`1657:huygens`
 :cite:t:`joyce:1999`
 :cite:t:`2011:troffaes:isipta:natext`
@@ -14,5 +13,6 @@ Using ``cite:t:``:
 :cite:t:`2005:cormack`
 :cite:t:`RSI`
 :cite:t:`Kristensen83`
-:cite:t:`2004:seidenfeld::rubinesque`
 :cite:t:`Astrom2005`
+
+Non-existing key :cite:t:`XXX`.

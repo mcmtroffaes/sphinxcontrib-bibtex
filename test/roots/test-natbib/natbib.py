@@ -6,6 +6,7 @@ from sphinx import addnodes
 from sphinx.domains import Domain, ObjType
 from sphinx.locale import _
 from sphinx.roles import XRefRole
+from sphinx.util import logging
 
 from pybtex.database.input import bibtex
 import pybtex.style.names.plain
@@ -15,6 +16,8 @@ import pybtex.backends.plaintext
 from oset import oset
 import re
 
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_CONF = {
     'file': '',
@@ -278,9 +281,9 @@ class CitationXRefRole(XRefRole):
             keys, pre, post = parse_keys(text)
             for key in keys:
                 if citations.get(key) is None:
-                    env.warn(env.docname,
-                             "cite-key `%s` not found in bibtex file" % key,
-                             lineno)
+                    logger.warning(
+                        "cite-key `%s` not found in bibtex file" % key,
+                        location=(env.docname, lineno))
                     continue
                 env.domaindata['cite']['keys'].add(key)
                 env.domaindata['cite']['keys'] = sort_references(
@@ -503,10 +506,9 @@ class CitationDomain(Domain):
 
         refdoc = env.domaindata['cite'].get('refdoc')
         if not refdoc:
-            env.warn(
-                fromdocname,
+            logger.warning(
                 'no `refs` directive found; citations will have dead links',
-                node.line)
+                location=node)
             refuri = ''
         else:
             refuri = builder.get_relative_uri(fromdocname, refdoc)
