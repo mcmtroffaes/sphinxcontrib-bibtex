@@ -20,8 +20,6 @@ Some citations
 :cite:t:`Astrom2005`
 :cite:t:`noauthor`.
 
-Non-existing key :cite:t:`XXX`.
-
 Multiple keys in text were analysed by
 :cite:t:`1657:huygens,joyce:1999`.
 
