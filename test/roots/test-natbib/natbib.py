@@ -1,18 +1,18 @@
 from docutils import nodes
 from docutils.parsers.rst import directives
+from docutils.parsers.rst import Directive
 
 from sphinx import addnodes
 from sphinx.domains import Domain, ObjType
-from sphinx.locale import l_
+from sphinx.locale import _
 from sphinx.roles import XRefRole
-from sphinx.util.compat import Directive
 
 from pybtex.database.input import bibtex
 import pybtex.style.names.plain
 import pybtex.style.names.lastfirst
 import pybtex.backends.plaintext
 
-import collections
+from oset import oset
 import re
 
 
@@ -30,74 +30,6 @@ ROLES = [
     't', 'ts', 'alt', 'alts',
     'author', 'authors', 'year', 'yearpar', 'text', 'title'
 ]
-
-KEY, PREV, NEXT = range(3)
-
-
-class OrderedSet(collections.MutableSet):
-    """
-    From: http://code.activestate.com/recipes/576694/
-    """
-
-    def __init__(self, iterable=None):
-        self.end = end = []
-        end += [None, end, end]  # sentinel node for doubly linked list
-        self.map = {}  # key --> [key, prev, next]
-        if iterable is not None:
-            self |= iterable
-
-    def __len__(self):
-        return len(self.map)
-
-    def __contains__(self, key):
-        return key in self.map
-
-    def add(self, key):
-        if key not in self.map:
-            end = self.end
-            curr = end[PREV]
-            curr[NEXT] = end[PREV] = self.map[key] = [key, curr, end]
-
-    def discard(self, key):
-        if key in self.map:
-            key, prev, next = self.map.pop(key)
-            prev[NEXT] = next
-            next[PREV] = prev
-
-    def __iter__(self):
-        end = self.end
-        curr = end[NEXT]
-        while curr is not end:
-            yield curr[KEY]
-            curr = curr[NEXT]
-
-    def __reversed__(self):
-        end = self.end
-        curr = end[PREV]
-        while curr is not end:
-            yield curr[KEY]
-            curr = curr[PREV]
-
-    def pop(self, last=True):
-        if not self:
-            raise KeyError('set is empty')
-        key = next(reversed(self)) if last else next(iter(self))
-        self.discard(key)
-        return key
-
-    def __repr__(self):
-        if not self:
-            return '%s()' % (self.__class__.__name__,)
-        return '%s(%r)' % (self.__class__.__name__, list(self))
-
-    def __eq__(self, other):
-        if isinstance(other, OrderedSet):
-            return len(self) == len(other) and list(self) == list(other)
-        return set(self) == set(other)
-
-    def __del__(self):
-        self.clear()  # remove circular references
-
 
 SUBSUP_RE = re.compile(r'([\s\S^\^\_]*)([\^\_]){?([\S\s^}]*)}?')
 
@@ -150,14 +82,15 @@ def parse_keys(rawtext):
 class Citations(object):
     def __init__(self, env):
         self.conf = DEFAULT_CONF.copy()
-        self.conf.update(env.config.natbib)
+        self.conf.update(env.app.config.natbib)
 
         self.file_name = None
         self.parser = None
         self.data = None
         self.ref_map = {}
 
-        file_name = self.conf.get('file')
+        file_name = env.relfn2path(self.conf.get('file'),
+                                   env.app.config.master_doc)[1]
         if file_name:
             self.file_name = file_name
             self.parser = bibtex.Parser()
@@ -198,11 +131,11 @@ class CitationTransform(object):
         if len(authors) == 0:
             author = ''
         elif len(authors) > 2 and not all_authors:
-            author = u'%s et al.' % authors[0].last()[0]
+            author = u'%s et al.' % authors[0].last_names[0]
         else:
             author = u"%s and %s" % (
-                u', '.join([a.last()[0] for a in authors[:-1]]),
-                authors[-1].last()[0])
+                u', '.join([a.last_names[0] for a in authors[:-1]]),
+                authors[-1].last_names[0])
         author = author.replace('{', '')
         author = author.replace('}', '')
         return author
@@ -225,12 +158,12 @@ class CitationTransform(object):
             node = nodes.inline('', '', classes=['citation'])
 
         if self.pre:
-            pre = u"%s " % self.pre.decode('latex')
+            pre = u"%s " % self.pre
             node += nodes.inline(pre, pre, classes=['pre'])
 
         for i, ref in enumerate(self.refs):
             authors = ref.persons.get('author', [])
-            author_text = self.get_author(authors, all_auths).decode('latex')
+            author_text = self.get_author(authors, all_auths)
             lrefuri = refuri + '#citation-' + nodes.make_id(ref.key)
 
             if 0 < i < len(self.refs):
@@ -286,7 +219,7 @@ class CitationTransform(object):
                     node += nodes.inline(bc, bc)
 
         if self.post:
-            post = u", %s" % self.post.decode('latex')
+            post = u", %s" % self.post
             node += nodes.inline(post, post, classes=['post'])
 
         if (cmd.startswith('p') or cmd == 'yearpar') and style != 'super':
@@ -310,7 +243,7 @@ def sort_references(refs, citations):
         return titlesort.upper()
 
     sortedrefs = sorted(refs, key=sortkey)
-    return OrderedSet(sortedrefs)
+    return oset(sortedrefs)
 
 
 class CitationXRefRole(XRefRole):
@@ -427,7 +360,6 @@ class CitationReferencesDirective(Directive):
                 author, abbr=True).format().render(plaintext)
             authortext = authortext.replace('{', '')
             authortext = authortext.replace('}', '')
-            authortext = authortext.decode('latex')
             text = authortext
 
             text = text.strip()
@@ -446,7 +378,6 @@ class CitationReferencesDirective(Directive):
         if title is None:
             title = ref.fields.get('key')
         if title:
-            title = title.decode('latex')
             title = title.replace('{', '')
             title = title.replace('}', '')
             node += nodes.inline(title, title, classes=['title'])
@@ -455,7 +386,6 @@ class CitationReferencesDirective(Directive):
         # @phdthesis
         if ref.type == 'phdthesis':
             school = ref.fields.get('school')
-            school = school.decode('latex')
             text = 'PhD Thesis, %s, ' % school
             node += nodes.inline(text, text)
 
@@ -464,7 +394,6 @@ class CitationReferencesDirective(Directive):
         if not pub:
             pub = ref.fields.get('booktitle')
         if pub:
-            pub = pub.decode('latex')
             pub = pub.replace('{', '')
             pub = pub.replace('}', '')
             node += nodes.emphasis(pub, pub, classes=['publication'])
@@ -485,17 +414,14 @@ class CitationReferencesDirective(Directive):
                     node += nodes.inline(', ', ', ')
 
         if vol:
-            vol = vol.decode('latex')
             node += nodes.inline(vol, vol, classes=['volume'])
             node += nodes.inline(':', ':')
 
         if pages:
-            pages = pages.decode('latex')
             node += nodes.inline(pages, pages, classes=['pages'])
             node += nodes.inline(', ', ', ')
 
         if year:
-            year = year.decode('latex')
             node += nodes.inline(year, year, classes=['year'])
             node += nodes.inline('.', '.')
 
@@ -548,7 +474,7 @@ class CitationDomain(Domain):
     label = "citation"
 
     object_types = {
-        'citation': ObjType(l_('citation'), *ROLES, searchprio=-1),
+        'citation': ObjType(_('citation'), *ROLES, searchprio=-1),
     }
 
     directives = {
@@ -558,7 +484,7 @@ class CitationDomain(Domain):
     roles = dict([(r, CitationXRefRole()) for r in ROLES])
 
     initial_data = {
-        'keys': OrderedSet(),  # Holds cite-keys in order of reference
+        'keys': oset(),  # Holds cite-keys in order of reference
         'conf': DEFAULT_CONF,
         'refdocs': {}
     }
@@ -567,7 +493,7 @@ class CitationDomain(Domain):
         super(CitationDomain, self).__init__(env)
 
         # Update conf
-        env.domaindata['cite']['conf'].update(env.config.natbib)
+        env.domaindata['cite']['conf'].update(env.app.config.natbib)
 
         # TODO: warn if citations can't parse bibtex file
         self.citations = Citations(env)
