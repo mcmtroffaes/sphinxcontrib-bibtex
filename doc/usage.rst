@@ -575,22 +575,23 @@ your ``conf.py``:
     '''
    }
 
-Mismatch Between Output of HTML and LaTeX Backends
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Mismatch Between Output of HTML/Text and LaTeX Backends
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Sphinx's LaTeX writer currently collects all citations together,
 and puts them on a separate page, with a separate title,
-whereas the html writer puts citations
+whereas the html and text writers puts citations
 at the location where they are defined.
 This issue will occur also if you use regular citations in Sphinx:
 it has nothing to do with sphinxcontrib-bibtex per se.
 
 To get a closer match between the two outputs,
-you can tell Sphinx to generate a rubric title only for html:
+you can tell Sphinx to generate a rubric title only for html or
+text outputs:
 
 .. code-block:: rest
 
-   .. only:: html
+   .. only:: html or text
 
       .. rubric:: References
 
