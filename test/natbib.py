@@ -37,14 +37,6 @@ ROLES = [
 SUBSUP_RE = re.compile(r'([\s\S^\^\_]*)([\^\_]){?([\S\s^}]*)}?')
 
 
-def latex_to_nodes(text):
-    """
-    Convert '_{}' and '^{}' text to node representation.
-    TODO: This doesn't work yet
-    """
-    return nodes.inline(text, text)
-
-
 def parse_keys(rawtext):
     # Get the keys and any pre- and post-ciation text
     # Spaces nor commas are allowed in cite keys, so we split on commas
@@ -368,7 +360,7 @@ class CitationReferencesDirective(Directive):
             text = authortext
 
             text = text.strip()
-            auth_node = latex_to_nodes(text)
+            auth_node = nodes.inline(text, text)
             auth_node['classes'].append('author')
             node += auth_node
 
