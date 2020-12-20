@@ -1,9 +1,9 @@
-from docutils import nodes, transforms
+from docutils import nodes
 from docutils.parsers.rst import directives
 
 from sphinx import addnodes
 from sphinx.domains import Domain, ObjType
-from sphinx.locale import l_, _
+from sphinx.locale import l_
 from sphinx.roles import XRefRole
 from sphinx.util.compat import Directive
 
@@ -13,28 +13,8 @@ import pybtex.style.names.lastfirst
 import pybtex.backends.plaintext
 
 import collections
-import latex_codec
-import os
 import re
 
-# fix pybtex bug in some versions
-try:
-    import pybtex.utils
-
-
-    def _fixed_pybtex_get(self, item, default=None):
-        """A case insensitive get."""
-        try:
-            return self[self._keys[item.lower()]]
-        except KeyError:
-            return default
-
-
-    pybtex.utils.CaseInsensitiveDict.get = _fixed_pybtex_get
-except:
-    pass
-
-latex_codec.register()
 
 DEFAULT_CONF = {
     'file': '',
@@ -128,16 +108,6 @@ def latex_to_nodes(text):
     TODO: This doesn't work yet
     """
     return nodes.inline(text, text)
-    m = SUBSUP_RE.findall(text)
-    if m:
-        n += latex_to_nodes(m[0][0])
-        if m[0][1] == '^':
-            n += nodes.superscript(latex_to_nodes(m[0][2]))
-        elif m[0][1] == '_':
-            n += nodes.subscript(latex_to_nodes(m[0][2]))
-    else:
-        n = nodes.inline(text, text)
-    return n
 
 
 def parse_keys(rawtext):
@@ -199,8 +169,8 @@ class Citations(object):
 
 class CitationTransform(object):
     """
-    This class is meant to be applied to a ``docutils.nodes.pending`` node when a
-    ``cite`` role is encountered.  Later (during the resolve_xref stage) this
+    This class is meant to be applied to a ``docutils.nodes.pending`` node when
+    a ``cite`` role is encountered.  Later (during the resolve_xref stage) this
     class can be used to generate the proper citation reference nodes for
     insertion into the actual document.
     """
@@ -230,16 +200,17 @@ class CitationTransform(object):
         elif len(authors) > 2 and not all_authors:
             author = u'%s et al.' % authors[0].last()[0]
         else:
-            author = u"%s and %s" % (u', '.join([a.last()[0] for a in authors[:-1]]),
-                                     authors[-1].last()[0])
+            author = u"%s and %s" % (
+                u', '.join([a.last()[0] for a in authors[:-1]]),
+                authors[-1].last()[0])
         author = author.replace('{', '')
         author = author.replace('}', '')
         return author
 
     def cite(self, cmd, refuri, global_keys=None):
         """
-        Return a docutils Node consisting of properly formatted citations children
-        nodes.
+        Return a docutils Node consisting of properly formatted citations
+        children nodes.
         """
         if global_keys is not None:
             self.global_keys = global_keys
@@ -247,9 +218,6 @@ class CitationTransform(object):
         sep = u'%s ' % self.config['separator']
         style = self.config['style']
         all_auths = (cmd.endswith('s'))
-        alt = (cmd.startswith('alt') or \
-               (cmd.startswith('alp')) or \
-               (style == 'citeyear'))
 
         if (cmd.startswith('p') or cmd == 'yearpar') and style != 'super':
             node = nodes.inline(bo, bo, classes=['citation'])
@@ -265,7 +233,7 @@ class CitationTransform(object):
             author_text = self.get_author(authors, all_auths).decode('latex')
             lrefuri = refuri + '#citation-' + nodes.make_id(ref.key)
 
-            if i > 0 and i < len(self.refs):
+            if 0 < i < len(self.refs):
                 if style == "authoryear":
                     node += nodes.inline(sep, sep)
                 else:
@@ -280,9 +248,12 @@ class CitationTransform(object):
                     title = ref.fields.get('key', '')
                 author_text = title
 
-            if (style == "authoryear" and (cmd.startswith('p') or cmd.startswith('alp'))) or \
-                    (cmd.startswith('t') or cmd.startswith('alt') or cmd.startswith('author')):
-                node += nodes.reference(author_text, author_text, internal=True, refuri=lrefuri)
+            if (style == "authoryear" and (cmd.startswith('p') or
+                                           cmd.startswith('alp'))
+                ) or (cmd.startswith('t') or cmd.startswith('alt') or
+                      cmd.startswith('author')):
+                node += nodes.reference(author_text, author_text,
+                                        internal=True, refuri=lrefuri)
 
                 if cmd.startswith('p') or cmd.startswith('alp'):
                     node += nodes.inline(', ', ', ')
@@ -300,7 +271,8 @@ class CitationTransform(object):
                 else:
                     num = ref.fields.get('year')
 
-                refnode = nodes.reference(str(num), str(num), internal=True, refuri=lrefuri)
+                refnode = nodes.reference(str(num), str(num),
+                                          internal=True, refuri=lrefuri)
 
                 if cmd.startswith('t') and style != 'super':
                     node += nodes.inline(bo, bo)
@@ -327,7 +299,7 @@ def sort_references(refs, citations):
     def sortkey(key):
         # sort by author last names, but if no author, sort by title
         citation = citations.get(key)
-        authorsort = u''.join(map(unicode, citation.persons.get('author', '')))
+        authorsort = u''.join(map(str, citation.persons.get('author', '')))
         if len(authorsort) > 0:
             authorsort = authorsort.replace('{', '')
             authorsort = authorsort.replace('}', '')
@@ -342,7 +314,7 @@ def sort_references(refs, citations):
 
 
 class CitationXRefRole(XRefRole):
-    def __call__(self, typ, rawtext, text, lineno, inliner, options={}, \
+    def __call__(self, typ, rawtext, text, lineno, inliner, options={},
                  content=[]):
         """
         When a ``cite`` role is encountered, we replace it with a
@@ -350,8 +322,8 @@ class CitationXRefRole(XRefRole):
         generating the proper citation reference representation during the
         resolve_xref phase.
         """
-        rnodes = super(CitationXRefRole, self).__call__(typ, rawtext, text, lineno,
-                                                        inliner, options, content)
+        rnodes = super(CitationXRefRole, self).__call__(
+            typ, rawtext, text, lineno, inliner, options, content)
         rootnode = rnodes[0][0]
 
         env = inliner.document.settings.env
@@ -360,20 +332,26 @@ class CitationXRefRole(XRefRole):
         # Get the config at this point in the document
         config = {}
         for opt in ['style', 'brackets', 'separator', 'sort', 'sort_compress']:
-            config[opt] = env.temp_data.get("cite_%s" % opt, env.domaindata['cite']['conf'].get(opt, DEFAULT_CONF[opt]))
+            config[opt] = env.temp_data.get(
+                "cite_%s" % opt,
+                env.domaindata['cite']['conf'].get(opt, DEFAULT_CONF[opt]))
 
         if typ == "cite:text":
-            # A ``text`` citation is unique because it doesn't reference a cite-key
+            # A ``text`` citation is unique because it doesn't reference a
+            # cite-key
             keys = []
             pre, post = text, ''
         else:
             keys, pre, post = parse_keys(text)
             for key in keys:
                 if citations.get(key) is None:
-                    env.warn(env.docname, "cite-key `%s` not found in bibtex file" % key, lineno)
+                    env.warn(env.docname,
+                             "cite-key `%s` not found in bibtex file" % key,
+                             lineno)
                     continue
                 env.domaindata['cite']['keys'].add(key)
-                env.domaindata['cite']['keys'] = sort_references(env.domaindata['cite']['keys'], citations)
+                env.domaindata['cite']['keys'] = sort_references(
+                    env.domaindata['cite']['keys'], citations)
 
         data = {'keys': keys,
                 'pre': pre,
@@ -409,11 +387,12 @@ class CitationConfDirective(Directive):
         if self.arguments:
             env.temp_data['cite_style'] = self.arguments[0]
         else:
-            env.temp_data['cite_style'] = self.options.get('style', DEFAULT_CONF['style'])
+            env.temp_data['cite_style'] = self.options.get(
+                'style', DEFAULT_CONF['style'])
 
         try:
             self.options.pop('style')
-        except:
+        except KeyError:
             pass
 
         for k, v in self.options.items():
@@ -444,7 +423,8 @@ class CitationReferencesDirective(Directive):
         # Authors
         authors = ref.persons.get('author', [])
         for i, author in enumerate(authors):
-            authortext = namestyler.format(author, abbr=True).format().render(plaintext)
+            authortext = namestyler.format(
+                author, abbr=True).format().render(plaintext)
             authortext = authortext.replace('{', '')
             authortext = authortext.replace('}', '')
             authortext = authortext.decode('latex')
@@ -496,7 +476,7 @@ class CitationReferencesDirective(Directive):
 
         if pub is None:
             howpub = ref.fields.get('howpublished')
-            if howpub is not None and howpub.startswith('\url{'):
+            if howpub is not None and howpub.startswith('\\url{'):
                 url = howpub[5:-1]
                 refnode = nodes.reference('', '', internal=False, refuri=url)
                 refnode += nodes.Text(url, url)
@@ -555,7 +535,8 @@ class CitationReferencesDirective(Directive):
         node = nodes.table('',
                            table_spec_node,
                            nodes.tgroup('',
-                                        nodes.colspec(colwidth=10, classes=['label']),
+                                        nodes.colspec(colwidth=10,
+                                                      classes=['label']),
                                         nodes.colspec(colwidth=90),
                                         tbody))
 
@@ -596,7 +577,10 @@ class CitationDomain(Domain):
 
         refdoc = env.domaindata['cite'].get('refdoc')
         if not refdoc:
-            env.warn(fromdocname, 'no `refs` directive found; citations will have dead links', node.line)
+            env.warn(
+                fromdocname,
+                'no `refs` directive found; citations will have dead links',
+                node.line)
             refuri = ''
         else:
             refuri = builder.get_relative_uri(fromdocname, refdoc)
@@ -618,7 +602,8 @@ class CitationDomain(Domain):
                     nd.details['refs'].append(ref)
 
                 transform = nd.transform(**nd.details)
-                node = transform.cite(typ, refuri, global_keys=env.domaindata['cite']['keys'])
+                node = transform.cite(
+                    typ, refuri, global_keys=env.domaindata['cite']['keys'])
 
         return node
 
