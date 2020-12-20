@@ -13,4 +13,7 @@ import re
 @pytest.mark.sphinx('html', testroot='natbib')
 def test_natbib(app, warning):
     app.build()
-    assert not warning.getvalue()
+    warning.seek(0)
+    warnings = warning.readlines()
+    assert len(warnings) == 1
+    assert "natbib/doc0.rst:18: WARNING: cite-key `XXX` not found in bibtex file" in warnings[0]
