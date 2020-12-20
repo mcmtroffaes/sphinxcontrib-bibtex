@@ -41,3 +41,15 @@ def test_natbib_norefs(app, warning):
     warnings = warning.readlines()
     assert len(warnings) == 1
     assert "WARNING: no `refs` directive found" in warnings[0]
+
+
+def test_natbib_citation_transform_str_repr():
+    from natbib import CitationTransform, DEFAULT_CONF
+    from pybtex.database import Entry
+    ref = Entry(type_='misc')
+    ref.key = 'somekey'
+    node = CitationTransform(
+        pre="", post="", typ="cite:p", global_keys={},
+        config=DEFAULT_CONF.copy(), refs=[ref])
+    assert str(node) == "somekey"
+    assert repr(node) == "<somekey>"
