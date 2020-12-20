@@ -10,6 +10,7 @@ Some citations
 :cite:t:`1996:fukuda`
 :cite:t:`2009:defra:animal:health`
 :cite:t:`test:url`
+:cite:t:`test:url2`
 :cite:t:`2000:troffaes:msthesis`
 :cite:t:`2008:hable:thesis`
 :cite:t:`Sherwood`
@@ -31,12 +32,16 @@ For post text, we refer you to
 :cite:t:`1657:huygens [p. 3]`.
 For pre and post text,
 :cite:t:`joyce:1999 [see][p. 20]`.
+For pre text,
+:cite:t:`joyce:1999 [see][]`.
 
 Now the same with parenthesis style.
 Here we use post text
 :cite:p:`1657:huygens [p. 3]`.
 Here we use pre and post text
 :cite:p:`joyce:1999 [see][p. 20]`.
+Here we use pre text
+:cite:p:`joyce:1999 [see][]`.
 
 All the commands with the same reference:
 
@@ -54,3 +59,5 @@ All the commands with the same reference:
 * yearpar :cite:yearpar:`Kristensen83`
 * text :cite:text:`Kristensen83`
 * title :cite:title:`Kristensen83`
+
+Title cite if there is no title :cite:title:`notitle`.

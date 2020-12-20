@@ -21,4 +21,9 @@ Some extra work was done by :cite:t:`1657:huygens,joyce:1999,2005:cormack`.
 .. cite:conf::
    :style: super
 
-Super style. Some extra work was done by :cite:p:`1657:huygens,joyce:1999,2005:cormack`.
+Super style. Some extra work was done :cite:p:`1657:huygens,joyce:1999,2005:cormack`.
+
+.. cite:conf:: authoryear
+
+Author year style specified as argument.
+Some extra work was done by :cite:t:`1657:huygens,joyce:1999,2005:cormack`.
