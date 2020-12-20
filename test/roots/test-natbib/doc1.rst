@@ -1,4 +1,4 @@
 doc1
 ----
 
-:cite:p:`2009:mandel`
+Some extra citations :cite:p:`1657:huygens,joyce:1999`.
