@@ -38,7 +38,7 @@ SUBSUP_RE = re.compile(r'([\s\S^\^\_]*)([\^\_]){?([\S\s^}]*)}?')
 
 
 def parse_keys(rawtext):
-    # Get the keys and any pre- and post-ciation text
+    # Get the keys and any pre- and post-citation text
     # Spaces nor commas are allowed in cite keys, so we split on commas
     # first.  This will give us a list of keys, however, the last item may have
     # pre- and post-citation text (in brackets "[pre][post]")
