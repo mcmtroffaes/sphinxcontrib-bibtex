@@ -135,6 +135,8 @@ class CitationTransform(object):
             author = ''
         elif len(authors) > 2 and not all_authors:
             author = u'%s et al.' % authors[0].last_names[0]
+        elif len(authors) == 1:
+            author = authors[0].last_names[0]
         else:
             author = u"%s and %s" % (
                 u', '.join([a.last_names[0] for a in authors[:-1]]),
