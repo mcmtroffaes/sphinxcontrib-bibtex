@@ -37,3 +37,20 @@ Here we use post text
 :cite:p:`1657:huygens [p. 3]`.
 Here we use pre and post text
 :cite:p:`joyce:1999 [see][p. 20]`.
+
+All the commands with the same reference:
+
+* p :cite:p:`Kristensen83`
+* ps :cite:ps:`Kristensen83`
+* alp :cite:alp:`Kristensen83`
+* alps :cite:alps:`Kristensen83`
+* t :cite:t:`Kristensen83`
+* ts :cite:ts:`Kristensen83`
+* alt :cite:alt:`Kristensen83`
+* alts :cite:alts:`Kristensen83`
+* author :cite:author:`Kristensen83`
+* authors :cite:authors:`Kristensen83`
+* year :cite:year:`Kristensen83`
+* yearpar :cite:yearpar:`Kristensen83`
+* text :cite:text:`Kristensen83`
+* title :cite:title:`Kristensen83`
