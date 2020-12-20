@@ -1,6 +1,8 @@
 doc0
 ----
 
+Testing the various cite roles using default settings.
+
 Some citations
 :cite:t:`1657:huygens`
 :cite:t:`joyce:1999`

@@ -5,8 +5,4 @@ extensions = ['natbib']
 exclude_patterns = ['_build']
 natbib = {
     'file': 'test.bib',
-    'brackets': '[]',
-    'separator': ',',
-    'style': 'numbers',
-    'sort': True,
 }
