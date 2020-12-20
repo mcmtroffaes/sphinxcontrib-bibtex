@@ -20,3 +20,12 @@ def test_natbib(app, warning):
     warnings = warning.readlines()
     assert len(warnings) == 1
     assert "WARNING: cite-key `XXX` not found in bibtex file" in warnings[0]
+
+
+@pytest.mark.sphinx('html', testroot='natbib_norefs')
+def test_natbib_norefs(app, warning):
+    app.build()
+    warning.seek(0)
+    warnings = warning.readlines()
+    assert len(warnings) == 1
+    assert "WARNING: no `refs` directive found; citations will have dead links" in warnings[0]
