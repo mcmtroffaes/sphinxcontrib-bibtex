@@ -14,7 +14,8 @@ Some citations
 :cite:t:`2005:cormack`
 :cite:t:`RSI`
 :cite:t:`Kristensen83`
-:cite:t:`Astrom2005`.
+:cite:t:`Astrom2005`
+:cite:t:`noauthor`.
 
 Non-existing key :cite:t:`XXX`.
 
