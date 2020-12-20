@@ -8,7 +8,6 @@
 
 import pytest
 import os
-import re
 import sys
 
 sys.path.append(os.path.dirname(__file__))  # ensure natbib extension is found
