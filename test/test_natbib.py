@@ -19,7 +19,6 @@ def test_natbib(app, warning):
     assert not warning.getvalue()
 
 
-@pytest.mark.skip('currently broken')
 @pytest.mark.sphinx('latex', testroot='natbib')
 def test_natbib_latex(app, warning):
     app.build()

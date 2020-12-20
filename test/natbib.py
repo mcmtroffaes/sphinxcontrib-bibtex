@@ -511,12 +511,6 @@ class CitationDomain(Domain):
             if isinstance(nd, nodes.pending):
                 nd.details['refs'] = []
 
-                if builder.name == 'latex':
-                    cite_keys = nd.details['keys']
-                    cite_keys = ','.join(cite_keys)
-                    cite_node = nodes.citation_reference(cite_keys, cite_keys)
-                    return cite_node
-
                 for key in nd.details.pop('keys'):
                     ref = self.citations.get(key)
                     if ref is None:
