@@ -13,8 +13,17 @@
 import ast
 import collections
 import copy
+import json
+from typing import List, Dict
+
 from oset import oset
 import re
+
+from sphinx.domains import Domain
+from sphinx.environment import BuildEnvironment
+from sphinx.errors import ExtensionError
+
+from .bibfile import BibfileCache, normpath_filename, process_bibfile
 
 
 def _defaultdict_oset():
@@ -159,61 +168,122 @@ class _FilterVisitor(ast.NodeVisitor):
         _raise_invalid_node(node)
 
 
-class Cache:
+class BibliographyCache(collections.namedtuple(
+    'BibliographyCache',
+    """bibfiles style
+list_ enumtype start labels labelprefix
+filter_ keyprefix
+""")):
 
-    """Global bibtex extension information cache. Stored in
-    ``app.env.bibtex_cache``, so must be picklable.
+    """Contains information about a bibliography directive.
+
+    .. attribute:: bibfiles
+
+        A :class:`list` of :class:`str`\\ s containing the .bib file
+        names (relative to the top source folder) that contain the
+        references.
+
+    .. attribute:: style
+
+        The bibtex style.
+
+    .. attribute:: list_
+
+        The list type.
+
+    .. attribute:: enumtype
+
+        The sequence type (only used for enumerated lists).
+
+    .. attribute:: start
+
+        The first ordinal of the sequence (only used for enumerated lists).
+
+    .. attribute:: labels
+
+        Maps citation keys to their final labels.
+
+    .. attribute:: labelprefix
+
+        This bibliography's string prefix for pybtex generated labels.
+
+    .. attribute:: keyprefix
+
+        This bibliography's string prefix for citation keys.
+
+    .. attribute:: filter_
+
+        An :class:`ast.AST` node, containing the parsed filter expression.
     """
 
-    bibfiles = None
-    """A :class:`dict` mapping .bib file names (relative to the top
-    source folder) to :class:`BibfileCache` instances.
-    """
 
-    bibliographies = None
-    """Each bibliography directive is assigned an id of the form
-    bibtex-bibliography-xxx. This :class:`dict` maps each docname
-    to another :class:`dict` which maps each id
-    to information about the bibliography directive,
-    :class:`BibliographyCache`. We need to store this extra
-    information separately because it cannot be stored in the
-    :class:`~sphinxcontrib.bibtex.nodes.bibliography` nodes
-    themselves.
-    """
+class BibtexCitationDomain(Domain):
 
-    cited = None
-    """A :class:`dict` mapping each docname to a :class:`set` of
-    citation keys.
-    """
+    """Global bibtex extension information cache."""
 
-    enum_count = None
-    """A :class:`dict` mapping each docname to an :class:`int`
-    representing the current bibliography enumeration counter.
-    """
+    name = 'cite'
+    label = 'bibtex citation'
+    data_version = 0
 
-    foot_cited = None
-    """A :class:`dict` mapping each docname to another :class:`dict`
-    which maps each id to a :class:`set` of footnote keys.
-    """
+    @property
+    def bibfiles(self) -> Dict[str, BibfileCache]:
+        return self.data.setdefault('bibfiles', {})  # filename -> cache
 
-    foot_current_id = None
-    """A :class:`dict` mapping each docname to the currently active id."""
+    @property
+    def bibliographies(self) -> Dict[str, Dict[str, BibliographyCache]]:
+        return self.data.setdefault(
+            'bibliographies',
+            collections.defaultdict(dict))  # doc -> id -> cache
 
-    def __init__(self):
-        self.bibfiles = {}
-        self.bibliographies = collections.defaultdict(dict)
-        self.cited = collections.defaultdict(oset)
-        self.cited_previous = collections.defaultdict(oset)
-        self.enum_count = {}
-        self.foot_cited = collections.defaultdict(_defaultdict_oset)
-        self.foot_current_id = {}
+    @property
+    def cited(self) -> Dict[str, oset]:
+        return self.data.setdefault(
+            'cited', collections.defaultdict(oset))  # doc -> keys
 
-    def purge(self, docname):
-        """Remove  all information related to *docname*.
+    @property
+    def cited_previous(self) -> Dict[str, oset]:
+        return self.data.setdefault(
+            'cited_previous', collections.defaultdict(oset))  # doc -> keys
 
-        :param docname: The document name.
-        :type docname: :class:`str`
-        """
+    @property
+    def enum_count(self) -> Dict[str, int]:
+        return self.data.setdefault('enum_count', {})  # doc -> enum count
+
+    @property
+    def foot_cited(self) -> Dict[str, Dict[str, oset]]:
+        return self.data.setdefault(
+            'foot_cited',
+            collections.defaultdict(_defaultdict_oset))  # doc -> id -> keys
+
+    @property
+    def foot_current_id(self) -> Dict[str, str]:
+        return self.data.setdefault('foot_current_id', {})  # doc -> id
+
+    def __init__(self, env: BuildEnvironment):
+        super().__init__(env)
+        # check config
+        if env.app.config.bibtex_bibfiles is None:
+            raise ExtensionError(
+                "You must configure the bibtex_bibfiles setting")
+        # update bib file information in the cache
+        for bibfile in env.app.config.bibtex_bibfiles:
+            process_bibfile(
+                self.bibfiles,
+                normpath_filename(env, bibfile, env.app.config.master_doc),
+                env.app.config.bibtex_encoding)
+        # read json
+        json_filename = normpath_filename(
+            env, "bibtex.json", env.app.config.master_doc)
+        try:
+            with open(json_filename) as json_file:
+                json_dict = json.load(json_file)
+        except FileNotFoundError:
+            json_dict = {"cited": {}}
+        # import cited_previous from json data
+        self.cited_previous.update({
+            key: oset(value) for key, value in json_dict["cited"].items()})
+
+    def clear_doc(self, docname: str) -> None:
         self.bibliographies.pop(docname, None)
         self.cited.pop(docname, None)
         # note: intentionally do not clear cited_previous
@@ -221,24 +291,19 @@ class Cache:
         self.foot_cited.pop(docname, None)
         self.foot_current_id.pop(docname, None)
 
-    def merge(self, docnames, other):
-        """Merge information from *other* cache related to *docnames*.
-
-        :param docnames: The document names.
-        :type docnames: :class:`str`
-        :param other: The other cache.
-        :type other: :class:`Cache`
-        """
+    def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
         for docname in docnames:
             # bibfiles and cited_previous are global, no need to merge
-            if docname in other.cited:
-                self.cited[docname] = other.cited[docname]
-            if docname in other.bibliographies:
-                self.bibliographies[docname] = other.bibliographies[docname]
-            if docname in other.enum_count:
-                self.enum_count[docname] = other.enum_count[docname]
-            self.foot_cited[docname] = other.foot_cited[docname]
-            self.foot_current_id[docname] = other.foot_current_id[docname]
+            if docname in otherdata['cited']:
+                self.cited[docname] = otherdata['cited'][docname]
+            if docname in otherdata['bibliographies']:
+                self.bibliographies[docname] = \
+                    otherdata['bibliographies'][docname]
+            if docname in otherdata['enum_count']:
+                self.enum_count[docname] = otherdata['enum_count'][docname]
+            self.foot_cited[docname] = otherdata['foot_cited'][docname]
+            self.foot_current_id[docname] = \
+                otherdata['foot_current_id'][docname]
 
     def get_label_from_key(self, key):
         """Return label for the given key."""
@@ -321,52 +386,3 @@ class Cache:
         """Generate a new id for the given build environment."""
         self.foot_current_id[env.docname] = 'bibtex-footbibliography-%s-%s' % (
             env.docname, env.new_serialno('bibtex'))
-
-
-class BibliographyCache(collections.namedtuple(
-    'BibliographyCache',
-    """bibfiles style
-list_ enumtype start labels labelprefix
-filter_ keyprefix
-""")):
-
-    """Contains information about a bibliography directive.
-
-    .. attribute:: bibfiles
-
-        A :class:`list` of :class:`str`\\ s containing the .bib file
-        names (relative to the top source folder) that contain the
-        references.
-
-    .. attribute:: style
-
-        The bibtex style.
-
-    .. attribute:: list_
-
-        The list type.
-
-    .. attribute:: enumtype
-
-        The sequence type (only used for enumerated lists).
-
-    .. attribute:: start
-
-        The first ordinal of the sequence (only used for enumerated lists).
-
-    .. attribute:: labels
-
-        Maps citation keys to their final labels.
-
-    .. attribute:: labelprefix
-
-        This bibliography's string prefix for pybtex generated labels.
-
-    .. attribute:: keyprefix
-
-        This bibliography's string prefix for citation keys.
-
-    .. attribute:: filter_
-
-        An :class:`ast.AST` node, containing the parsed filter expression.
-    """

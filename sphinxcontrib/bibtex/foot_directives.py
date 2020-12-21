@@ -3,9 +3,11 @@
 
         .. automethod:: run
 """
+from typing import cast
 
 from docutils.parsers.rst import Directive
 
+from .cache import BibtexCitationDomain
 from .foot_nodes import footbibliography
 
 
@@ -32,8 +34,9 @@ class FootBibliographyDirective(Directive):
         that is to be transformed to the entries of the bibliography.
         """
         env = self.state.document.settings.env
-        for bibfile in env.bibtex_cache.bibfiles:
+        domain = cast(BibtexCitationDomain, env.get_domain('cite'))
+        for bibfile in domain.bibfiles:
             env.note_dependency(bibfile)
-        id_ = env.bibtex_cache.foot_current_id[env.docname]
-        env.bibtex_cache.new_foot_current_id(env)
+        id_ = domain.foot_current_id[env.docname]
+        domain.new_foot_current_id(env)
         return [footbibliography('', ids=[id_])]

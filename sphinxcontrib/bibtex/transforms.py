@@ -9,6 +9,7 @@
 
     .. autofunction:: transform_url_command
 """
+from typing import cast
 
 import docutils.nodes
 import docutils.transforms
@@ -16,6 +17,7 @@ import sphinx.util
 
 from pybtex.plugin import find_plugin
 
+from .cache import BibtexCitationDomain
 from .nodes import bibliography
 
 
@@ -79,9 +81,10 @@ class BibliographyTransform(docutils.transforms.Transform):
         docname = env.docname
         docnames = list(get_docnames(env))
         for bibnode in self.document.traverse(bibliography):
+            domain = cast(BibtexCitationDomain, env.get_domain('cite'))
             id_ = bibnode['ids'][0]
-            bibcache = env.bibtex_cache.bibliographies[docname][id_]
-            entries = env.bibtex_cache.get_bibliography_entries(
+            bibcache = domain.bibliographies[docname][id_]
+            entries = domain.get_bibliography_entries(
                 docname=docname, id_=id_, warn=logger.warning,
                 docnames=docnames)
             # locate and instantiate style and backend plugins
@@ -93,9 +96,9 @@ class BibliographyTransform(docutils.transforms.Transform):
                 nodes['enumtype'] = bibcache.enumtype
                 if bibcache.start >= 1:
                     nodes['start'] = bibcache.start
-                    env.bibtex_cache.enum_count[env.docname] = bibcache.start
+                    domain.enum_count[env.docname] = bibcache.start
                 else:
-                    nodes['start'] = env.bibtex_cache.enum_count[env.docname]
+                    nodes['start'] = domain.enum_count[env.docname]
             elif bibcache.list_ == "bullet":
                 nodes = docutils.nodes.bullet_list()
             else:  # "citation"
@@ -117,7 +120,7 @@ class BibliographyTransform(docutils.transforms.Transform):
                 node_text_transform(citation, transform_url_command)
                 nodes += citation
                 if bibcache.list_ == "enumerated":
-                    env.bibtex_cache.enum_count[env.docname] += 1
+                    domain.enum_count[env.docname] += 1
             if env.bibtex_bibliography_header is not None:
                 nodes = [env.bibtex_bibliography_header.deepcopy(), nodes]
             bibnode.replace_self(nodes)

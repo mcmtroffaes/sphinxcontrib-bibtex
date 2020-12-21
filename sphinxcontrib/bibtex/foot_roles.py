@@ -4,10 +4,13 @@
 
         .. automethod:: result_nodes
 """
+from typing import cast
 
 from pybtex.plugin import find_plugin
 import pybtex.database
 from sphinx.roles import XRefRole
+
+from .cache import BibtexCitationDomain
 
 
 class FootCiteRole(XRefRole):
@@ -16,12 +19,13 @@ class FootCiteRole(XRefRole):
     backend = find_plugin('pybtex.backends', 'docutils')()
 
     def make_refnode(self, document, env, key):
-        cited = env.bibtex_cache.foot_cited[env.docname]
+        domain = cast(BibtexCitationDomain, env.get_domain('cite'))
+        cited = domain.foot_cited[env.docname]
         for otherkeys in cited.values():
             if key in otherkeys:
                 break
         else:
-            cited[env.bibtex_cache.foot_current_id[env.docname]].add(key)
+            cited[domain.foot_current_id[env.docname]].add(key)
         # TODO get the actual entry
         return self.backend.footnote_reference(_fake_entry(key), document)
 
