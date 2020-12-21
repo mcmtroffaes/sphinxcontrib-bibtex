@@ -1,15 +1,7 @@
-# -*- coding: utf-8 -*-
-"""
-    test_bibfile_out_of_date
-    ~~~~~~~~~~~~~~~~~~~~~~~~
-
-    Test that updates to the bibfile generate the correct result when
-    Sphinx is run again.
-"""
-
 import pytest
 import re
 import shutil
+from sphinx.errors import ExtensionError
 import time
 
 
@@ -18,9 +10,10 @@ def htmlbibitem(label, text):
         '.*<dt class="bibtex label".*><span class="brackets">'
         '<a.*>{0}</a></span></dt>\\s*<dd>.*{1}.*</dd>'.format(label, text))
 
-
-@pytest.mark.sphinx('html', testroot='bibfile_out_of_date')
-def test_bibfile_out_of_date(make_app, app_params, warning):
+# Test that updates to the bibfile generate the correct result when
+# Sphinx is run again.
+@pytest.mark.sphinx('html', testroot='bibfiles_out_of_date')
+def test_bibfiles_out_of_date(make_app, app_params, warning):
     args, kwargs = app_params
     app = make_app(*args, **kwargs)
     app.build()
@@ -47,3 +40,17 @@ def test_bibfile_out_of_date(make_app, app_params, warning):
         + htmlbibitem("4", "Handy")
         + '.*</p>',
         output, re.MULTILINE | re.DOTALL)
+
+
+@pytest.mark.sphinx('html', testroot='bibfiles_not_found')
+def test_bibfiles_not_found(app, warning):
+    app.builder.build_all()
+    assert re.search(
+        'could not open bibtex file .*unknown[.]bib', warning.getvalue())
+
+
+@pytest.mark.sphinx('html', testroot='bibfiles_missing_conf')
+def test_bibfiles_missing_conf(make_app, app_params):
+    args, kwargs = app_params
+    with pytest.raises(ExtensionError):
+        make_app(*args, **kwargs)
