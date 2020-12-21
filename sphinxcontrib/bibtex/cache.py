@@ -26,10 +26,6 @@ from sphinx.errors import ExtensionError
 from .bibfile import BibfileCache, normpath_filename, process_bibfile
 
 
-def _defaultdict_oset():
-    return collections.defaultdict(oset)
-
-
 def _raise_invalid_node(node):
     """Helper method to raise an exception when an invalid node is
     visited.
