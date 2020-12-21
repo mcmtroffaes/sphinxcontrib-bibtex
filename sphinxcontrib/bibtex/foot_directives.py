@@ -6,9 +6,17 @@
 from typing import cast
 
 from docutils.parsers.rst import Directive
+from sphinx.environment import BuildEnvironment
 
 from .cache import BibtexDomain
 from .foot_nodes import footbibliography
+
+
+def new_footbibliography_id(env: BuildEnvironment) -> None:
+    """Generate a new footbibliography id for the given build environment."""
+    env.temp_data["bibtex_footbibliography_id"] = \
+        'bibtex-footbibliography-%s-%s' % (
+            env.docname, env.new_serialno('bibtex'))
 
 
 class FootBibliographyDirective(Directive):
@@ -38,5 +46,5 @@ class FootBibliographyDirective(Directive):
         for bibfile in domain.bibfiles:
             env.note_dependency(bibfile)
         id_ = env.temp_data["bibtex_footbibliography_id"]
-        domain.new_footbibliography_id()
+        new_footbibliography_id(env)
         return [footbibliography('', ids=[id_])]

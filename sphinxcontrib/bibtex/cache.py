@@ -374,9 +374,3 @@ class BibtexDomain(Domain):
                 sorted_entries.append(entry)
         sorted_entries += entries.values()
         return sorted_entries
-
-    def new_footbibliography_id(self):
-        """Generate a new id for the given build environment."""
-        self.env.temp_data["bibtex_footbibliography_id"] = \
-            'bibtex-footbibliography-%s-%s' % (
-                self.env.docname, self.env.new_serialno('bibtex'))
