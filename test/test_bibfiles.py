@@ -44,9 +44,11 @@ def test_bibfiles_out_of_date(make_app, app_params, warning):
 
 @pytest.mark.sphinx('html', testroot='bibfiles_not_found')
 def test_bibfiles_not_found(app, warning):
-    app.builder.build_all()
-    assert re.search(
-        'could not open bibtex file .*unknown[.]bib', warning.getvalue())
+    app.build()
+    warning.seek(0)
+    warnings = warning.readlines()
+    assert len(warnings) == 1
+    assert 'could not open bibtex file' in warnings[0]
 
 
 @pytest.mark.sphinx('html', testroot='bibfiles_missing_conf')
