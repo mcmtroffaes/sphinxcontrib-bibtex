@@ -223,7 +223,7 @@ class BibtexDomain(Domain):
 
     name = 'bibtex'
     label = 'BibTeX'
-    data_version = 0
+    data_version = 1
 
     @property
     def bibfiles(self) -> Dict[str, BibfileCache]:
@@ -248,12 +248,6 @@ class BibtexDomain(Domain):
     @property
     def enum_count(self) -> Dict[str, int]:
         return self.data.setdefault('enum_count', {})  # doc -> enum count
-
-    @property
-    def foot_cited(self) -> Dict[str, Dict[str, oset]]:
-        return self.data.setdefault(
-            'foot_cited',
-            collections.defaultdict(_defaultdict_oset))  # doc -> id -> keys
 
     def __init__(self, env: BuildEnvironment):
         super().__init__(env)
@@ -284,7 +278,6 @@ class BibtexDomain(Domain):
         self.cited.pop(docname, None)
         # note: intentionally do not clear cited_previous
         self.enum_count.pop(docname, None)
-        self.foot_cited.pop(docname, None)
 
     def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
         for docname in docnames:
@@ -296,7 +289,6 @@ class BibtexDomain(Domain):
                     otherdata['bibliographies'][docname]
             if docname in otherdata['enum_count']:
                 self.enum_count[docname] = otherdata['enum_count'][docname]
-            self.foot_cited[docname] = otherdata['foot_cited'][docname]
 
     def get_label_from_key(self, key):
         """Return label for the given key."""

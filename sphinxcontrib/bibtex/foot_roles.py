@@ -4,6 +4,8 @@
 
         .. automethod:: result_nodes
 """
+
+from oset import oset
 from typing import cast
 
 from pybtex.plugin import find_plugin
@@ -20,12 +22,14 @@ class FootCiteRole(XRefRole):
 
     def make_refnode(self, document, env, key):
         domain = cast(BibtexDomain, env.get_domain('bibtex'))
-        cited = domain.foot_cited[env.docname]
+        cited = env.temp_data.setdefault("bibtex_foot_cited", {})
         for otherkeys in cited.values():
             if key in otherkeys:
                 break
         else:
-            cited[env.temp_data["bibtex_footbibliography_id"]].add(key)
+            keys = cited.setdefault(
+                env.temp_data["bibtex_footbibliography_id"], oset())
+            keys.add(key)
         # TODO get the actual entry
         return self.backend.footnote_reference(_fake_entry(key), document)
 
