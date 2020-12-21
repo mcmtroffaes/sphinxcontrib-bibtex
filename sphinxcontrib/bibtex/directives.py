@@ -129,6 +129,6 @@ class BibliographyDirective(Directive):
             env.note_dependency(bibfile)
         # if citations change, bibtex.json changes, and so might entries
         env.note_dependency(
-            normpath_filename(env, "bibtex.json", env.app.config.master_doc))
+            normpath_filename(env, "/bibtex.json"))
         domain.bibliographies[env.docname][id_] = bibcache
         return [bibliography('', ids=[id_])]

@@ -259,11 +259,10 @@ class BibtexDomain(Domain):
         for bibfile in env.app.config.bibtex_bibfiles:
             process_bibfile(
                 self.bibfiles,
-                normpath_filename(env, bibfile, env.app.config.master_doc),
+                normpath_filename(env, "/" + bibfile),
                 env.app.config.bibtex_encoding)
         # read json
-        json_filename = normpath_filename(
-            env, "bibtex.json", env.app.config.master_doc)
+        json_filename = normpath_filename(env, "/bibtex.json")
         try:
             with open(json_filename) as json_file:
                 json_dict = json.load(json_file)

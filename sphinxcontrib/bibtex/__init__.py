@@ -130,8 +130,7 @@ def check_duplicate_labels(app, env):
 
 def save_bibtex_json(app, exc):
     if exc is None:
-        json_filename = normpath_filename(
-            app.env, "bibtex.json", app.config.master_doc)
+        json_filename = normpath_filename(app.env, "/bibtex.json")
         try:
             with open(json_filename) as json_file:
                 json_string_old = json_file.read()
