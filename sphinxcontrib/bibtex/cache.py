@@ -217,12 +217,12 @@ filter_ keyprefix
     """
 
 
-class BibtexCitationDomain(Domain):
+class BibtexDomain(Domain):
 
     """Global bibtex extension information cache."""
 
-    name = 'cite'
-    label = 'bibtex citation'
+    name = 'bibtex'
+    label = 'BibTeX'
     data_version = 0
 
     @property

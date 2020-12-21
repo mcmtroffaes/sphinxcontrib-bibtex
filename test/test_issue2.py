@@ -9,14 +9,14 @@
 from typing import cast
 import pytest
 
-from sphinxcontrib.bibtex.cache import BibtexCitationDomain
+from sphinxcontrib.bibtex.cache import BibtexDomain
 
 
 @pytest.mark.sphinx('html', testroot='issue2')
 def test_mixing_citation_styles(app, warning):
     app.build()
     assert not warning.getvalue()
-    domain = cast(BibtexCitationDomain, app.env.get_domain('cite'))
+    domain = cast(BibtexDomain, app.env.get_domain('cite'))
     cited_docnames = [
         docname for docname, keys in domain.cited.items()
         if u"Test" in keys]

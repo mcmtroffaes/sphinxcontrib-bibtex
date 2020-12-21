@@ -20,7 +20,7 @@ import sphinx.util
 from typing import cast
 
 from .bibfile import normpath_filename
-from .cache import BibtexCitationDomain
+from .cache import BibtexDomain
 from .nodes import bibliography
 from .roles import CiteRole
 from .directives import BibliographyDirective
@@ -64,7 +64,7 @@ def init_foot_current_id(app, docname, source):
     :param source: The document source.
     :type source: :class:`str`
     """
-    domain = cast(BibtexCitationDomain, app.env.get_domain('cite'))
+    domain = cast(BibtexDomain, app.env.get_domain('cite'))
     domain.new_foot_current_id(app.env)
 
 
@@ -78,7 +78,7 @@ def process_citations(app, doctree, docname):
     :param docname: The document name.
     :type docname: :class:`str`
     """
-    domain = cast(BibtexCitationDomain, app.env.get_domain('cite'))
+    domain = cast(BibtexDomain, app.env.get_domain('cite'))
     for node in doctree.traverse(docutils.nodes.citation):
         if "bibtex" in node.attributes.get('classes', []):
             key = node[0].astext()
@@ -98,7 +98,7 @@ def process_citation_references(app, doctree, docname):
     """
     # sphinx has already turned citation_reference nodes
     # into reference nodes, so iterate over reference nodes
-    domain = cast(BibtexCitationDomain, app.env.get_domain('cite'))
+    domain = cast(BibtexDomain, app.env.get_domain('cite'))
     for node in doctree.traverse(docutils.nodes.reference):
         if "bibtex" in node.attributes.get('classes', []):
             text = node[0].astext()
@@ -115,7 +115,7 @@ def check_duplicate_labels(app, env):
     :param env: The sphinx build environment.
     :type env: :class:`sphinx.environment.BuildEnvironment`
     """
-    domain = cast(BibtexCitationDomain, env.get_domain('cite'))
+    domain = cast(BibtexDomain, env.get_domain('cite'))
     label_to_key = {}
     for bibcaches in domain.bibliographies.values():
         for bibcache in bibcaches.values():
@@ -138,7 +138,7 @@ def save_bibtex_json(app, exc):
         except FileNotFoundError:
             json_string_old = json.dumps(
                 {"cited": {}}, indent=4, sort_keys=True)
-        domain = cast(BibtexCitationDomain, app.env.get_domain('cite'))
+        domain = cast(BibtexDomain, app.env.get_domain('cite'))
         cited = {
             key: list(value)
             for key, value in domain.cited.items()}
@@ -169,7 +169,7 @@ def setup(app):
     app.add_config_value("bibtex_encoding", "utf-8-sig", "html")
     app.add_config_value("bibtex_bibliography_header", "", "html")
     app.add_config_value("bibtex_footbibliography_header", "", "html")
-    app.add_domain(BibtexCitationDomain)
+    app.add_domain(BibtexDomain)
     app.connect("builder-inited", init_bibtex_cache)
     app.connect("source-read", init_foot_current_id)
     app.connect("doctree-resolved", process_citations)

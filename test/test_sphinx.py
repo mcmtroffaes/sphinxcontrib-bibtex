@@ -9,7 +9,7 @@ from typing import cast
 
 import pytest
 
-from sphinxcontrib.bibtex import BibtexCitationDomain
+from sphinxcontrib.bibtex import BibtexDomain
 
 
 @pytest.mark.sphinx('html', testroot='sphinx')
@@ -20,5 +20,5 @@ def test_sphinx(app, warning):
     assert u'is not referenced' in warnings
     # for coverage
     with pytest.raises(KeyError):
-        domain = cast(BibtexCitationDomain, app.env.get_domain('cite'))
+        domain = cast(BibtexDomain, app.env.get_domain('cite'))
         domain.get_label_from_key("nonexistinglabel")

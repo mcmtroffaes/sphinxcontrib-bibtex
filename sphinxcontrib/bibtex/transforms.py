@@ -17,7 +17,7 @@ import sphinx.util
 
 from pybtex.plugin import find_plugin
 
-from .cache import BibtexCitationDomain
+from .cache import BibtexDomain
 from .nodes import bibliography
 
 
@@ -81,7 +81,7 @@ class BibliographyTransform(docutils.transforms.Transform):
         docname = env.docname
         docnames = list(get_docnames(env))
         for bibnode in self.document.traverse(bibliography):
-            domain = cast(BibtexCitationDomain, env.get_domain('cite'))
+            domain = cast(BibtexDomain, env.get_domain('cite'))
             id_ = bibnode['ids'][0]
             bibcache = domain.bibliographies[docname][id_]
             entries = domain.get_bibliography_entries(

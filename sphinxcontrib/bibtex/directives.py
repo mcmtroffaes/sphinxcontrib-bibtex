@@ -15,7 +15,7 @@ from docutils.parsers.rst import Directive, directives
 from sphinx.util.console import standout
 
 from .bibfile import normpath_filename
-from .cache import BibliographyCache, BibtexCitationDomain
+from .cache import BibliographyCache, BibtexDomain
 from .nodes import bibliography
 
 
@@ -72,7 +72,7 @@ class BibliographyDirective(Directive):
         bibliography.
         """
         env = self.state.document.settings.env
-        domain = cast(BibtexCitationDomain, env.get_domain('cite'))
+        domain = cast(BibtexDomain, env.get_domain('cite'))
         # create id and cache for this node
         # this id will be stored with the node
         # and is used to look up additional data in env.bibtex_cache

@@ -10,7 +10,7 @@ from pybtex.plugin import find_plugin
 import pybtex.database
 from sphinx.roles import XRefRole
 
-from .cache import BibtexCitationDomain
+from .cache import BibtexDomain
 
 
 class FootCiteRole(XRefRole):
@@ -19,7 +19,7 @@ class FootCiteRole(XRefRole):
     backend = find_plugin('pybtex.backends', 'docutils')()
 
     def make_refnode(self, document, env, key):
-        domain = cast(BibtexCitationDomain, env.get_domain('cite'))
+        domain = cast(BibtexDomain, env.get_domain('cite'))
         cited = domain.foot_cited[env.docname]
         for otherkeys in cited.values():
             if key in otherkeys:

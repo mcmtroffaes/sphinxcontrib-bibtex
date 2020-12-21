@@ -12,7 +12,7 @@ import docutils.transforms
 import sphinx.util
 from pybtex.plugin import find_plugin
 
-from .cache import BibtexCitationDomain
+from .cache import BibtexDomain
 from .transforms import node_text_transform, transform_url_command
 from .foot_nodes import footbibliography
 from .bibfile import get_bibliography_entry
@@ -40,7 +40,7 @@ class FootBibliographyTransform(docutils.transforms.Transform):
         """
         env = self.document.settings.env
         for bibnode in self.document.traverse(footbibliography):
-            domain = cast(BibtexCitationDomain, env.get_domain('cite'))
+            domain = cast(BibtexDomain, env.get_domain('cite'))
             id_ = bibnode['ids'][0]
             entries = [
                 get_bibliography_entry(domain.bibfiles, key)
