@@ -10,6 +10,7 @@ def htmlbibitem(label, text):
         '.*<dt class="bibtex label".*><span class="brackets">'
         '<a.*>{0}</a></span></dt>\\s*<dd>.*{1}.*</dd>'.format(label, text))
 
+
 # Test that updates to the bibfile generate the correct result when
 # Sphinx is run again.
 @pytest.mark.sphinx('html', testroot='bibfiles_out_of_date')
