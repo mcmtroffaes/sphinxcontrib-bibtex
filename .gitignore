@@ -1,8 +1,10 @@
 *~
 *.pyc
 .noseids
+.coverage
 nosetests.xml
 doc/_build/
 .pytest_cache/
 venv/
+htmlcov/
 .idea/
