@@ -19,7 +19,7 @@ class FootCiteRole(XRefRole):
     backend = find_plugin('pybtex.backends', 'docutils')()
 
     def make_refnode(self, document, env, key):
-        domain = cast(BibtexDomain, env.get_domain('cite'))
+        domain = cast(BibtexDomain, env.get_domain('bibtex'))
         cited = domain.foot_cited[env.docname]
         for otherkeys in cited.values():
             if key in otherkeys:

@@ -40,7 +40,7 @@ class FootBibliographyTransform(docutils.transforms.Transform):
         """
         env = self.document.settings.env
         for bibnode in self.document.traverse(footbibliography):
-            domain = cast(BibtexDomain, env.get_domain('cite'))
+            domain = cast(BibtexDomain, env.get_domain('bibtex'))
             id_ = bibnode['ids'][0]
             entries = [
                 get_bibliography_entry(domain.bibfiles, key)

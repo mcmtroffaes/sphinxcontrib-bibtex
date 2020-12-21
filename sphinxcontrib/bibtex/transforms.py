@@ -81,7 +81,7 @@ class BibliographyTransform(docutils.transforms.Transform):
         docname = env.docname
         docnames = list(get_docnames(env))
         for bibnode in self.document.traverse(bibliography):
-            domain = cast(BibtexDomain, env.get_domain('cite'))
+            domain = cast(BibtexDomain, env.get_domain('bibtex'))
             id_ = bibnode['ids'][0]
             bibcache = domain.bibliographies[docname][id_]
             entries = domain.get_bibliography_entries(

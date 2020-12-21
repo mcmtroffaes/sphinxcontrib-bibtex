@@ -34,7 +34,7 @@ class FootBibliographyDirective(Directive):
         that is to be transformed to the entries of the bibliography.
         """
         env = self.state.document.settings.env
-        domain = cast(BibtexDomain, env.get_domain('cite'))
+        domain = cast(BibtexDomain, env.get_domain('bibtex'))
         for bibfile in domain.bibfiles:
             env.note_dependency(bibfile)
         id_ = domain.foot_current_id[env.docname]

@@ -72,7 +72,7 @@ class BibliographyDirective(Directive):
         bibliography.
         """
         env = self.state.document.settings.env
-        domain = cast(BibtexDomain, env.get_domain('cite'))
+        domain = cast(BibtexDomain, env.get_domain('bibtex'))
         # create id and cache for this node
         # this id will be stored with the node
         # and is used to look up additional data in env.bibtex_cache
