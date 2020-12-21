@@ -255,10 +255,6 @@ class BibtexDomain(Domain):
             'foot_cited',
             collections.defaultdict(_defaultdict_oset))  # doc -> id -> keys
 
-    @property
-    def foot_current_id(self) -> Dict[str, str]:
-        return self.data.setdefault('foot_current_id', {})  # doc -> id
-
     def __init__(self, env: BuildEnvironment):
         super().__init__(env)
         # check config
@@ -289,7 +285,6 @@ class BibtexDomain(Domain):
         # note: intentionally do not clear cited_previous
         self.enum_count.pop(docname, None)
         self.foot_cited.pop(docname, None)
-        self.foot_current_id.pop(docname, None)
 
     def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
         for docname in docnames:
@@ -302,8 +297,6 @@ class BibtexDomain(Domain):
             if docname in otherdata['enum_count']:
                 self.enum_count[docname] = otherdata['enum_count'][docname]
             self.foot_cited[docname] = otherdata['foot_cited'][docname]
-            self.foot_current_id[docname] = \
-                otherdata['foot_current_id'][docname]
 
     def get_label_from_key(self, key):
         """Return label for the given key."""
@@ -382,7 +375,8 @@ class BibtexDomain(Domain):
         sorted_entries += entries.values()
         return sorted_entries
 
-    def new_foot_current_id(self, env):
+    def new_footbibliography_id(self):
         """Generate a new id for the given build environment."""
-        self.foot_current_id[env.docname] = 'bibtex-footbibliography-%s-%s' % (
-            env.docname, env.new_serialno('bibtex'))
+        self.env.temp_data["bibtex_footbibliography_id"] = \
+            'bibtex-footbibliography-%s-%s' % (
+                self.env.docname, self.env.new_serialno('bibtex'))

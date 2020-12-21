@@ -37,6 +37,6 @@ class FootBibliographyDirective(Directive):
         domain = cast(BibtexDomain, env.get_domain('bibtex'))
         for bibfile in domain.bibfiles:
             env.note_dependency(bibfile)
-        id_ = domain.foot_current_id[env.docname]
-        domain.new_foot_current_id(env)
+        id_ = env.temp_data["bibtex_footbibliography_id"]
+        domain.new_footbibliography_id()
         return [footbibliography('', ids=[id_])]

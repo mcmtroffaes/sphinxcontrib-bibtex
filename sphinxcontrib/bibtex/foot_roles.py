@@ -25,7 +25,7 @@ class FootCiteRole(XRefRole):
             if key in otherkeys:
                 break
         else:
-            cited[domain.foot_current_id[env.docname]].add(key)
+            cited[env.temp_data["bibtex_footbibliography_id"]].add(key)
         # TODO get the actual entry
         return self.backend.footnote_reference(_fake_entry(key), document)
 

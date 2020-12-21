@@ -65,7 +65,7 @@ def init_foot_current_id(app, docname, source):
     :type source: :class:`str`
     """
     domain = cast(BibtexDomain, app.env.get_domain('bibtex'))
-    domain.new_foot_current_id(app.env)
+    domain.new_footbibliography_id()
 
 
 def process_citations(app, doctree, docname):
