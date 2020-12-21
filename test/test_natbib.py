@@ -53,3 +53,11 @@ def test_natbib_citation_transform_str_repr():
         config=DEFAULT_CONF.copy(), refs=[ref])
     assert str(node) == "somekey"
     assert repr(node) == "<somekey>"
+
+
+@pytest.mark.sphinx('text', testroot='natbib_conf')
+def test_natbib_conf(app, warning):
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.txt").read_text()
+    assert "{One, 2001/ Two, 2002}" in output
