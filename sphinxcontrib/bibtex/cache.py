@@ -14,7 +14,7 @@ import ast
 import collections
 import copy
 import json
-from typing import List, Dict
+from typing import List, Dict, NamedTuple
 
 from oset import oset
 import re
@@ -164,53 +164,17 @@ class _FilterVisitor(ast.NodeVisitor):
         _raise_invalid_node(node)
 
 
-class BibliographyCache(collections.namedtuple(
-    'BibliographyCache',
-    """bibfiles style
-list_ enumtype start labels labelprefix
-filter_ keyprefix
-""")):
-
-    """Contains information about a bibliography directive.
-
-    .. attribute:: bibfiles
-
-        A :class:`list` of :class:`str`\\ s containing the .bib file
-        names (relative to the top source folder) that contain the
-        references.
-
-    .. attribute:: style
-
-        The bibtex style.
-
-    .. attribute:: list_
-
-        The list type.
-
-    .. attribute:: enumtype
-
-        The sequence type (only used for enumerated lists).
-
-    .. attribute:: start
-
-        The first ordinal of the sequence (only used for enumerated lists).
-
-    .. attribute:: labels
-
-        Maps citation keys to their final labels.
-
-    .. attribute:: labelprefix
-
-        This bibliography's string prefix for pybtex generated labels.
-
-    .. attribute:: keyprefix
-
-        This bibliography's string prefix for citation keys.
-
-    .. attribute:: filter_
-
-        An :class:`ast.AST` node, containing the parsed filter expression.
-    """
+class BibliographyCache(NamedTuple):
+    """Contains information about a bibliography directive."""
+    bibfiles: List[str]  #: List of bib files for this directive.
+    style: str  #: The pybtex style.
+    list_: str  #: The list type.
+    enumtype: str  #: The sequence type (for enumerated lists).
+    start: int  #: The first ordinal of the sequence (for enumerated lists).
+    labels: Dict[str, str]  #: Maps citation keys to their final labels.
+    labelprefix: str  #: String prefix for pybtex generated labels.
+    keyprefix: str  #: String prefix for citation keys.
+    filter_: ast.AST  #: Parsed filter expression.
 
 
 class BibtexDomain(Domain):
