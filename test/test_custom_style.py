@@ -6,15 +6,14 @@
     Test a custom style.
 """
 
-import re
 import pytest
 
 
 @pytest.mark.sphinx('html', testroot='custom_style')
 def test_custom_style(app, warning):
-    app.builder.build_all()
+    app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding='utf-8')
     # the custom style suppresses web links
-    assert not re.search('http://arxiv.org', output)
-    assert not re.search('http://dx.doi.org', output)
+    assert 'http://arxiv.org' not in output
+    assert 'http://dx.doi.org' not in output
