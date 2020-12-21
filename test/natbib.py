@@ -434,9 +434,6 @@ class CitationReferencesDirective(Directive):
 
         citations = env.domains['cite'].citations
 
-        # TODO: implement
-        # env.domaindata['cite']['refdocs'][env.docname] = Citations(env, path)
-
         tbody = nodes.tbody('')
         for i, key in enumerate(keys):
             row = nodes.row('')
@@ -483,14 +480,14 @@ class CitationDomain(Domain):
     initial_data = {
         'keys': oset(),  # Holds cite-keys in order of reference
         'conf': DEFAULT_CONF,
-        'refdocs': {}
+        'refdoc': None
     }
 
     def __init__(self, env):
         super().__init__(env)
 
         # Update conf
-        env.domaindata['cite']['conf'].update(env.app.config.natbib)
+        self.data['conf'].update(env.app.config.natbib)
 
         # TODO: warn if citations can't parse bibtex file
         self.citations = Citations(env)
@@ -498,7 +495,7 @@ class CitationDomain(Domain):
     def resolve_xref(self, env, fromdocname, builder,
                      typ, target, node, contnode):
 
-        refdoc = env.domaindata['cite'].get('refdoc')
+        refdoc = self.data['refdoc']
         if not refdoc:
             logger.warning(
                 'no `refs` directive found; citations will have dead links',
@@ -519,7 +516,7 @@ class CitationDomain(Domain):
 
                 transform = nd.transform(**nd.details)
                 node = transform.cite(
-                    typ, refuri, global_keys=env.domaindata['cite']['keys'])
+                    typ, refuri, global_keys=self.data['keys'])
 
         return node
 
