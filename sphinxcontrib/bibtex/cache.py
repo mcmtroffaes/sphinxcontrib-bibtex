@@ -3,7 +3,7 @@
     Classes and methods to maintain any bibtex information that is stored
     outside the doctree.
 
-    .. autoclass:: Cache
+    .. autoclass:: BibtexDomain
         :members:
 
     .. autoclass:: BibliographyCache

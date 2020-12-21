@@ -2,12 +2,11 @@
 """
     .. autofunction:: setup
     .. autofunction:: init_bibtex_cache
-    .. autofunction:: purge_bibtex_cache
-    .. autofunction:: merge_bibtex_cache
-    .. autofunction:: init_foot_current_id
+    .. autofunction:: init_foot_bibliography_id
     .. autofunction:: process_citations
     .. autofunction:: process_citation_references
     .. autofunction:: check_duplicate_labels
+    .. autofunction:: save_bibtex_json
 """
 
 import docutils.nodes
@@ -55,7 +54,7 @@ def init_bibtex_cache(app):
                     document[0] if len(document) > 0 else None)
 
 
-def init_foot_current_id(app, docname, source):
+def init_foot_bibliography_id(app, docname, source):
     """Initialize current footbibliography id for *docname*.
 
     :param app: The sphinx application.
@@ -170,7 +169,7 @@ def setup(app):
     app.add_config_value("bibtex_footbibliography_header", "", "html")
     app.add_domain(BibtexDomain)
     app.connect("builder-inited", init_bibtex_cache)
-    app.connect("source-read", init_foot_current_id)
+    app.connect("source-read", init_foot_bibliography_id)
     app.connect("doctree-resolved", process_citations)
     app.connect("doctree-resolved", process_citation_references)
     app.connect("env-updated", check_duplicate_labels)
