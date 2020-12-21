@@ -16,7 +16,10 @@ import docutils.parsers.rst
 import docutils.utils
 import sphinx.util
 
-from typing import cast
+from typing import cast, Optional
+
+from sphinx.application import Sphinx
+from sphinx.environment import BuildEnvironment
 
 from .bibfile import normpath_filename
 from .cache import BibtexDomain
@@ -34,12 +37,8 @@ from .foot_transforms import FootBibliographyTransform
 logger = sphinx.util.logging.getLogger(__name__)
 
 
-def init_bibtex_cache(app):
-    """Create ``app.env.bibtex_cache`` if it does not exist yet.
-
-    :param app: The sphinx application.
-    :type app: :class:`sphinx.application.Sphinx`
-    """
+def init_bibtex_cache(app: Sphinx) -> None:
+    """Initialize the Sphinx build."""
     # parse bibliography headers
     for directive in ("bibliography", "footbibliography"):
         conf_name = "bibtex_{0}_header".format(directive)
@@ -54,29 +53,15 @@ def init_bibtex_cache(app):
                     document[0] if len(document) > 0 else None)
 
 
-def init_foot_bibliography_id(app, docname, source):
-    """Initialize current footbibliography id for *docname*.
-
-    :param app: The sphinx application.
-    :type app: :class:`sphinx.application.Sphinx`
-    :param docname: The document name.
-    :type docname: :class:`str`
-    :param source: The document source.
-    :type source: :class:`str`
-    """
+def init_foot_bibliography_id(app: Sphinx, docname: docutils.nodes.document,
+                              source: str) -> None:
+    """Initialize current footbibliography id for *docname*."""
     new_foot_bibliography_id(app.env)
 
 
-def process_citations(app, doctree, docname):
-    """Replace labels of citation nodes by actual labels.
-
-    :param app: The sphinx application.
-    :type app: :class:`sphinx.application.Sphinx`
-    :param doctree: The document tree.
-    :type doctree: :class:`docutils.nodes.document`
-    :param docname: The document name.
-    :type docname: :class:`str`
-    """
+def process_citations(app: Sphinx, doctree: docutils.nodes.document,
+                      docname: str) -> None:
+    """Replace labels of citation nodes by actual labels."""
     domain = cast(BibtexDomain, app.env.get_domain('bibtex'))
     for node in doctree.traverse(docutils.nodes.citation):
         if "bibtex" in node.attributes.get('classes', []):
@@ -85,7 +70,8 @@ def process_citations(app, doctree, docname):
             node[0] = docutils.nodes.label('', label)
 
 
-def process_citation_references(app, doctree, docname):
+def process_citation_references(app: Sphinx, doctree: docutils.nodes.document,
+                                docname: str) -> None:
     """Replace text of citation reference nodes by actual labels.
 
     :param app: The sphinx application.
@@ -106,14 +92,8 @@ def process_citation_references(app, doctree, docname):
             node[0] = docutils.nodes.Text('[' + label + ']')
 
 
-def check_duplicate_labels(app, env):
-    """Check and warn about duplicate citation labels.
-
-    :param app: The sphinx application.
-    :type app: :class:`sphinx.application.Sphinx`
-    :param env: The sphinx build environment.
-    :type env: :class:`sphinx.environment.BuildEnvironment`
-    """
+def check_duplicate_labels(app: Sphinx, env: BuildEnvironment) -> None:
+    """Check and warn about duplicate citation labels."""
     domain = cast(BibtexDomain, env.get_domain('bibtex'))
     label_to_key = {}
     for bibcaches in domain.bibliographies.values():
@@ -127,7 +107,7 @@ def check_duplicate_labels(app, env):
                     label_to_key[label] = key
 
 
-def save_bibtex_json(app, exc):
+def save_bibtex_json(app: Sphinx, exc: Optional[Exception]) -> None:
     if exc is None:
         json_filename = normpath_filename(app.env, "/bibtex.json")
         try:
@@ -148,7 +128,7 @@ def save_bibtex_json(app, exc):
             logger.error("""bibtex citations changed, rerun sphinx""")
 
 
-def setup(app):
+def setup(app: Sphinx) -> None:
     """Set up the bibtex extension:
 
     * register config values
@@ -157,9 +137,6 @@ def setup(app):
     * register roles
     * register transforms
     * connect events to functions
-
-    :param app: The sphinx application.
-    :type app: :class:`sphinx.application.Sphinx`
     """
 
     app.add_config_value("bibtex_default_style", "alpha", "html")
