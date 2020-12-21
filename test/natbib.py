@@ -487,7 +487,7 @@ class CitationDomain(Domain):
     }
 
     def __init__(self, env):
-        super(CitationDomain, self).__init__(env)
+        super().__init__(env)
 
         # Update conf
         env.domaindata['cite']['conf'].update(env.app.config.natbib)
