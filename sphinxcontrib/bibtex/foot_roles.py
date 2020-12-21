@@ -6,13 +6,10 @@
 """
 
 from oset import oset
-from typing import cast
 
 from pybtex.plugin import find_plugin
 import pybtex.database
 from sphinx.roles import XRefRole
-
-from .cache import BibtexDomain
 
 
 class FootCiteRole(XRefRole):
@@ -21,14 +18,13 @@ class FootCiteRole(XRefRole):
     backend = find_plugin('pybtex.backends', 'docutils')()
 
     def make_refnode(self, document, env, key):
-        domain = cast(BibtexDomain, env.get_domain('bibtex'))
         cited = env.temp_data.setdefault("bibtex_foot_cited", {})
         for otherkeys in cited.values():
             if key in otherkeys:
                 break
         else:
             keys = cited.setdefault(
-                env.temp_data["bibtex_footbibliography_id"], oset())
+                env.temp_data["bibtex_foot_bibliography_id"], oset())
             keys.add(key)
         # TODO get the actual entry
         return self.backend.footnote_reference(_fake_entry(key), document)

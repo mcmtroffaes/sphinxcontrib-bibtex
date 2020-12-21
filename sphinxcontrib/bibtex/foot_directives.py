@@ -12,9 +12,9 @@ from .cache import BibtexDomain
 from .foot_nodes import footbibliography
 
 
-def new_footbibliography_id(env: BuildEnvironment) -> None:
+def new_foot_bibliography_id(env: BuildEnvironment) -> None:
     """Generate a new footbibliography id for the given build environment."""
-    env.temp_data["bibtex_footbibliography_id"] = \
+    env.temp_data["bibtex_foot_bibliography_id"] = \
         'bibtex-footbibliography-%s-%s' % (
             env.docname, env.new_serialno('bibtex'))
 
@@ -45,6 +45,6 @@ class FootBibliographyDirective(Directive):
         domain = cast(BibtexDomain, env.get_domain('bibtex'))
         for bibfile in domain.bibfiles:
             env.note_dependency(bibfile)
-        id_ = env.temp_data["bibtex_footbibliography_id"]
-        new_footbibliography_id(env)
+        id_ = env.temp_data["bibtex_foot_bibliography_id"]
+        new_foot_bibliography_id(env)
         return [footbibliography('', ids=[id_])]

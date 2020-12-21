@@ -27,7 +27,8 @@ from .directives import BibliographyDirective
 from .transforms import BibliographyTransform
 from .foot_nodes import footbibliography
 from .foot_roles import FootCiteRole
-from .foot_directives import FootBibliographyDirective, new_footbibliography_id
+from .foot_directives import FootBibliographyDirective
+from .foot_directives import new_foot_bibliography_id
 from .foot_transforms import FootBibliographyTransform
 
 
@@ -64,7 +65,7 @@ def init_foot_current_id(app, docname, source):
     :param source: The document source.
     :type source: :class:`str`
     """
-    new_footbibliography_id(app.env)
+    new_foot_bibliography_id(app.env)
 
 
 def process_citations(app, doctree, docname):
