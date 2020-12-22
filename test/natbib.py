@@ -261,7 +261,8 @@ class CitationXRefRole(XRefRole):
         for opt in ['style', 'brackets', 'separator', 'sort', 'sort_compress']:
             config[opt] = self.env.temp_data.get(
                 "cite_%s" % opt,
-                self.env.domaindata['cite']['conf'].get(opt, DEFAULT_CONF[opt]))
+                self.env.domaindata['cite']['conf'].get(
+                    opt, DEFAULT_CONF[opt]))
 
         if self.name == "cite:text":
             # A ``text`` citation is unique because it doesn't reference a
