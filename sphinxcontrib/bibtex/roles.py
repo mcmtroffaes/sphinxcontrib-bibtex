@@ -6,6 +6,7 @@
 """
 from typing import cast
 
+import docutils.nodes
 from pybtex.plugin import find_plugin
 import pybtex.database
 from sphinx.addnodes import pending_xref
@@ -28,10 +29,13 @@ class CiteRole(XRefRole):
         for key in self.target.split(','):
             key = key.strip()
             refnode = pending_xref(
-                key, refdomain='cite', reftype='citation',
-                reftarget="bibtex-citation-%s" % key, refdoc=env.docname)
+                key, refdomain='cite', reftype='p',
+                reftarget="bibtex-citation-%s" % key, refdoc=env.docname,
+                refexplicit=False, refwarn=False)
+            refnode += docutils.nodes.literal(
+                key, key, classes=['xref', 'cite', 'cite-p'])
+            refnodes.append(refnode)
             domain.citation_refs[key].add(env.docname)
-            refnodes += refnode
         return refnodes, []
 
 
