@@ -14,60 +14,35 @@
     .. autofunction:: get_bibliography_entry
 """
 
-import collections
 import copy
 import os.path
+from typing import NamedTuple, Dict
+
 from pybtex.database.input import bibtex
-from pybtex.database import BibliographyData
+from pybtex.database import BibliographyData, Entry
 import sphinx.util
+from sphinx.environment import BuildEnvironment
 from sphinx.util.console import bold, standout
 
 
 logger = sphinx.util.logging.getLogger(__name__)
 
 
-class BibfileCache(collections.namedtuple('BibfileCache', 'mtime data')):
-
-    """Contains information about a parsed .bib file.
-
-    .. attribute:: mtime
-
-        A :class:`float` representing the modification time of the .bib
-        file when it was last parsed.
-
-    .. attribute:: data
-
-        A :class:`pybtex.database.BibliographyData` containing the
-        parsed .bib file.
-
-    """
+#: Contains information about a parsed bib file.
+class BibfileCache(NamedTuple):
+    #: modification time of the bib file when last parsed
+    mtime: float
+    #: parsed bib file
+    data: BibliographyData
 
 
-def normpath_filename(env, filename, docname=None):
-    """Return normalised path to *bibfile* for the given environment
-    *env*.
-
-    :param env: The sphinx build environment.
-    :type env: :class:`sphinx.environment.BuildEnvironment`
-    :param filename: The file name.
-    :type filename: ``str``
-    :param docname: The document name from which the bib file is referenced.
-    :type docname: ``str``
-    :return: A normalised path to the bib file.
-    :rtype: ``str``
-    """
-    return os.path.normpath(
-        env.relfn2path(filename.strip(), docname)[1])
+def normpath_filename(env: BuildEnvironment, filename: str) -> str:
+    """Return normalised path to *filename* for the given environment *env*."""
+    return os.path.normpath(env.relfn2path(filename.strip())[1])
 
 
-def parse_bibfile(bibfile, encoding):
-    """Parse *bibfile*, and return parsed data.
-
-    :param bibfile: The bib file name.
-    :type bibfile: ``str``
-    :return: The parsed bibliography data.
-    :rtype: :class:`pybtex.database.BibliographyData`
-    """
+def parse_bibfile(bibfile: str, encoding: str) -> BibliographyData:
+    """Parse *bibfile* with given *encoding*, and return parsed data."""
     parser = bibtex.Parser(encoding)
     logger.info(
         bold("parsing bibtex file {0}... ".format(bibfile)), nonl=True)
@@ -77,16 +52,10 @@ def parse_bibfile(bibfile, encoding):
     return parser.data
 
 
-def process_bibfile(cache, bibfile, encoding):
+def process_bibfile(cache: Dict[str, BibfileCache],
+                    bibfile: str, encoding: str) -> BibliographyData:
     """Check if ``cache[bibfile]`` is still up to date. If not, parse
-    the *bibfile*, and store parsed data in the bibtex cache.
-
-    :param cache: The cache for all bib files.
-    :type cache: ``dict``
-    :param bibfile: The bib file name.
-    :type bibfile: ``str``
-    :return: The parsed bibliography data.
-    :rtype: :class:`pybtex.database.BibliographyData`
+    *bibfile*, store parsed data in *cache*, and return the data.
     """
     # get modification time of bibfile
     try:
@@ -119,7 +88,7 @@ def process_bibfile(cache, bibfile, encoding):
     return cache[bibfile].data
 
 
-def get_bibliography_entry(cache, key):
+def get_bibliography_entry(cache: Dict[str, BibfileCache], key: str) -> Entry:
     """Return bibliography entry from *cache* for the given *key*."""
     for bibfile_cache in cache.values():
         data = bibfile_cache.data

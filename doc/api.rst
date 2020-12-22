@@ -10,3 +10,4 @@ Extension API
     api/directives
     api/transforms
     api/cache
+    api/bibfile

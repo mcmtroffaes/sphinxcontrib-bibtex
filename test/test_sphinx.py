@@ -5,8 +5,11 @@
 
     General Sphinx test and check output.
 """
+from typing import cast
 
 import pytest
+
+from sphinxcontrib.bibtex import BibtexDomain
 
 
 @pytest.mark.sphinx('html', testroot='sphinx')
@@ -17,4 +20,5 @@ def test_sphinx(app, warning):
     assert u'is not referenced' in warnings
     # for coverage
     with pytest.raises(KeyError):
-        app.env.bibtex_cache.get_label_from_key("nonexistinglabel")
+        domain = cast(BibtexDomain, app.env.get_domain('bibtex'))
+        domain.get_label_from_key("nonexistinglabel")

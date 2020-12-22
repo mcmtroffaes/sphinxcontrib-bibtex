@@ -7,13 +7,15 @@
 """
 
 import ast  # parse(), used for filter
+from typing import cast
+
 import sphinx.util
 
 from docutils.parsers.rst import Directive, directives
 from sphinx.util.console import standout
 
 from .bibfile import normpath_filename
-from .cache import BibliographyCache
+from .cache import BibliographyCache, BibtexDomain
 from .nodes import bibliography
 
 
@@ -70,6 +72,7 @@ class BibliographyDirective(Directive):
         bibliography.
         """
         env = self.state.document.settings.env
+        domain = cast(BibtexDomain, env.get_domain('bibtex'))
         # create id and cache for this node
         # this id will be stored with the node
         # and is used to look up additional data in env.bibtex_cache
@@ -106,7 +109,7 @@ class BibliographyDirective(Directive):
             bibfiles = [normpath_filename(env, bibfile)
                         for bibfile in self.arguments[0].split()]
         else:
-            bibfiles = list(env.bibtex_cache.bibfiles.keys())
+            bibfiles = list(domain.bibfiles.keys())
         bibcache = BibliographyCache(
             list_=self.options.get("list", "citation"),
             enumtype=self.options.get("enumtype", "arabic"),
@@ -126,6 +129,6 @@ class BibliographyDirective(Directive):
             env.note_dependency(bibfile)
         # if citations change, bibtex.json changes, and so might entries
         env.note_dependency(
-            normpath_filename(env, "bibtex.json", env.app.config.master_doc))
-        env.bibtex_cache.bibliographies[env.docname][id_] = bibcache
+            normpath_filename(env, "/bibtex.json"))
+        domain.bibliographies[env.docname][id_] = bibcache
         return [bibliography('', ids=[id_])]

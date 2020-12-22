@@ -4,10 +4,13 @@
 
         .. automethod:: result_nodes
 """
+from typing import cast
 
 from pybtex.plugin import find_plugin
 import pybtex.database
 from sphinx.roles import XRefRole
+
+from .cache import BibtexDomain
 
 
 class CiteRole(XRefRole):
@@ -31,9 +34,10 @@ class CiteRole(XRefRole):
             for key in keys]
         for refnode in refnodes:
             refnode['classes'].append('bibtex')
+        domain = cast(BibtexDomain, env.get_domain('bibtex'))
         for key in keys:
-            env.bibtex_cache.cited[env.docname].add(key)
-        if key not in env.bibtex_cache.cited_previous[env.docname]:
+            domain.cited[env.docname].add(key)
+        if key not in domain.cited_previous[env.docname]:
             env.note_reread()
         return refnodes, []
 
