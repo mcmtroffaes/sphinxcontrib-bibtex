@@ -1,4 +1,4 @@
-from typing import Tuple, List
+from typing import Tuple, List, cast
 
 from docutils import nodes
 from docutils.parsers.rst import directives
@@ -254,7 +254,7 @@ class CitationXRefRole(XRefRole):
         generating the proper citation reference representation during the
         resolve_xref phase.
         """
-        citations = env.domains['cite'].citations
+        domain = cast(CitationDomain, env.get_domain('cite'))
 
         # Get the config at this point in the document
         config = {}
@@ -272,14 +272,14 @@ class CitationXRefRole(XRefRole):
         else:
             keys, pre, post = parse_keys(self.text)
             for key in keys:
-                if citations.get(key) is None:
+                if domain.citations.get(key) is None:
                     logger.warning(
                         "cite-key `%s` not found in bibtex file" % key,
                         location=(env.docname, self.lineno))
                     continue
                 env.domaindata['cite']['keys'].add(key)
                 env.domaindata['cite']['keys'] = sort_references(
-                    env.domaindata['cite']['keys'], citations)
+                    env.domaindata['cite']['keys'], domain.citations)
 
         data = {'keys': keys,
                 'pre': pre,
