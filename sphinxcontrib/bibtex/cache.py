@@ -181,8 +181,8 @@ class BibtexDomain(Domain):
 
     """Global bibtex extension information cache."""
 
-    name = 'bibtex'
-    label = 'BibTeX'
+    name = 'cite'
+    label = 'BibTeX Citations'
     data_version = 1
 
     @property
