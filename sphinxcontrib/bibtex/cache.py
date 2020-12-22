@@ -18,13 +18,11 @@ from typing import List, Dict, NamedTuple, Tuple, Set
 import docutils.nodes
 import re
 
-from pybtex.database import Entry
 from sphinx.addnodes import pending_xref
 from sphinx.builders import Builder
 from sphinx.domains import Domain
 from sphinx.environment import BuildEnvironment
 from sphinx.errors import ExtensionError
-from sphinx.util.nodes import make_refnode
 
 from .bibfile import BibfileCache, normpath_filename, process_bibfile
 
