@@ -24,19 +24,12 @@ class CiteRole(XRefRole):
         """Transform reference node into a citation reference,
         and note that the reference was cited.
         """
+        node['refdomain'] = 'cite'
         domain = cast(BibtexDomain, env.get_domain('cite'))
-        refnodes = []
-        for key in self.target.split(','):
-            key = key.strip()
-            refnode = pending_xref(
-                key, refdomain='cite', reftype='p',
-                reftarget="bibtex-citation-%s" % key, refdoc=env.docname,
-                refexplicit=False, refwarn=False)
-            refnode += docutils.nodes.literal(
-                key, key, classes=['xref', 'cite', 'cite-p'])
-            refnodes.append(refnode)
-            domain.citation_refs[key].add(env.docname)
-        return refnodes, []
+        keys = [key.strip() for key in self.target.split(',')]
+        for key in keys:
+            domain.citation_refs.setdefault(key, set()).add(env.docname)
+        return [node], []
 
 
 def _fake_entry(key):

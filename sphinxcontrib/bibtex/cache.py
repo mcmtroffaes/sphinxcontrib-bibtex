@@ -15,7 +15,7 @@ import collections
 import copy
 from typing import List, Dict, NamedTuple, Tuple, Set
 
-from docutils.nodes import Element
+import docutils.nodes
 import re
 
 from pybtex.database import Entry
@@ -257,10 +257,19 @@ class BibtexDomain(Domain):
 
     def resolve_xref(self, env: BuildEnvironment, fromdocname: str,
                      builder: Builder, typ: str, target: str,
-                     node: pending_xref, contnode: Element
-                     ) -> Element:
-        docname, labelid = self.citations[target]
-        return make_refnode(builder, fromdocname, docname, labelid, contnode)
+                     node: pending_xref, contnode: docutils.nodes.Element
+                     ) -> docutils.nodes.Element:
+        keys = [key.strip() for key in target.split(',')]
+        node = docutils.nodes.inline('', '', classes=['cite'])
+        for key in keys:
+            todocname, labelid = self.citations[key]
+            refuri = builder.get_relative_uri(fromdocname, todocname)
+            lrefuri = '#'.join([refuri, labelid])
+            # TODO generate proper labels
+            label = "[" + key + "]"
+            node += docutils.nodes.reference(
+                label, label, internal=True, refuri=lrefuri)
+        return node
 
     def get_label_from_key(self, key):
         """Return label for the given key."""
