@@ -24,6 +24,8 @@ class CiteRole(XRefRole):
         and note that the reference was cited.
         """
         domain = cast(BibtexDomain, env.get_domain('cite'))
+        refnodes = []
+        for key in self.target.split(','):
             key = key.strip()
             refnode = pending_xref(
                 key, refdomain='cite', reftype='citation',
