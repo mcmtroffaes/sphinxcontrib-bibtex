@@ -15,17 +15,18 @@ def test_autodoc(app, warning):
     app.builder.build_all()
     assert not warning.getvalue()
     output = (app.outdir / "doc_cite.html").read_text()
-    assert len(re.findall("\\[One\\]", output)) == 1
-    assert len(re.findall("\\[Two\\]", output)) == 1
-    assert len(re.findall("\\[Thr\\]", output)) == 1
-    assert len(re.findall("\\[Fou\\]", output)) == 1
-    assert len(re.findall("\\[Fiv\\]", output)) == 1
-    assert len(re.findall("\\[Six\\]", output)) == 1
-    assert len(re.findall("\\[Sev\\]", output)) == 1
-    assert len(re.findall("\\[Eig\\]", output)) == 1
-    assert len(re.findall("\\[Nin\\]", output)) == 1
-    assert len(re.findall("\\[Ten\\]", output)) == 1
-    assert len(re.findall("\\[Ele\\]", output)) == 1
+    print(output)
+    assert len(re.findall("\\[One\\]", output)) == 2
+    assert len(re.findall("\\[Two\\]", output)) == 2
+    assert len(re.findall("\\[Thr\\]", output)) == 2
+    assert len(re.findall("\\[Fou\\]", output)) == 2
+    assert len(re.findall("\\[Fiv\\]", output)) == 2
+    assert len(re.findall("\\[Six\\]", output)) == 2
+    assert len(re.findall("\\[Sev\\]", output)) == 2
+    assert len(re.findall("\\[Eig\\]", output)) == 2
+    assert len(re.findall("\\[Nin\\]", output)) == 2
+    assert len(re.findall("\\[Ten\\]", output)) == 2
+    assert len(re.findall("\\[Ele\\]", output)) == 2
     assert len(re.findall("Een", output)) == 1
     assert len(re.findall("Twee", output)) == 1
     assert len(re.findall("Drie", output)) == 1

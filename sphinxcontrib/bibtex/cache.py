@@ -262,7 +262,6 @@ class BibtexDomain(Domain):
             todocname, id_, label = self.citations[key]
             refuri = builder.get_relative_uri(fromdocname, todocname)
             lrefuri = '#'.join([refuri, id_])
-            # TODO generate proper labels
             node += docutils.nodes.reference(
                 label, label, internal=True, refuri=lrefuri)
         return node
