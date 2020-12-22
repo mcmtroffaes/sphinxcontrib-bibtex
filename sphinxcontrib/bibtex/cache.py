@@ -267,7 +267,7 @@ class BibtexDomain(Domain):
                 yield key
 
     def _get_bibliography_entries(self, docname, id_, warn):
-        """Return filtered bibliography entries, sorted by occurence
+        """Return filtered bibliography entries, sorted by occurrence
         in the bib file.
         """
         # get the information of this bibliography node
