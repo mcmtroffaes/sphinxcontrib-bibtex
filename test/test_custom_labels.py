@@ -15,7 +15,9 @@ def test_custom_labels(app, warning):
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding='utf-8')
     # the custom style uses keys as labels
-    assert "[myfancybibtexkey]" in output
-    assert "[myotherfancybibtexkey]" in output
-    assert ">myfancybibtexkey</a>" in output
-    assert ">myotherfancybibtexkey</a>" in output
+    # citations
+    assert ">[myfancybibtexkey]</span>" in output
+    assert ">[myotherfancybibtexkey]</span>" in output
+    # citation_refs
+    assert ">[myfancybibtexkey]</a>" in output
+    assert ">[myotherfancybibtexkey]</a>" in output
