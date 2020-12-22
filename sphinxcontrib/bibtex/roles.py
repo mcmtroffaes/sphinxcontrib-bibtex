@@ -29,8 +29,7 @@ class CiteRole(XRefRole):
             key = key.strip()
             refnode = pending_xref(
                 key, refdomain='cite', reftype='citation',
-                reftarget="bibtex-key-%s" % key, refdoc=env.docname,
-                classes=['bibtex'])
+                reftarget="bibtex-citation-%s" % key, refdoc=env.docname)
             domain.citation_refs[key].add(env.docname)
             refnodes += refnode
         return refnodes, []

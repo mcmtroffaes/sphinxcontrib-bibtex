@@ -197,9 +197,9 @@ class BibtexDomain(Domain):
     def bibliographies(self) -> Dict[str, BibliographyCache]:
         return self.data.setdefault('bibliographies', {})  # id -> cache
 
-    #: key -> (docname, id, line, entry)
+    #: key -> (docname, citation id)
     @property
-    def citations(self) -> Dict[str, Tuple[str, str, int, Entry]]:
+    def citations(self) -> Dict[str, Tuple[str, str]]:
         return self.data.setdefault('citations', {})
 
     #: key -> docnames
@@ -229,7 +229,7 @@ class BibtexDomain(Domain):
         for id_, bibcache in list(self.bibliographies.items()):
             if bibcache.docname == docname:
                 del self.bibliographies[id_]
-        for key, (doc, id_, line, entry) in list(self.citations.items()):
+        for key, (doc, id_) in list(self.citations.items()):
             if doc == docname:
                 del self.citations[key]
         for key, docnames in list(self.citation_refs.items()):
@@ -244,16 +244,22 @@ class BibtexDomain(Domain):
             if bibcache.docname in docnames:
                 self.bibliographies[id_] = bibcache
         for docname in docnames:
-            # bibfiles and cited_previous are global, no need to merge
-            if docname in otherdata['cited']:
-                self.cited[docname] = otherdata['cited'][docname]
             if docname in otherdata['enum_count']:
                 self.enum_count[docname] = otherdata['enum_count'][docname]
+        for key, (doc, id_) in otherdata['citations'].items():
+            if doc in docnames:
+                self.citations[key] = doc
+        for key, data in otherdata['citation_refs'].items():
+            citation_refs = self.citation_refs.setdefault(key, set())
+            for docname in data:
+                if docname in docnames:
+                    citation_refs.add(docname)
 
     def resolve_xref(self, env: BuildEnvironment, fromdocname: str,
                      builder: Builder, typ: str, target: str,
                      node: pending_xref, contnode: Element
                      ) -> Element:
+        docname, labelid = self.citations[target]
         return make_refnode(builder, fromdocname, docname, labelid, contnode)
 
     def get_label_from_key(self, key):
