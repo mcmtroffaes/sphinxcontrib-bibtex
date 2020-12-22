@@ -1,9 +1,12 @@
+from typing import Tuple, List
+
 from docutils import nodes
 from docutils.parsers.rst import directives
 from docutils.parsers.rst import Directive
 
 from sphinx import addnodes
 from sphinx.domains import Domain, ObjType
+from sphinx.environment import BuildEnvironment
 from sphinx.locale import _
 from sphinx.roles import XRefRole
 from sphinx.util import logging
@@ -33,8 +36,6 @@ ROLES = [
     't', 'ts', 'alt', 'alts',
     'author', 'authors', 'year', 'yearpar', 'text', 'title'
 ]
-
-SUBSUP_RE = re.compile(r'([\s\S^\^\_]*)([\^\_]){?([\S\s^}]*)}?')
 
 
 def parse_keys(rawtext):
@@ -244,24 +245,23 @@ def sort_references(refs, citations):
 
 
 class CitationXRefRole(XRefRole):
-    def run(self):
+    def result_nodes(self, document: nodes.document, env: BuildEnvironment,
+                     node: nodes.Element, is_ref: bool
+                     ) -> Tuple[List[nodes.Node], List[nodes.system_message]]:
         """
         When a ``cite`` role is encountered, we replace it with a
-        ``docutils.nodes.pending`` node that uses a ``CitationTrasform`` for
+        ``docutils.nodes.pending`` node that uses a ``CitationTransform`` for
         generating the proper citation reference representation during the
         resolve_xref phase.
         """
-        rnodes = super().run()
-        rootnode = rnodes[0][0]
-
-        citations = self.env.domains['cite'].citations
+        citations = env.domains['cite'].citations
 
         # Get the config at this point in the document
         config = {}
         for opt in ['style', 'brackets', 'separator', 'sort', 'sort_compress']:
-            config[opt] = self.env.temp_data.get(
+            config[opt] = env.temp_data.get(
                 "cite_%s" % opt,
-                self.env.domaindata['cite']['conf'].get(
+                env.domaindata['cite']['conf'].get(
                     opt, DEFAULT_CONF[opt]))
 
         if self.name == "cite:text":
@@ -275,21 +275,21 @@ class CitationXRefRole(XRefRole):
                 if citations.get(key) is None:
                     logger.warning(
                         "cite-key `%s` not found in bibtex file" % key,
-                        location=(self.env.docname, self.lineno))
+                        location=(env.docname, self.lineno))
                     continue
-                self.env.domaindata['cite']['keys'].add(key)
-                self.env.domaindata['cite']['keys'] = sort_references(
-                    self.env.domaindata['cite']['keys'], citations)
+                env.domaindata['cite']['keys'].add(key)
+                env.domaindata['cite']['keys'] = sort_references(
+                    env.domaindata['cite']['keys'], citations)
 
         data = {'keys': keys,
                 'pre': pre,
                 'post': post,
                 'typ': self.name,
-                'global_keys': self.env.domaindata['cite']['keys'],
+                'global_keys': env.domaindata['cite']['keys'],
                 'config': config}
 
-        rootnode += nodes.pending(CitationTransform, data)
-        return [rootnode], []
+        node += nodes.pending(CitationTransform, data)
+        return [node], []
 
 
 class CitationConfDirective(Directive):
