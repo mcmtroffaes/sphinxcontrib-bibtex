@@ -3,7 +3,7 @@
         :show-inheritance:
 
         .. autoattribute:: default_priority
-        .. automethod:: apply
+        .. automethod:: run
 
     .. autofunction:: node_text_transform
 
@@ -16,6 +16,7 @@ import docutils.transforms
 import sphinx.util
 
 from pybtex.plugin import find_plugin
+from sphinx.transforms.post_transforms import SphinxPostTransform
 
 from .cache import BibtexDomain
 from .nodes import bibliography
@@ -60,19 +61,17 @@ def get_docnames(env):
         docname = nextdoc
 
 
-class BibliographyTransform(docutils.transforms.Transform):
-
+class BibliographyTransform(SphinxPostTransform):
     """A docutils transform to generate citation entries for
     bibliography nodes.
     """
 
-    # transform must be applied before references are resolved
-    default_priority = 10
-    """Priority of the transform. See
-    https://docutils.sourceforge.io/docs/ref/transforms.html
-    """
+    # transform must be applied before sphinx runs its ReferencesResolver
+    # which has priority 10, so when ReferencesResolver calls the cite domain
+    # resolve_xref, the target is present and all will work fine
+    default_priority = 5
 
-    def apply(self):
+    def run(self, **kwargs):
         """Transform each
         :class:`~sphinxcontrib.bibtex.nodes.bibliography` node into a
         list of citations.

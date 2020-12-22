@@ -13,15 +13,18 @@
 import ast
 import collections
 import copy
-import json
-from typing import List, Dict, NamedTuple
+from typing import List, Dict, NamedTuple, Tuple, Set
 
-from oset import oset
+from docutils.nodes import Element
 import re
 
+from pybtex.database import Entry
+from sphinx.addnodes import pending_xref
+from sphinx.builders import Builder
 from sphinx.domains import Domain
 from sphinx.environment import BuildEnvironment
 from sphinx.errors import ExtensionError
+from sphinx.util.nodes import make_refnode
 
 from .bibfile import BibfileCache, normpath_filename, process_bibfile
 
@@ -194,15 +197,16 @@ class BibtexDomain(Domain):
     def bibliographies(self) -> Dict[str, BibliographyCache]:
         return self.data.setdefault('bibliographies', {})  # id -> cache
 
+    #: key -> (docname, id, line, entry)
     @property
-    def cited(self) -> Dict[str, oset]:
-        return self.data.setdefault(
-            'cited', collections.defaultdict(oset))  # doc -> keys
+    def citations(self) -> Dict[str, Tuple[str, str, int, Entry]]:
+        return self.data.setdefault('citations', {})
 
+    #: key -> docnames
     @property
-    def cited_previous(self) -> Dict[str, oset]:
+    def citation_refs(self) -> Dict[str, Set[str]]:
         return self.data.setdefault(
-            'cited_previous', collections.defaultdict(oset))  # doc -> keys
+            'citation_refs', collections.defaultdict(set))
 
     @property
     def enum_count(self) -> Dict[str, int]:
@@ -220,23 +224,19 @@ class BibtexDomain(Domain):
                 self.bibfiles,
                 normpath_filename(env, "/" + bibfile),
                 env.app.config.bibtex_encoding)
-        # read json
-        json_filename = normpath_filename(env, "/bibtex.json")
-        try:
-            with open(json_filename) as json_file:
-                json_dict = json.load(json_file)
-        except FileNotFoundError:
-            json_dict = {"cited": {}}
-        # import cited_previous from json data
-        self.cited_previous.update({
-            key: oset(value) for key, value in json_dict["cited"].items()})
 
     def clear_doc(self, docname: str) -> None:
         for id_, bibcache in list(self.bibliographies.items()):
             if bibcache.docname == docname:
                 del self.bibliographies[id_]
-        self.cited.pop(docname, None)
-        # note: intentionally do not clear cited_previous
+        for key, (doc, id_, line, entry) in list(self.citations.items()):
+            if doc == docname:
+                del self.citations[key]
+        for key, docnames in list(self.citation_refs.items()):
+            if docnames == {docname}:
+                del self.citation_refs[key]
+            elif docname in docnames:
+                docnames.remove(docname)
         self.enum_count.pop(docname, None)
 
     def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
@@ -249,6 +249,12 @@ class BibtexDomain(Domain):
                 self.cited[docname] = otherdata['cited'][docname]
             if docname in otherdata['enum_count']:
                 self.enum_count[docname] = otherdata['enum_count'][docname]
+
+    def resolve_xref(self, env: BuildEnvironment, fromdocname: str,
+                     builder: Builder, typ: str, target: str,
+                     node: pending_xref, contnode: Element
+                     ) -> Element:
+        return make_refnode(builder, fromdocname, docname, labelid, contnode)
 
     def get_label_from_key(self, key):
         """Return label for the given key."""
@@ -263,8 +269,9 @@ class BibtexDomain(Domain):
         ordered by citation order.
         """
         for docname in docnames:
-            for key in self.cited_previous.get(docname, []):
-                yield key
+            for key, docs in self.citation_refs.items():
+                if docname in docs:
+                    yield key
 
     def _get_bibliography_entries(self, id_, warn):
         """Return filtered bibliography entries, sorted by occurrence
@@ -279,19 +286,16 @@ class BibtexDomain(Domain):
                 # beware: the prefix is not stored in the data
                 # to allow reusing the data for multiple bibliographies
                 key = bibcache.keyprefix + entry.key
-                cited_docnames = frozenset([
-                    docname for docname, keys in self.cited_previous.items()
-                    if key in keys])
                 visitor = _FilterVisitor(
                     entry=entry,
                     docname=bibcache.docname,
-                    cited_docnames=cited_docnames)
+                    cited_docnames=self.citation_refs[key])
                 try:
                     success = visitor.visit(bibcache.filter_)
                 except ValueError as err:
                     warn("syntax error in :filter: expression; %s" % err)
                     # recover by falling back to the default
-                    success = bool(cited_docnames)
+                    success = key in self.citation_refs
                 if success:
                     # entries are modified in an unpickable way
                     # when formatting, so fetch a deep copy

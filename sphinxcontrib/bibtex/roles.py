@@ -8,6 +8,7 @@ from typing import cast
 
 from pybtex.plugin import find_plugin
 import pybtex.database
+from sphinx.addnodes import pending_xref
 from sphinx.roles import XRefRole
 
 from .cache import BibtexDomain
@@ -22,20 +23,14 @@ class CiteRole(XRefRole):
         """Transform reference node into a citation reference,
         and note that the reference was cited.
         """
-        keys = [key.strip() for key in self.target.split(',')]
-        # We fake an entry with the desired key, and
-        # fix the label at doctree-resolved time. This happens in
-        # process_citation_references.
-        refnodes = [
-            self.backend.citation_reference(_fake_entry(key), document)
-            for key in keys]
-        for refnode in refnodes:
-            refnode['classes'].append('bibtex')
         domain = cast(BibtexDomain, env.get_domain('cite'))
-        for key in keys:
-            domain.cited[env.docname].add(key)
-        if key not in domain.cited_previous[env.docname]:
-            env.note_reread()
+            key = key.strip()
+            refnode = pending_xref(
+                key, refdomain='cite', reftype='citation',
+                reftarget="bibtex-key-%s" % key, refdoc=env.docname,
+                classes=['bibtex'])
+            domain.citation_refs[key].add(env.docname)
+            refnodes += refnode
         return refnodes, []
 
 

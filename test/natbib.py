@@ -17,7 +17,6 @@ import pybtex.style.names.lastfirst
 import pybtex.backends.plaintext
 
 from oset import oset
-import re
 
 
 logger = logging.getLogger(__name__)

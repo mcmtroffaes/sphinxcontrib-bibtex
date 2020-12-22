@@ -128,8 +128,5 @@ class BibliographyDirective(Directive):
                 "unknown bibliography list type '{0}'.".format(bibcache.list_))
         for bibfile in bibfiles:
             env.note_dependency(bibfile)
-        # if citations change, bibtex.json changes, and so might entries
-        env.note_dependency(
-            normpath_filename(env, "/bibtex.json"))
         domain.bibliographies[id_] = bibcache
         return [bibliography('', ids=[id_])]
