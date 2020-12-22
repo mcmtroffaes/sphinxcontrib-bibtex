@@ -116,6 +116,10 @@ class BibliographyTransform(SphinxPostTransform):
                     label = '[' + bibcache.labelprefix + entry.label + ']'
                     domain.citations[key] = (
                         env.docname, citation['ids'][0], label)
+                    # citation[0] is the label node
+                    # we override it to change the text
+                    assert isinstance(citation[0], docutils.nodes.label)
+                    citation[0] = docutils.nodes.label(label, label)
                 node_text_transform(citation, transform_url_command)
                 nodes += citation
                 if bibcache.list_ == "enumerated":
