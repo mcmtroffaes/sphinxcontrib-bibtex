@@ -16,6 +16,7 @@ import copy
 from typing import List, Dict, NamedTuple, Tuple, Set
 
 import docutils.nodes
+import sphinx.util
 import re
 
 from sphinx.addnodes import pending_xref
@@ -25,6 +26,9 @@ from sphinx.environment import BuildEnvironment
 from sphinx.errors import ExtensionError
 
 from .bibfile import BibfileCache, normpath_filename, process_bibfile
+
+
+logger = sphinx.util.logging.getLogger(__name__)
 
 
 def _raise_invalid_node(node):
@@ -259,11 +263,18 @@ class BibtexDomain(Domain):
         keys = [key.strip() for key in target.split(',')]
         node = docutils.nodes.inline('', '', classes=['cite'])
         for key in keys:
-            todocname, id_, label = self.citations[key]
-            refuri = builder.get_relative_uri(fromdocname, todocname)
-            lrefuri = '#'.join([refuri, id_])
-            node += docutils.nodes.reference(
-                label, label, internal=True, refuri=lrefuri)
+            try:
+                todocname, id_, label = self.citations[key]
+            except KeyError:
+                # TODO can handle missing reference warning using the domain
+                # TODO instead of posting warning here
+                logger.warning('could not find bibtex key %s' % key)
+                return None
+            else:
+                refuri = builder.get_relative_uri(fromdocname, todocname)
+                lrefuri = '#'.join([refuri, id_])
+                node += docutils.nodes.reference(
+                    label, label, internal=True, refuri=lrefuri)
         return node
 
     def get_label_from_key(self, key):

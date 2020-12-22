@@ -31,9 +31,6 @@ from .foot_directives import new_foot_bibliography_id
 from .foot_transforms import FootBibliographyTransform
 
 
-logger = sphinx.util.logging.getLogger(__name__)
-
-
 def init_bibtex_cache(app: Sphinx) -> None:
     """Initialize the Sphinx build."""
     # parse bibliography headers
