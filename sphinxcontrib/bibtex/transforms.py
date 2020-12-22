@@ -112,9 +112,10 @@ class BibliographyTransform(SphinxPostTransform):
                     # we change it to entry.label later onwards
                     # but we must note the entry.label now;
                     # at this point, we also already prefix the label
-                    key = citation[0].astext()
-                    bibcache.labels[key] = bibcache.labelprefix + entry.label
-                    domain.citations[key] = (env.docname, citation['ids'][0])
+                    key = bibcache.keyprefix + entry.key
+                    label = '[' + bibcache.labelprefix + entry.label + ']'
+                    domain.citations[key] = (
+                        env.docname, citation['ids'][0], label)
                 node_text_transform(citation, transform_url_command)
                 nodes += citation
                 if bibcache.list_ == "enumerated":

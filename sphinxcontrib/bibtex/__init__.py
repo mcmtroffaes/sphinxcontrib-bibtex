@@ -56,53 +56,6 @@ def init_foot_bibliography_id(app: Sphinx, docname: docutils.nodes.document,
     new_foot_bibliography_id(app.env)
 
 
-def process_citations(app: Sphinx, doctree: docutils.nodes.document,
-                      docname: str) -> None:
-    """Replace labels of citation nodes by actual labels."""
-    domain = cast(BibtexDomain, app.env.get_domain('cite'))
-    for node in doctree.traverse(docutils.nodes.citation):
-        if "bibtex" in node.attributes.get('classes', []):
-            key = node[0].astext()
-            label = domain.get_label_from_key(key)
-            node[0] = docutils.nodes.label('', label)
-
-
-def process_citation_references(app: Sphinx, doctree: docutils.nodes.document,
-                                docname: str) -> None:
-    """Replace text of citation reference nodes by actual labels.
-
-    :param app: The sphinx application.
-    :type app: :class:`sphinx.application.Sphinx`
-    :param doctree: The document tree.
-    :type doctree: :class:`docutils.nodes.document`
-    :param docname: The document name.
-    :type docname: :class:`str`
-    """
-    # sphinx has already turned citation_reference nodes
-    # into reference nodes, so iterate over reference nodes
-    domain = cast(BibtexDomain, app.env.get_domain('cite'))
-    for node in doctree.traverse(docutils.nodes.reference):
-        if "bibtex" in node.attributes.get('classes', []):
-            text = node[0].astext()
-            key = text[1:-1]
-            label = domain.get_label_from_key(key)
-            node[0] = docutils.nodes.Text('[' + label + ']')
-
-
-def check_duplicate_labels(app: Sphinx, env: BuildEnvironment) -> None:
-    """Check and warn about duplicate citation labels."""
-    domain = cast(BibtexDomain, env.get_domain('cite'))
-    label_to_key = {}
-    for bibcache in domain.bibliographies.values():
-        for key, label in bibcache.labels.items():
-            if label in label_to_key:
-                logger.warning(
-                    "duplicate label for keys %s and %s"
-                    % (key, label_to_key[label]))
-            else:
-                label_to_key[label] = key
-
-
 def setup(app: Sphinx) -> Dict[str, Any]:
     """Set up the bibtex extension:
 
@@ -122,9 +75,6 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_domain(BibtexDomain)
     app.connect("builder-inited", init_bibtex_cache)
     app.connect("source-read", init_foot_bibliography_id)
-    app.connect("doctree-resolved", process_citations)
-    app.connect("doctree-resolved", process_citation_references)
-    app.connect("env-updated", check_duplicate_labels)
     app.add_directive("bibliography", BibliographyDirective)
     app.add_role("cite", CiteRole())
     app.add_node(bibliography, override=True)

@@ -173,7 +173,6 @@ class BibliographyCache(NamedTuple):
     list_: str  #: The list type.
     enumtype: str  #: The sequence type (for enumerated lists).
     start: int  #: The first ordinal of the sequence (for enumerated lists).
-    labels: Dict[str, str]  #: Maps citation keys to their final labels.
     labelprefix: str  #: String prefix for pybtex generated labels.
     keyprefix: str  #: String prefix for citation keys.
     filter_: ast.AST  #: Parsed filter expression.
@@ -195,9 +194,9 @@ class BibtexDomain(Domain):
     def bibliographies(self) -> Dict[str, BibliographyCache]:
         return self.data.setdefault('bibliographies', {})  # id -> cache
 
-    #: key -> (docname, citation id)
+    #: key -> (docname, citation id, label)
     @property
-    def citations(self) -> Dict[str, Tuple[str, str]]:
+    def citations(self) -> Dict[str, Tuple[str, str, str]]:
         return self.data.setdefault('citations', {})
 
     #: key -> docnames
@@ -227,7 +226,7 @@ class BibtexDomain(Domain):
         for id_, bibcache in list(self.bibliographies.items()):
             if bibcache.docname == docname:
                 del self.bibliographies[id_]
-        for key, (doc, id_) in list(self.citations.items()):
+        for key, (doc, id_, label) in list(self.citations.items()):
             if doc == docname:
                 del self.citations[key]
         for key, docnames in list(self.citation_refs.items()):
@@ -244,9 +243,9 @@ class BibtexDomain(Domain):
         for docname in docnames:
             if docname in otherdata['enum_count']:
                 self.enum_count[docname] = otherdata['enum_count'][docname]
-        for key, (doc, id_) in otherdata['citations'].items():
+        for key, (doc, id_, label) in otherdata['citations'].items():
             if doc in docnames:
-                self.citations[key] = doc
+                self.citations[key] = (doc, id_, label)
         for key, data in otherdata['citation_refs'].items():
             citation_refs = self.citation_refs.setdefault(key, set())
             for docname in data:
@@ -260,11 +259,10 @@ class BibtexDomain(Domain):
         keys = [key.strip() for key in target.split(',')]
         node = docutils.nodes.inline('', '', classes=['cite'])
         for key in keys:
-            todocname, labelid = self.citations[key]
+            todocname, id_, label = self.citations[key]
             refuri = builder.get_relative_uri(fromdocname, todocname)
-            lrefuri = '#'.join([refuri, labelid])
+            lrefuri = '#'.join([refuri, id_])
             # TODO generate proper labels
-            label = "[" + key + "]"
             node += docutils.nodes.reference(
                 label, label, internal=True, refuri=lrefuri)
         return node

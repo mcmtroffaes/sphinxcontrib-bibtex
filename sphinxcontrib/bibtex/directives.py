@@ -120,7 +120,6 @@ class BibliographyDirective(Directive):
             filter_=filter_,
             labelprefix=self.options.get("labelprefix", ""),
             keyprefix=self.options.get("keyprefix", ""),
-            labels={},
             bibfiles=bibfiles,
         )
         if bibcache.list_ not in {"bullet", "enumerated", "citation"}:
