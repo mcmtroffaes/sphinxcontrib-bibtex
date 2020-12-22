@@ -16,7 +16,7 @@ import docutils.parsers.rst
 import docutils.utils
 import sphinx.util
 
-from typing import cast, Optional
+from typing import cast, Optional, Any, Dict
 
 from sphinx.application import Sphinx
 from sphinx.environment import BuildEnvironment
@@ -128,7 +128,7 @@ def save_bibtex_json(app: Sphinx, exc: Optional[Exception]) -> None:
             logger.error("""bibtex citations changed, rerun sphinx""")
 
 
-def setup(app: Sphinx) -> None:
+def setup(app: Sphinx) -> Dict[str, Any]:
     """Set up the bibtex extension:
 
     * register config values
