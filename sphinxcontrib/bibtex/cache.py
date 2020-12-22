@@ -295,7 +295,7 @@ class BibtexDomain(Domain):
                 visitor = _FilterVisitor(
                     entry=entry,
                     docname=bibcache.docname,
-                    cited_docnames=self.citation_refs[key])
+                    cited_docnames=self.citation_refs.get(key, set()))
                 try:
                     success = visitor.visit(bibcache.filter_)
                 except ValueError as err:
