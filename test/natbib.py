@@ -244,50 +244,47 @@ def sort_references(refs, citations):
 
 
 class CitationXRefRole(XRefRole):
-    def __call__(self, typ, rawtext, text, lineno, inliner, options={},
-                 content=[]):
+    def run(self):
         """
         When a ``cite`` role is encountered, we replace it with a
         ``docutils.nodes.pending`` node that uses a ``CitationTrasform`` for
         generating the proper citation reference representation during the
         resolve_xref phase.
         """
-        rnodes = super(CitationXRefRole, self).__call__(
-            typ, rawtext, text, lineno, inliner, options, content)
+        rnodes = super().run()
         rootnode = rnodes[0][0]
 
-        env = inliner.document.settings.env
-        citations = env.domains['cite'].citations
+        citations = self.env.domains['cite'].citations
 
         # Get the config at this point in the document
         config = {}
         for opt in ['style', 'brackets', 'separator', 'sort', 'sort_compress']:
-            config[opt] = env.temp_data.get(
+            config[opt] = self.env.temp_data.get(
                 "cite_%s" % opt,
-                env.domaindata['cite']['conf'].get(opt, DEFAULT_CONF[opt]))
+                self.env.domaindata['cite']['conf'].get(opt, DEFAULT_CONF[opt]))
 
-        if typ == "cite:text":
+        if self.name == "cite:text":
             # A ``text`` citation is unique because it doesn't reference a
             # cite-key
             keys = []
-            pre, post = text, ''
+            pre, post = self.text, ''
         else:
-            keys, pre, post = parse_keys(text)
+            keys, pre, post = parse_keys(self.text)
             for key in keys:
                 if citations.get(key) is None:
                     logger.warning(
                         "cite-key `%s` not found in bibtex file" % key,
-                        location=(env.docname, lineno))
+                        location=(self.env.docname, self.lineno))
                     continue
-                env.domaindata['cite']['keys'].add(key)
-                env.domaindata['cite']['keys'] = sort_references(
-                    env.domaindata['cite']['keys'], citations)
+                self.env.domaindata['cite']['keys'].add(key)
+                self.env.domaindata['cite']['keys'] = sort_references(
+                    self.env.domaindata['cite']['keys'], citations)
 
         data = {'keys': keys,
                 'pre': pre,
                 'post': post,
-                'typ': typ,
-                'global_keys': env.domaindata['cite']['keys'],
+                'typ': self.name,
+                'global_keys': self.env.domaindata['cite']['keys'],
                 'config': config}
 
         rootnode += nodes.pending(CitationTransform, data)
