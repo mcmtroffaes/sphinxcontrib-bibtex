@@ -166,6 +166,7 @@ class _FilterVisitor(ast.NodeVisitor):
 
 class BibliographyCache(NamedTuple):
     """Contains information about a bibliography directive."""
+    docname: str  #: Document name.
     bibfiles: List[str]  #: List of bib files for this directive.
     style: str  #: The pybtex style.
     list_: str  #: The list type.
@@ -190,10 +191,8 @@ class BibtexDomain(Domain):
         return self.data.setdefault('bibfiles', {})  # filename -> cache
 
     @property
-    def bibliographies(self) -> Dict[str, Dict[str, BibliographyCache]]:
-        return self.data.setdefault(
-            'bibliographies',
-            collections.defaultdict(dict))  # doc -> id -> cache
+    def bibliographies(self) -> Dict[str, BibliographyCache]:
+        return self.data.setdefault('bibliographies', {})  # id -> cache
 
     @property
     def cited(self) -> Dict[str, oset]:
@@ -233,28 +232,29 @@ class BibtexDomain(Domain):
             key: oset(value) for key, value in json_dict["cited"].items()})
 
     def clear_doc(self, docname: str) -> None:
-        self.bibliographies.pop(docname, None)
+        for id_, bibcache in list(self.bibliographies.items()):
+            if bibcache.docname == docname:
+                del self.bibliographies[id_]
         self.cited.pop(docname, None)
         # note: intentionally do not clear cited_previous
         self.enum_count.pop(docname, None)
 
     def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
+        for id_, bibcache in otherdata['bibliographies'].items():
+            if bibcache.docname in docnames:
+                self.bibliographies[id_] = bibcache
         for docname in docnames:
             # bibfiles and cited_previous are global, no need to merge
             if docname in otherdata['cited']:
                 self.cited[docname] = otherdata['cited'][docname]
-            if docname in otherdata['bibliographies']:
-                self.bibliographies[docname] = \
-                    otherdata['bibliographies'][docname]
             if docname in otherdata['enum_count']:
                 self.enum_count[docname] = otherdata['enum_count'][docname]
 
     def get_label_from_key(self, key):
         """Return label for the given key."""
-        for bibcaches in self.bibliographies.values():
-            for bibcache in bibcaches.values():
-                if key in bibcache.labels:
-                    return bibcache.labels[key]
+        for bibcache in self.bibliographies.values():
+            if key in bibcache.labels:
+                return bibcache.labels[key]
         else:
             raise KeyError("%s not found" % key)
 
@@ -266,12 +266,12 @@ class BibtexDomain(Domain):
             for key in self.cited_previous.get(docname, []):
                 yield key
 
-    def _get_bibliography_entries(self, docname, id_, warn):
+    def _get_bibliography_entries(self, id_, warn):
         """Return filtered bibliography entries, sorted by occurrence
         in the bib file.
         """
         # get the information of this bibliography node
-        bibcache = self.bibliographies[docname][id_]
+        bibcache = self.bibliographies[id_]
         # generate entries
         for bibfile in bibcache.bibfiles:
             data = self.bibfiles[bibfile].data
@@ -284,7 +284,7 @@ class BibtexDomain(Domain):
                     if key in keys])
                 visitor = _FilterVisitor(
                     entry=entry,
-                    docname=docname,
+                    docname=bibcache.docname,
                     cited_docnames=cited_docnames)
                 try:
                     success = visitor.visit(bibcache.filter_)
@@ -305,13 +305,12 @@ class BibtexDomain(Domain):
                     entry.collection = data
                     yield entry2
 
-    def get_bibliography_entries(self, docname, id_, warn, docnames):
+    def get_bibliography_entries(self, id_, warn, docnames):
         """Return filtered bibliography entries, sorted by citation order."""
         # get entries, ordered by bib file occurrence
         entries = collections.OrderedDict(
             (entry.key, entry) for entry in
-            self._get_bibliography_entries(
-                docname=docname, id_=id_, warn=warn))
+            self._get_bibliography_entries(id_=id_, warn=warn))
         # order entries according to which were cited first
         # first, we add all keys that were cited
         # then, we add all remaining keys

@@ -78,15 +78,13 @@ class BibliographyTransform(docutils.transforms.Transform):
         list of citations.
         """
         env = self.document.settings.env
-        docname = env.docname
         docnames = list(get_docnames(env))
         for bibnode in self.document.traverse(bibliography):
-            domain = cast(BibtexDomain, env.get_domain('bibtex'))
+            domain = cast(BibtexDomain, env.get_domain('cite'))
             id_ = bibnode['ids'][0]
-            bibcache = domain.bibliographies[docname][id_]
+            bibcache = domain.bibliographies[id_]
             entries = domain.get_bibliography_entries(
-                docname=docname, id_=id_, warn=logger.warning,
-                docnames=docnames)
+                id_=id_, warn=logger.warning, docnames=docnames)
             # locate and instantiate style and backend plugins
             style = find_plugin('pybtex.style.formatting', bibcache.style)()
             backend = find_plugin('pybtex.backends', 'docutils')()

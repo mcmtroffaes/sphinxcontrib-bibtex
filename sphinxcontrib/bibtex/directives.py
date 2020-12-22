@@ -72,7 +72,7 @@ class BibliographyDirective(Directive):
         bibliography.
         """
         env = self.state.document.settings.env
-        domain = cast(BibtexDomain, env.get_domain('bibtex'))
+        domain = cast(BibtexDomain, env.get_domain('cite'))
         # create id and cache for this node
         # this id will be stored with the node
         # and is used to look up additional data in env.bibtex_cache
@@ -111,6 +111,7 @@ class BibliographyDirective(Directive):
         else:
             bibfiles = list(domain.bibfiles.keys())
         bibcache = BibliographyCache(
+            docname=env.docname,
             list_=self.options.get("list", "citation"),
             enumtype=self.options.get("enumtype", "arabic"),
             start=self.options.get("start", 1),
@@ -130,5 +131,5 @@ class BibliographyDirective(Directive):
         # if citations change, bibtex.json changes, and so might entries
         env.note_dependency(
             normpath_filename(env, "/bibtex.json"))
-        domain.bibliographies[env.docname][id_] = bibcache
+        domain.bibliographies[id_] = bibcache
         return [bibliography('', ids=[id_])]

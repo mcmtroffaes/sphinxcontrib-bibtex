@@ -20,5 +20,5 @@ def test_sphinx(app, warning):
     assert u'is not referenced' in warnings
     # for coverage
     with pytest.raises(KeyError):
-        domain = cast(BibtexDomain, app.env.get_domain('bibtex'))
+        domain = cast(BibtexDomain, app.env.get_domain('cite'))
         domain.get_label_from_key("nonexistinglabel")

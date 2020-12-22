@@ -34,7 +34,7 @@ class CiteRole(XRefRole):
             for key in keys]
         for refnode in refnodes:
             refnode['classes'].append('bibtex')
-        domain = cast(BibtexDomain, env.get_domain('bibtex'))
+        domain = cast(BibtexDomain, env.get_domain('cite'))
         for key in keys:
             domain.cited[env.docname].add(key)
         if key not in domain.cited_previous[env.docname]:

@@ -62,7 +62,7 @@ def init_foot_bibliography_id(app: Sphinx, docname: docutils.nodes.document,
 def process_citations(app: Sphinx, doctree: docutils.nodes.document,
                       docname: str) -> None:
     """Replace labels of citation nodes by actual labels."""
-    domain = cast(BibtexDomain, app.env.get_domain('bibtex'))
+    domain = cast(BibtexDomain, app.env.get_domain('cite'))
     for node in doctree.traverse(docutils.nodes.citation):
         if "bibtex" in node.attributes.get('classes', []):
             key = node[0].astext()
@@ -83,7 +83,7 @@ def process_citation_references(app: Sphinx, doctree: docutils.nodes.document,
     """
     # sphinx has already turned citation_reference nodes
     # into reference nodes, so iterate over reference nodes
-    domain = cast(BibtexDomain, app.env.get_domain('bibtex'))
+    domain = cast(BibtexDomain, app.env.get_domain('cite'))
     for node in doctree.traverse(docutils.nodes.reference):
         if "bibtex" in node.attributes.get('classes', []):
             text = node[0].astext()
@@ -94,17 +94,16 @@ def process_citation_references(app: Sphinx, doctree: docutils.nodes.document,
 
 def check_duplicate_labels(app: Sphinx, env: BuildEnvironment) -> None:
     """Check and warn about duplicate citation labels."""
-    domain = cast(BibtexDomain, env.get_domain('bibtex'))
+    domain = cast(BibtexDomain, env.get_domain('cite'))
     label_to_key = {}
-    for bibcaches in domain.bibliographies.values():
-        for bibcache in bibcaches.values():
-            for key, label in bibcache.labels.items():
-                if label in label_to_key:
-                    logger.warning(
-                        "duplicate label for keys %s and %s"
-                        % (key, label_to_key[label]))
-                else:
-                    label_to_key[label] = key
+    for bibcache in domain.bibliographies.values():
+        for key, label in bibcache.labels.items():
+            if label in label_to_key:
+                logger.warning(
+                    "duplicate label for keys %s and %s"
+                    % (key, label_to_key[label]))
+            else:
+                label_to_key[label] = key
 
 
 def save_bibtex_json(app: Sphinx, exc: Optional[Exception]) -> None:
@@ -116,7 +115,7 @@ def save_bibtex_json(app: Sphinx, exc: Optional[Exception]) -> None:
         except FileNotFoundError:
             json_string_old = json.dumps(
                 {"cited": {}}, indent=4, sort_keys=True)
-        domain = cast(BibtexDomain, app.env.get_domain('bibtex'))
+        domain = cast(BibtexDomain, app.env.get_domain('cite'))
         cited = {
             key: list(value)
             for key, value in domain.cited.items()}

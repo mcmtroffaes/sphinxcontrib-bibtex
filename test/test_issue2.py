@@ -16,7 +16,7 @@ from sphinxcontrib.bibtex.cache import BibtexDomain
 def test_mixing_citation_styles(app, warning):
     app.build()
     assert not warning.getvalue()
-    domain = cast(BibtexDomain, app.env.get_domain('bibtex'))
+    domain = cast(BibtexDomain, app.env.get_domain('cite'))
     cited_docnames = [
         docname for docname, keys in domain.cited.items()
         if u"Test" in keys]
