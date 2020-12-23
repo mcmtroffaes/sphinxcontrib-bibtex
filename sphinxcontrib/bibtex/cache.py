@@ -11,8 +11,6 @@
 """
 
 import ast
-import collections
-import copy
 from typing import List, Dict, NamedTuple, Set, cast
 
 import docutils.nodes
@@ -362,9 +360,9 @@ class BibtexDomain(Domain):
         ordered by citation order.
         """
         for docname in docnames:
-            for key, citation_ref in self.citation_refs.items():
+            for id_, citation_ref in self.citation_refs.items():
                 if docname == citation_ref.docname:
-                    yield key
+                    yield citation_ref.key
 
     def _get_bibliography_entries(self, id_):
         """Return filtered bibliography entries, sorted by occurrence
@@ -395,23 +393,14 @@ class BibtexDomain(Domain):
                     # recover by falling back to the default
                     success = bool(cited_docnames)
                 if success:
-                    # entries are modified in an unpickable way
-                    # when formatting, so fetch a deep copy
-                    # and return this copy with prefixed key
-                    # we do not deep copy entry.collection because that
-                    # consumes enormous amounts of memory
-                    entry.collection = None
-                    entry2 = copy.deepcopy(entry)
-                    entry2.key = bibcache.keyprefix + entry.key
-                    entry2.collection = data
-                    entry.collection = data
-                    yield entry2
+                    yield entry
 
     def get_bibliography_entries(self, id_, docnames):
         """Return filtered bibliography entries, sorted by citation order."""
         # get entries, ordered by bib file occurrence
-        entries = collections.OrderedDict(
-            (entry.key, entry) for entry in
+        bibcache = self.bibliographies[id_]
+        entries = dict(
+            (bibcache.keyprefix + entry.key, entry) for entry in
             self._get_bibliography_entries(id_=id_))
         # order entries according to which were cited first
         # first, we add all keys that were cited
