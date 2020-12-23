@@ -18,7 +18,7 @@ import sphinx.util
 from pybtex.plugin import find_plugin
 from sphinx.transforms.post_transforms import SphinxPostTransform
 
-from .cache import BibtexDomain
+from .cache import BibtexDomain, Citation
 from .nodes import bibliography
 
 
@@ -114,8 +114,20 @@ class BibliographyTransform(SphinxPostTransform):
                     # at this point, we also already prefix the label
                     key = bibcache.keyprefix + entry.key
                     label = '[' + bibcache.labelprefix + entry.label + ']'
-                    domain.citations[key] = (
-                        env.docname, citation['ids'][0], label)
+                    for otherkey, othercitation in domain.citations.items():
+                        if otherkey == key:
+                            logger.warning(
+                                'duplicate citation key %s' % key,
+                                location=(env.docname, bibnode.lineno))
+                        elif othercitation.label == label:
+                            logger.warning(
+                                'duplicate label %s for keys %s and %s' % (
+                                    label, key, otherkey),
+                                location=(env.docname, bibnode.lineno))
+                    domain.citations[key] = Citation(
+                        docname=env.docname,
+                        id_=citation['ids'][0],
+                        label=label)
                     # citation[0] is the label node
                     # we override it to change the text
                     assert isinstance(citation[0], docutils.nodes.label)

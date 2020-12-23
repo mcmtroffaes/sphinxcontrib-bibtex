@@ -10,7 +10,7 @@ from pybtex.plugin import find_plugin
 import pybtex.database
 from sphinx.roles import XRefRole
 
-from .cache import BibtexDomain
+from .cache import BibtexDomain, CitationRef
 
 
 class CiteRole(XRefRole):
@@ -26,7 +26,9 @@ class CiteRole(XRefRole):
         domain = cast(BibtexDomain, env.get_domain('cite'))
         keys = [key.strip() for key in self.target.split(',')]
         for key in keys:
-            domain.citation_refs.setdefault(key, set()).add(env.docname)
+            if key not in domain.citation_refs:
+                domain.citation_refs[key] = CitationRef(docnames=set())
+            domain.citation_refs[key].docnames.add(env.docname)
         return [node], []
 
 

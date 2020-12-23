@@ -182,6 +182,16 @@ class BibliographyCache(NamedTuple):
     filter_: ast.AST  #: Parsed filter expression.
 
 
+class Citation(NamedTuple):
+    docname: str  #: Name of document where citation resides.
+    id_: str  #: Unique citation id used for referencing.
+    label: str  #: Citation label.
+
+
+class CitationRef(NamedTuple):
+    docnames: Set[str]  #: Document names where the citation is referenced.
+
+
 class BibtexDomain(Domain):
 
     """Global bibtex extension information cache."""
@@ -192,25 +202,34 @@ class BibtexDomain(Domain):
 
     @property
     def bibfiles(self) -> Dict[str, BibfileCache]:
+        """Map each bib filename to some information about the file (including
+        the parsed data).
+        """
         return self.data.setdefault('bibfiles', {})  # filename -> cache
 
     @property
     def bibliographies(self) -> Dict[str, BibliographyCache]:
+        """Map each bibliography directive id to further information about the
+        directive.
+        """
         return self.data.setdefault('bibliographies', {})  # id -> cache
 
-    #: key -> (docname, citation id, label)
     @property
-    def citations(self) -> Dict[str, Tuple[str, str, str]]:
+    def citations(self) -> Dict[str, Citation]:
+        """Map each citation key to citation data."""
         return self.data.setdefault('citations', {})
 
-    #: key -> docnames
     @property
-    def citation_refs(self) -> Dict[str, Set[str]]:
-        return self.data.setdefault(
-            'citation_refs', collections.defaultdict(set))
+    def citation_refs(self) -> Dict[str, CitationRef]:
+        """Map each citation key to citation reference data."""
+        return self.data.setdefault('citation_refs', {})
 
+    # TODO switch to temp_data and remove from domain
     @property
     def enum_count(self) -> Dict[str, int]:
+        """Keeps track of the current bibliography enum count in each
+        document.
+        """
         return self.data.setdefault('enum_count', {})  # doc -> enum count
 
     def __init__(self, env: BuildEnvironment):
@@ -230,14 +249,13 @@ class BibtexDomain(Domain):
         for id_, bibcache in list(self.bibliographies.items()):
             if bibcache.docname == docname:
                 del self.bibliographies[id_]
-        for key, (doc, id_, label) in list(self.citations.items()):
-            if doc == docname:
+        for key, citation in list(self.citations.items()):
+            if citation.docname == docname:
                 del self.citations[key]
-        for key, docnames in list(self.citation_refs.items()):
-            if docnames == {docname}:
+        for key, citation_ref in list(self.citation_refs.items()):
+            citation_ref.docnames.discard(docname)
+            if not citation_ref.docnames:
                 del self.citation_refs[key]
-            elif docname in docnames:
-                docnames.remove(docname)
         self.enum_count.pop(docname, None)
 
     def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
@@ -247,14 +265,15 @@ class BibtexDomain(Domain):
         for docname in docnames:
             if docname in otherdata['enum_count']:
                 self.enum_count[docname] = otherdata['enum_count'][docname]
-        for key, (doc, id_, label) in otherdata['citations'].items():
-            if doc in docnames:
-                self.citations[key] = (doc, id_, label)
-        for key, data in otherdata['citation_refs'].items():
-            citation_refs = self.citation_refs.setdefault(key, set())
-            for docname in data:
+        for key, citation in otherdata['citations'].items():
+            if citation.docname in docnames:
+                self.citations[key] = citation
+        for key, citation_ref in otherdata['citation_refs'].items():
+            for docname in citation_ref.docnames:
                 if docname in docnames:
-                    citation_refs.add(docname)
+                    if key not in self.citation_refs[key]:
+                        self.citation_refs[key] = CitationRef(docnames=set())
+                    self.citation_refs[key].docnames.add(docname)
 
     def resolve_xref(self, env: BuildEnvironment, fromdocname: str,
                      builder: Builder, typ: str, target: str,
@@ -264,16 +283,17 @@ class BibtexDomain(Domain):
         node = docutils.nodes.inline('', '', classes=['cite'])
         for key in keys:
             try:
-                todocname, id_, label = self.citations[key]
+                citation = self.citations[key]
             except KeyError:
                 # TODO can handle missing reference warning using the domain
                 logger.warning('could not find bibtex key %s' % key)
                 return None
             else:
-                refuri = builder.get_relative_uri(fromdocname, todocname)
-                lrefuri = '#'.join([refuri, id_])
+                refuri = builder.get_relative_uri(
+                    fromdocname, citation.docname)
+                lrefuri = '#'.join([refuri, citation.id_])
                 node += docutils.nodes.reference(
-                    label, label, internal=True, refuri=lrefuri)
+                    citation.label, citation.label, internal=True, refuri=lrefuri)
         return node
 
     def get_label_from_key(self, key):
@@ -289,8 +309,8 @@ class BibtexDomain(Domain):
         ordered by citation order.
         """
         for docname in docnames:
-            for key, docs in self.citation_refs.items():
-                if docname in docs:
+            for key, citation_ref in self.citation_refs.items():
+                if docname in citation_ref.docnames:
                     yield key
 
     def _get_bibliography_entries(self, id_, warn):
@@ -306,16 +326,20 @@ class BibtexDomain(Domain):
                 # beware: the prefix is not stored in the data
                 # to allow reusing the data for multiple bibliographies
                 key = bibcache.keyprefix + entry.key
+                if key in self.citation_refs:
+                    cited_docnames = self.citation_refs[key].docnames
+                else:
+                    cited_docnames = set()
                 visitor = _FilterVisitor(
                     entry=entry,
                     docname=bibcache.docname,
-                    cited_docnames=self.citation_refs.get(key, set()))
+                    cited_docnames=cited_docnames)
                 try:
                     success = visitor.visit(bibcache.filter_)
                 except ValueError as err:
                     warn("syntax error in :filter: expression; %s" % err)
                     # recover by falling back to the default
-                    success = key in self.citation_refs
+                    success = bool(cited_docnames)
                 if success:
                     # entries are modified in an unpickable way
                     # when formatting, so fetch a deep copy
