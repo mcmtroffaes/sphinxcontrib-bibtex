@@ -16,8 +16,6 @@ import pybtex.style.names.plain
 import pybtex.style.names.lastfirst
 import pybtex.backends.plaintext
 
-from oset import oset
-
 
 logger = logging.getLogger(__name__)
 
@@ -240,7 +238,7 @@ def sort_references(refs, citations):
         return titlesort.upper()
 
     sortedrefs = sorted(refs, key=sortkey)
-    return oset(sortedrefs)
+    return {ref: None for ref in sortedrefs}
 
 
 class CitationXRefRole(XRefRole):
@@ -276,7 +274,7 @@ class CitationXRefRole(XRefRole):
                         "cite-key `%s` not found in bibtex file" % key,
                         location=(env.docname, self.lineno))
                     continue
-                env.domaindata['cite']['keys'].add(key)
+                env.domaindata['cite']['keys'][key] = None
                 env.domaindata['cite']['keys'] = sort_references(
                     env.domaindata['cite']['keys'], domain.citations)
 
@@ -475,7 +473,7 @@ class CitationDomain(Domain):
     roles = dict([(r, CitationXRefRole()) for r in ROLES])
 
     initial_data = {
-        'keys': oset(),  # Holds cite-keys in order of reference
+        'keys': {},  # cite-keys in order of reference using dict as sorted set
         'conf': DEFAULT_CONF,
         'refdoc': None
     }

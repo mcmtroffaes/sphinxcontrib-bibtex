@@ -267,7 +267,6 @@ class BibtexDomain(Domain):
                 todocname, id_, label = self.citations[key]
             except KeyError:
                 # TODO can handle missing reference warning using the domain
-                # TODO instead of posting warning here
                 logger.warning('could not find bibtex key %s' % key)
                 return None
             else:

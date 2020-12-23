@@ -15,7 +15,6 @@ def test_autodoc(app, warning):
     app.builder.build_all()
     assert not warning.getvalue()
     output = (app.outdir / "doc_cite.html").read_text()
-    print(output)
     assert len(re.findall("\\[One\\]", output)) == 2
     assert len(re.findall("\\[Two\\]", output)) == 2
     assert len(re.findall("\\[Thr\\]", output)) == 2

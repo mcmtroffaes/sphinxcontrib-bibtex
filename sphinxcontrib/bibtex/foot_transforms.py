@@ -44,7 +44,7 @@ class FootBibliographyTransform(docutils.transforms.Transform):
             id_ = bibnode['ids'][0]
             entries = [
                 get_bibliography_entry(domain.bibfiles, key)
-                for key in env.temp_data["bibtex_foot_cited"][id_]]
+                for key in env.temp_data["bibtex_foot_citation_refs"][id_]]
             entries2 = [entry for entry in entries if entry is not None]
             # locate and instantiate style and backend plugins
             style = find_plugin(

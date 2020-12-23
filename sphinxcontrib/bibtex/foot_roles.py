@@ -5,8 +5,6 @@
         .. automethod:: result_nodes
 """
 
-from oset import oset
-
 from pybtex.plugin import find_plugin
 import pybtex.database
 from sphinx.roles import XRefRole
@@ -18,14 +16,15 @@ class FootCiteRole(XRefRole):
     backend = find_plugin('pybtex.backends', 'docutils')()
 
     def make_refnode(self, document, env, key):
-        cited = env.temp_data.setdefault("bibtex_foot_cited", {})
-        for otherkeys in cited.values():
+        citation_refs = env.temp_data.setdefault("bibtex_foot_citation_refs", {})
+        for otherkeys in citation_refs.values():
             if key in otherkeys:
                 break
         else:
-            keys = cited.setdefault(
-                env.temp_data["bibtex_foot_bibliography_id"], oset())
-            keys.add(key)
+            # note: using dict as ordered set
+            keys = citation_refs.setdefault(
+                env.temp_data["bibtex_foot_bibliography_id"], {})
+            keys[key] = None
         # TODO get the actual entry
         return self.backend.footnote_reference(_fake_entry(key), document)
 
