@@ -15,19 +15,19 @@ def test_issue87(app, warning):
     assert not warning.getvalue()
     output = (app.outdir / "doc0.html").read_text()
     assert (
-        'class="reference internal" href="#bibtex-citation-tag0-2009-mandel"'
+        'class="citation-reference" href="#bibtex-citation-tag0-2009-mandel"'
         in output)
     assert (
-        'class="reference internal" href="#bibtex-citation-tag0-2003-evensen"'
+        'class="citation-reference" href="#bibtex-citation-tag0-2003-evensen"'
         in output)
     assert 'AMan09' in output
     assert 'AEve03' in output
     output = (app.outdir / "doc1.html").read_text()
     assert (
-        'class="reference internal" href="#bibtex-citation-tag1-2009-mandel"'
+        'class="citation-reference" href="#bibtex-citation-tag1-2009-mandel"'
         in output)
     assert (
-        'class="reference internal" href="#bibtex-citation-tag1-2003-evensen"'
+        'class="citation-reference" href="#bibtex-citation-tag1-2003-evensen"'
         not in output)
     assert 'BMan09' in output
     assert 'BEve03' not in output
