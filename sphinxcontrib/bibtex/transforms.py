@@ -107,9 +107,9 @@ class BibliographyTransform(SphinxPostTransform):
                     citation_node += backend.paragraph(entry)
                     citation_node['ids'].append(citation_id)
                 node_text_transform(citation_node, transform_url_command)
-                nodes += citation_node
+                nodes.append(citation_node)
                 if bibcache.list_ == "enumerated":
                     domain.enum_count[env.docname] += 1
             if env.bibtex_bibliography_header is not None:
-                nodes = [env.bibtex_bibliography_header.deepcopy(), nodes]
+                nodes = env.bibtex_bibliography_header.deepcopy() + nodes
             bibnode.replace_self(nodes)
