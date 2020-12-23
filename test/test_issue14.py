@@ -12,7 +12,7 @@ import re
 
 def htmlbiblabel(label):
     return (
-        '<dt class="bibtex label".*><span class="brackets">[[]{0}[]]</span>'
+        r'<dt class="label".*><span class="brackets">\[{0}\]</span>'
         .format(label))
 
 
@@ -20,7 +20,7 @@ def htmlbiblabel(label):
 def test_duplicate_label(app, warning):
     app.builder.build_all()
     assert re.search(
-        'duplicate label [[]1[]] for keys (Test and Test2)|(Test2 and Test)',
+        r'duplicate label \[1] for keys (Test and Test2)|(Test2 and Test)',
         warning.getvalue())
     output = (app.outdir / "doc1.html").read_text()
     assert re.search(htmlbiblabel("1"), output)
