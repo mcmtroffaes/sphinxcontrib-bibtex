@@ -17,8 +17,10 @@ def test_mixing_citation_styles(app, warning):
     app.build()
     assert not warning.getvalue()
     domain = cast(BibtexDomain, app.env.get_domain('cite'))
-    cited_docnames = [
-        docname for docname, keys in domain.cited.items()
-        if u"Test" in keys]
-    assert cited_docnames == [u"adoc1"]
-    assert domain.get_label_from_key(u"Test") == u"1"
+    assert len(domain.citation_refs) == 1
+    citation_ref_id, citation_ref = domain.citation_refs.popitem()
+    assert citation_ref.key == 'Test'
+    assert citation_ref.docname == 'adoc1'
+    assert len(domain.citations) == 1
+    key, citation = domain.citations.popitem()
+    assert citation.entry_label == '1'

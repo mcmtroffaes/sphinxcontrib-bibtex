@@ -112,6 +112,7 @@ class BibliographyDirective(Directive):
             bibfiles = list(domain.bibfiles.keys())
         bibcache = BibliographyCache(
             docname=env.docname,
+            line=self.lineno,
             list_=self.options.get("list", "citation"),
             enumtype=self.options.get("enumtype", "arabic"),
             start=self.options.get("start", 1),
@@ -128,6 +129,4 @@ class BibliographyDirective(Directive):
         for bibfile in bibfiles:
             env.note_dependency(bibfile)
         domain.bibliographies[id_] = bibcache
-        node = bibliography('', ids=[id_])
-        node.line = self.lineno
-        return [node]
+        return [bibliography('', ids=[id_])]

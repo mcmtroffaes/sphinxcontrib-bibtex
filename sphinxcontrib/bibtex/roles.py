@@ -26,9 +26,14 @@ class CiteRole(XRefRole):
         domain = cast(BibtexDomain, env.get_domain('cite'))
         keys = [key.strip() for key in self.target.split(',')]
         for key in keys:
-            if key not in domain.citation_refs:
-                domain.citation_refs[key] = CitationRef(docnames=set())
-            domain.citation_refs[key].docnames.add(env.docname)
+            citation_ref_id = 'bibtex-citation-ref-%s-%s' % (
+                env.docname, env.new_serialno('bibtex'))
+            assert citation_ref_id not in domain.citation_refs
+            domain.citation_refs[citation_ref_id] = CitationRef(
+                docname=env.docname,
+                line=document.line,
+                key=key,
+            )
         return [node], []
 
 

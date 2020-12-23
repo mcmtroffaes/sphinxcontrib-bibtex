@@ -18,6 +18,7 @@ import sphinx.util
 from pybtex.plugin import find_plugin
 from sphinx.transforms.post_transforms import SphinxPostTransform
 
+from .bibfile import get_bibliography_entry
 from .cache import BibtexDomain, Citation
 from .nodes import bibliography
 
@@ -52,15 +53,6 @@ def transform_url_command(textnode):
         return textnode
 
 
-def get_docnames(env):
-    rel = env.collect_relations()
-    docname = env.config.master_doc
-    while docname is not None:
-        yield docname
-        parent, prevdoc, nextdoc = rel[docname]
-        docname = nextdoc
-
-
 class BibliographyTransform(SphinxPostTransform):
     """A docutils transform to generate citation entries for
     bibliography nodes.
@@ -77,13 +69,14 @@ class BibliographyTransform(SphinxPostTransform):
         list of citations.
         """
         env = self.document.settings.env
-        docnames = list(get_docnames(env))
+        domain = cast(BibtexDomain, env.get_domain('cite'))
         for bibnode in self.document.traverse(bibliography):
-            domain = cast(BibtexDomain, env.get_domain('cite'))
             id_ = bibnode['ids'][0]
             bibcache = domain.bibliographies[id_]
-            entries = domain.get_bibliography_entries(
-                id_=id_, warn=logger.warning, docnames=docnames)
+            citations = {
+                key: citation
+                for key, citation in domain.citations.items()
+                if citation.bibliography_id == id_}
             # locate and instantiate style and backend plugins
             style = find_plugin('pybtex.style.formatting', bibcache.style)()
             backend = find_plugin('pybtex.backends', 'docutils')()
@@ -100,40 +93,24 @@ class BibliographyTransform(SphinxPostTransform):
                 nodes = docutils.nodes.bullet_list()
             else:  # "citation"
                 nodes = docutils.nodes.paragraph()
-            # remind: style.format_entries modifies entries in unpickable way
-            for entry in style.format_entries(entries):
+            for key, citation in citations.items():
+                entry = style.format_entry(
+                    citation.entry_label,
+                    get_bibliography_entry(
+                        domain.bibfiles, citation.entry_key))
                 if bibcache.list_ in ["enumerated", "bullet"]:
-                    citation = docutils.nodes.list_item()
-                    citation += backend.paragraph(entry)
+                    citation_node = docutils.nodes.list_item()
+                    citation_node += backend.paragraph(entry)
                 else:  # "citation"
-                    citation = backend.citation(entry, self.document)
-                    citation['classes'].append('bibtex')
-                    # backend.citation(...) uses entry.key as citation label
-                    # we change it to entry.label later onwards
-                    # but we must note the entry.label now;
-                    # at this point, we also already prefix the label
-                    key = bibcache.keyprefix + entry.key
-                    label = '[' + bibcache.labelprefix + entry.label + ']'
-                    for otherkey, othercitation in domain.citations.items():
-                        if otherkey == key:
-                            logger.warning(
-                                'duplicate citation key %s' % key,
-                                location=(env.docname, bibnode.line))
-                        elif othercitation.label == label:
-                            logger.warning(
-                                'duplicate label %s for keys %s and %s' % (
-                                    label, key, otherkey),
-                                location=(env.docname, bibnode.line))
-                    domain.citations[key] = Citation(
-                        docname=env.docname,
-                        id_=citation['ids'][0],
-                        label=label)
+                    citation_node = backend.citation(entry, self.document)
+                    citation_node['classes'].append('bibtex')
                     # citation[0] is the label node
                     # we override it to change the text
-                    assert isinstance(citation[0], docutils.nodes.label)
-                    citation[0] = docutils.nodes.label(label, label)
-                node_text_transform(citation, transform_url_command)
-                nodes += citation
+                    assert isinstance(citation_node[0], docutils.nodes.label)
+                    citation_node[0] = docutils.nodes.label(
+                        citation.label, citation.label)
+                node_text_transform(citation_node, transform_url_command)
+                nodes += citation_node
                 if bibcache.list_ == "enumerated":
                     domain.enum_count[env.docname] += 1
             if env.bibtex_bibliography_header is not None:

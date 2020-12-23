@@ -13,12 +13,14 @@
 import ast
 import collections
 import copy
-from typing import List, Dict, NamedTuple, Set
+from typing import List, Dict, NamedTuple, Set, cast
 
 import docutils.nodes
 import sphinx.util
 import re
 
+from pybtex.plugin import find_plugin
+import pybtex.style.formatting
 from sphinx.addnodes import pending_xref
 from sphinx.builders import Builder
 from sphinx.domains import Domain
@@ -26,7 +28,6 @@ from sphinx.environment import BuildEnvironment
 from sphinx.errors import ExtensionError
 
 from .bibfile import BibfileCache, normpath_filename, process_bibfile
-
 
 logger = sphinx.util.logging.getLogger(__name__)
 
@@ -169,27 +170,44 @@ class _FilterVisitor(ast.NodeVisitor):
         _raise_invalid_node(node)
 
 
+def get_docnames(env):
+    """Ged document names in order."""
+    rel = env.collect_relations()
+    docname = env.config.master_doc
+    while docname is not None:
+        yield docname
+        parent, prevdoc, nextdoc = rel[docname]
+        docname = nextdoc
+
+
 class BibliographyCache(NamedTuple):
     """Contains information about a bibliography directive."""
-    docname: str  #: Document name.
+    docname: str         #: Document name.
+    line: int            #: Line number of the directive in the document.
     bibfiles: List[str]  #: List of bib files for this directive.
-    style: str  #: The pybtex style.
-    list_: str  #: The list type.
-    enumtype: str  #: The sequence type (for enumerated lists).
-    start: int  #: The first ordinal of the sequence (for enumerated lists).
-    labelprefix: str  #: String prefix for pybtex generated labels.
-    keyprefix: str  #: String prefix for citation keys.
-    filter_: ast.AST  #: Parsed filter expression.
+    style: str           #: The pybtex style.
+    list_: str           #: The list type.
+    enumtype: str        #: The sequence type (for enumerated lists).
+    start: int           #: The start of the sequence (for enumerated lists).
+    labelprefix: str     #: String prefix for pybtex generated labels.
+    keyprefix: str       #: String prefix for citation keys.
+    filter_: ast.AST     #: Parsed filter expression.
 
 
 class Citation(NamedTuple):
-    docname: str  #: Name of document where citation resides.
-    id_: str  #: Unique citation id used for referencing.
-    label: str  #: Citation label.
+    """Information about a citation."""
+    bibliography_id: str  #: Unique id of its bibliography directive.
+    key: str              #: Unique citation id used for referencing.
+    label: str            #: Label (including brackets and label prefix).
+    entry_key: str        #: The original entry key (no prefix).
+    entry_label: str      #: The original entry label (no brackets or prefix).
 
 
 class CitationRef(NamedTuple):
-    docnames: Set[str]  #: Document names where the citation is referenced.
+    """Information about a citation reference."""
+    docname: str  #: Document name where the citation is referenced.
+    line: int     #: Line number.
+    key: str      #: Citation key (including key prefix).
 
 
 class BibtexDomain(Domain):
@@ -216,12 +234,12 @@ class BibtexDomain(Domain):
 
     @property
     def citations(self) -> Dict[str, Citation]:
-        """Map each citation key to citation data."""
+        """Map each citation id to citation data."""
         return self.data.setdefault('citations', {})
 
     @property
     def citation_refs(self) -> Dict[str, CitationRef]:
-        """Map each citation key to citation reference data."""
+        """Map each citation reference id to citation reference data."""
         return self.data.setdefault('citation_refs', {})
 
     # TODO switch to temp_data and remove from domain
@@ -249,13 +267,12 @@ class BibtexDomain(Domain):
         for id_, bibcache in list(self.bibliographies.items()):
             if bibcache.docname == docname:
                 del self.bibliographies[id_]
-        for key, citation in list(self.citations.items()):
+        for id_, citation in list(self.citations.items()):
             if citation.docname == docname:
-                del self.citations[key]
-        for key, citation_ref in list(self.citation_refs.items()):
-            citation_ref.docnames.discard(docname)
-            if not citation_ref.docnames:
-                del self.citation_refs[key]
+                del self.citations[id_]
+        for id_, citation_ref in list(self.citation_refs.items()):
+            if citation_ref.docname == docname:
+                del self.citation_refs[id_]
         self.enum_count.pop(docname, None)
 
     def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
@@ -265,15 +282,52 @@ class BibtexDomain(Domain):
         for docname in docnames:
             if docname in otherdata['enum_count']:
                 self.enum_count[docname] = otherdata['enum_count'][docname]
-        for key, citation in otherdata['citations'].items():
+        for id_, citation in otherdata['citations'].items():
             if citation.docname in docnames:
-                self.citations[key] = citation
-        for key, citation_ref in otherdata['citation_refs'].items():
-            for docname in citation_ref.docnames:
-                if docname in docnames:
-                    if key not in self.citation_refs[key]:
-                        self.citation_refs[key] = CitationRef(docnames=set())
-                    self.citation_refs[key].docnames.add(docname)
+                self.citations[id_] = citation
+        for id_, citation_ref in otherdata['citation_refs'].items():
+            if citation_ref.docname in docnames:
+                self.citation_refs[id_] = citation_ref
+
+    def check_consistency(self) -> None:
+        # This function is called when all doctrees are parsed,
+        # but before any post transforms are applied. We use it to
+        # determine which citations will be added to which bibliography
+        # directive, and also to format the labels. We need to format
+        # the labels and construct the citation ids here because they must be
+        # known when resolve_xref is called.
+        docnames = list(get_docnames(self.env))
+        for id_, bibcache in self.bibliographies.items():
+            entries = self.get_bibliography_entries(id_=id_, docnames=docnames)
+            # locate and instantiate style and backend plugins
+            style = cast(
+                pybtex.style.formatting.BaseStyle,
+                find_plugin('pybtex.style.formatting', bibcache.style)())
+            sorted_entries = style.sort(entries)
+            labels = style.format_labels(sorted_entries)
+            for label, entry in zip(labels, sorted_entries):
+                key = bibcache.keyprefix + entry.key
+                citation = Citation(
+                    bibliography_id=id_,
+                    key=key,
+                    label='[' + bibcache.labelprefix + label + ']',
+                    entry_key=entry.key,
+                    entry_label=label,
+                )
+                if (bibcache.list_ == 'citation'):
+                    for othercitation in self.citations.values():
+                        if othercitation.key == key:
+                            logger.warning(
+                                'duplicate bibtex citation for key %s' % key,
+                                location=(bibcache.docname, bibcache.line))
+                        elif othercitation.label == citation.label:
+                            logger.warning(
+                                'duplicate bibtex label %s for keys %s and %s' % (
+                                    citation.label, key, othercitation.key),
+                                location=(bibcache.docname, bibcache.line))
+                citation_id = 'bibtex-citation-%s-%s' % (
+                    bibcache.docname, self.env.new_serialno('bibtex'))
+                self.citations[citation_id] = citation
 
     def resolve_xref(self, env: BuildEnvironment, fromdocname: str,
                      builder: Builder, typ: str, target: str,
@@ -282,24 +336,26 @@ class BibtexDomain(Domain):
         keys = [key.strip() for key in target.split(',')]
         node = docutils.nodes.inline('', '', classes=['cite'])
         for key in keys:
-            try:
-                citation = self.citations[key]
-            except KeyError:
+            citation = None
+            for citation_id, citation in self.citations.items():
+                bibcache = self.bibliographies[citation.bibliography_id]
+                if citation.key == key and bibcache.list_ == 'citation':
+                    break
+            if citation is None:
                 # TODO can handle missing reference warning using the domain
                 logger.warning('could not find bibtex key %s' % key)
                 return None
-            else:
-                refuri = builder.get_relative_uri(
-                    fromdocname, citation.docname)
-                lrefuri = '#'.join([refuri, citation.id_])
-                node += docutils.nodes.reference(
-                    citation.label, citation.label, internal=True, refuri=lrefuri)
+            refuri = builder.get_relative_uri(fromdocname, bibcache.docname)
+            lrefuri = '#'.join([refuri, citation_id])
+            node += docutils.nodes.reference(
+                citation.label, citation.label,
+                internal=True, refuri=lrefuri)
         return node
 
     # TODO remove this function
     def get_label_from_key(self, key):
         """Return label for the given key."""
-        return self.citations[key].label
+        return
 
     def get_all_cited_keys(self, docnames):
         """Yield all citation keys for given *docnames* in order, then
@@ -307,10 +363,10 @@ class BibtexDomain(Domain):
         """
         for docname in docnames:
             for key, citation_ref in self.citation_refs.items():
-                if docname in citation_ref.docnames:
+                if docname == citation_ref.docname:
                     yield key
 
-    def _get_bibliography_entries(self, id_, warn):
+    def _get_bibliography_entries(self, id_):
         """Return filtered bibliography entries, sorted by occurrence
         in the bib file.
         """
@@ -320,13 +376,12 @@ class BibtexDomain(Domain):
         for bibfile in bibcache.bibfiles:
             data = self.bibfiles[bibfile].data
             for entry in data.entries.values():
-                # beware: the prefix is not stored in the data
-                # to allow reusing the data for multiple bibliographies
                 key = bibcache.keyprefix + entry.key
-                if key in self.citation_refs:
-                    cited_docnames = self.citation_refs[key].docnames
-                else:
-                    cited_docnames = set()
+                cited_docnames = {
+                    citation_ref.docname
+                    for citation_ref in self.citation_refs.values()
+                    if citation_ref.key == key
+                }
                 visitor = _FilterVisitor(
                     entry=entry,
                     docname=bibcache.docname,
@@ -334,7 +389,9 @@ class BibtexDomain(Domain):
                 try:
                     success = visitor.visit(bibcache.filter_)
                 except ValueError as err:
-                    warn("syntax error in :filter: expression; %s" % err)
+                    logger.warning(
+                        "syntax error in :filter: expression; %s" % err,
+                        location=(bibcache.docname, bibcache.line))
                     # recover by falling back to the default
                     success = bool(cited_docnames)
                 if success:
@@ -350,12 +407,12 @@ class BibtexDomain(Domain):
                     entry.collection = data
                     yield entry2
 
-    def get_bibliography_entries(self, id_, warn, docnames):
+    def get_bibliography_entries(self, id_, docnames):
         """Return filtered bibliography entries, sorted by citation order."""
         # get entries, ordered by bib file occurrence
         entries = collections.OrderedDict(
             (entry.key, entry) for entry in
-            self._get_bibliography_entries(id_=id_, warn=warn))
+            self._get_bibliography_entries(id_=id_))
         # order entries according to which were cited first
         # first, we add all keys that were cited
         # then, we add all remaining keys
