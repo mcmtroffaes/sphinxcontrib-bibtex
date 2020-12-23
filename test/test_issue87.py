@@ -13,17 +13,21 @@ import re
 def test_issue87(app, warning):
     app.builder.build_all()
     assert not warning.getvalue()
-    output = (app.outdir / "doc0.html").read_text(encoding='utf-8')
-    assert re.search(
-        'class="bibtex reference internal" href="#tag0-2009-mandel"', output)
-    assert re.search(
-        'class="bibtex reference internal" href="#tag0-2003-evensen"', output)
-    assert re.search('AMan09', output)
-    assert re.search('AEve03', output)
-    output = (app.outdir / "doc1.html").read_text(encoding='utf-8')
-    assert re.search(
-        'class="bibtex reference internal" href="#tag1-2009-mandel"', output)
-    assert not re.search(
-        'class="bibtex reference internal" href="#tag1-2003-evensen"', output)
-    assert re.search('BMan09', output)
-    assert not re.search('BEve03', output)
+    output = (app.outdir / "doc0.html").read_text()
+    assert (
+        'class="reference internal" href="#bibtex-citation-tag0-2009-mandel"'
+        in output)
+    assert (
+        'class="reference internal" href="#bibtex-citation-tag0-2003-evensen"'
+        in output)
+    assert 'AMan09' in output
+    assert 'AEve03' in output
+    output = (app.outdir / "doc1.html").read_text()
+    assert (
+        'class="reference internal" href="#bibtex-citation-tag1-2009-mandel"'
+        in output)
+    assert (
+        'class="reference internal" href="#bibtex-citation-tag1-2003-evensen"'
+        not in output)
+    assert 'BMan09' in output
+    assert 'BEve03' not in output
