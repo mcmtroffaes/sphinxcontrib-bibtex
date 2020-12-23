@@ -13,7 +13,7 @@
 import ast
 import collections
 import copy
-from typing import List, Dict, NamedTuple, Tuple, Set
+from typing import List, Dict, NamedTuple, Set
 
 import docutils.nodes
 import sphinx.util
@@ -296,13 +296,10 @@ class BibtexDomain(Domain):
                     citation.label, citation.label, internal=True, refuri=lrefuri)
         return node
 
+    # TODO remove this function
     def get_label_from_key(self, key):
         """Return label for the given key."""
-        for bibcache in self.bibliographies.values():
-            if key in bibcache.labels:
-                return bibcache.labels[key]
-        else:
-            raise KeyError("%s not found" % key)
+        return self.citations[key].label
 
     def get_all_cited_keys(self, docnames):
         """Yield all citation keys for given *docnames* in order, then
