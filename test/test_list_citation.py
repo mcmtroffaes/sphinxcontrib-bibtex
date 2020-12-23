@@ -12,8 +12,8 @@ import re
 
 def htmlbibitem(label, text):
     return (
-        '.*<dt class="bibtex label".*><span class="brackets">'
-        '<a.*>{0}</a></span></dt>\\s*<dd>.*{1}.*</dd>'.format(label, text))
+        r'.*<dt class="label".*><span class="brackets">'
+        r'*{0}.*</span></dt>\s*<dd>.*{1}.*</dd>'.format(label, text))
 
 
 @pytest.mark.sphinx('html', testroot='list_citation')
