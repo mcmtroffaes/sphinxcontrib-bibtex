@@ -16,6 +16,6 @@ def test_multiple_keys(app, warning):
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     assert re.search(
-        'class="reference internal" href="#.*testone.*"', output)
+        'class="citation-reference" href="#.*testone.*"', output)
     assert re.search(
-        'class="reference internal" href="#.*testtwo.*"', output)
+        'class="citation-reference" href="#.*testtwo.*"', output)

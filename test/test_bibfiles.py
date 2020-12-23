@@ -14,7 +14,7 @@ status_parsing = "parsing bibtex file.*parsed [0-9]+ entries"
 def htmlbibitem(label, text):
     return (
         r'.*<dt class="label".*><span class="brackets">'
-        r'*\[{0}\].*</span></dt>\s*<dd>.*{1}.*</dd>'.format(label, text))
+        r'*{0}.*</span></dt>\s*<dd>.*{1}.*</dd>'.format(label, text))
 
 
 # Test that updates to the bibfile generate the correct result when

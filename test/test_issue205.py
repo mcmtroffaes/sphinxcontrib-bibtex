@@ -15,5 +15,5 @@ def test_issue205(app, warning):
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     # ensure Man09 is cited
-    assert len(re.findall("\\[Fir\\]", output)) == 2
-    assert len(re.findall("\\[Sec\\]", output)) == 2
+    assert len(re.findall("\\[Fir\\]", output)) == 1
+    assert len(re.findall("\\[Sec\\]", output)) == 1

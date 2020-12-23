@@ -313,7 +313,7 @@ class BibtexDomain(Domain):
             labels = style.format_labels(sorted_entries)
             for entry_label, entry in zip(labels, sorted_entries):
                 key = bibcache.keyprefix + entry.key
-                label = '[' + bibcache.labelprefix + entry_label + ']'
+                label = bibcache.labelprefix + entry_label
                 if bibcache.list_ != 'citation':
                     # no warning in this case, just don't generate link
                     citation_id = None
@@ -366,11 +366,12 @@ class BibtexDomain(Domain):
                 # TODO can handle missing reference warning using the domain
                 logger.warning('could not find bibtex key %s' % key)
                 return None
-            refuri = builder.get_relative_uri(fromdocname, bibcache.docname)
-            lrefuri = '#'.join([refuri, citation.citation_id])
             # TODO use sphinx's make_refnode
-            node += docutils.nodes.reference(
-                '', citation.label, internal=True, refuri=lrefuri)
+            node += docutils.nodes.citation_reference(
+                '', citation.label, internal=True,
+                docname=bibcache.docname,
+                refid=citation.citation_id,
+                refname=citation.citation_id)
         return node
 
     # TODO remove this function

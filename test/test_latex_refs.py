@@ -11,8 +11,8 @@ import pytest
 
 @pytest.mark.sphinx('latex', testroot='latex_refs')
 def test_latex_refs(app, warning):
-    app.builder.build_all()
+    app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "test.tex").read_text(encoding='utf-8')
-    assert r'\sphinxcite{index:huygens}' in output
-    assert r'\bibitem[Huy57]{index:huygens}' in output
+    output = (app.outdir / "test.tex").read_text()
+    assert r'\sphinxcite{index:bibtex-citation-huygens}' in output
+    assert r'\bibitem[Huy57]{index:bibtex-citation-huygens}' in output
