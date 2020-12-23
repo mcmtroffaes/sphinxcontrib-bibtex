@@ -14,8 +14,8 @@ import re
 def test_multiple_keys(app, warning):
     app.builder.build_all()
     assert not warning.getvalue()
-    output = (app.outdir / "index.html").read_text(encoding='utf-8')
+    output = (app.outdir / "index.html").read_text()
     assert re.search(
-        'class="bibtex reference internal" href="#testone"', output)
+        'class="reference internal" href="#.*testone.*"', output)
     assert re.search(
-        'class="bibtex reference internal" href="#testtwo"', output)
+        'class="reference internal" href="#.*testtwo.*"', output)
