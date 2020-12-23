@@ -16,12 +16,13 @@ class FootCiteRole(XRefRole):
     backend = find_plugin('pybtex.backends', 'docutils')()
 
     def make_refnode(self, document, env, key):
-        citation_refs = env.temp_data.setdefault("bibtex_foot_citation_refs", {})
+        citation_refs = env.temp_data.setdefault(
+            "bibtex_foot_citation_refs", {})
         for otherkeys in citation_refs.values():
             if key in otherkeys:
                 break
         else:
-            # note: using dict as ordered set
+            # note: keys is a dict used as an ordered set
             keys = citation_refs.setdefault(
                 env.temp_data["bibtex_foot_bibliography_id"], {})
             keys[key] = None
@@ -32,7 +33,7 @@ class FootCiteRole(XRefRole):
         """Transform reference node into a footnote reference,
         and note that the reference was cited.
         """
-        keys = [key.strip() for key in node['reftarget'].split(',')]
+        keys = [key.strip() for key in self.target.split(',')]
         return [self.make_refnode(document, env, key) for key in keys], []
 
 
