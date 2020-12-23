@@ -11,7 +11,7 @@
 """
 
 import ast
-from typing import List, Dict, NamedTuple, cast
+from typing import List, Dict, NamedTuple, cast, Optional
 
 import docutils.nodes
 import sphinx.util
@@ -194,18 +194,20 @@ class BibliographyCache(NamedTuple):
 
 class Citation(NamedTuple):
     """Information about a citation."""
-    bibliography_id: str  #: Unique id of its bibliography directive.
-    key: str              #: Unique citation id used for referencing.
-    label: str            #: Label (including brackets and label prefix).
-    entry_key: str        #: The original entry key (no prefix).
-    entry_label: str      #: The original entry label (no brackets or prefix).
+    citation_id: Optional[str]   #: Unique id of this citation.
+    bibliography_id: str         #: Unique id of its bibliography directive.
+    key: str                     #: Unique citation id used for referencing.
+    label: str                   #: Label (with brackets and label prefix).
+    entry_key: str               #: The original key (no prefix).
+    entry_label: str             #: The original label (no brackets or prefix).
 
 
 class CitationRef(NamedTuple):
     """Information about a citation reference."""
-    docname: str  #: Document name where the citation is referenced.
-    line: int     #: Line number.
-    key: str      #: Citation key (including key prefix).
+    citation_ref_id: Optional[str]  #: Unique id of this citation reference.
+    docname: str                    #: Document name.
+    line: int                       #: Line number.
+    key: str                        #: Citation key (including key prefix).
 
 
 class BibtexDomain(Domain):
@@ -231,14 +233,14 @@ class BibtexDomain(Domain):
         return self.data.setdefault('bibliographies', {})  # id -> cache
 
     @property
-    def citations(self) -> Dict[str, Citation]:
-        """Map each citation id to citation data."""
-        return self.data.setdefault('citations', {})
+    def citations(self) -> List[Citation]:
+        """Citation data."""
+        return self.data.setdefault('citations', [])
 
     @property
-    def citation_refs(self) -> Dict[str, CitationRef]:
-        """Map each citation reference id to citation reference data."""
-        return self.data.setdefault('citation_refs', {})
+    def citation_refs(self) -> List[CitationRef]:
+        """Citation reference data."""
+        return self.data.setdefault('citation_refs', [])
 
     # TODO switch to temp_data and remove from domain
     @property
@@ -262,15 +264,16 @@ class BibtexDomain(Domain):
                 env.app.config.bibtex_encoding)
 
     def clear_doc(self, docname: str) -> None:
+        self.data['citations'] = [
+            citation for citation in self.citations
+            if self.bibliographies[
+                   citation.bibliography_id].docname != docname]
+        self.data['citation_refs'] = [
+            ref for ref in self.citation_refs
+            if ref.docname != docname]
         for id_, bibcache in list(self.bibliographies.items()):
             if bibcache.docname == docname:
                 del self.bibliographies[id_]
-        for id_, citation in list(self.citations.items()):
-            if citation.docname == docname:
-                del self.citations[id_]
-        for id_, citation_ref in list(self.citation_refs.items()):
-            if citation_ref.docname == docname:
-                del self.citation_refs[id_]
         self.enum_count.pop(docname, None)
 
     def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
@@ -280,12 +283,13 @@ class BibtexDomain(Domain):
         for docname in docnames:
             if docname in otherdata['enum_count']:
                 self.enum_count[docname] = otherdata['enum_count'][docname]
-        for id_, citation in otherdata['citations'].items():
-            if citation.docname in docnames:
-                self.citations[id_] = citation
-        for id_, citation_ref in otherdata['citation_refs'].items():
+        for citation in otherdata['citations']:
+            if self.bibliographies[
+                    citation.bibliography_id].docname in docnames:
+                self.citations.append(citation)
+        for citation_ref in otherdata['citation_refs']:
             if citation_ref.docname in docnames:
-                self.citation_refs[id_] = citation_ref
+                self.citation_refs.append(citation_ref)
 
     def check_consistency(self) -> None:
         # This function is called when all doctrees are parsed,
@@ -295,6 +299,9 @@ class BibtexDomain(Domain):
         # the labels and construct the citation ids here because they must be
         # known when resolve_xref is called.
         docnames = list(get_docnames(self.env))
+        # we keep track of this to quickly check for duplicates
+        used_keys = set()
+        used_labels = {}
         for id_, bibcache in self.bibliographies.items():
             entries = self.get_bibliography_entries(id_=id_, docnames=docnames)
             # locate and instantiate style and backend plugins
@@ -303,31 +310,39 @@ class BibtexDomain(Domain):
                 find_plugin('pybtex.style.formatting', bibcache.style)())
             sorted_entries = style.sort(entries)
             labels = style.format_labels(sorted_entries)
-            for label, entry in zip(labels, sorted_entries):
+            for entry_label, entry in zip(labels, sorted_entries):
                 key = bibcache.keyprefix + entry.key
-                citation = Citation(
+                label = '[' + bibcache.labelprefix + entry_label + ']'
+                if bibcache.list_ != 'citation':
+                    # no warning in this case, just don't generate link
+                    citation_id = None
+                elif key in used_keys:
+                    logger.warning(
+                        'duplicate citation for key %s' % key,
+                        location=(bibcache.docname, bibcache.line))
+                    # no id for this one
+                    citation_id = None
+                else:
+                    citation_id = 'bibtex-citation-%s-%s-%s' % (
+                        bibcache.docname,
+                        docutils.nodes.fully_normalize_name(key),
+                        self.env.new_serialno('bibtex'))
+                self.citations.append(Citation(
+                    citation_id=citation_id,
                     bibliography_id=id_,
                     key=key,
-                    label='[' + bibcache.labelprefix + label + ']',
+                    label=label,
                     entry_key=entry.key,
-                    entry_label=label,
-                )
-                if bibcache.list_ == 'citation':
-                    for othercitation in self.citations.values():
-                        if othercitation.key == key:
-                            logger.warning(
-                                'duplicate citation for key %s' % key,
-                                location=(bibcache.docname, bibcache.line))
-                        elif othercitation.label == citation.label:
-                            logger.warning(
-                                'duplicate label %s for keys %s and %s' % (
-                                    citation.label, key, othercitation.key),
-                                location=(bibcache.docname, bibcache.line))
-                citation_id = 'bibtex-citation-%s-%s-%s' % (
-                    bibcache.docname,
-                    docutils.nodes.fully_normalize_name(key),
-                    self.env.new_serialno('bibtex'))
-                self.citations[citation_id] = citation
+                    entry_label=entry_label,
+                ))
+                used_keys.add(key)
+                used_labels.setdefault(label, set()).add(key)
+        for label, keys in used_labels.items():
+            if len(keys) > 1:
+                logger.warning(
+                    'duplicate label %s for keys %s' % (
+                        label, keys))
+
 
     def resolve_xref(self, env: BuildEnvironment, fromdocname: str,
                      builder: Builder, typ: str, target: str,
@@ -337,7 +352,7 @@ class BibtexDomain(Domain):
         node = docutils.nodes.inline('', '', classes=['cite'])
         for key in keys:
             citation = None
-            for citation_id, citation in self.citations.items():
+            for citation in self.citations:
                 bibcache = self.bibliographies[citation.bibliography_id]
                 if citation.key == key and bibcache.list_ == 'citation':
                     break
@@ -346,7 +361,7 @@ class BibtexDomain(Domain):
                 logger.warning('could not find bibtex key %s' % key)
                 return None
             refuri = builder.get_relative_uri(fromdocname, bibcache.docname)
-            lrefuri = '#'.join([refuri, citation_id])
+            lrefuri = '#'.join([refuri, citation.citation_id])
             # TODO use sphinx's make_refnode
             node += docutils.nodes.reference(
                 '', citation.label, internal=True, refuri=lrefuri)
@@ -362,7 +377,7 @@ class BibtexDomain(Domain):
         ordered by citation order.
         """
         for docname in docnames:
-            for id_, citation_ref in self.citation_refs.items():
+            for citation_ref in self.citation_refs:
                 if docname == citation_ref.docname:
                     yield citation_ref.key
 
@@ -379,7 +394,7 @@ class BibtexDomain(Domain):
                 key = bibcache.keyprefix + entry.key
                 cited_docnames = {
                     citation_ref.docname
-                    for citation_ref in self.citation_refs.values()
+                    for citation_ref in self.citation_refs
                     if citation_ref.key == key
                 }
                 visitor = _FilterVisitor(

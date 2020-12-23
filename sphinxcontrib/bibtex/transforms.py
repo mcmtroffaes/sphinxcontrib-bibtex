@@ -73,10 +73,8 @@ class BibliographyTransform(SphinxPostTransform):
         for bibnode in self.document.traverse(bibliography):
             bibliography_id = bibnode['ids'][0]
             bibcache = domain.bibliographies[bibliography_id]
-            citations = {
-                id_: citation
-                for id_, citation in domain.citations.items()
-                if citation.bibliography_id == bibliography_id}
+            citations = [citation for citation in domain.citations
+                         if citation.bibliography_id == bibliography_id]
             # locate and instantiate style and backend plugins
             style = find_plugin('pybtex.style.formatting', bibcache.style)()
             backend = find_plugin('pybtex.backends', 'docutils')()
@@ -93,7 +91,7 @@ class BibliographyTransform(SphinxPostTransform):
                 nodes = docutils.nodes.bullet_list()
             else:  # "citation"
                 nodes = docutils.nodes.paragraph()
-            for citation_id, citation in citations.items():
+            for citation in citations:
                 entry = style.format_entry(
                     citation.entry_label,
                     get_bibliography_entry(
@@ -105,7 +103,8 @@ class BibliographyTransform(SphinxPostTransform):
                     citation_node = docutils.nodes.citation()
                     citation_node += docutils.nodes.label('', citation.label)
                     citation_node += backend.paragraph(entry)
-                    citation_node['ids'].append(citation_id)
+                if citation.citation_id is not None:
+                    citation_node['ids'].append(citation.citation_id)
                 node_text_transform(citation_node, transform_url_command)
                 nodes.append(citation_node)
                 if bibcache.list_ == "enumerated":

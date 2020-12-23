@@ -28,12 +28,12 @@ class CiteRole(XRefRole):
         for key in keys:
             citation_ref_id = 'bibtex-citation-ref-%s-%s' % (
                 env.docname, env.new_serialno('bibtex'))
-            assert citation_ref_id not in domain.citation_refs
-            domain.citation_refs[citation_ref_id] = CitationRef(
+            domain.citation_refs.append(CitationRef(
+                citation_ref_id=citation_ref_id,
                 docname=env.docname,
                 line=document.line,
                 key=key,
-            )
+            ))
         return [node], []
 
 
