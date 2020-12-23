@@ -302,6 +302,7 @@ class BibtexDomain(Domain):
         # we keep track of this to quickly check for duplicates
         used_keys = set()
         used_labels = {}
+        used_ids = set()
         for id_, bibcache in self.bibliographies.items():
             entries = self.get_bibliography_entries(id_=id_, docnames=docnames)
             # locate and instantiate style and backend plugins
@@ -323,10 +324,15 @@ class BibtexDomain(Domain):
                     # no id for this one
                     citation_id = None
                 else:
-                    citation_id = 'bibtex-citation-%s-%s-%s' % (
-                        bibcache.docname,
-                        docutils.nodes.fully_normalize_name(key),
-                        self.env.new_serialno('bibtex'))
+                    base_id = 'bibtex-citation-{}'.format(
+                        docutils.nodes.make_id(key))
+                    if base_id not in used_ids:
+                        citation_id = base_id
+                    else:
+                        num = 1
+                        while base_id + '-' + str(num) in used_ids:
+                            num += 1
+                        citation_id = base_id + '-' + str(num)
                 self.citations.append(Citation(
                     citation_id=citation_id,
                     bibliography_id=id_,

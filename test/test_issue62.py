@@ -12,12 +12,12 @@ import re
 
 def extract_references(code):
     return frozenset(re.findall(
-        '<a class="bibtex reference internal" href="([^"]+)"', code))
+        '<a class="reference internal" href="([^"]+)"', code))
 
 
 def extract_citations(code):
     return frozenset(re.findall(
-        '<dt class="bibtex label" id="([^"]+)"', code))
+        '<dt class="label" id="([^"]+)"', code))
 
 
 def check_code(code, refs, cites, otherrefs, othercites):
@@ -34,37 +34,37 @@ def check_code(code, refs, cites, otherrefs, othercites):
 @pytest.mark.sphinx('html', testroot='issue62')
 def test_local_bibliographies(app, warning):
     doc1_refs = frozenset([
-        '#wustner-atomistic-2014',
-        '#fuhrmans-molecular-2012',
-        '#blume-apparent-1983',
-        '#grabitz-relaxation-2002',
+        '#bibtex-citation-wustner-atomistic-2014',
+        '#bibtex-citation-fuhrmans-molecular-2012',
+        '#bibtex-citation-blume-apparent-1983',
+        '#bibtex-citation-grabitz-relaxation-2002',
         ])
     doc1_cites = frozenset([
-        'blume-apparent-1983',
-        'wustner-atomistic-2014',
-        'fuhrmans-molecular-2012',
-        'grabitz-relaxation-2002'
+        'bibtex-citation-blume-apparent-1983',
+        'bibtex-citation-wustner-atomistic-2014',
+        'bibtex-citation-fuhrmans-molecular-2012',
+        'bibtex-citation-grabitz-relaxation-2002'
         ])
     doc2_refs = frozenset([
-        '#shirts-simple-2013'
+        '#bibtex-citation-shirts-simple-2013'
         ])
     doc2_cites = frozenset([
-        'shirts-simple-2013'
+        'bibtex-citation-shirts-simple-2013'
         ])
     sum_refs = frozenset([
-        "#mcmahon-membrane-2010",
-        "#hu-gaussian-2013",
-        "doc1.html#fuhrmans-molecular-2012",
-        "#risselada-curvature-dependent-2011",
-        "#risselada-curvature-2009",
-        "#marrink-mechanism-2003",
+        "#bibtex-citation-mcmahon-membrane-2010",
+        "#bibtex-citation-hu-gaussian-2013",
+        "doc1.html#bibtex-citation-fuhrmans-molecular-2012",
+        "#bibtex-citation-risselada-curvature-dependent-2011",
+        "#bibtex-citation-risselada-curvature-2009",
+        "#bibtex-citation-marrink-mechanism-2003",
         ])
     sum_cites = frozenset([
-        'hu-gaussian-2013',
-        'marrink-mechanism-2003',
-        'risselada-curvature-2009',
-        'risselada-curvature-dependent-2011',
-        'mcmahon-membrane-2010',
+        'bibtex-citation-hu-gaussian-2013',
+        'bibtex-citation-marrink-mechanism-2003',
+        'bibtex-citation-risselada-curvature-2009',
+        'bibtex-citation-risselada-curvature-dependent-2011',
+        'bibtex-citation-mcmahon-membrane-2010',
         ])
     app.builder.build_all()
     assert not warning.getvalue()
