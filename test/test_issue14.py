@@ -12,7 +12,7 @@ import re
 
 def htmlbiblabel(label):
     return (
-        '<dt class="bibtex label".*><span class="brackets">[[]{0}[]]</span></dt>'
+        '<dt class="bibtex label".*><span class="brackets">[[]{0}[]]</span>'
         .format(label))
 
 

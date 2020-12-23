@@ -11,7 +11,7 @@
 """
 
 import ast
-from typing import List, Dict, NamedTuple, Set, cast
+from typing import List, Dict, NamedTuple, cast
 
 import docutils.nodes
 import sphinx.util
@@ -316,11 +316,11 @@ class BibtexDomain(Domain):
                     for othercitation in self.citations.values():
                         if othercitation.key == key:
                             logger.warning(
-                                'duplicate bibtex citation for key %s' % key,
+                                'duplicate citation for key %s' % key,
                                 location=(bibcache.docname, bibcache.line))
                         elif othercitation.label == citation.label:
                             logger.warning(
-                                'duplicate bibtex label %s for keys %s and %s' % (
+                                'duplicate label %s for keys %s and %s' % (
                                     citation.label, key, othercitation.key),
                                 location=(bibcache.docname, bibcache.line))
                 citation_id = 'bibtex-citation-%s-%s-%s' % (
@@ -347,9 +347,9 @@ class BibtexDomain(Domain):
                 return None
             refuri = builder.get_relative_uri(fromdocname, bibcache.docname)
             lrefuri = '#'.join([refuri, citation_id])
+            # TODO use sphinx's make_refnode
             node += docutils.nodes.reference(
-                citation.label, citation.label,
-                internal=True, refuri=lrefuri)
+                '', citation.label, internal=True, refuri=lrefuri)
         return node
 
     # TODO remove this function

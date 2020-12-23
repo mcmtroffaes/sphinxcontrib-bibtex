@@ -19,7 +19,7 @@ from pybtex.plugin import find_plugin
 from sphinx.transforms.post_transforms import SphinxPostTransform
 
 from .bibfile import get_bibliography_entry
-from .cache import BibtexDomain, Citation
+from .cache import BibtexDomain
 from .nodes import bibliography
 
 
