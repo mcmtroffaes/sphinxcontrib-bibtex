@@ -312,7 +312,7 @@ class BibtexDomain(Domain):
                     entry_key=entry.key,
                     entry_label=label,
                 )
-                if (bibcache.list_ == 'citation'):
+                if bibcache.list_ == 'citation':
                     for othercitation in self.citations.values():
                         if othercitation.key == key:
                             logger.warning(
