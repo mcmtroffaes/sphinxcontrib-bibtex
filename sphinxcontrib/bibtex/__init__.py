@@ -12,12 +12,10 @@ import docutils.nodes
 import docutils.frontend
 import docutils.parsers.rst
 import docutils.utils
-import sphinx.util
 
-from typing import cast, Any, Dict
+from typing import Any, Dict
 
 from sphinx.application import Sphinx
-from sphinx.environment import BuildEnvironment
 
 from .cache import BibtexDomain
 from .nodes import bibliography

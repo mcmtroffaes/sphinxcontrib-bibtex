@@ -118,12 +118,12 @@ class BibliographyTransform(SphinxPostTransform):
                         if otherkey == key:
                             logger.warning(
                                 'duplicate citation key %s' % key,
-                                location=(env.docname, bibnode.lineno))
+                                location=(env.docname, bibnode.line))
                         elif othercitation.label == label:
                             logger.warning(
                                 'duplicate label %s for keys %s and %s' % (
                                     label, key, otherkey),
-                                location=(env.docname, bibnode.lineno))
+                                location=(env.docname, bibnode.line))
                     domain.citations[key] = Citation(
                         docname=env.docname,
                         id_=citation['ids'][0],

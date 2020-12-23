@@ -128,4 +128,6 @@ class BibliographyDirective(Directive):
         for bibfile in bibfiles:
             env.note_dependency(bibfile)
         domain.bibliographies[id_] = bibcache
-        return [bibliography('', ids=[id_])]
+        node = bibliography('', ids=[id_])
+        node.line = self.lineno
+        return [node]
