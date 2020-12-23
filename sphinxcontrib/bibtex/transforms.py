@@ -71,12 +71,12 @@ class BibliographyTransform(SphinxPostTransform):
         env = self.document.settings.env
         domain = cast(BibtexDomain, env.get_domain('cite'))
         for bibnode in self.document.traverse(bibliography):
-            id_ = bibnode['ids'][0]
-            bibcache = domain.bibliographies[id_]
+            bibliography_id = bibnode['ids'][0]
+            bibcache = domain.bibliographies[bibliography_id]
             citations = {
-                key: citation
-                for key, citation in domain.citations.items()
-                if citation.bibliography_id == id_}
+                id_: citation
+                for id_, citation in domain.citations.items()
+                if citation.bibliography_id == bibliography_id}
             # locate and instantiate style and backend plugins
             style = find_plugin('pybtex.style.formatting', bibcache.style)()
             backend = find_plugin('pybtex.backends', 'docutils')()
@@ -93,7 +93,7 @@ class BibliographyTransform(SphinxPostTransform):
                 nodes = docutils.nodes.bullet_list()
             else:  # "citation"
                 nodes = docutils.nodes.paragraph()
-            for key, citation in citations.items():
+            for citation_id, citation in citations.items():
                 entry = style.format_entry(
                     citation.entry_label,
                     get_bibliography_entry(
@@ -104,11 +104,7 @@ class BibliographyTransform(SphinxPostTransform):
                 else:  # "citation"
                     citation_node = backend.citation(entry, self.document)
                     citation_node['classes'].append('bibtex')
-                    # citation[0] is the label node
-                    # we override it to change the text
-                    assert isinstance(citation_node[0], docutils.nodes.label)
-                    citation_node[0] = docutils.nodes.label(
-                        citation.label, citation.label)
+                    citation_node[0] = docutils.nodes.label('', citation.label)
                 node_text_transform(citation_node, transform_url_command)
                 nodes += citation_node
                 if bibcache.list_ == "enumerated":

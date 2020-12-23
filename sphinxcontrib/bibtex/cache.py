@@ -323,8 +323,10 @@ class BibtexDomain(Domain):
                                 'duplicate bibtex label %s for keys %s and %s' % (
                                     citation.label, key, othercitation.key),
                                 location=(bibcache.docname, bibcache.line))
-                citation_id = 'bibtex-citation-%s-%s' % (
-                    bibcache.docname, self.env.new_serialno('bibtex'))
+                citation_id = 'bibtex-citation-%s-%s-%s' % (
+                    bibcache.docname,
+                    docutils.nodes.fully_normalize_name(key),
+                    self.env.new_serialno('bibtex'))
                 self.citations[citation_id] = citation
 
     def resolve_xref(self, env: BuildEnvironment, fromdocname: str,
