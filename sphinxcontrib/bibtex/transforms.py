@@ -102,9 +102,10 @@ class BibliographyTransform(SphinxPostTransform):
                     citation_node = docutils.nodes.list_item()
                     citation_node += backend.paragraph(entry)
                 else:  # "citation"
-                    citation_node = backend.citation(entry, self.document)
-                    citation_node['classes'].append('bibtex')
-                    citation_node[0] = docutils.nodes.label('', citation.label)
+                    citation_node = docutils.nodes.citation()
+                    citation_node += docutils.nodes.label('', citation.label)
+                    citation_node += backend.paragraph(entry)
+                    citation_node['ids'].append(citation_id)
                 node_text_transform(citation_node, transform_url_command)
                 nodes += citation_node
                 if bibcache.list_ == "enumerated":
