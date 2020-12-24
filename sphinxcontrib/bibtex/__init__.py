@@ -3,9 +3,6 @@
     .. autofunction:: setup
     .. autofunction:: init_bibtex_cache
     .. autofunction:: init_foot_bibliography_id
-    .. autofunction:: process_citations
-    .. autofunction:: process_citation_references
-    .. autofunction:: check_duplicate_labels
 """
 
 import docutils.nodes
