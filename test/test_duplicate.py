@@ -21,3 +21,12 @@ def test_duplicate_label(app, warning):
     assert re.search(htmlbiblabel("1"), output)
     output = (app.outdir / "doc2.html").read_text()
     assert re.search(htmlbiblabel("1"), output)
+
+
+@pytest.mark.sphinx('html', testroot='duplicate_citation')
+def test_duplicate_citation(app, warning):
+    app.builder.build_all()
+    warning.seek(0)
+    warnings = list(warning.readlines())
+    assert len(warnings) == 1
+    assert "duplicate citation for key Test" in warnings[0]
