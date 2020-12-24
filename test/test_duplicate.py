@@ -30,3 +30,6 @@ def test_duplicate_citation(app, warning):
     warnings = list(warning.readlines())
     assert len(warnings) == 1
     assert "duplicate citation for key Test" in warnings[0]
+    # assure there's only one id for this citation
+    output = (app.outdir / "index.html").read_text()
+    assert output.count('id="bibtex-citation-test"') == 1
