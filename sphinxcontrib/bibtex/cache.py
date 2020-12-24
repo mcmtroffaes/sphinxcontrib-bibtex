@@ -11,12 +11,13 @@
 """
 
 import ast
-from typing import List, Dict, NamedTuple, cast, Optional
+from typing import List, Dict, NamedTuple, cast, Optional, Iterable, Tuple
 
 import docutils.nodes
 import sphinx.util
 import re
 
+from pybtex.database import Entry
 from pybtex.plugin import find_plugin
 import pybtex.style.formatting
 from sphinx.addnodes import pending_xref
@@ -346,16 +347,20 @@ class BibtexDomain(Domain):
         """Replace node by list of citation references (one for each key)."""
         keys = [key.strip() for key in target.split(',')]
         node = docutils.nodes.inline('', '', classes=['cite'])
+        # map citation keys that can be resolved to their citation data
+        citations = {
+            cit.key: cit for cit in self.citations
+            if cit.key in keys
+            and self.bibliographies[cit.bibliography_id].list_ == 'citation'}
         for key in keys:
-            citation = None
-            for citation in self.citations:
-                bibcache = self.bibliographies[citation.bibliography_id]
-                if citation.key == key and bibcache.list_ == 'citation':
-                    break
-            if citation is None:
+            refcontnode = docutils.nodes.Text('[' + citation.label + ']')
+            try:
+                citation = citations[key]
+            except KeyError:
                 # TODO can handle missing reference warning using the domain
                 logger.warning('could not find bibtex key %s' % key)
-                return None
+                node += refcontnode
+                continue
             if builder.name == 'latex':
                 # latex builder needs a citation_reference
                 refnode = docutils.nodes.citation_reference(
@@ -364,7 +369,6 @@ class BibtexDomain(Domain):
                     refname=citation.citation_id)
             else:
                 # other builders can use general reference node
-                refcontnode = docutils.nodes.Text('[' + citation.label + ']')
                 refnode = make_refnode(
                     builder, env.docname, bibcache.docname,
                     citation.citation_id, refcontnode)
@@ -375,60 +379,73 @@ class BibtexDomain(Domain):
         """Yield all citation keys for given *docnames* in order, then
         ordered by citation order.
         """
-        for docname in docnames:
-            for citation_ref in self.citation_refs:
-                if docname == citation_ref.docname:
-                    for key in citation_ref.keys:
-                        yield key
+        for i, citation_ref in sorted(
+                enumerate(self.citation_refs),
+                key=lambda x: (docnames.index(x[1].docname), x[0])):
+            yield citation_ref.key
+        #for docname in docnames:
+        #    for citation_ref in self.citation_refs:
+        #        if docname == citation_ref.docname:
+        #            for key in citation_ref.keys:
+        #                yield key
 
-    def _get_bibliography_entries(self, id_):
-        """Return filtered bibliography entries, sorted by occurrence
-        in the bib file.
-        """
-        # get the information of this bibliography node
-        bibcache = self.bibliographies[id_]
-        # generate entries
+    def get_bibliography_entries(
+            self, bibcache: BibliographyCache) -> Iterable[Tuple[str, Entry]]:
+        """Return all bibliography entries from the bib files."""
         for bibfile in bibcache.bibfiles:
-            data = self.bibfiles[bibfile].data
-            for entry in data.entries.values():
-                key = bibcache.keyprefix + entry.key
-                cited_docnames = {
-                    citation_ref.docname
-                    for citation_ref in self.citation_refs
-                    if key in citation_ref.keys
-                }
-                visitor = _FilterVisitor(
-                    entry=entry,
-                    docname=bibcache.docname,
-                    cited_docnames=cited_docnames)
-                try:
-                    success = visitor.visit(bibcache.filter_)
-                except ValueError as err:
-                    logger.warning(
-                        "syntax error in :filter: expression; %s" % err,
-                        location=(bibcache.docname, bibcache.line))
-                    # recover by falling back to the default
-                    success = bool(cited_docnames)
-                if success:
-                    yield entry
+            for entry in self.bibfiles[bibfile].data.entries.values():
+                yield bibcache.keyprefix + entry.key, entry
 
-    def get_bibliography_entries(self, id_, docnames):
-        """Return filtered bibliography entries, sorted by citation order."""
-        # get entries, ordered by bib file occurrence
-        bibcache = self.bibliographies[id_]
-        entries = dict(
-            (bibcache.keyprefix + entry.key, entry) for entry in
-            self._get_bibliography_entries(id_=id_))
-        # order entries according to which were cited first
-        # first, we add all keys that were cited
-        # then, we add all remaining keys
-        sorted_entries = []
+    def get_filtered_bibliography_entries(
+            self, bibcache: BibliographyCache) -> Iterable[Tuple[str, Entry]]:
+        """Return filtered bibliography entries."""
+        for key, entry in self.get_bibliography_entries(bibcache):
+            key = bibcache.keyprefix + entry.key
+            cited_docnames = {
+                citation_ref.docname
+                for citation_ref in self.citation_refs
+                if key in citation_ref.keys
+            }
+            visitor = _FilterVisitor(
+                entry=entry,
+                docname=bibcache.docname,
+                cited_docnames=cited_docnames)
+            try:
+                success = visitor.visit(bibcache.filter_)
+            except ValueError as err:
+                logger.warning(
+                    "syntax error in :filter: expression; %s" % err,
+                    location=(bibcache.docname, bibcache.line))
+                # recover by falling back to the default
+                success = bool(cited_docnames)
+            if success:
+                yield key, entry
+
+    def get_sorted_bibliography_entries(
+            self, bibcache: BibliographyCache, docnames: List[str]
+            ) -> Iterable[Tuple[str, Entry]]:
+        """Return sorted bibliography entries."""
+        entries = dict(self.get_filtered_bibliography_entries(bibcache))
+        # yield entries which were cited first, in citation order
         for key in self.get_all_cited_keys(docnames):
             try:
                 entry = entries.pop(key)
             except KeyError:
                 pass
             else:
-                sorted_entries.append(entry)
-        sorted_entries += entries.values()
-        return sorted_entries
+                yield key, entry
+        # then all remaining keys, in order of bibliography file
+        for key, entry in entries.items():
+            yield key, entry
+
+    def get_labelled_bibliography_entries(
+            self, bibcache: BibliographyCache, docnames: List[str]
+            ) -> Iterable[Tuple[str, Entry]]:
+        entries = dict(
+            self.get_sorted_bibliography_entries(bibcache, docnames))
+        style = cast(
+            pybtex.style.formatting.BaseStyle,
+            find_plugin('pybtex.style.formatting', bibcache.style)())
+        sorted_entries = style.sort(entries.values())
+        labels = style.format_labels(sorted_entries)
+        return zip(labels, sorted_entries)
