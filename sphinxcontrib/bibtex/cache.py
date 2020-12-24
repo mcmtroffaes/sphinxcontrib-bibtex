@@ -243,14 +243,6 @@ class BibtexDomain(Domain):
         """Citation reference data."""
         return self.data.setdefault('citation_refs', [])
 
-    # TODO switch to temp_data and remove from domain
-    @property
-    def enum_count(self) -> Dict[str, int]:
-        """Keeps track of the current bibliography enum count in each
-        document.
-        """
-        return self.data.setdefault('enum_count', {})  # doc -> enum count
-
     def __init__(self, env: BuildEnvironment):
         super().__init__(env)
         # check config
@@ -275,15 +267,11 @@ class BibtexDomain(Domain):
         for id_, bibcache in list(self.bibliographies.items()):
             if bibcache.docname == docname:
                 del self.bibliographies[id_]
-        self.enum_count.pop(docname, None)
 
     def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
         for id_, bibcache in otherdata['bibliographies'].items():
             if bibcache.docname in docnames:
                 self.bibliographies[id_] = bibcache
-        for docname in docnames:
-            if docname in otherdata['enum_count']:
-                self.enum_count[docname] = otherdata['enum_count'][docname]
         for citation in otherdata['citations']:
             if self.bibliographies[
                     citation.bibliography_id].docname in docnames:

@@ -84,9 +84,10 @@ class BibliographyTransform(SphinxPostTransform):
                 nodes['enumtype'] = bibcache.enumtype
                 if bibcache.start >= 1:
                     nodes['start'] = bibcache.start
-                    domain.enum_count[env.docname] = bibcache.start
+                    env.temp_data['bibtex_enum_count'] = bibcache.start
                 else:
-                    nodes['start'] = domain.enum_count[env.docname]
+                    nodes['start'] = env.temp_data.setdefault(
+                        'bibtex_enum_count', 1)
             elif bibcache.list_ == "bullet":
                 nodes = docutils.nodes.bullet_list()
             else:  # "citation"
@@ -110,7 +111,7 @@ class BibliographyTransform(SphinxPostTransform):
                 node_text_transform(citation_node, transform_url_command)
                 nodes.append(citation_node)
                 if bibcache.list_ == "enumerated":
-                    domain.enum_count[env.docname] += 1
+                    env.temp_data['bibtex_enum_count'] += 1
             if env.bibtex_bibliography_header is not None:
                 nodes = [env.bibtex_bibliography_header.deepcopy(), nodes]
             bibnode.replace_self(nodes)
