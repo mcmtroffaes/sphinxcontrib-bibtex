@@ -14,7 +14,6 @@
     .. autofunction:: get_bibliography_entry
 """
 
-import copy
 import os.path
 from typing import NamedTuple, Dict
 
