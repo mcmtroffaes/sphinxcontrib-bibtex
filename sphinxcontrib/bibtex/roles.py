@@ -35,9 +35,3 @@ class CiteRole(XRefRole):
             keys=keys,
         ))
         return [node], []
-
-
-def _fake_entry(key):
-    entry = pybtex.database.Entry(type_="")
-    entry.key = key
-    return entry
