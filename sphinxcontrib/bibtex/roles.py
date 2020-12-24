@@ -23,13 +23,12 @@ class CiteRole(XRefRole):
         and note the cited citation keys.
         """
         node['refdomain'] = 'cite'
-        document.set_id(node, suggested_prefix='cite')
+        document.note_explicit_target(node, node)  # for backrefs
         domain = cast(BibtexDomain, env.get_domain('cite'))
-        keys = [key.strip() for key in self.target.split(',')]
         domain.citation_refs.append(CitationRef(
             citation_ref_id=node['ids'][0],
             docname=env.docname,
             line=document.line,
-            keys=keys,
+            keys=[key.strip() for key in self.target.split(',')],
         ))
         return [node], []
