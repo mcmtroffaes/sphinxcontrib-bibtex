@@ -331,9 +331,9 @@ class BibtexDomain(Domain):
                         citation_id = base_id
                     else:
                         num = 1
-                        while base_id + '-' + str(num) in used_ids:
+                        while base_id + str(num) in used_ids:
                             num += 1
-                        citation_id = base_id + '-' + str(num)
+                        citation_id = base_id + str(num)
                 self.citations.append(Citation(
                     citation_id=citation_id,
                     bibliography_id=id_,
@@ -344,6 +344,7 @@ class BibtexDomain(Domain):
                 ))
                 used_keys.add(key)
                 used_labels.setdefault(label, set()).add(key)
+                used_ids.add(citation_id)
         for label, keys in used_labels.items():
             if len(keys) > 1:
                 logger.warning(

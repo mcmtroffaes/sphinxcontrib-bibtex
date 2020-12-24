@@ -33,3 +33,18 @@ def test_duplicate_citation(app, warning):
     # assure there's only one id for this citation
     output = (app.outdir / "index.html").read_text()
     assert output.count('id="bibtex-citation-test"') == 1
+
+
+@pytest.mark.sphinx('html', testroot='duplicate_nearly_identical_keys')
+def test_duplicate_nearly_identical_keys(app, warning):
+    app.builder.build_all()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
+    # assure both citations and citation references are present
+    assert "[Smi]" in output
+    assert "Smith" in output
+    assert "[Pop]" in output
+    assert "Poppins" in output
+    # assure distinct ids for citations
+    assert output.count('id="bibtex-citation-test"') == 1
+    assert output.count('id="bibtex-citation-test1"') == 1
