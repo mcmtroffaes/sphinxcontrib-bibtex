@@ -24,6 +24,7 @@ from sphinx.builders import Builder
 from sphinx.domains import Domain
 from sphinx.environment import BuildEnvironment
 from sphinx.errors import ExtensionError
+from sphinx.util.nodes import make_refnode
 
 from .bibfile import BibfileCache, normpath_filename, process_bibfile
 
@@ -365,13 +366,19 @@ class BibtexDomain(Domain):
                 # TODO can handle missing reference warning using the domain
                 logger.warning('could not find bibtex key %s' % key)
                 return None
-            # TODO use sphinx's make_refnode?
-            # TODO something is still wrong with this, only resolves locally?
-            node += docutils.nodes.citation_reference(
-                '', citation.label, internal=True,
-                docname=bibcache.docname,
-                refid=citation.citation_id,
-                refname=citation.citation_id)
+            if builder.name == 'latex':
+                # latex builder needs a citation_reference
+                refnode = docutils.nodes.citation_reference(
+                    '', citation.label,
+                    docname=env.docname,
+                    refname=citation.citation_id)
+            else:
+                # other builders can use general reference node
+                refcontnode = docutils.nodes.Text('[' + citation.label + ']')
+                refnode = make_refnode(
+                    builder, env.docname, bibcache.docname,
+                    citation.citation_id, refcontnode)
+            node += refnode
         return node
 
     def get_all_cited_keys(self, docnames):

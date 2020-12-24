@@ -12,7 +12,7 @@ import re
 
 def extract_references(code):
     return frozenset(re.findall(
-        '<a class="citation-reference" href="([^"]+)"', code))
+        '<a class="reference internal" href="([^"]+)"', code))
 
 
 def extract_citations(code):
