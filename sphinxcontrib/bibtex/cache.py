@@ -204,10 +204,10 @@ class Citation(NamedTuple):
 
 class CitationRef(NamedTuple):
     """Information about a citation reference."""
-    citation_ref_id: Optional[str]  #: Unique id of this citation reference.
-    docname: str                    #: Document name.
-    line: int                       #: Line number.
-    key: str                        #: Citation key (including key prefix).
+    citation_ref_id: str  #: Unique id of this citation reference.
+    docname: str          #: Document name.
+    line: int             #: Line number.
+    keys: List[str]       #: Citation keys (including key prefix).
 
 
 class BibtexDomain(Domain):
@@ -381,7 +381,8 @@ class BibtexDomain(Domain):
         for docname in docnames:
             for citation_ref in self.citation_refs:
                 if docname == citation_ref.docname:
-                    yield citation_ref.key
+                    for key in citation_ref.keys:
+                        yield key
 
     def _get_bibliography_entries(self, id_):
         """Return filtered bibliography entries, sorted by occurrence
@@ -397,7 +398,7 @@ class BibtexDomain(Domain):
                 cited_docnames = {
                     citation_ref.docname
                     for citation_ref in self.citation_refs
-                    if citation_ref.key == key
+                    if key in citation_ref.keys
                 }
                 visitor = _FilterVisitor(
                     entry=entry,
