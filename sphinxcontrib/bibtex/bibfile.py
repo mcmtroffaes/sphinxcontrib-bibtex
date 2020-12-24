@@ -97,16 +97,6 @@ def get_bibliography_entry(cache: Dict[str, BibfileCache], key: str) -> Entry:
         except KeyError:
             pass
         else:
-            # entries are modified in an unpickable way
-            # when formatting, so fetch a deep copy
-            # and return this copy
-            # we do not deep copy entry.collection because that
-            # consumes enormous amounts of memory
-            entry.collection = None
-            entry2 = copy.deepcopy(entry)
-            entry2.key = entry.key
-            entry2.collection = data
-            entry.collection = data
             return entry
     else:
         logger.warning("could not find bibtex key {0}.".format(key))
