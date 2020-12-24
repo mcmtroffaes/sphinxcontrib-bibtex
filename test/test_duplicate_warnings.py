@@ -1,10 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-    test_issue14
-    ~~~~~~~~~~~~
-
-    Test duplicate label issue.
-"""
+"""Test warnings on duplicate labels/keys."""
 
 import pytest
 import re
@@ -16,8 +10,9 @@ def htmlbiblabel(label):
         .format(label))
 
 
-@pytest.mark.sphinx('html', testroot='issue14')
+@pytest.mark.sphinx('html', testroot='duplicate_label')
 def test_duplicate_label(app, warning):
+    # see github issue 14
     app.builder.build_all()
     assert re.search(
         r"duplicate label 1 for keys ({'Test', 'Test2'})|({'Test2', 'Test'})",
