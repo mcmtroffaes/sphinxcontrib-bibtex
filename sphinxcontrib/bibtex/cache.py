@@ -293,15 +293,9 @@ class BibtexDomain(Domain):
         used_keys = set()
         used_labels = {}
         used_ids = set()
-        for id_, bibcache in self.bibliographies.items():
-            entries = self.get_bibliography_entries(id_=id_, docnames=docnames)
-            # locate and instantiate style and backend plugins
-            style = cast(
-                pybtex.style.formatting.BaseStyle,
-                find_plugin('pybtex.style.formatting', bibcache.style)())
-            sorted_entries = style.sort(entries)
-            labels = style.format_labels(sorted_entries)
-            for entry_label, entry in zip(labels, sorted_entries):
+        for bibliography_id, bibcache in self.bibliographies.items():
+            for entry_label, entry in self.get_labelled_bibliography_entries(
+                    bibcache, docnames):
                 key = bibcache.keyprefix + entry.key
                 label = bibcache.labelprefix + entry_label
                 if bibcache.list_ != 'citation':
@@ -325,7 +319,7 @@ class BibtexDomain(Domain):
                         citation_id = base_id + str(num)
                 self.citations.append(Citation(
                     citation_id=citation_id,
-                    bibliography_id=id_,
+                    bibliography_id=bibliography_id,
                     key=key,
                     label=label,
                     entry_key=entry.key,
@@ -353,13 +347,12 @@ class BibtexDomain(Domain):
             if cit.key in keys
             and self.bibliographies[cit.bibliography_id].list_ == 'citation'}
         for key in keys:
-            refcontnode = docutils.nodes.Text('[' + citation.label + ']')
             try:
                 citation = citations[key]
             except KeyError:
                 # TODO can handle missing reference warning using the domain
                 logger.warning('could not find bibtex key %s' % key)
-                node += refcontnode
+                node += docutils.nodes.Text(key)
                 continue
             if builder.name == 'latex':
                 # latex builder needs a citation_reference
@@ -369,8 +362,10 @@ class BibtexDomain(Domain):
                     refname=citation.citation_id)
             else:
                 # other builders can use general reference node
+                refcontnode = docutils.nodes.Text('[' + citation.label + ']')
                 refnode = make_refnode(
-                    builder, env.docname, bibcache.docname,
+                    builder, env.docname,
+                    self.bibliographies[citation.bibliography_id].docname,
                     citation.citation_id, refcontnode)
             node += refnode
         return node
@@ -379,15 +374,10 @@ class BibtexDomain(Domain):
         """Yield all citation keys for given *docnames* in order, then
         ordered by citation order.
         """
-        for i, citation_ref in sorted(
-                enumerate(self.citation_refs),
-                key=lambda x: (docnames.index(x[1].docname), x[0])):
-            yield citation_ref.key
-        #for docname in docnames:
-        #    for citation_ref in self.citation_refs:
-        #        if docname == citation_ref.docname:
-        #            for key in citation_ref.keys:
-        #                yield key
+        for citation_ref in sorted(
+                self.citation_refs, key=lambda c: docnames.index(c.docname)):
+            for key in citation_ref.keys:
+                yield key
 
     def get_bibliography_entries(
             self, bibcache: BibliographyCache) -> Iterable[Tuple[str, Entry]]:
