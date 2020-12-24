@@ -355,6 +355,7 @@ class BibtexDomain(Domain):
                      builder: Builder, typ: str, target: str,
                      node: pending_xref, contnode: docutils.nodes.Element
                      ) -> docutils.nodes.Element:
+        """Replace node by list of citation references (one for each key)."""
         keys = [key.strip() for key in target.split(',')]
         node = docutils.nodes.inline('', '', classes=['cite'])
         for key in keys:
