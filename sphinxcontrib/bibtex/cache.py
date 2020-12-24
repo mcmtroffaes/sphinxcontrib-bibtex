@@ -349,7 +349,6 @@ class BibtexDomain(Domain):
                     'duplicate label %s for keys %s' % (
                         label, keys))
 
-
     def resolve_xref(self, env: BuildEnvironment, fromdocname: str,
                      builder: Builder, typ: str, target: str,
                      node: pending_xref, contnode: docutils.nodes.Element
@@ -366,18 +365,14 @@ class BibtexDomain(Domain):
                 # TODO can handle missing reference warning using the domain
                 logger.warning('could not find bibtex key %s' % key)
                 return None
-            # TODO use sphinx's make_refnode
+            # TODO use sphinx's make_refnode?
+            # TODO something is still wrong with this, only resolves locally?
             node += docutils.nodes.citation_reference(
                 '', citation.label, internal=True,
                 docname=bibcache.docname,
                 refid=citation.citation_id,
                 refname=citation.citation_id)
         return node
-
-    # TODO remove this function
-    def get_label_from_key(self, key):
-        """Return label for the given key."""
-        return
 
     def get_all_cited_keys(self, docnames):
         """Yield all citation keys for given *docnames* in order, then
