@@ -45,6 +45,9 @@ def test_duplicate_nearly_identical_keys(app, warning):
     assert "Smith" in output
     assert "[Pop]" in output
     assert "Poppins" in output
+    assert "[Ein]" in output
+    assert "Einstein" in output
     # assure distinct ids for citations
     assert output.count('id="bibtex-citation-test"') == 1
     assert output.count('id="bibtex-citation-test1"') == 1
+    assert output.count('id="bibtex-citation-test2"') == 1
