@@ -273,7 +273,11 @@ class BibtexDomain(Domain):
         for id_, bibcache in otherdata['bibliographies'].items():
             if bibcache.docname in docnames:
                 self.bibliographies[id_] = bibcache
-        for citation in otherdata['citations']:
+        # TODO add a test to see if we can trigger this merge
+        # note: at this point, citations are normally empty,
+        # as they are only created during check_consistency
+        # so exempt loop from coverage
+        for citation in otherdata['citations']:  # pragma: no cover
             if self.bibliographies[
                     citation.bibliography_id].docname in docnames:
                 self.citations.append(citation)
