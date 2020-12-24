@@ -5,11 +5,8 @@
 
     General Sphinx test and check output.
 """
-from typing import cast
 
 import pytest
-
-from sphinxcontrib.bibtex import BibtexDomain
 
 
 @pytest.mark.sphinx('html', testroot='sphinx')

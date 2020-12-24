@@ -7,9 +7,7 @@
 
 from typing import cast
 
-import docutils.nodes
 from pybtex.plugin import find_plugin
-import pybtex.database
 from sphinx.roles import XRefRole
 
 from .cache import BibtexDomain, CitationRef

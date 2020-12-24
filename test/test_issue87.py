@@ -6,7 +6,6 @@
 """
 
 import pytest
-import re
 
 
 @pytest.mark.sphinx('html', testroot='issue87')
