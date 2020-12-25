@@ -400,14 +400,18 @@ class BibtexDomain(Domain):
 
     def get_bibliography_entries(
             self, bibliography: Bibliography) -> Iterable[Tuple[str, Entry]]:
-        """Return all bibliography entries from the bib files."""
+        """Return all bibliography entries from the bib files, unsorted (i.e.
+        in order of appearance in the bib files.
+        """
         for bibfile in bibliography.bibfiles:
             for entry in self.bibfiles[bibfile].data.entries.values():
                 yield bibliography.keyprefix + entry.key, entry
 
     def get_filtered_bibliography_entries(
             self, bibliography: Bibliography) -> Iterable[Tuple[str, Entry]]:
-        """Return filtered bibliography entries."""
+        """Return unsorted bibliography entries filtered by the filter
+        expression.
+        """
         for key, entry in self.get_bibliography_entries(bibliography):
             key = bibliography.keyprefix + entry.key
             cited_docnames = {
@@ -433,9 +437,8 @@ class BibtexDomain(Domain):
     def get_sorted_bibliography_entries(
             self, bibliography: Bibliography, docnames: List[str]
             ) -> Iterable[Tuple[str, Entry]]:
-        """Return sorted bibliography entries."""
+        """Return filtered bibliography entries sorted by citation order."""
         entries = dict(self.get_filtered_bibliography_entries(bibliography))
-        # yield entries which were cited first, in citation order
         for key in self.get_all_cited_keys(docnames):
             try:
                 entry = entries.pop(key)
@@ -450,6 +453,9 @@ class BibtexDomain(Domain):
     def get_labelled_bibliography_entries(
             self, bibliography: Bibliography, docnames: List[str]
             ) -> Iterable[Tuple[str, Entry]]:
+        """Get sorted bibliography entries along with their pybtex labels,
+        with additional sorting applied from the pybtex style.
+        """
         entries = dict(
             self.get_sorted_bibliography_entries(bibliography, docnames))
         style = cast(
