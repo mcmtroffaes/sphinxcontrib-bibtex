@@ -9,5 +9,5 @@ Extension API
     api/nodes
     api/directives
     api/transforms
-    api/domain
+    api/domains
     api/bibfile
