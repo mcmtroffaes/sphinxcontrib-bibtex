@@ -15,7 +15,7 @@ from docutils.parsers.rst import Directive, directives
 from sphinx.util.console import standout
 
 from .bibfile import normpath_filename
-from .cache import BibliographyCache, BibtexDomain
+from .cache import Bibliography, BibtexDomain
 from .nodes import bibliography
 
 
@@ -106,7 +106,7 @@ class BibliographyDirective(Directive):
                         for bibfile in self.arguments[0].split()]
         else:
             bibfiles = list(domain.bibfiles.keys())
-        bibcache = BibliographyCache(
+        bibcache = Bibliography(
             docname=env.docname,
             line=self.lineno,
             list_=self.options.get("list", "citation"),

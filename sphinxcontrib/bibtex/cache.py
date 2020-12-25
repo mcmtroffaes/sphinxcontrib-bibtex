@@ -3,7 +3,7 @@
     Classes and methods to maintain any bibtex information that is stored
     outside the doctree.
 
-    .. autoclass:: BibliographyCache
+    .. autoclass:: Bibliography
         :members:
 
     .. autoclass:: Citation
@@ -186,7 +186,7 @@ def get_docnames(env):
         docname = nextdoc
 
 
-class BibliographyCache(NamedTuple):
+class Bibliography(NamedTuple):
     """Contains information about a bibliography directive."""
     docname: str         #: Document name.
     line: int            #: Line number of the directive in the document.
@@ -234,7 +234,7 @@ class BibtexDomain(Domain):
         return self.data.setdefault('bibfiles', {})  # filename -> cache
 
     @property
-    def bibliographies(self) -> Dict[str, BibliographyCache]:
+    def bibliographies(self) -> Dict[str, Bibliography]:
         """Map each bibliography directive id to further information about the
         directive.
         """
@@ -385,14 +385,14 @@ class BibtexDomain(Domain):
                 yield key
 
     def get_bibliography_entries(
-            self, bibcache: BibliographyCache) -> Iterable[Tuple[str, Entry]]:
+            self, bibcache: Bibliography) -> Iterable[Tuple[str, Entry]]:
         """Return all bibliography entries from the bib files."""
         for bibfile in bibcache.bibfiles:
             for entry in self.bibfiles[bibfile].data.entries.values():
                 yield bibcache.keyprefix + entry.key, entry
 
     def get_filtered_bibliography_entries(
-            self, bibcache: BibliographyCache) -> Iterable[Tuple[str, Entry]]:
+            self, bibcache: Bibliography) -> Iterable[Tuple[str, Entry]]:
         """Return filtered bibliography entries."""
         for key, entry in self.get_bibliography_entries(bibcache):
             key = bibcache.keyprefix + entry.key
@@ -417,7 +417,7 @@ class BibtexDomain(Domain):
                 yield key, entry
 
     def get_sorted_bibliography_entries(
-            self, bibcache: BibliographyCache, docnames: List[str]
+            self, bibcache: Bibliography, docnames: List[str]
             ) -> Iterable[Tuple[str, Entry]]:
         """Return sorted bibliography entries."""
         entries = dict(self.get_filtered_bibliography_entries(bibcache))
@@ -434,7 +434,7 @@ class BibtexDomain(Domain):
             yield key, entry
 
     def get_labelled_bibliography_entries(
-            self, bibcache: BibliographyCache, docnames: List[str]
+            self, bibcache: Bibliography, docnames: List[str]
             ) -> Iterable[Tuple[str, Entry]]:
         entries = dict(
             self.get_sorted_bibliography_entries(bibcache, docnames))
