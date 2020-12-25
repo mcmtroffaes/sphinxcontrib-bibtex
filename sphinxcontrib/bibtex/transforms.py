@@ -20,7 +20,7 @@ from sphinx.transforms.post_transforms import SphinxPostTransform
 
 from .bibfile import get_bibliography_entry
 from .cache import BibtexDomain
-from .nodes import bibliography
+from .nodes import bibliography as bibliography_node
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -70,25 +70,26 @@ class BibliographyTransform(SphinxPostTransform):
         """
         env = self.document.settings.env
         domain = cast(BibtexDomain, env.get_domain('cite'))
-        for bibnode in self.document.traverse(bibliography):
+        for bibnode in self.document.traverse(bibliography_node):
             bibliography_id = bibnode['ids'][0]
-            bibcache = domain.bibliographies[bibliography_id]
+            bibliography = domain.bibliographies[bibliography_id]
             citations = [citation for citation in domain.citations
                          if citation.bibliography_id == bibliography_id]
             # locate and instantiate style and backend plugins
-            style = find_plugin('pybtex.style.formatting', bibcache.style)()
+            style = find_plugin(
+                'pybtex.style.formatting', bibliography.style)()
             backend = find_plugin('pybtex.backends', 'docutils')()
             # create citation nodes for all references
-            if bibcache.list_ == "enumerated":
+            if bibliography.list_ == "enumerated":
                 nodes = docutils.nodes.enumerated_list()
-                nodes['enumtype'] = bibcache.enumtype
-                if bibcache.start >= 1:
-                    nodes['start'] = bibcache.start
-                    env.temp_data['bibtex_enum_count'] = bibcache.start
+                nodes['enumtype'] = bibliography.enumtype
+                if bibliography.start >= 1:
+                    nodes['start'] = bibliography.start
+                    env.temp_data['bibtex_enum_count'] = bibliography.start
                 else:
                     nodes['start'] = env.temp_data.setdefault(
                         'bibtex_enum_count', 1)
-            elif bibcache.list_ == "bullet":
+            elif bibliography.list_ == "bullet":
                 nodes = docutils.nodes.bullet_list()
             else:  # "citation"
                 nodes = docutils.nodes.paragraph()
@@ -97,7 +98,7 @@ class BibliographyTransform(SphinxPostTransform):
                     citation.entry_label,
                     get_bibliography_entry(
                         domain.bibfiles, citation.entry_key))
-                if bibcache.list_ in ["enumerated", "bullet"]:
+                if bibliography.list_ in ["enumerated", "bullet"]:
                     citation_node = docutils.nodes.list_item()
                     citation_node += backend.paragraph(entry)
                 else:  # "citation"
@@ -110,7 +111,7 @@ class BibliographyTransform(SphinxPostTransform):
                     citation_node['names'].append(citation.citation_id)
                 node_text_transform(citation_node, transform_url_command)
                 nodes.append(citation_node)
-                if bibcache.list_ == "enumerated":
+                if bibliography.list_ == "enumerated":
                     env.temp_data['bibtex_enum_count'] += 1
             if env.bibtex_bibliography_header is not None:
                 nodes = [env.bibtex_bibliography_header.deepcopy(), nodes]

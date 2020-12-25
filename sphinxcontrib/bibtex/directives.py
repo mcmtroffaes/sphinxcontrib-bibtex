@@ -16,7 +16,7 @@ from sphinx.util.console import standout
 
 from .bibfile import normpath_filename
 from .cache import Bibliography, BibtexDomain
-from .nodes import bibliography
+from .nodes import bibliography as bibliography_node
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -106,7 +106,7 @@ class BibliographyDirective(Directive):
                         for bibfile in self.arguments[0].split()]
         else:
             bibfiles = list(domain.bibfiles.keys())
-        bibcache = Bibliography(
+        bibliography = Bibliography(
             docname=env.docname,
             line=self.lineno,
             list_=self.options.get("list", "citation"),
@@ -119,10 +119,10 @@ class BibliographyDirective(Directive):
             keyprefix=self.options.get("keyprefix", ""),
             bibfiles=bibfiles,
         )
-        if bibcache.list_ not in {"bullet", "enumerated", "citation"}:
-            logger.warning(
-                "unknown bibliography list type '{0}'.".format(bibcache.list_))
+        if bibliography.list_ not in {"bullet", "enumerated", "citation"}:
+            logger.warning("unknown bibliography list type '{0}'.".format(
+                bibliography.list_))
         for bibfile in bibfiles:
             env.note_dependency(bibfile)
-        domain.bibliographies[id_] = bibcache
-        return [bibliography('', ids=[id_])]
+        domain.bibliographies[id_] = bibliography
+        return [bibliography_node('', ids=[id_])]

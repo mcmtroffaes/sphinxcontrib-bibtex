@@ -385,17 +385,17 @@ class BibtexDomain(Domain):
                 yield key
 
     def get_bibliography_entries(
-            self, bibcache: Bibliography) -> Iterable[Tuple[str, Entry]]:
+            self, bibliography: Bibliography) -> Iterable[Tuple[str, Entry]]:
         """Return all bibliography entries from the bib files."""
-        for bibfile in bibcache.bibfiles:
+        for bibfile in bibliography.bibfiles:
             for entry in self.bibfiles[bibfile].data.entries.values():
-                yield bibcache.keyprefix + entry.key, entry
+                yield bibliography.keyprefix + entry.key, entry
 
     def get_filtered_bibliography_entries(
-            self, bibcache: Bibliography) -> Iterable[Tuple[str, Entry]]:
+            self, bibliography: Bibliography) -> Iterable[Tuple[str, Entry]]:
         """Return filtered bibliography entries."""
-        for key, entry in self.get_bibliography_entries(bibcache):
-            key = bibcache.keyprefix + entry.key
+        for key, entry in self.get_bibliography_entries(bibliography):
+            key = bibliography.keyprefix + entry.key
             cited_docnames = {
                 citation_ref.docname
                 for citation_ref in self.citation_refs
@@ -403,24 +403,24 @@ class BibtexDomain(Domain):
             }
             visitor = _FilterVisitor(
                 entry=entry,
-                docname=bibcache.docname,
+                docname=bibliography.docname,
                 cited_docnames=cited_docnames)
             try:
-                success = visitor.visit(bibcache.filter_)
+                success = visitor.visit(bibliography.filter_)
             except ValueError as err:
                 logger.warning(
                     "syntax error in :filter: expression; %s" % err,
-                    location=(bibcache.docname, bibcache.line))
+                    location=(bibliography.docname, bibliography.line))
                 # recover by falling back to the default
                 success = bool(cited_docnames)
             if success:
                 yield key, entry
 
     def get_sorted_bibliography_entries(
-            self, bibcache: Bibliography, docnames: List[str]
+            self, bibliography: Bibliography, docnames: List[str]
             ) -> Iterable[Tuple[str, Entry]]:
         """Return sorted bibliography entries."""
-        entries = dict(self.get_filtered_bibliography_entries(bibcache))
+        entries = dict(self.get_filtered_bibliography_entries(bibliography))
         # yield entries which were cited first, in citation order
         for key in self.get_all_cited_keys(docnames):
             try:
@@ -434,13 +434,13 @@ class BibtexDomain(Domain):
             yield key, entry
 
     def get_labelled_bibliography_entries(
-            self, bibcache: Bibliography, docnames: List[str]
+            self, bibliography: Bibliography, docnames: List[str]
             ) -> Iterable[Tuple[str, Entry]]:
         entries = dict(
-            self.get_sorted_bibliography_entries(bibcache, docnames))
+            self.get_sorted_bibliography_entries(bibliography, docnames))
         style = cast(
             pybtex.style.formatting.BaseStyle,
-            find_plugin('pybtex.style.formatting', bibcache.style)())
+            find_plugin('pybtex.style.formatting', bibliography.style)())
         sorted_entries = style.sort(entries.values())
         labels = style.format_labels(sorted_entries)
         return zip(labels, sorted_entries)
