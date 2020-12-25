@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
     Classes and methods to maintain any bibtex information that is stored
     outside the doctree.

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # sphinxcontrib-bibtex documentation build configuration file, created by
 # sphinx-quickstart on Thu Jun 13 13:56:25 2013.
 #

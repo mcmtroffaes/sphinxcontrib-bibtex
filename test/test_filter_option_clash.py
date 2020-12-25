@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
     test_filter_option_clash
     ~~~~~~~~~~~~~~~~~~~~~~~~

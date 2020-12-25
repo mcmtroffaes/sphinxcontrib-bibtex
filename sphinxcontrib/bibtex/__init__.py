@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
     .. autofunction:: setup
     .. autofunction:: init_foot_bibliography_id
