@@ -43,9 +43,10 @@ class FootBibliographyTransform(docutils.transforms.Transform):
             domain = cast(BibtexDomain, env.get_domain('cite'))
             id_ = bibnode['ids'][0]
             entries = [
-                get_bibliography_entry(domain.bibfiles, key)
-                for key in env.temp_data["bibtex_foot_citation_refs"][id_]]
-            entries2 = [entry for entry in entries if entry is not None]
+                entry for entry in [
+                    get_bibliography_entry(domain.bibfiles, key)
+                    for key in env.temp_data["bibtex_foot_citation_refs"][id_]]
+                if entry is not None]
             # locate and instantiate style and backend plugins
             style = find_plugin(
                 'pybtex.style.formatting',
@@ -53,14 +54,11 @@ class FootBibliographyTransform(docutils.transforms.Transform):
             backend = find_plugin('pybtex.backends', 'docutils')()
             # create footnote nodes for all references
             footnotes = docutils.nodes.paragraph()
-            # remind: style.format_entries modifies entries in unpickable way
-            for entry in style.format_entries(entries2):
+            for entry in style.format_entries(entries):
                 footnote = backend.footnote(entry, self.document)
                 node_text_transform(footnote, transform_url_command)
                 footnotes += footnote
             if env.bibtex_footbibliography_header is not None:
-                nodes = [env.bibtex_footbibliography_header.deepcopy(),
-                         footnotes]
-            else:
-                nodes = footnotes
-            bibnode.replace_self(nodes)
+                footnotes = [env.bibtex_footbibliography_header.deepcopy(),
+                             footnotes]
+            bibnode.replace_self(footnotes)

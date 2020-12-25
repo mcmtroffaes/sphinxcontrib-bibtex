@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
     Classes and methods to work with bib files.
 
@@ -15,7 +14,7 @@
 """
 
 import os.path
-from typing import NamedTuple, Dict
+from typing import NamedTuple, Dict, Optional
 
 from pybtex.database.input import bibtex
 from pybtex.database import BibliographyData, Entry
@@ -27,12 +26,10 @@ from sphinx.util.console import bold, standout
 logger = sphinx.util.logging.getLogger(__name__)
 
 
-#: Contains information about a parsed bib file.
 class BibfileCache(NamedTuple):
-    #: modification time of the bib file when last parsed
-    mtime: float
-    #: parsed bib file
-    data: BibliographyData
+    """Contains information about a parsed bib file."""
+    mtime: float            #: modification time of bib file when last parsed
+    data: BibliographyData  #: parsed data from pybtex
 
 
 def normpath_filename(env: BuildEnvironment, filename: str) -> str:
@@ -43,8 +40,7 @@ def normpath_filename(env: BuildEnvironment, filename: str) -> str:
 def parse_bibfile(bibfile: str, encoding: str) -> BibliographyData:
     """Parse *bibfile* with given *encoding*, and return parsed data."""
     parser = bibtex.Parser(encoding)
-    logger.info(
-        bold("parsing bibtex file {0}... ".format(bibfile)), nonl=True)
+    logger.info(bold("parsing bibtex file {0}... ".format(bibfile)), nonl=True)
     parser.parse_file(bibfile)
     logger.info("parsed {0} entries"
                 .format(len(parser.data.entries)))
@@ -87,15 +83,15 @@ def process_bibfile(cache: Dict[str, BibfileCache],
     return cache[bibfile].data
 
 
-def get_bibliography_entry(cache: Dict[str, BibfileCache], key: str) -> Entry:
+def get_bibliography_entry(
+        cache: Dict[str, BibfileCache], key: str) -> Optional[Entry]:
     """Return bibliography entry from *cache* for the given *key*."""
     for bibfile_cache in cache.values():
         data = bibfile_cache.data
         try:
-            entry = data.entries[key]
+            return data.entries[key]
         except KeyError:
             pass
-        else:
-            return entry
     else:
         logger.warning("could not find bibtex key {0}.".format(key))
+        return None
