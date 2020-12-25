@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 """
     .. autofunction:: setup
-    .. autofunction:: init_bibtex_cache
     .. autofunction:: init_foot_bibliography_id
 """
 
 import docutils.nodes
-import docutils.frontend
-import docutils.parsers.rst
-import docutils.utils
 
 from typing import Any, Dict
 
@@ -24,22 +20,6 @@ from .foot_roles import FootCiteRole
 from .foot_directives import FootBibliographyDirective
 from .foot_directives import new_foot_bibliography_id
 from .foot_transforms import FootBibliographyTransform
-
-
-def init_bibtex_cache(app: Sphinx) -> None:
-    """Initialize the Sphinx build."""
-    # parse bibliography headers
-    for directive in ("bibliography", "footbibliography"):
-        conf_name = "bibtex_{0}_header".format(directive)
-        if not hasattr(app.env, conf_name):
-            parser = docutils.parsers.rst.Parser()
-            settings = docutils.frontend.OptionParser(
-                components=(docutils.parsers.rst.Parser,)).get_default_values()
-            document = docutils.utils.new_document(
-                "{0}_header".format(directive), settings)
-            parser.parse(getattr(app.config, conf_name), document)
-            setattr(app.env, conf_name,
-                    document[0] if len(document) > 0 else None)
 
 
 def init_foot_bibliography_id(app: Sphinx, docname: docutils.nodes.document,
@@ -65,7 +45,6 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_config_value("bibtex_bibliography_header", "", "html")
     app.add_config_value("bibtex_footbibliography_header", "", "html")
     app.add_domain(BibtexDomain)
-    app.connect("builder-inited", init_bibtex_cache)
     app.connect("source-read", init_foot_bibliography_id)
     app.add_directive("bibliography", BibliographyDirective)
     app.add_role("cite", CiteRole())

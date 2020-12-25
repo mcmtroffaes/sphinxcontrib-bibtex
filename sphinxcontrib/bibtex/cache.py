@@ -19,7 +19,9 @@
 import ast
 from typing import List, Dict, NamedTuple, cast, Optional, Iterable, Tuple
 
+import docutils.frontend
 import docutils.nodes
+import docutils.parsers.rst
 import sphinx.util
 import re
 
@@ -33,7 +35,7 @@ from sphinx.environment import BuildEnvironment
 from sphinx.errors import ExtensionError
 from sphinx.util.nodes import make_refnode
 
-from .bibfile import BibfileCache, normpath_filename, process_bibfile
+from .bibfile import BibFile, normpath_filename, process_bibfile
 
 logger = sphinx.util.logging.getLogger(__name__)
 
@@ -227,7 +229,7 @@ class BibtexDomain(Domain):
     data_version = 1
 
     @property
-    def bibfiles(self) -> Dict[str, BibfileCache]:
+    def bibfiles(self) -> Dict[str, BibFile]:
         """Map each bib filename to some information about the file (including
         the parsed data).
         """
@@ -259,9 +261,21 @@ class BibtexDomain(Domain):
         # update bib file information in the cache
         for bibfile in env.app.config.bibtex_bibfiles:
             process_bibfile(
-                self.bibfiles,
-                normpath_filename(env, "/" + bibfile),
+                self.bibfiles, normpath_filename(env, "/" + bibfile),
                 env.app.config.bibtex_encoding)
+        # parse bibliography headers
+        for directive in ("bibliography", "footbibliography"):
+            conf_name = "bibtex_{0}_header".format(directive)
+            if not hasattr(env, conf_name):
+                parser = docutils.parsers.rst.Parser()
+                settings = docutils.frontend.OptionParser(
+                    components=(docutils.parsers.rst.Parser,)
+                ).get_default_values()
+                document = docutils.utils.new_document(
+                    "{0}_header".format(directive), settings)
+                parser.parse(getattr(env.app.config, conf_name), document)
+                setattr(env, conf_name,
+                        document[0] if len(document) > 0 else None)
 
     def clear_doc(self, docname: str) -> None:
         self.data['citations'] = [
