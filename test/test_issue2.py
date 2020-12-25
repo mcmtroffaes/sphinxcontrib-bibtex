@@ -9,7 +9,7 @@
 from typing import cast
 import pytest
 
-from sphinxcontrib.bibtex.cache import BibtexDomain
+from sphinxcontrib.bibtex.domain import BibtexDomain
 
 
 @pytest.mark.sphinx('html', testroot='issue2')

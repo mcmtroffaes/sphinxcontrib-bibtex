@@ -10,7 +10,7 @@ from typing import cast
 from pybtex.plugin import find_plugin
 from sphinx.roles import XRefRole
 
-from .cache import BibtexDomain, CitationRef
+from .domain import BibtexDomain, CitationRef
 
 
 class CiteRole(XRefRole):

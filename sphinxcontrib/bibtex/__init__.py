@@ -10,7 +10,7 @@ from typing import Any, Dict
 
 from sphinx.application import Sphinx
 
-from .cache import BibtexDomain
+from .domain import BibtexDomain
 from .nodes import bibliography
 from .roles import CiteRole
 from .directives import BibliographyDirective

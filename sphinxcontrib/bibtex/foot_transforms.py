@@ -5,6 +5,7 @@
         .. autoattribute:: default_priority
         .. automethod:: apply
 """
+
 from typing import cast
 
 import docutils.nodes
@@ -12,7 +13,7 @@ import docutils.transforms
 import sphinx.util
 from pybtex.plugin import find_plugin
 
-from .cache import BibtexDomain
+from .domain import BibtexDomain
 from .transforms import node_text_transform, transform_url_command
 from .foot_nodes import footbibliography
 from .bibfile import get_bibliography_entry

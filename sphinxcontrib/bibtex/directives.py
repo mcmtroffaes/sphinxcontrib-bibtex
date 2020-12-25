@@ -15,7 +15,7 @@ from docutils.parsers.rst import Directive, directives
 from sphinx.util.console import standout
 
 from .bibfile import normpath_filename
-from .cache import Bibliography, BibtexDomain
+from .domain import Bibliography, BibtexDomain
 from .nodes import bibliography as bibliography_node
 
 
