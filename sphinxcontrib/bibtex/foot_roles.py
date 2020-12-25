@@ -5,9 +5,15 @@
         .. automethod:: result_nodes
 """
 
+import docutils.nodes
+
+from typing import cast, Optional, Tuple, List
 from pybtex.plugin import find_plugin
-import pybtex.database
+from sphinx.environment import BuildEnvironment
 from sphinx.roles import XRefRole
+
+from .domain import BibtexDomain
+from .bibfile import get_bibliography_entry
 
 
 class FootCiteRole(XRefRole):
@@ -15,29 +21,36 @@ class FootCiteRole(XRefRole):
 
     backend = find_plugin('pybtex.backends', 'docutils')()
 
-    def make_refnode(self, document, env, key):
+    def make_refnode(self, document: docutils.nodes.document,
+                     env: BuildEnvironment, key: str
+                     ) -> Optional[docutils.nodes.footnote_reference]:
+        domain = cast(BibtexDomain, self.env.get_domain('cite'))
         citation_refs = env.temp_data.setdefault(
             "bibtex_foot_citation_refs", {})
         for otherkeys in citation_refs.values():
             if key in otherkeys:
-                break
+                entry = get_bibliography_entry(domain.bibfiles, key)
+                assert entry is not None
+                return self.backend.footnote_reference(entry, document)
         else:
             # note: keys is a dict used as an ordered set
             keys = citation_refs.setdefault(
                 env.temp_data["bibtex_foot_bibliography_id"], {})
-            keys[key] = None
-        # TODO get the actual entry
-        return self.backend.footnote_reference(_fake_entry(key), document)
+            entry = get_bibliography_entry(domain.bibfiles, key)
+            if entry is not None:
+                keys[key] = None
+                return self.backend.footnote_reference(entry, document)
+            else:
+                return None
 
-    def result_nodes(self, document, env, node, is_ref):
+    def result_nodes(self, document: docutils.nodes.document,
+                     env: BuildEnvironment, node: docutils.nodes.Element,
+                     is_ref: bool
+                     ) -> Tuple[List[docutils.nodes.Node],
+                                List[docutils.nodes.system_message]]:
         """Transform reference node into a footnote reference,
         and note that the reference was cited.
         """
         keys = [key.strip() for key in self.target.split(',')]
-        return [self.make_refnode(document, env, key) for key in keys], []
-
-
-def _fake_entry(key):
-    entry = pybtex.database.Entry(type_="")
-    entry.key = key
-    return entry
+        refnodes = [self.make_refnode(document, env, key) for key in keys]
+        return [refnode for refnode in refnodes if refnode is not None], []
