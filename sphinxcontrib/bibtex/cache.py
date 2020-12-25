@@ -271,14 +271,14 @@ class BibtexDomain(Domain):
         self.data['citation_refs'] = [
             ref for ref in self.citation_refs
             if ref.docname != docname]
-        for id_, bibcache in list(self.bibliographies.items()):
-            if bibcache.docname == docname:
+        for id_, bibliography in list(self.bibliographies.items()):
+            if bibliography.docname == docname:
                 del self.bibliographies[id_]
 
     def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
-        for id_, bibcache in otherdata['bibliographies'].items():
-            if bibcache.docname in docnames:
-                self.bibliographies[id_] = bibcache
+        for id_, bibliography in otherdata['bibliographies'].items():
+            if bibliography.docname in docnames:
+                self.bibliographies[id_] = bibliography
         for citation_ref in otherdata['citation_refs']:
             if citation_ref.docname in docnames:
                 self.citation_refs.append(citation_ref)
@@ -298,18 +298,18 @@ class BibtexDomain(Domain):
         used_keys = set()
         used_labels = {}
         used_ids = set()
-        for bibliography_id, bibcache in self.bibliographies.items():
+        for bibliography_id, bibliography in self.bibliographies.items():
             for entry_label, entry in self.get_labelled_bibliography_entries(
-                    bibcache, docnames):
-                key = bibcache.keyprefix + entry.key
-                label = bibcache.labelprefix + entry_label
-                if bibcache.list_ != 'citation':
+                    bibliography, docnames):
+                key = bibliography.keyprefix + entry.key
+                label = bibliography.labelprefix + entry_label
+                if bibliography.list_ != 'citation':
                     # no warning in this case, just don't generate link
                     citation_id = None
                 elif key in used_keys:
                     logger.warning(
                         'duplicate citation for key %s' % key,
-                        location=(bibcache.docname, bibcache.line))
+                        location=(bibliography.docname, bibliography.line))
                     # no id for this one
                     citation_id = None
                 else:
