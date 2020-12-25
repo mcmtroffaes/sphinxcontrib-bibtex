@@ -22,6 +22,7 @@ from typing import List, Dict, NamedTuple, cast, Optional, Iterable, Tuple
 import docutils.frontend
 import docutils.nodes
 import docutils.parsers.rst
+import docutils.utils
 import sphinx.util
 import re
 
