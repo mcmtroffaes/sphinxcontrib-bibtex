@@ -22,7 +22,7 @@ def html_citations(name=r'\w+', label=r'\w+', text='.*'):
         r'<a href="#(?P<backref1>\w+)">1</a>'
         r',<a href="#(?P<backref2>\w+)">2</a>'
         r'(,<a href="#(?P<backref3>\w+)">3</a>)?'
-        r'(,<a href="#\w+">\d+</a>)*'
+        r'(,<a href="#\w+">\d+</a>)*'  # no named group for additional backrefs
         r'\)</span>)?'
         r'</dt>\n'
         r'<dd><p>(?P<text>{2})</p>\n</dd>'.format(name, label, text))
