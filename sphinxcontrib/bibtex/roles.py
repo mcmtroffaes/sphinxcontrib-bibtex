@@ -5,8 +5,9 @@
         .. automethod:: result_nodes
 """
 
-from typing import cast
+import docutils.nodes
 
+from typing import cast
 from pybtex.plugin import find_plugin
 from sphinx.roles import XRefRole
 
@@ -17,6 +18,7 @@ class CiteRole(XRefRole):
 
     """Class for processing the :rst:role:`cite` role."""
     backend = find_plugin('pybtex.backends', 'docutils')()
+    innernodeclass = docutils.nodes.inline
 
     def result_nodes(self, document, env, node, is_ref):
         """Associate the pending_xref with the cite domain,
