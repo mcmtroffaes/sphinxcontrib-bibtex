@@ -8,25 +8,25 @@ import pytest
 def test_backrefs(app, warning):
     app.build()
     output = (app.outdir / "index.html").read_text()
-    match = common.html_citations(id_="bibtex-citation-test0").search(output)
+    match = common.html_citations(text=".*Test zero.*").search(output)
     assert match
     assert match.group('backref') is None
     assert match.group('backref1') is None
     assert match.group('backref2') is None
     assert match.group('backref3') is None
-    match = common.html_citations(id_="bibtex-citation-test1").search(output)
+    match = common.html_citations(text=".*Test one.*").search(output)
     assert match
     assert match.group('backref') is not None
     assert match.group('backref1') is None
     assert match.group('backref2') is None
     assert match.group('backref3') is None
-    match = common.html_citations(id_="bibtex-citation-test2").search(output)
+    match = common.html_citations(text=".*Test two.*").search(output)
     assert match
     assert match.group('backref') is None
     assert match.group('backref1') is not None
     assert match.group('backref2') is not None
     assert match.group('backref3') is None
-    match = common.html_citations(id_="bibtex-citation-test3").search(output)
+    match = common.html_citations(text=".*Test three.*").search(output)
     assert match
     assert match.group('backref') is None
     assert match.group('backref1') is not None
