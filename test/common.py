@@ -3,7 +3,6 @@
 import re
 
 RE_ID = r'[a-z][-?a-z0-9]*'
-RE_NAME = r'[-?a-z0-9]+'  # what follows 'bibtex-citation-' ids
 RE_NUM = r'\d+'
 RE_LABEL = r'[^<]+'
 RE_TEXT = r'.*'
