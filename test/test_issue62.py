@@ -5,74 +5,44 @@
     Test local bibliographies.
 """
 
+import common
 import pytest
 import re
 
 
-def extract_references(code):
-    return frozenset(re.findall(
-        '<a class="reference internal" href="([^"]+)"', code))
+def get_citation_refs(code):
+    return {match.group('label')
+            for match in common.html_citation_refs().finditer(code)}
 
 
-def extract_citations(code):
-    return frozenset(re.findall(
-        '<dt class="label" id="([^"]+)"', code))
-
-
-def check_code(code, refs, cites, otherrefs, othercites):
-    code_refs = extract_references(code)
-    code_cites = extract_citations(code)
-    # use <= here because refs contains all internal references, not
-    # just citation references
-    assert refs <= code_refs
-    assert cites == code_cites
-    assert not(otherrefs & code_refs)
-    assert not(othercites & code_cites)
+def get_citations(code):
+    return {match.group('label')
+            for match in common.html_citations().finditer(code)}
 
 
 @pytest.mark.sphinx('html', testroot='issue62')
 def test_local_bibliographies(app, warning):
-    doc1_refs = frozenset([
-        '#bibtex-citation-wustner-atomistic-2014',
-        '#bibtex-citation-fuhrmans-molecular-2012',
-        '#bibtex-citation-blume-apparent-1983',
-        '#bibtex-citation-grabitz-relaxation-2002',
-        ])
-    doc1_cites = frozenset([
-        'bibtex-citation-blume-apparent-1983',
-        'bibtex-citation-wustner-atomistic-2014',
-        'bibtex-citation-fuhrmans-molecular-2012',
-        'bibtex-citation-grabitz-relaxation-2002'
-        ])
-    doc2_refs = frozenset([
-        '#bibtex-citation-shirts-simple-2013'
-        ])
-    doc2_cites = frozenset([
-        'bibtex-citation-shirts-simple-2013'
-        ])
-    sum_refs = frozenset([
-        "#bibtex-citation-mcmahon-membrane-2010",
-        "#bibtex-citation-hu-gaussian-2013",
-        "doc1.html#bibtex-citation-fuhrmans-molecular-2012",
-        "#bibtex-citation-risselada-curvature-dependent-2011",
-        "#bibtex-citation-risselada-curvature-2009",
-        "#bibtex-citation-marrink-mechanism-2003",
-        ])
-    sum_cites = frozenset([
-        'bibtex-citation-hu-gaussian-2013',
-        'bibtex-citation-marrink-mechanism-2003',
-        'bibtex-citation-risselada-curvature-2009',
-        'bibtex-citation-risselada-curvature-dependent-2011',
-        'bibtex-citation-mcmahon-membrane-2010',
-        ])
+    doc1_refs = {'AFM12', 'ABlu83', 'AGIH02', 'AWS14'}
+    doc1_cites = {'ABlu83', 'AFM12', 'AGIH02', 'AWS14'}
+    doc2_refs = {'BShi13'}
+    doc2_cites = {'BShi13'}
+    sum_refs = {'CMcMahonKM10', 'AFM12', 'CRMM11', 'CRM09', 'CMM03', 'CHdJMD13'}
+    sum_cites = {'CMcMahonKM10', 'CRMM11', 'CRM09', 'CMM03', 'CHdJMD13'}
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "doc1.html").read_text()
-    check_code(output, doc1_refs, doc1_cites,
-               doc2_refs | sum_refs, doc2_cites | sum_cites)
-    output = (app.outdir / "doc2.html").read_text()
-    check_code(output, doc2_refs, doc2_cites,
-               doc1_refs | sum_refs, doc1_cites | sum_cites)
-    output = (app.outdir / "summary.html").read_text()
-    check_code(output, sum_refs, sum_cites,
-               doc1_refs | doc2_refs, doc1_cites | doc2_cites)
+    output1 = (app.outdir / "doc1.html").read_text()
+    assert doc1_refs == get_citation_refs(output1)
+    assert doc1_cites == get_citations(output1)
+    output2 = (app.outdir / "doc2.html").read_text()
+    assert doc2_refs == get_citation_refs(output2)
+    assert doc2_cites == get_citations(output2)
+    output3 = (app.outdir / "summary.html").read_text()
+    assert sum_refs == get_citation_refs(output3)
+    assert sum_cites == get_citations(output3)
+    # check citation reference from summary to doc1
+    match1 = common.html_citations(label='AFM12').search(output1)
+    match3 = common.html_citation_refs(label='AFM12').search(output3)
+    assert match1
+    assert match3
+    assert match1.group('id_') == match3.group('refid')
+    assert match3.group('refdoc') == 'doc1.html'

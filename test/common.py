@@ -11,8 +11,8 @@ RE_TEXT = r'.*'
 
 def html_citation_refs(refid=RE_ID, label=RE_LABEL):
     return re.compile(
-        '<a class="reference internal" href="#{refid}">'
-        '<span>{label}</span>'
+        '<a class="reference internal" href="(?P<refdoc>[^#]+)?#(?P<refid>{refid})">'
+        '<span>(?P<label>{label})</span>'
         '</a>'.format(refid=refid, label=label))
 
 
