@@ -12,7 +12,7 @@ RE_DOCNAME = r'[^:]+'
 def html_citation_refs(refid=RE_ID, label=RE_LABEL):
     return re.compile(
         r'<a class="reference internal" '
-        'href="(?P<refdoc>[^#]+)?#(?P<refid>{refid})">'
+        r'href="(?P<refdoc>[^#]+)?#(?P<refid>{refid})">'
         r'<span>(?P<label>{label})</span>'
         r'</a>'.format(refid=refid, label=label))
 
