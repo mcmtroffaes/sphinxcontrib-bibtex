@@ -33,4 +33,4 @@ def test_list_enumerated(app, warning):
         '.*<li>.*Klopgeest.*</li>'
         '.*<li>.*Laterfanter.*</li>'
         '.*</ol>',
-        output, re.MULTILINE | re.DOTALL)
+        output, re.DOTALL)

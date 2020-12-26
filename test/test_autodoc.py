@@ -7,7 +7,6 @@
 
 import common
 import pytest
-import re
 
 
 @pytest.mark.sphinx('html', testroot='autodoc')

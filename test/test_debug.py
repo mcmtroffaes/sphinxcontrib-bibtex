@@ -1,3 +1,4 @@
+# flake8: noqa: E501
 """Some tests purely used for stepping into the debugger
 to help understand what docutils/sphinx are doing.
 """
@@ -7,14 +8,14 @@ import pytest
 
 docutils_citation_xml = """
     <paragraph>
-        <reference ids="id1" internal="True" refid="citationlabel">
+        <reference ids="id1" internal="True" refid="label">
             <inline>
-                [CitationLabel]
-    <citation backrefs="id1" docname="index" ids="citationlabel" names="citationlabel">
+                [Label]
+    <citation backrefs="id1" docname="index" ids="label" names="label">
         <label support_smartquotes="False">
-            CitationLabel
+            Label
         <paragraph>
-            Citation Text.
+            The title.
 """
 
 bibtex_citation_xml = """
@@ -26,7 +27,7 @@ bibtex_citation_xml = """
                     tes
             ]
     <paragraph ids="bibtex-bibliography-index-1">
-        <citation docname="index" ids="bibtex-citation-testkey" names="bibtex-citation-testkey">
+        <citation backrefs="id1" docname="index" ids="bibtex-citation-testkey" names="bibtex-citation-testkey">
             <label support_smartquotes="False">
                 tes
             <paragraph>

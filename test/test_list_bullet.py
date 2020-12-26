@@ -21,4 +21,4 @@ def test_list_bullet(app, warning):
         '.*<li>.*Chap.*</li>'
         '.*<li>.*Dude.*</li>'
         '.*</ul>',
-        output, re.MULTILINE | re.DOTALL)
+        output, re.DOTALL)

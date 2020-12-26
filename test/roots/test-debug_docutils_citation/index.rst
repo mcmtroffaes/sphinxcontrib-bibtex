@@ -1,3 +1,3 @@
-[CitationLabel]_
+[Label]_
 
-.. [CitationLabel] Citation Text.
+.. [Label] The title.

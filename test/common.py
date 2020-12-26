@@ -10,11 +10,16 @@ def html_citation_refs(name='.*', label='.*'):
         '</a>'.format(name, label))
 
 
-def html_citations(name='.*', label='.*'):
+def html_citations(name='.*', label='.*', text='.*'):
     return re.compile(
-        '<dt class="label" id="bibtex-citation-{0}">'
-        '<span class="brackets">{1}</span>'
-        '</dt>'.format(name, label))
+        r'<dt class="label" id="bibtex-citation-{0}">'
+        r'<span class="brackets">'
+        r'(?:<a class="fn-backref" href="#.*">)?'
+        r'{1}'
+        r'(?:</a>)?'
+        '</span>'
+        r'</dt>\n'
+        r'<dd><p>{2}</p>\n</dd>'.format(name, label, text))
 
 
 def html_footnote_refs(name='.*', id_='.*', num='.*'):

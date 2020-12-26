@@ -1,3 +1,4 @@
+import common
 import pytest
 import re
 import shutil
@@ -9,12 +10,6 @@ status_not_found = "checking for.*in bibtex cache.*not found"
 status_up_to_date = "checking for.*in bibtex cache.*up to date"
 status_out_of_date = "checking for.*in bibtex cache.*out of date"
 status_parsing = "parsing bibtex file.*parsed [0-9]+ entries"
-
-
-def htmlbibitem(label, text):
-    return (
-        r'.*<dt class="label".*><span class="brackets">'
-        r'*{0}.*</span></dt>\s*<dd>.*{1}.*</dd>'.format(label, text))
 
 
 # Test that updates to the bibfile generate the correct result when
@@ -31,14 +26,10 @@ def test_bibfiles_out_of_date(make_app, app_params):
     assert re.search(status_out_of_date, status) is None
     assert re.search(status_parsing, status) is not None
     output = (app.outdir / "index.html").read_text()
-    assert re.search(
-        '<p id="bibtex-bibliography-index-[0-9]+">'
-        + htmlbibitem("1", "Akkerdju")
-        + htmlbibitem("2", "Bro")
-        + htmlbibitem("3", "Chap")
-        + htmlbibitem("4", "Dude")
-        + '.*</p>',
-        output, re.MULTILINE | re.DOTALL) is not None
+    assert common.html_citations(label='1', text='.*Akkerdju.*').search(output)
+    assert common.html_citations(label='2', text='.*Bro.*').search(output)
+    assert common.html_citations(label='3', text='.*Chap.*').search(output)
+    assert common.html_citations(label='4', text='.*Dude.*').search(output)
     # wait to ensure different timestamp
     time.sleep(0.1)
     shutil.copyfile((app.srcdir / 'test_new.xxx'), (app.srcdir / 'test.bib'))
@@ -51,14 +42,10 @@ def test_bibfiles_out_of_date(make_app, app_params):
     assert re.search(status_out_of_date, status) is not None
     assert re.search(status_parsing, status) is not None
     output = (app.outdir / "index.html").read_text()
-    assert re.search(
-        '<p id="bibtex-bibliography-index-[0-9]+">'
-        + htmlbibitem("1", "Eminence")
-        + htmlbibitem("2", "Frater")
-        + htmlbibitem("3", "Giggles")
-        + htmlbibitem("4", "Handy")
-        + '.*</p>',
-        output, re.MULTILINE | re.DOTALL) is not None
+    assert common.html_citations(label='1', text='.*Eminence.*').search(output)
+    assert common.html_citations(label='2', text='.*Frater.*').search(output)
+    assert common.html_citations(label='3', text='.*Giggles.*').search(output)
+    assert common.html_citations(label='4', text='.*Handy.*').search(output)
     # wait to ensure different timestamp
     time.sleep(0.1)
     shutil.copyfile((app.srcdir / 'index_new.xxx'), (app.srcdir / 'index.rst'))

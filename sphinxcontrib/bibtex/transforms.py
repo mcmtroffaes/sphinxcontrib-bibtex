@@ -103,6 +103,14 @@ class BibliographyTransform(SphinxPostTransform):
                     citation_node += backend.paragraph(entry)
                 else:  # "citation"
                     citation_node = docutils.nodes.citation()
+                    # backrefs only supported in same document
+                    backrefs = [
+                        citation_ref.citation_ref_id
+                        for citation_ref in domain.citation_refs
+                        if env.docname == citation_ref.docname
+                        and citation.key in citation_ref.keys]
+                    if backrefs:
+                        citation_node['backrefs'] = backrefs
                     citation_node += docutils.nodes.label(
                         '', citation.label, support_smartquotes=False)
                     citation_node += backend.paragraph(entry)

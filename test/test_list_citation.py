@@ -5,14 +5,8 @@
     Test the ``:list: citation`` option.
 """
 
+import common
 import pytest
-import re
-
-
-def htmlbibitem(label, text):
-    return (
-        r'.*<dt class="label".*><span class="brackets">'
-        r'*{0}.*</span></dt>\s*<dd>.*{1}.*</dd>'.format(label, text))
 
 
 @pytest.mark.sphinx('html', testroot='list_citation')
@@ -20,11 +14,7 @@ def test_list_citation(app, warning):
     app.builder.build_all()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
-    assert re.search(
-        '<p id="bibtex-bibliography-index-[0-9]+">'
-        + htmlbibitem("1", "Akkerdju")
-        + htmlbibitem("2", "Bro")
-        + htmlbibitem("3", "Chap")
-        + htmlbibitem("4", "Dude")
-        + '.*</p>',
-        output, re.MULTILINE | re.DOTALL)
+    assert common.html_citations(label='1', text='.*Akkerdju.*').search(output)
+    assert common.html_citations(label='2', text='.*Bro.*').search(output)
+    assert common.html_citations(label='3', text='.*Chap.*').search(output)
+    assert common.html_citations(label='4', text='.*Dude.*').search(output)
