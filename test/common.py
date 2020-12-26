@@ -12,18 +12,20 @@ def html_citation_refs(name='.*', label='.*'):
 
 def html_citations(name=r'\w+', label=r'\w+', text='.*'):
     return re.compile(
-        r'<dt class="label" id="bibtex-citation-{0}">'
+        r'<dt class="label" id="bibtex-citation-(?P<name>{0})">'
         r'<span class="brackets">'
-        r'(?:<a class="fn-backref" href="#.*">)?'
-        r'{1}'
+        r'(?:<a class="fn-backref" href="(?P<backref>#\w+)">)?'
+        r'(?P<label>{1})'
         r'(?:</a>)?'
         r'</span>'
-        r'(?:<span class="fn-backref">'
-        r'\(<a href="#\w+">\d+</a>'
-        r'(,<a href="#\w+">\d+</a>)+\)'
-        r'</span>)?'
+        r'(?:<span class="fn-backref">\('
+        r'<a href="#(?P<backref1>\w+)">1</a>'
+        r',<a href="#(?P<backref2>\w+)">2</a>'
+        r'(,<a href="#(?P<backref3>\w+)">3</a>)?'
+        r'(,<a href="#\w+">\d+</a>)*'
+        r'\)</span>)?'
         r'</dt>\n'
-        r'<dd><p>{2}</p>\n</dd>'.format(name, label, text))
+        r'<dd><p>(?P<text>{2})</p>\n</dd>'.format(name, label, text))
 
 
 def html_footnote_refs(name='.*', id_='.*', num='.*'):
