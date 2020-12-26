@@ -5,6 +5,7 @@
     Test a custom label style.
 """
 
+import common
 import pytest
 
 
@@ -15,8 +16,11 @@ def test_custom_labels(app, warning):
     output = (app.outdir / "index.html").read_text()
     # the custom style uses keys as labels
     # citations
-    assert ">myfancybibtexkey</span>" in output
-    assert ">myotherfancybibtexkey</span>" in output
-    # citation_refs
-    assert ">[myfancybibtexkey]</a>" in output
-    assert ">[myotherfancybibtexkey]</a>" in output
+    assert len(common.html_citations(
+        label='myfancybibtexkey').findall(output)) == 1
+    assert len(common.html_citations(
+        label='myotherfancybibtexkey').findall(output)) == 1
+    assert len(common.html_citation_refs(
+        label='myfancybibtexkey').findall(output)) == 1
+    assert len(common.html_citation_refs(
+        label='myotherfancybibtexkey').findall(output)) == 1

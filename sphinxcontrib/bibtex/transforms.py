@@ -103,7 +103,8 @@ class BibliographyTransform(SphinxPostTransform):
                     citation_node += backend.paragraph(entry)
                 else:  # "citation"
                     citation_node = docutils.nodes.citation()
-                    citation_node += docutils.nodes.label('', citation.label)
+                    citation_node += docutils.nodes.label(
+                        '', citation.label, support_smartquotes=False)
                     citation_node += backend.paragraph(entry)
                 citation_node['docname'] = env.docname
                 if citation.citation_id is not None:

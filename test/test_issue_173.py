@@ -5,6 +5,7 @@
     Check referencing works with near identical entries.
 """
 
+import common
 import pytest
 
 
@@ -13,5 +14,5 @@ def test_issue_173(app, warning):
     app.builder.build_all()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding='utf-8')
-    assert "[xyz19a]" in output
-    assert "[xyz19b]" in output
+    assert common.html_citation_refs(label="xyz19a").search(output)
+    assert common.html_citation_refs(label="xyz19b").search(output)

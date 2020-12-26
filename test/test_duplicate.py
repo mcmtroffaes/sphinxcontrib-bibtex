@@ -1,26 +1,20 @@
 """Test warnings on duplicate labels/keys."""
 
+import common
 import pytest
 import re
-
-
-def htmlbiblabel(label):
-    return (
-        r'<dt class="label".*><span class="brackets">{0}</span>'
-        .format(label))
 
 
 @pytest.mark.sphinx('html', testroot='duplicate_label')
 def test_duplicate_label(app, warning):
     # see github issue 14
     app.builder.build_all()
-    assert re.search(
-        r"duplicate label 1 for keys ({'Test', 'Test2'})|({'Test2', 'Test'})",
-        warning.getvalue())
+    assert re.search("duplicate label 1 for keys Test,Test2",
+                     warning.getvalue())
     output = (app.outdir / "doc1.html").read_text()
-    assert re.search(htmlbiblabel("1"), output)
+    assert common.html_citations(name="test", label="1").search(output)
     output = (app.outdir / "doc2.html").read_text()
-    assert re.search(htmlbiblabel("1"), output)
+    assert common.html_citations(name="test2", label="1").search(output)
 
 
 @pytest.mark.sphinx('html', testroot='duplicate_citation')
@@ -41,12 +35,12 @@ def test_duplicate_nearly_identical_keys(app, warning):
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     # assure both citations and citation references are present
-    assert "[Smi]" in output
-    assert "Smith" in output
-    assert "[Pop]" in output
-    assert "Poppins" in output
-    assert "[Ein]" in output
-    assert "Einstein" in output
+    assert common.html_citation_refs(label='Smi').search(output)
+    assert common.html_citation_refs(label='Pop').search(output)
+    assert common.html_citation_refs(label='Ein').search(output)
+    assert common.html_citations(label='Smi').search(output)
+    assert common.html_citations(label='Pop').search(output)
+    assert common.html_citations(label='Ein').search(output)
     # assure distinct ids for citations
     assert output.count('id="bibtex-citation-test"') == 1
     assert output.count('id="bibtex-citation-test1"') == 1

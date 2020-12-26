@@ -351,7 +351,7 @@ class BibtexDomain(Domain):
             if len(keys) > 1:
                 logger.warning(
                     'duplicate label %s for keys %s' % (
-                        label, keys))
+                        label, ','.join(sorted(keys))))
 
     def resolve_xref(self, env: BuildEnvironment, fromdocname: str,
                      builder: Builder, typ: str, target: str,
@@ -359,34 +359,37 @@ class BibtexDomain(Domain):
                      ) -> docutils.nodes.Element:
         """Replace node by list of citation references (one for each key)."""
         keys = [key.strip() for key in target.split(',')]
-        node = docutils.nodes.inline('', '', classes=['cite'])
+        node = docutils.nodes.inline(rawsource=target, text='[')
         # map citation keys that can be resolved to their citation data
         citations = {
             cit.key: cit for cit in self.citations
             if cit.key in keys
             and self.bibliographies[cit.bibliography_id].list_ == 'citation'}
-        for key in keys:
+        for i, key in enumerate(keys):
             try:
                 citation = citations[key]
             except KeyError:
                 # TODO can handle missing reference warning using the domain
                 logger.warning('could not find bibtex key %s' % key)
-                node += docutils.nodes.Text(key)
+                node += docutils.nodes.inline('', key)
                 continue
+            refcontnode = docutils.nodes.inline('', citation.label)
             if builder.name == 'latex':
                 # latex builder needs a citation_reference
                 refnode = docutils.nodes.citation_reference(
-                    '', citation.label,
+                    '', refcontnode,
                     docname=env.docname,
                     refname=citation.citation_id)
             else:
                 # other builders can use general reference node
-                refcontnode = docutils.nodes.Text('[' + citation.label + ']')
                 refnode = make_refnode(
                     builder, env.docname,
                     self.bibliographies[citation.bibliography_id].docname,
                     citation.citation_id, refcontnode)
             node += refnode
+            if i != len(keys) - 1:
+                node += docutils.nodes.Text(',')
+        node += docutils.nodes.Text(']')
         return node
 
     def get_all_cited_keys(self, docnames):
