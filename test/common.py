@@ -2,44 +2,51 @@
 
 import re
 
+RE_ID = r'[a-z][-?a-z0-9]*'
+RE_NAME = r'[-?a-z0-9]+'  # what follows 'bibtex-citation-' ids
+RE_NUM = r'\d+'
+RE_LABEL = r'[^<]+'
+RE_TEXT = r'.*'
 
-def html_citation_refs(name='.*', label='.*'):
+
+def html_citation_refs(name=RE_NAME, label=RE_LABEL):
     return re.compile(
-        '<a class="reference internal" href="#bibtex-citation-{0}">'
-        '<span>{1}</span>'
-        '</a>'.format(name, label))
+        '<a class="reference internal" href="#bibtex-citation-{name}">'
+        '<span>{label}</span>'
+        '</a>'.format(name=name, label=label))
 
 
-def html_citations(name=r'\w+', label=r'\w+', text='.*'):
+def html_citations(name=RE_NAME, label=RE_LABEL, text=RE_TEXT):
     return re.compile(
-        r'<dt class="label" id="bibtex-citation-(?P<name>{0})">'
+        r'<dt class="label" id="bibtex-citation-(?P<name>{name})">'
         r'<span class="brackets">'
-        r'(?:<a class="fn-backref" href="(?P<backref>#\w+)">)?'
-        r'(?P<label>{1})'
+        r'(?:<a class="fn-backref" href="#(?P<backref>{id_})">)?'
+        r'(?P<label>{label})'
         r'(?:</a>)?'
         r'</span>'
         r'(?:<span class="fn-backref">\('
-        r'<a href="#(?P<backref1>\w+)">1</a>'
-        r',<a href="#(?P<backref2>\w+)">2</a>'
-        r'(,<a href="#(?P<backref3>\w+)">3</a>)?'
+        r'<a href="#(?P<backref1>{id_})">1</a>'
+        r',<a href="#(?P<backref2>{id_}\w+)">2</a>'
+        r'(,<a href="#(?P<backref3>{id_}\w+)">3</a>)?'
         r'(,<a href="#\w+">\d+</a>)*'  # no named group for additional backrefs
         r'\)</span>)?'
         r'</dt>\n'
-        r'<dd><p>(?P<text>{2})</p>\n</dd>'.format(name, label, text))
+        r'<dd><p>(?P<text>{text})</p>\n</dd>'.format(
+            name=name, label=label, text=text, id_=RE_ID))
 
 
-def html_footnote_refs(name='.*', id_='.*', num='.*'):
+def html_footnote_refs(name=RE_ID):
     return re.compile(
-        '<a class="footnote-reference brackets" href="#{0}" id="{1}">'
-        '{2}'
-        '</a>'.format(name, id_, num))
+        '<a class="footnote-reference brackets" href="#{name}" id="{id_}">'
+        '{num}'
+        '</a>'.format(name=name, id_=RE_ID, num=RE_NUM))
 
 
-def html_footnotes(name='.*', id_='.*', num='.*'):
+def html_footnotes(name=RE_ID):
     return re.compile(
-        '<dt class="label" id="{0}">'
-        '<span class="brackets"><a class="fn-backref" href="#{1}">'
-        '{2}'
+        '<dt class="label" id="{name}">'
+        '<span class="brackets"><a class="fn-backref" href="#{id_}">'
+        '{num}'
         '</a>'
         '</span>'
-        '</dt>'.format(name, id_, num))
+        '</dt>'.format(name=name, id_=RE_ID, num=RE_NUM))
