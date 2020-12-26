@@ -77,3 +77,32 @@ app.build
                 [the pending ref is replaced with this reference node]
                 [if the resolve_xref returns None = missing link, if it raises NoUri, then no url is generated but no error]
           sphinx.builders.latex.transforms.BibliographyTransform
+
+Transform Stages For Docutils Test
+==================================
+
+* docutils reader:
+  <citation_reference ids="id1" refname="citationlabel">CitationLabel</citation_reference>
+  <citation ids="citationlabel" names="citationlabel"><label>CitationLabel</label><paragraph>Citation Text.</paragraph></citation>
+
+* sphinx.domains.citation.CitationDefinitionTransform
+  <citation docname="index" ids="citationlabel" names="citationlabel"><label support_smartquotes="False">CitationLabel</label><paragraph>Citation Text.</paragraph></citation>
+
+* sphinx.domains.citation.CitationReferenceTransform
+  <pending_xref ids="id1" refdomain="citation" reftarget="CitationLabel" reftype="ref" refwarn="True" support_smartquotes="False"><inline>[CitationLabel]</inline></pending_xref>
+
+* sphinx.transforms.post_transforms.ReferencesResolver
+  <reference ids="id1" internal="True" refid="citationlabel"><inline>[CitationLabel]</inline></reference>
+
+Transform Stages For BibTeX Test
+================================
+
+* docutils reader:
+  <pending_xref ids="id1" refdoc="index" refdomain="cite" refexplicit="False" reftarget="testkey" reftype="cite" refwarn="False"><literal classes="xref cite">testkey</literal></pending_xref>
+  <bibliography ids="['bibtex-bibliography-index-1']"/>
+
+* sphinxcontrib.bibtex.transforms.BibliographyTransform
+  <paragraph ids="bibtex-bibliography-index-1"><citation docname="index" ids="bibtex-citation-testkey" names="bibtex-citation-testkey"><label>Las20</label><paragraph>Firstname Lastname. The title. 2020.</paragraph></citation></paragraph>
+
+* sphinx.transforms.post_transforms.ReferencesResolver
+  <inline classes="cite" ids="id1"><reference internal="True" refid="bibtex-citation-testkey">[Las20]</reference></inline>
