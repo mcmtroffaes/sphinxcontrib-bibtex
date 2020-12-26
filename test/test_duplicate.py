@@ -12,10 +12,10 @@ def test_duplicate_label(app, warning):
     assert "duplicate label 1 for keys Test,Test2" in warning.getvalue()
     output = (app.outdir / "doc1.html").read_text()
     output2 = (app.outdir / "doc2.html").read_text()
-    print(output)
-    print(output2)
-    assert common.html_citations(name="test", label="1").search(output)
-    assert common.html_citations(name="test2", label="1").search(output2)
+    assert common.html_citations(
+        id_="bibtex-citation-test", label="1").search(output)
+    assert common.html_citations(
+        id_="bibtex-citation-test2", label="1").search(output2)
 
 
 @pytest.mark.sphinx('html', testroot='duplicate_citation')
@@ -43,9 +43,12 @@ def test_duplicate_nearly_identical_keys(app, warning):
     assert common.html_citations(label='Pop').search(output)
     assert common.html_citations(label='Ein').search(output)
     # assure distinct ids for citations
-    assert len(common.html_citations(name='test').findall(output)) == 1
-    assert len(common.html_citations(name='test1').findall(output)) == 1
-    assert len(common.html_citations(name='test2').findall(output)) == 1
+    assert len(common.html_citations(
+        id_='bibtex-citation-test').findall(output)) == 1
+    assert len(common.html_citations(
+        id_='bibtex-citation-test1').findall(output)) == 1
+    assert len(common.html_citations(
+        id_='bibtex-citation-test2').findall(output)) == 1
 
 
 # this test "accidentally" includes a user provided id which
