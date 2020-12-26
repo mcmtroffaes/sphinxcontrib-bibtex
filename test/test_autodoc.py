@@ -36,4 +36,3 @@ def test_autodoc(app, warning):
         assert match
         id_ = match.group('id_')
         assert len(common.html_footnote_refs(refid=id_).findall(output2)) == 1
-

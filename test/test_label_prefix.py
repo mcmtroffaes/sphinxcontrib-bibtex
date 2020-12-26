@@ -18,7 +18,8 @@ def test_label_prefix(app, warning):
     doc1_cites = {'ABlu83', 'AFM12', 'AGIH02', 'AWS14'}
     doc2_refs = {'BShi13'}
     doc2_cites = {'BShi13'}
-    sum_refs = {'CMcMahonKM10', 'AFM12', 'CRMM11', 'CRM09', 'CMM03', 'CHdJMD13'}
+    sum_refs = {'CMcMahonKM10', 'CRMM11', 'CRM09', 'CMM03', 'CHdJMD13',
+                'AFM12'}
     sum_cites = {'CMcMahonKM10', 'CRMM11', 'CRM09', 'CMM03', 'CHdJMD13'}
     app.build()
     assert not warning.getvalue()
