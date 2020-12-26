@@ -420,7 +420,6 @@ class BibtexDomain(Domain):
         expression.
         """
         for key, entry in self.get_bibliography_entries(bibliography):
-            key = bibliography.keyprefix + entry.key
             cited_docnames = {
                 citation_ref.docname
                 for citation_ref in self.citation_refs
