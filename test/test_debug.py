@@ -1,4 +1,3 @@
-# flake8: noqa: E501
 """Some tests purely used for stepping into the debugger
 to help understand what docutils/sphinx are doing.
 """
@@ -27,7 +26,7 @@ bibtex_citation_xml = """
                     tes
             ]
     <paragraph ids="bibtex-bibliography-index-1">
-        <citation backrefs="id1" docname="index" ids="bibtex-citation-testkey" names="bibtex-citation-testkey">
+        <citation backrefs="id1" docname="index" ids="bibtex-citation-testkey">
             <label support_smartquotes="False">
                 tes
             <paragraph>
