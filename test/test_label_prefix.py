@@ -1,13 +1,5 @@
-"""
-    test_issue62
-    ~~~~~~~~~~~~
-
-    Test local bibliographies.
-"""
-
 import common
 import pytest
-import re
 
 
 def get_citation_refs(code):
@@ -20,8 +12,8 @@ def get_citations(code):
             for match in common.html_citations().finditer(code)}
 
 
-@pytest.mark.sphinx('html', testroot='issue62')
-def test_local_bibliographies(app, warning):
+@pytest.mark.sphinx('html', testroot='label_prefix')
+def test_label_prefix(app, warning):
     doc1_refs = {'AFM12', 'ABlu83', 'AGIH02', 'AWS14'}
     doc1_cites = {'ABlu83', 'AFM12', 'AGIH02', 'AWS14'}
     doc2_refs = {'BShi13'}
