@@ -35,18 +35,20 @@ def html_citations(name=RE_NAME, label=RE_LABEL, text=RE_TEXT):
             name=name, label=label, text=text, id_=RE_ID))
 
 
-def html_footnote_refs(name=RE_ID):
+def html_footnote_refs(refid=RE_ID):
     return re.compile(
-        '<a class="footnote-reference brackets" href="#{name}" id="{id_}">'
-        '{num}'
-        '</a>'.format(name=name, id_=RE_ID, num=RE_NUM))
+        '<a class="footnote-reference brackets"'
+        ' href="#(?P<refid>{refid})" id="(?P<id_>{id_})">'
+        '(?P<label>{label})'
+        '</a>'.format(refid=refid, id_=RE_ID, label=RE_NUM))
 
 
-def html_footnotes(name=RE_ID):
+def html_footnotes(id_=RE_ID):
     return re.compile(
-        '<dt class="label" id="{name}">'
-        '<span class="brackets"><a class="fn-backref" href="#{id_}">'
-        '{num}'
+        '<dt class="label" id="(?P<id_>{id_})">'
+        '<span class="brackets">'
+        '<a class="fn-backref" href="#(?P<backref>{backref_id})">'
+        '(?P<label>{label})'
         '</a>'
         '</span>'
-        '</dt>'.format(name=name, id_=RE_ID, num=RE_NUM))
+        '</dt>'.format(id_=id_, backref_id=RE_ID, label=RE_NUM))
