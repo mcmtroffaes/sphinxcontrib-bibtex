@@ -10,9 +10,9 @@ RE_TEXT = r'.*'
 
 def html_citation_refs(refid=RE_ID, label=RE_LABEL):
     return re.compile(
-        '<a class="reference internal" href="(?P<refdoc>[^#]+)?#(?P<refid>{refid})">'
-        '<span>(?P<label>{label})</span>'
-        '</a>'.format(refid=refid, label=label))
+        r'<a class="reference internal" href="(?P<refdoc>[^#]+)?#(?P<refid>{refid})">'
+        r'<span>(?P<label>{label})</span>'
+        r'</a>'.format(refid=refid, label=label))
 
 
 def html_citations(id_=RE_ID, label=RE_LABEL, text=RE_TEXT):
@@ -36,18 +36,20 @@ def html_citations(id_=RE_ID, label=RE_LABEL, text=RE_TEXT):
 
 def html_footnote_refs(refid=RE_ID):
     return re.compile(
-        '<a class="footnote-reference brackets"'
-        ' href="#(?P<refid>{refid})" id="(?P<id_>{id_})">'
-        '(?P<label>{label})'
-        '</a>'.format(refid=refid, id_=RE_ID, label=RE_NUM))
+        r'<a class="footnote-reference brackets"'
+        r' href="#(?P<refid>{refid})" id="(?P<id_>{id_})">'
+        r'(?P<label>{label})'
+        r'</a>'.format(refid=refid, id_=RE_ID, label=RE_NUM))
 
 
-def html_footnotes(id_=RE_ID):
+def html_footnotes(id_=RE_ID, text=RE_TEXT):
     return re.compile(
-        '<dt class="label" id="(?P<id_>{id_})">'
-        '<span class="brackets">'
-        '<a class="fn-backref" href="#(?P<backref>{backref_id})">'
-        '(?P<label>{label})'
-        '</a>'
-        '</span>'
-        '</dt>'.format(id_=id_, backref_id=RE_ID, label=RE_NUM))
+        r'<dt class="label" id="(?P<id_>{id_})">'
+        r'<span class="brackets">'
+        r'<a class="fn-backref" href="#(?P<backref>{backref_id})">'
+        r'(?P<label>{label})'
+        r'</a>'
+        r'</span>'
+        r'</dt>\n'
+        r'<dd><p>(?P<text>{text})</p>\n</dd>'.format(
+            id_=id_, backref_id=RE_ID, label=RE_NUM, text=text))
