@@ -359,7 +359,10 @@ class BibtexDomain(Domain):
                      ) -> docutils.nodes.Element:
         """Replace node by list of citation references (one for each key)."""
         keys = [key.strip() for key in target.split(',')]
-        node = docutils.nodes.inline(rawsource=target, text='[')
+        if builder.name != 'latex':
+            node = docutils.nodes.inline(rawsource=target, text='[')
+        else:
+            node = docutils.nodes.inline(rawsource=target, text='')
         # map citation keys that can be resolved to their citation data
         citations = {
             cit.key: cit for cit in self.citations
@@ -387,9 +390,10 @@ class BibtexDomain(Domain):
                     self.bibliographies[citation.bibliography_id].docname,
                     citation.citation_id, refcontnode)
             node += refnode
-            if i != len(keys) - 1:
+            if i != len(keys) - 1 and builder.name != 'latex':
                 node += docutils.nodes.Text(',')
-        node += docutils.nodes.Text(']')
+        if builder.name != 'latex':
+            node += docutils.nodes.Text(']')
         return node
 
     def get_all_cited_keys(self, docnames):

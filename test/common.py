@@ -10,7 +10,7 @@ def html_citation_refs(name='.*', label='.*'):
         '</a>'.format(name, label))
 
 
-def html_citations(name='.*', label='.*', text='.*'):
+def html_citations(name=r'\w+', label=r'\w+', text='.*'):
     return re.compile(
         r'<dt class="label" id="bibtex-citation-{0}">'
         r'<span class="brackets">'
