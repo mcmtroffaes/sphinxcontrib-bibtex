@@ -6,6 +6,7 @@ RE_ID = r'[a-z][-?a-z0-9]*'
 RE_NUM = r'\d+'
 RE_LABEL = r'[^<]+'
 RE_TEXT = r'.*'
+RE_DOCNAME = r'[^:]+'
 
 
 def html_citation_refs(refid=RE_ID, label=RE_LABEL):
@@ -54,3 +55,18 @@ def html_footnotes(id_=RE_ID, text=RE_TEXT):
         r'</dt>\n'
         r'<dd><p>(?P<text>{text})</p>\n</dd>'.format(
             id_=id_, backref_id=RE_ID, label=RE_NUM, text=text))
+
+
+def latex_citations(docname=RE_DOCNAME, id_=RE_ID,
+                    label=RE_LABEL, text=RE_TEXT):
+    return re.compile(
+        r'\\bibitem\[(?P<label>{label})]'
+        r'{{(?P<docname>{docname}):(?P<id_>{id_})}}\n'
+        r'(?P<text>{text})\n'.format(
+            docname=docname, label=label, id_=id_, text=text))
+
+
+def latex_citation_refs(docname=RE_DOCNAME, refid=RE_ID):
+    return re.compile(
+        r'\\sphinxcite{{(?P<docname>{docname}):(?P<refid>{refid})}}'.format(
+            docname=docname, refid=refid))
