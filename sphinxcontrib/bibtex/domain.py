@@ -327,8 +327,8 @@ class BibtexDomain(Domain):
                     # no id for this one
                     citation_id = None
                 else:
-                    base_id = 'bibtex-citation-{}'.format(
-                        docutils.nodes.make_id(key))
+                    format_id = "bibtex-citation-%s"
+                    base_id = docutils.nodes.make_id(format_id % key)
                     if base_id not in used_ids:
                         citation_id = base_id
                     else:

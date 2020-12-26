@@ -118,6 +118,8 @@ class BibliographyTransform(SphinxPostTransform):
                 if citation.citation_id is not None:
                     citation_node['ids'].append(citation.citation_id)
                     # note: citation_node['names'] attribute not required
+                    self.document.note_explicit_target(
+                        citation_node, citation_node)
                 node_text_transform(citation_node, transform_url_command)
                 nodes.append(citation_node)
                 if bibliography.list_ == "enumerated":
