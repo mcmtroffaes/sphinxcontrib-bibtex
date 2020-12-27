@@ -25,7 +25,7 @@ bibtex_citation_xml = """
                 <inline>
                     tes
             ]
-    <paragraph ids="bibtex-bibliography-index-1">
+    <paragraph ids="id2">
         <citation backrefs="id1" docname="index" ids="bibtex-citation-testkey">
             <label support_smartquotes="False">
                 tes

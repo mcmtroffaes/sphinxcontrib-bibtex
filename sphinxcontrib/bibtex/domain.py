@@ -2,7 +2,10 @@
     Classes and methods to maintain any bibtex information that is stored
     outside the doctree.
 
-    .. autoclass:: Bibliography
+    .. autoclass:: BibliographyKey
+        :members:
+
+    .. autoclass:: BibliographyValue
         :members:
 
     .. autoclass:: Citation
@@ -188,9 +191,13 @@ def get_docnames(env):
         docname = nextdoc
 
 
-class Bibliography(NamedTuple):
+class BibliographyKey(NamedTuple):
+    docname: str
+    id_: str
+
+
+class BibliographyValue(NamedTuple):
     """Contains information about a bibliography directive."""
-    docname: str         #: Document name.
     line: int            #: Line number of the directive in the document.
     bibfiles: List[str]  #: List of bib files for this directive.
     style: str           #: The pybtex style.
@@ -205,7 +212,7 @@ class Bibliography(NamedTuple):
 class Citation(NamedTuple):
     """Information about a citation."""
     citation_id: Optional[str]   #: Unique id of this citation.
-    bibliography_id: str         #: Unique id of its bibliography directive.
+    bibliography_key: BibliographyKey  #: Key of its bibliography directive.
     key: str                     #: Unique citation id used for referencing.
     label: str                   #: Label (with brackets and label prefix).
     entry_key: str               #: The original key (no prefix).
@@ -236,10 +243,8 @@ class BibtexDomain(Domain):
         return self.data.setdefault('bibfiles', {})  # filename -> cache
 
     @property
-    def bibliographies(self) -> Dict[str, Bibliography]:
-        """Map each bibliography directive id to further information about the
-        directive.
-        """
+    def bibliographies(self) -> Dict[BibliographyKey, BibliographyValue]:
+        """Map storing information about each directive."""
         return self.data.setdefault('bibliographies', {})  # id -> cache
 
     @property
@@ -280,19 +285,18 @@ class BibtexDomain(Domain):
     def clear_doc(self, docname: str) -> None:
         self.data['citations'] = [
             citation for citation in self.citations
-            if self.bibliographies[
-                   citation.bibliography_id].docname != docname]
+            if citation.bibliography_key.docname != docname]
         self.data['citation_refs'] = [
             ref for ref in self.citation_refs
             if ref.docname != docname]
-        for id_, bibliography in list(self.bibliographies.items()):
-            if bibliography.docname == docname:
-                del self.bibliographies[id_]
+        for bib_key, bib_value in list(self.bibliographies.items()):
+            if bib_key.docname == docname:
+                del self.bibliographies[bib_key]
 
     def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
-        for id_, bibliography in otherdata['bibliographies'].items():
-            if bibliography.docname in docnames:
-                self.bibliographies[id_] = bibliography
+        for bib_key, bib_value in otherdata['bibliographies'].items():
+            if bib_key.docname in docnames:
+                self.bibliographies[bib_key] = bib_value
         for citation_ref in otherdata['citation_refs']:
             if citation_ref.docname in docnames:
                 self.citation_refs.append(citation_ref)
@@ -312,9 +316,9 @@ class BibtexDomain(Domain):
         used_keys = set()
         used_labels = {}
         used_ids = set()
-        for bibliography_id, bibliography in self.bibliographies.items():
+        for bibliography_key, bibliography in self.bibliographies.items():
             for entry_label, entry in self.get_labelled_bibliography_entries(
-                    bibliography, docnames):
+                    bibliography_key, docnames):
                 key = bibliography.keyprefix + entry.key
                 label = bibliography.labelprefix + entry_label
                 if bibliography.list_ != 'citation':
@@ -323,7 +327,7 @@ class BibtexDomain(Domain):
                 elif key in used_keys:
                     logger.warning(
                         'duplicate citation for key %s' % key,
-                        location=(bibliography.docname, bibliography.line))
+                        location=(bibliography_key.docname, bibliography.line))
                     # no id for this one
                     citation_id = None
                 else:
@@ -338,7 +342,7 @@ class BibtexDomain(Domain):
                         citation_id = base_id + str(num)
                 self.citations.append(Citation(
                     citation_id=citation_id,
-                    bibliography_id=bibliography_id,
+                    bibliography_key=bibliography_key,
                     key=key,
                     label=label,
                     entry_key=entry.key,
@@ -367,7 +371,7 @@ class BibtexDomain(Domain):
         citations = {
             cit.key: cit for cit in self.citations
             if cit.key in keys
-            and self.bibliographies[cit.bibliography_id].list_ == 'citation'}
+            and self.bibliographies[cit.bibliography_key].list_ == 'citation'}
         for i, key in enumerate(keys):
             try:
                 citation = citations[key]
@@ -387,7 +391,7 @@ class BibtexDomain(Domain):
                 # other builders can use general reference node
                 refnode = make_refnode(
                     builder, env.docname,
-                    self.bibliographies[citation.bibliography_id].docname,
+                    citation.bibliography_key.docname,
                     citation.citation_id, refcontnode)
             node += refnode
             if i != len(keys) - 1 and builder.name != 'latex':
@@ -405,21 +409,24 @@ class BibtexDomain(Domain):
             for key in citation_ref.keys:
                 yield key
 
-    def get_bibliography_entries(
-            self, bibliography: Bibliography) -> Iterable[Tuple[str, Entry]]:
+    def get_bibliography_entries(self, bibliography_key: BibliographyKey
+                                 ) -> Iterable[Tuple[str, Entry]]:
         """Return all bibliography entries from the bib files, unsorted (i.e.
         in order of appearance in the bib files.
         """
-        for bibfile in bibliography.bibfiles:
+        bibliography = self.bibliographies[bibliography_key]
+        for bibfile in self.bibliographies[bibliography_key].bibfiles:
             for entry in self.bibfiles[bibfile].data.entries.values():
                 yield bibliography.keyprefix + entry.key, entry
 
     def get_filtered_bibliography_entries(
-            self, bibliography: Bibliography) -> Iterable[Tuple[str, Entry]]:
+            self, bibliography_key: BibliographyKey
+            ) -> Iterable[Tuple[str, Entry]]:
         """Return unsorted bibliography entries filtered by the filter
         expression.
         """
-        for key, entry in self.get_bibliography_entries(bibliography):
+        bibliography = self.bibliographies[bibliography_key]
+        for key, entry in self.get_bibliography_entries(bibliography_key):
             cited_docnames = {
                 citation_ref.docname
                 for citation_ref in self.citation_refs
@@ -427,24 +434,24 @@ class BibtexDomain(Domain):
             }
             visitor = _FilterVisitor(
                 entry=entry,
-                docname=bibliography.docname,
+                docname=bibliography_key.docname,
                 cited_docnames=cited_docnames)
             try:
                 success = visitor.visit(bibliography.filter_)
             except ValueError as err:
                 logger.warning(
                     "syntax error in :filter: expression; %s" % err,
-                    location=(bibliography.docname, bibliography.line))
+                    location=(bibliography_key.docname, bibliography.line))
                 # recover by falling back to the default
                 success = bool(cited_docnames)
             if success:
                 yield key, entry
 
     def get_sorted_bibliography_entries(
-            self, bibliography: Bibliography, docnames: List[str]
+            self, bibliography_key: BibliographyKey, docnames: List[str]
             ) -> Iterable[Tuple[str, Entry]]:
         """Return filtered bibliography entries sorted by citation order."""
-        entries = dict(self.get_filtered_bibliography_entries(bibliography))
+        entries = dict(self.get_filtered_bibliography_entries(bibliography_key))
         for key in self.get_all_cited_keys(docnames):
             try:
                 entry = entries.pop(key)
@@ -457,13 +464,14 @@ class BibtexDomain(Domain):
             yield key, entry
 
     def get_labelled_bibliography_entries(
-            self, bibliography: Bibliography, docnames: List[str]
+            self, bibliography_key: BibliographyKey, docnames: List[str]
             ) -> Iterable[Tuple[str, Entry]]:
         """Get sorted bibliography entries along with their pybtex labels,
         with additional sorting applied from the pybtex style.
         """
+        bibliography = self.bibliographies[bibliography_key]
         entries = dict(
-            self.get_sorted_bibliography_entries(bibliography, docnames))
+            self.get_sorted_bibliography_entries(bibliography_key, docnames))
         style = cast(
             pybtex.style.formatting.BaseStyle,
             find_plugin('pybtex.style.formatting', bibliography.style)())

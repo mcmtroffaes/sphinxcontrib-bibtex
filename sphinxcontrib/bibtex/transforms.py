@@ -19,7 +19,7 @@ from pybtex.plugin import find_plugin
 from sphinx.transforms.post_transforms import SphinxPostTransform
 
 from .bibfile import get_bibliography_entry
-from .domain import BibtexDomain
+from .domain import BibtexDomain, BibliographyKey
 from .nodes import bibliography as bibliography_node
 
 
@@ -71,10 +71,11 @@ class BibliographyTransform(SphinxPostTransform):
         env = self.document.settings.env
         domain = cast(BibtexDomain, env.get_domain('cite'))
         for bibnode in self.document.traverse(bibliography_node):
-            bibliography_id = bibnode['ids'][0]
-            bibliography = domain.bibliographies[bibliography_id]
+            bib_key = BibliographyKey(
+                docname=env.docname, id_=bibnode['ids'][0])
+            bibliography = domain.bibliographies[bib_key]
             citations = [citation for citation in domain.citations
-                         if citation.bibliography_id == bibliography_id]
+                         if citation.bibliography_key == bib_key]
             # locate and instantiate style and backend plugins
             style = find_plugin(
                 'pybtex.style.formatting', bibliography.style)()

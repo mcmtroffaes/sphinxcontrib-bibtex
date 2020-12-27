@@ -7,15 +7,15 @@
 """
 
 import ast  # parse(), used for filter
-from typing import cast
-
 import sphinx.util
 
+from typing import cast
 from docutils.parsers.rst import Directive, directives
+from sphinx.environment import BuildEnvironment
 from sphinx.util.console import standout
 
 from .bibfile import normpath_filename
-from .domain import Bibliography, BibtexDomain
+from .domain import BibliographyValue, BibtexDomain, BibliographyKey
 from .nodes import bibliography as bibliography_node
 
 
@@ -71,13 +71,8 @@ class BibliographyDirective(Directive):
         node that is to be transformed to the entries of the
         bibliography.
         """
-        env = self.state.document.settings.env
+        env = cast(BuildEnvironment, self.state.document.settings.env)
         domain = cast(BibtexDomain, env.get_domain('cite'))
-        # create id and cache for this node
-        # this id will be stored with the node
-        # and is used to look up additional data
-        id_ = 'bibtex-bibliography-%s-%s' % (
-            env.docname, env.new_serialno('bibtex'))
         if "filter" in self.options:
             if "all" in self.options:
                 logger.warning(standout(":filter: overrides :all:"))
@@ -106,8 +101,7 @@ class BibliographyDirective(Directive):
                         for bibfile in self.arguments[0].split()]
         else:
             bibfiles = list(domain.bibfiles.keys())
-        bibliography = Bibliography(
-            docname=env.docname,
+        bibliography = BibliographyValue(
             line=self.lineno,
             list_=self.options.get("list", "citation"),
             enumtype=self.options.get("enumtype", "arabic"),
@@ -124,5 +118,9 @@ class BibliographyDirective(Directive):
                 bibliography.list_))
         for bibfile in bibfiles:
             env.note_dependency(bibfile)
-        domain.bibliographies[id_] = bibliography
-        return [bibliography_node('', ids=[id_])]
+        node = bibliography_node('')
+        self.state.document.note_explicit_target(node)
+        bib_key = BibliographyKey(docname=env.docname, id_=node['ids'][0])
+        assert bib_key not in domain.bibliographies
+        domain.bibliographies[bib_key] = bibliography
+        return [node]
