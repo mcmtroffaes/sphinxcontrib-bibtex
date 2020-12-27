@@ -114,15 +114,15 @@ class BibliographyDirective(Directive):
         # generate nodes and ids
         keyprefix = self.options.get("keyprefix", "")
         node = bibliography_node('')
-        self.state.document.note_explicit_target(node)
-        citation_nodes: Dict[str, docutils.nodes.citation] = {}
-        for entry in domain.get_bibliography_entries(bibfiles):
-            # we only know which citations to included at resolve stage
-            # but we need to know their ids before resolve stage
-            # so for now we generate a node, and thus, an id, for every entry
-            citation_node = docutils.nodes.citation()
-            self.state.document.note_explicit_target(citation_node)
-            citation_nodes[keyprefix + entry.key] = citation_node
+        self.state.document.note_explicit_target(node, node)
+        # we only know which citations to included at resolve stage
+        # but we need to know their ids before resolve stage
+        # so for now we generate a node, and thus, an id, for every entry
+        citation_nodes = {keyprefix + entry.key: docutils.nodes.citation()
+                          for entry in domain.get_entries(bibfiles)}
+        for citation_node in citation_nodes.values():
+            self.state.document.note_explicit_target(
+                citation_node, citation_node)
         # create bibliography object
         bibliography = BibliographyValue(
             line=self.lineno,

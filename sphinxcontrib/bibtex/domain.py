@@ -318,7 +318,7 @@ class BibtexDomain(Domain):
         used_labels: Dict[str, Set[str]] = {}
         used_ids = set()
         for bibliography_key, bibliography in self.bibliographies.items():
-            for formatted_entry in self.get_labelled_bibliography_entries(
+            for formatted_entry in self.get_formatted_entries(
                     bibliography_key, docnames):
                 key = bibliography.keyprefix + formatted_entry.key
                 label = bibliography.labelprefix + formatted_entry.label
@@ -401,7 +401,7 @@ class BibtexDomain(Domain):
             for key in citation_ref.keys:
                 yield key
 
-    def get_bibliography_entries(
+    def get_entries(
             self, bibfiles: List[str]) -> Iterable[Entry]:
         """Return all bibliography entries from the bib files, unsorted (i.e.
         in order of appearance in the bib files.
@@ -410,14 +410,14 @@ class BibtexDomain(Domain):
             for entry in self.bibfiles[bibfile].data.entries.values():
                 yield entry
 
-    def get_filtered_bibliography_entries(
+    def get_filtered_entries(
             self, bibliography_key: BibliographyKey
             ) -> Iterable[Tuple[str, Entry]]:
         """Return unsorted bibliography entries filtered by the filter
         expression.
         """
         bibliography = self.bibliographies[bibliography_key]
-        for entry in self.get_bibliography_entries(bibliography.bibfiles):
+        for entry in self.get_entries(bibliography.bibfiles):
             key = bibliography.keyprefix + entry.key
             cited_docnames = {
                 citation_ref.docname
@@ -439,12 +439,12 @@ class BibtexDomain(Domain):
             if success:
                 yield key, entry
 
-    def get_sorted_bibliography_entries(
+    def get_sorted_entries(
             self, bibliography_key: BibliographyKey, docnames: List[str]
             ) -> Iterable[Tuple[str, Entry]]:
         """Return filtered bibliography entries sorted by citation order."""
         entries = dict(
-            self.get_filtered_bibliography_entries(bibliography_key))
+            self.get_filtered_entries(bibliography_key))
         for key in self.get_all_cited_keys(docnames):
             try:
                 entry = entries.pop(key)
@@ -456,15 +456,15 @@ class BibtexDomain(Domain):
         for key, entry in entries.items():
             yield key, entry
 
-    def get_labelled_bibliography_entries(
+    def get_formatted_entries(
             self, bibliography_key: BibliographyKey, docnames: List[str]
             ) -> Iterable[FormattedEntry]:
         """Get sorted bibliography entries along with their pybtex labels,
-        with additional sorting applied from the pybtex style.
+        with additional sorting and formatting applied from the pybtex style.
         """
         bibliography = self.bibliographies[bibliography_key]
         entries = dict(
-            self.get_sorted_bibliography_entries(bibliography_key, docnames))
+            self.get_sorted_entries(bibliography_key, docnames))
         style = cast(
             pybtex.style.formatting.BaseStyle,
             find_plugin('pybtex.style.formatting', bibliography.style)())
