@@ -12,7 +12,6 @@ import sphinx.util
 from typing import cast
 from docutils.parsers.rst import Directive, directives
 from sphinx.environment import BuildEnvironment
-from sphinx.util.console import standout
 
 from .bibfile import normpath_filename
 from .domain import BibliographyValue, BibtexDomain, BibliographyKey
@@ -75,16 +74,16 @@ class BibliographyDirective(Directive):
         domain = cast(BibtexDomain, env.get_domain('cite'))
         if "filter" in self.options:
             if "all" in self.options:
-                logger.warning(standout(":filter: overrides :all:"))
+                logger.warning(":filter: overrides :all:")
             if "notcited" in self.options:
-                logger.warning(standout(":filter: overrides :notcited:"))
+                logger.warning(":filter: overrides :notcited:")
             if "cited" in self.options:
-                logger.warning(standout(":filter: overrides :cited:"))
+                logger.warning(":filter: overrides :cited:")
             try:
                 filter_ = ast.parse(self.options["filter"])
             except SyntaxError:
                 logger.warning(
-                    standout("syntax error in :filter: expression") +
+                    "syntax error in :filter: expression" +
                     " (" + self.options["filter"] + "); "
                     "the option will be ignored"
                 )

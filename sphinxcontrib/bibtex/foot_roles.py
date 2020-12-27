@@ -51,6 +51,6 @@ class FootCiteRole(XRefRole):
         """Transform reference node into a footnote reference,
         and note that the reference was cited.
         """
-        keys = [key.strip() for key in self.target.split(',')]
+        keys = [key.strip() for key in self.target.split(',')]  # type: ignore
         refnodes = [self.make_refnode(document, env, key) for key in keys]
         return [refnode for refnode in refnodes if refnode is not None], []

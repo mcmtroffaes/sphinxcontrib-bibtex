@@ -19,7 +19,7 @@
 """
 
 import ast
-from typing import List, Dict, NamedTuple, cast, Optional, Iterable, Tuple
+from typing import List, Dict, NamedTuple, cast, Optional, Iterable, Tuple, Set
 
 import docutils.frontend
 import docutils.nodes
@@ -314,7 +314,7 @@ class BibtexDomain(Domain):
         docnames = list(get_docnames(self.env))
         # we keep track of this to quickly check for duplicates
         used_keys = set()
-        used_labels = {}
+        used_labels : Dict[str, Set[str]] = {}
         used_ids = set()
         for bibliography_key, bibliography in self.bibliographies.items():
             for formatted_entry in self.get_labelled_bibliography_entries(

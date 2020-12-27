@@ -20,7 +20,6 @@ from pybtex.database.input import bibtex
 from pybtex.database import BibliographyData, Entry
 import sphinx.util
 from sphinx.environment import BuildEnvironment
-from sphinx.util.console import standout
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -56,9 +55,7 @@ def process_bibfile(bibfiles: Dict[str, BibFile],
         mtime = os.path.getmtime(bibfilename)
     except OSError:
         logger.warning(
-            standout("could not open bibtex file {0}.".format(bibfilename)))
-        bibfiles[bibfilename] = BibFile(  # dummy cache
-            mtime=-float("inf"), data=BibliographyData())
+            "could not open bibtex file {0}.".format(bibfilename))
         return
     # get cache and check if it is still up to date
     # if it is not up to date, parse the bibtex file
