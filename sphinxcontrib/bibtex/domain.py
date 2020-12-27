@@ -451,7 +451,8 @@ class BibtexDomain(Domain):
             self, bibliography_key: BibliographyKey, docnames: List[str]
             ) -> Iterable[Tuple[str, Entry]]:
         """Return filtered bibliography entries sorted by citation order."""
-        entries = dict(self.get_filtered_bibliography_entries(bibliography_key))
+        entries = dict(
+            self.get_filtered_bibliography_entries(bibliography_key))
         for key in self.get_all_cited_keys(docnames):
             try:
                 entry = entries.pop(key)
