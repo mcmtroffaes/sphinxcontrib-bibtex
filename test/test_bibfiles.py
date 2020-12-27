@@ -64,8 +64,9 @@ def test_bibfiles_not_found(app, warning):
     app.build()
     warning.seek(0)
     warnings = warning.readlines()
-    assert len(warnings) == 1
+    assert len(warnings) == 2
     assert 'could not open bibtex file' in warnings[0]
+    assert 'not found or not configured in bibtex_bibfiles' in warnings[1]
 
 
 @pytest.mark.sphinx('html', testroot='bibfiles_missing_conf')

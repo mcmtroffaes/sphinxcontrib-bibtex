@@ -96,8 +96,16 @@ class BibliographyDirective(Directive):
             # the default filter: include only cited entries
             filter_ = ast.parse("cited")
         if self.arguments:
-            bibfiles = [normpath_filename(env, bibfile)
-                        for bibfile in self.arguments[0].split()]
+            bibfiles = []
+            for bibfile in self.arguments[0].split():
+                normbibfile = normpath_filename(env, bibfile)
+                if normbibfile not in domain.bibfiles:
+                    logger.warning(
+                        "{0} not found or not configured"
+                        " in bibtex_bibfiles".format(bibfile),
+                        location=(env.docname, self.lineno))
+                else:
+                    bibfiles.append(normbibfile)
         else:
             bibfiles = list(domain.bibfiles.keys())
         bibliography = BibliographyValue(
