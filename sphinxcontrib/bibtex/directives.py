@@ -113,12 +113,21 @@ class BibliographyDirective(Directive):
             env.note_dependency(bibfile)
         # generate nodes and ids
         keyprefix = self.options.get("keyprefix", "")
+        list_ = self.options.get("list", "citation")
+        if list_ not in {"bullet", "enumerated", "citation"}:
+            logger.warning(
+                "unknown bibliography list type '{0}'.".format(list_))
+            list_ = "citation"
+        if list_ in {"bullet", "enumerated"}:
+            citation_node_class = docutils.nodes.list_item
+        else:
+            citation_node_class = docutils.nodes.citation
         node = bibliography_node('')
         self.state.document.note_explicit_target(node, node)
         # we only know which citations to included at resolve stage
         # but we need to know their ids before resolve stage
         # so for now we generate a node, and thus, an id, for every entry
-        citation_nodes = {keyprefix + entry.key: docutils.nodes.citation()
+        citation_nodes = {keyprefix + entry.key: citation_node_class()
                           for entry in domain.get_entries(bibfiles)}
         for citation_node in citation_nodes.values():
             self.state.document.note_explicit_target(
@@ -126,7 +135,7 @@ class BibliographyDirective(Directive):
         # create bibliography object
         bibliography = BibliographyValue(
             line=self.lineno,
-            list_=self.options.get("list", "citation"),
+            list_=list_,
             enumtype=self.options.get("enumtype", "arabic"),
             start=self.options.get("start", 1),
             style=self.options.get(
@@ -137,9 +146,6 @@ class BibliographyDirective(Directive):
             bibfiles=bibfiles,
             citation_nodes=citation_nodes
         )
-        if bibliography.list_ not in {"bullet", "enumerated", "citation"}:
-            logger.warning("unknown bibliography list type '{0}'.".format(
-                bibliography.list_))
         bib_key = BibliographyKey(docname=env.docname, id_=node['ids'][0])
         assert bib_key not in domain.bibliographies
         domain.bibliographies[bib_key] = bibliography

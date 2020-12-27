@@ -91,12 +91,11 @@ class BibliographyTransform(SphinxPostTransform):
             else:  # "citation"
                 nodes = docutils.nodes.paragraph()
             for citation in citations:
-                if bibliography.list_ in ["enumerated", "bullet"]:
-                    citation_node = docutils.nodes.list_item()
+                citation_node = bibliography.citation_nodes[citation.key]
+                if bibliography.list_ in {"enumerated", "bullet"}:
                     citation_node += backend.paragraph(
                         citation.formatted_entry)
                 else:  # "citation"
-                    citation_node = bibliography.citation_nodes[citation.key]
                     # backrefs only supported in same document
                     backrefs = [
                         citation_ref.citation_ref_id
