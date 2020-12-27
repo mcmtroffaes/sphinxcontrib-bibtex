@@ -21,12 +21,12 @@ bibtex_citation_xml = """
     <paragraph>
         <inline ids="id1">
             [
-            <reference internal="True" refid="bibtex-citation-testkey">
+            <reference internal="True" refid="id3">
                 <inline>
                     tes
             ]
     <paragraph ids="id2">
-        <citation backrefs="id1" docname="index" ids="bibtex-citation-testkey">
+        <citation backrefs="id1" docname="index" ids="id3">
             <label support_smartquotes="False">
                 tes
             <paragraph>

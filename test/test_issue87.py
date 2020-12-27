@@ -2,31 +2,26 @@
     test_issue87
     ~~~~~~~~~~~~
 
-    Test bibliography tags.
+    Test keyprefix feature.
 """
 
+import common
 import pytest
 
 
 @pytest.mark.sphinx('html', testroot='issue87')
-def test_issue87(app, warning):
+def test_keyprefix(app, warning):
     app.builder.build_all()
     assert not warning.getvalue()
     output = (app.outdir / "doc0.html").read_text()
-    assert (
-        'class="reference internal" href="#bibtex-citation-tag0-2009-mandel"'
-        in output)
-    assert (
-        'class="reference internal" href="#bibtex-citation-tag0-2003-evensen"'
-        in output)
-    assert 'AMan09' in output
-    assert 'AEve03' in output
+    cits = {match.group('label')
+            for match in common.html_citations().finditer(output)}
+    citrefs = {match.group('label')
+               for match in common.html_citation_refs().finditer(output)}
+    assert cits == citrefs == {'AMan09', 'AEve03'}
     output = (app.outdir / "doc1.html").read_text()
-    assert (
-        'class="reference internal" href="#bibtex-citation-tag1-2009-mandel"'
-        in output)
-    assert (
-        'class="reference internal" href="#bibtex-citation-tag1-2003-evensen"'
-        not in output)
-    assert 'BMan09' in output
-    assert 'BEve03' not in output
+    cits = {match.group('label')
+            for match in common.html_citations().finditer(output)}
+    citrefs = {match.group('label')
+               for match in common.html_citation_refs().finditer(output)}
+    assert cits == citrefs == {'BMan09'}

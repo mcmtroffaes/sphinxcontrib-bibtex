@@ -1,9 +1,21 @@
-.. _bibtex-citation-test:
+.. _id1:
 
-Some Section
-============
+Section 1
+=========
 
-:ref:`bibtex-citation-test`
+.. _id2:
+
+Section 2
+=========
+
+.. _id3:
+
+Section 3
+=========
+
+References: :ref:`id1` :ref:`id3` :ref:`id3`
+
+Citations: :cite:`Test`
 
 .. bibliography:: test.bib
    :all:

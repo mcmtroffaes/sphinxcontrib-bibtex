@@ -7,9 +7,10 @@
 """
 
 import ast  # parse(), used for filter
+import docutils.nodes
 import sphinx.util
 
-from typing import cast
+from typing import cast, Dict
 from docutils.parsers.rst import Directive, directives
 from sphinx.environment import BuildEnvironment
 
@@ -108,6 +109,21 @@ class BibliographyDirective(Directive):
                     bibfiles.append(normbibfile)
         else:
             bibfiles = list(domain.bibfiles.keys())
+        for bibfile in bibfiles:
+            env.note_dependency(bibfile)
+        # generate nodes and ids
+        keyprefix = self.options.get("keyprefix", "")
+        node = bibliography_node('')
+        self.state.document.note_explicit_target(node)
+        citation_nodes: Dict[str, docutils.nodes.citation] = {}
+        for entry in domain.get_bibliography_entries(bibfiles):
+            # we only know which citations to included at resolve stage
+            # but we need to know their ids before resolve stage
+            # so for now we generate a node, and thus, an id, for every entry
+            citation_node = docutils.nodes.citation()
+            self.state.document.note_explicit_target(citation_node)
+            citation_nodes[keyprefix + entry.key] = citation_node
+        # create bibliography object
         bibliography = BibliographyValue(
             line=self.lineno,
             list_=self.options.get("list", "citation"),
@@ -117,16 +133,13 @@ class BibliographyDirective(Directive):
                 "style", env.app.config.bibtex_default_style),
             filter_=filter_,
             labelprefix=self.options.get("labelprefix", ""),
-            keyprefix=self.options.get("keyprefix", ""),
+            keyprefix=keyprefix,
             bibfiles=bibfiles,
+            citation_nodes=citation_nodes
         )
         if bibliography.list_ not in {"bullet", "enumerated", "citation"}:
             logger.warning("unknown bibliography list type '{0}'.".format(
                 bibliography.list_))
-        for bibfile in bibfiles:
-            env.note_dependency(bibfile)
-        node = bibliography_node('')
-        self.state.document.note_explicit_target(node)
         bib_key = BibliographyKey(docname=env.docname, id_=node['ids'][0])
         assert bib_key not in domain.bibliographies
         domain.bibliographies[bib_key] = bibliography

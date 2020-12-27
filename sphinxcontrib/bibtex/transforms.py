@@ -96,7 +96,7 @@ class BibliographyTransform(SphinxPostTransform):
                     citation_node += backend.paragraph(
                         citation.formatted_entry)
                 else:  # "citation"
-                    citation_node = docutils.nodes.citation()
+                    citation_node = bibliography.citation_nodes[citation.key]
                     # backrefs only supported in same document
                     backrefs = [
                         citation_ref.citation_ref_id
@@ -110,11 +110,6 @@ class BibliographyTransform(SphinxPostTransform):
                     citation_node += backend.paragraph(
                         citation.formatted_entry)
                 citation_node['docname'] = env.docname
-                if citation.citation_id is not None:
-                    citation_node['ids'].append(citation.citation_id)
-                    # note: citation_node['names'] attribute not required
-                    self.document.note_explicit_target(
-                        citation_node, citation_node)
                 node_text_transform(citation_node, transform_url_command)
                 nodes.append(citation_node)
                 if bibliography.list_ == "enumerated":
