@@ -9,7 +9,6 @@
 
     .. autofunction:: transform_url_command
 """
-from typing import cast
 
 import docutils.nodes
 import docutils.transforms
@@ -17,8 +16,8 @@ import sphinx.util
 
 from pybtex.plugin import find_plugin
 from sphinx.transforms.post_transforms import SphinxPostTransform
+from typing import cast
 
-from .bibfile import get_bibliography_entry
 from .domain import BibtexDomain, BibliographyKey
 from .nodes import bibliography as bibliography_node
 
@@ -76,9 +75,6 @@ class BibliographyTransform(SphinxPostTransform):
             bibliography = domain.bibliographies[bib_key]
             citations = [citation for citation in domain.citations
                          if citation.bibliography_key == bib_key]
-            # locate and instantiate style and backend plugins
-            style = find_plugin(
-                'pybtex.style.formatting', bibliography.style)()
             backend = find_plugin('pybtex.backends', 'docutils')()
             # create citation nodes for all references
             if bibliography.list_ == "enumerated":
@@ -95,13 +91,10 @@ class BibliographyTransform(SphinxPostTransform):
             else:  # "citation"
                 nodes = docutils.nodes.paragraph()
             for citation in citations:
-                entry = style.format_entry(
-                    citation.entry_label,
-                    get_bibliography_entry(
-                        domain.bibfiles, citation.entry_key))
                 if bibliography.list_ in ["enumerated", "bullet"]:
                     citation_node = docutils.nodes.list_item()
-                    citation_node += backend.paragraph(entry)
+                    citation_node += backend.paragraph(
+                        citation.formatted_entry)
                 else:  # "citation"
                     citation_node = docutils.nodes.citation()
                     # backrefs only supported in same document
@@ -114,7 +107,8 @@ class BibliographyTransform(SphinxPostTransform):
                         citation_node['backrefs'] = backrefs
                     citation_node += docutils.nodes.label(
                         '', citation.label, support_smartquotes=False)
-                    citation_node += backend.paragraph(entry)
+                    citation_node += backend.paragraph(
+                        citation.formatted_entry)
                 citation_node['docname'] = env.docname
                 if citation.citation_id is not None:
                     citation_node['ids'].append(citation.citation_id)

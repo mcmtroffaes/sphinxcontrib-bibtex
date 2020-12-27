@@ -31,6 +31,7 @@ import re
 from pybtex.database import Entry
 from pybtex.plugin import find_plugin
 import pybtex.style.formatting
+from pybtex.style import FormattedEntry
 from sphinx.addnodes import pending_xref
 from sphinx.builders import Builder
 from sphinx.domains import Domain
@@ -215,8 +216,7 @@ class Citation(NamedTuple):
     bibliography_key: BibliographyKey  #: Key of its bibliography directive.
     key: str                     #: Unique citation id used for referencing.
     label: str                   #: Label (with brackets and label prefix).
-    entry_key: str               #: The original key (no prefix).
-    entry_label: str             #: The original label (no brackets or prefix).
+    formatted_entry: FormattedEntry  #: Entry as formatted by pybtex.
 
 
 class CitationRef(NamedTuple):
@@ -317,10 +317,10 @@ class BibtexDomain(Domain):
         used_labels = {}
         used_ids = set()
         for bibliography_key, bibliography in self.bibliographies.items():
-            for entry_label, entry in self.get_labelled_bibliography_entries(
+            for formatted_entry in self.get_labelled_bibliography_entries(
                     bibliography_key, docnames):
-                key = bibliography.keyprefix + entry.key
-                label = bibliography.labelprefix + entry_label
+                key = bibliography.keyprefix + formatted_entry.key
+                label = bibliography.labelprefix + formatted_entry.label
                 if bibliography.list_ != 'citation':
                     # no warning in this case, just don't generate link
                     citation_id = None
@@ -345,8 +345,7 @@ class BibtexDomain(Domain):
                     bibliography_key=bibliography_key,
                     key=key,
                     label=label,
-                    entry_key=entry.key,
-                    entry_label=entry_label,
+                    formatted_entry=formatted_entry,
                 ))
                 used_keys.add(key)
                 used_labels.setdefault(label, set()).add(key)
@@ -466,7 +465,7 @@ class BibtexDomain(Domain):
 
     def get_labelled_bibliography_entries(
             self, bibliography_key: BibliographyKey, docnames: List[str]
-            ) -> Iterable[Tuple[str, Entry]]:
+            ) -> Iterable[FormattedEntry]:
         """Get sorted bibliography entries along with their pybtex labels,
         with additional sorting applied from the pybtex style.
         """
@@ -476,6 +475,4 @@ class BibtexDomain(Domain):
         style = cast(
             pybtex.style.formatting.BaseStyle,
             find_plugin('pybtex.style.formatting', bibliography.style)())
-        sorted_entries = style.sort(entries.values())
-        labels = style.format_labels(sorted_entries)
-        return zip(labels, sorted_entries)
+        return style.format_entries(entries.values())
