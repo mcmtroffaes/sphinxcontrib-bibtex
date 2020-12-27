@@ -13,8 +13,6 @@ Another few citations: :footcite:`rockafellar:1970,1972:savage`.
 
 Cite it twice: :footcite:`1657:huygens`.
 
-Bad citation: :footcite:`keydoesnotexist`.
-
 .. [#note] A footnote.
 
 .. footbibliography::

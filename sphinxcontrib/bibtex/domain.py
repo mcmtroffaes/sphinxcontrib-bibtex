@@ -245,7 +245,7 @@ class BibtexDomain(Domain):
 
     @property
     def bibliographies(self) -> Dict[BibliographyKey, BibliographyValue]:
-        """Map storing information about each directive."""
+        """Map storing information about each bibliography directive."""
         return self.data.setdefault('bibliographies', {})  # id -> cache
 
     @property

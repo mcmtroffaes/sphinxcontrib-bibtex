@@ -10,7 +10,7 @@ import ast  # parse(), used for filter
 import docutils.nodes
 import sphinx.util
 
-from typing import cast, Dict
+from typing import cast
 from docutils.parsers.rst import Directive, directives
 from sphinx.environment import BuildEnvironment
 
