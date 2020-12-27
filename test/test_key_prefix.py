@@ -1,16 +1,10 @@
-"""
-    test_issue87
-    ~~~~~~~~~~~~
-
-    Test keyprefix feature.
-"""
-
 import common
 import pytest
 
 
-@pytest.mark.sphinx('html', testroot='issue87')
-def test_keyprefix(app, warning):
+# see issue 87
+@pytest.mark.sphinx('html', testroot='key_prefix')
+def test_key_prefix(app, warning):
     app.builder.build_all()
     assert not warning.getvalue()
     output = (app.outdir / "doc0.html").read_text()
