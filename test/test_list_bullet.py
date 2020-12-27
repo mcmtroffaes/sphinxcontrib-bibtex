@@ -15,10 +15,10 @@ def test_list_bullet(app, warning):
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     assert re.search(
-        '<ul .* id="[^"]+">'
-        '.*<li>.*Akkerdju.*</li>'
-        '.*<li>.*Bro.*</li>'
-        '.*<li>.*Chap.*</li>'
-        '.*<li>.*Dude.*</li>'
+        '<ul'
+        '.*<li.*Akkerdju.*</li>'
+        '.*<li.*Bro.*</li>'
+        '.*<li.*Chap.*</li>'
+        '.*<li.*Dude.*</li>'
         '.*</ul>',
         output, re.DOTALL)
