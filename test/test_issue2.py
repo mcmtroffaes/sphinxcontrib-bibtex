@@ -22,4 +22,4 @@ def test_mixing_citation_styles(app, warning):
     assert citation_ref.docname == 'adoc1'
     assert len(domain.citations) == 1
     citation = domain.citations.pop()
-    assert citation.entry_label == '1'
+    assert citation.formatted_entry.label == '1'
