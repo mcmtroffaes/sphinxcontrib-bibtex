@@ -234,7 +234,7 @@ class BibtexDomain(Domain):
 
     name = 'cite'
     label = 'BibTeX Citations'
-    data_version = 1
+    data_version = 2
 
     @property
     def bibfiles(self) -> Dict[str, BibFile]:
