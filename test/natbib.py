@@ -1,13 +1,13 @@
 # patched version of Weston Nielson's sphinx-natbib
 
 # changes:
-#   * fixed some typos and flake warnings, add a few type annotations
-#   * removed unused latex_to_nodes function and unused SUBSUP_RE variable
+#   * fix some typos and flake warnings, add a few type annotations
+#   * remove unused latex_to_nodes and SUBSUP_RE
 #   * remove latex special casing to fix build error
 #   * simplify super calls
 #   * fix refdoc bug
 #   * use XRefRole.result_nodes instead of XRefRole.__call__
-#   * use dictionary as sorted set (assuming Python 3.6+)
+#   * use dictionary as ordered set (assuming Python 3.6+)
 
 from typing import Tuple, List, cast
 

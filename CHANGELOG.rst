@@ -2,9 +2,11 @@
 ------------------------
 
 * The extension no longer relies on the ``bibtex.json`` method. Instead, the
-  extension uses check_consistency to identify all citation cross-references,
-  resolve_xref for citation references, and a SphinxPostTransform for
-  bibliography citations, so that ``bibtex.json`` is no longer needed and thus
+  extension now postpones identifying all citation cross-references to
+  Sphinx's consistency check phase.
+  The actual citation references and bibliography citations
+  are then generated in the resolve phase using post-transforms.
+  As a result, ``bibtex.json`` is no longer needed and thus
   Sphinx no longer needs to run twice as in the past if the file did not exist
   (closes issues #214 and #215).
   *Thanks to everyone who chimed in on this, especially everyone who
