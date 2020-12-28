@@ -1,18 +1,18 @@
-# -*- coding: utf-8 -*-
-"""
-    test_latex_refs
-    ~~~~~~~~~~~~~~~
-
-    Check that LaTeX backend produces correct references.
-"""
-
+import common
 import pytest
 
 
 @pytest.mark.sphinx('latex', testroot='latex_refs')
 def test_latex_refs(app, warning):
-    app.builder.build_all()
+    app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "test.tex").read_text(encoding='utf-8')
-    assert r'\sphinxcite{index:huygens}' in output
-    assert r'\bibitem[Huy57]{index:huygens}' in output
+    output = (app.outdir / "test.tex").read_text()
+    assert len(common.latex_citations().findall(output)) == 1
+    assert len(common.latex_citation_refs().findall(output)) == 1
+    match = common.latex_citations().search(output)
+    match_ref = common.latex_citation_refs().search(output)
+    assert match.group('label') == 'Huy57'
+    assert match.group('docname') == 'index'
+    assert "De ratiociniis in ludo aleæ." in match.group('text')
+    assert match_ref.group('refid') == match.group('id_')
+    assert match_ref.group('docname') == 'index'

@@ -7,16 +7,16 @@
 """
 
 import ast  # parse(), used for filter
-from typing import cast
-
+import docutils.nodes
 import sphinx.util
 
+from typing import cast
 from docutils.parsers.rst import Directive, directives
-from sphinx.util.console import standout
+from sphinx.environment import BuildEnvironment
 
 from .bibfile import normpath_filename
-from .cache import BibliographyCache, BibtexDomain
-from .nodes import bibliography
+from .domain import BibliographyValue, BibtexDomain, BibliographyKey
+from .nodes import bibliography as bibliography_node
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -71,29 +71,20 @@ class BibliographyDirective(Directive):
         node that is to be transformed to the entries of the
         bibliography.
         """
-        env = self.state.document.settings.env
+        env = cast(BuildEnvironment, self.state.document.settings.env)
         domain = cast(BibtexDomain, env.get_domain('cite'))
-        # create id and cache for this node
-        # this id will be stored with the node
-        # and is used to look up additional data in env.bibtex_cache
-        # (implementation note: new_serialno only guarantees unique
-        # ids within a single document, but we need the id to be
-        # unique across all documents, so we also include the docname
-        # in the id)
-        id_ = 'bibtex-bibliography-%s-%s' % (
-            env.docname, env.new_serialno('bibtex'))
         if "filter" in self.options:
             if "all" in self.options:
-                logger.warning(standout(":filter: overrides :all:"))
+                logger.warning(":filter: overrides :all:")
             if "notcited" in self.options:
-                logger.warning(standout(":filter: overrides :notcited:"))
+                logger.warning(":filter: overrides :notcited:")
             if "cited" in self.options:
-                logger.warning(standout(":filter: overrides :cited:"))
+                logger.warning(":filter: overrides :cited:")
             try:
                 filter_ = ast.parse(self.options["filter"])
             except SyntaxError:
                 logger.warning(
-                    standout("syntax error in :filter: expression") +
+                    "syntax error in :filter: expression" +
                     " (" + self.options["filter"] + "); "
                     "the option will be ignored"
                 )
@@ -106,30 +97,56 @@ class BibliographyDirective(Directive):
             # the default filter: include only cited entries
             filter_ = ast.parse("cited")
         if self.arguments:
-            bibfiles = [normpath_filename(env, bibfile)
-                        for bibfile in self.arguments[0].split()]
+            bibfiles = []
+            for bibfile in self.arguments[0].split():
+                normbibfile = normpath_filename(env, bibfile)
+                if normbibfile not in domain.bibfiles:
+                    logger.warning(
+                        "{0} not found or not configured"
+                        " in bibtex_bibfiles".format(bibfile),
+                        location=(env.docname, self.lineno))
+                else:
+                    bibfiles.append(normbibfile)
         else:
             bibfiles = list(domain.bibfiles.keys())
-        bibcache = BibliographyCache(
-            docname=env.docname,
-            list_=self.options.get("list", "citation"),
+        for bibfile in bibfiles:
+            env.note_dependency(bibfile)
+        # generate nodes and ids
+        keyprefix = self.options.get("keyprefix", "")
+        list_ = self.options.get("list", "citation")
+        if list_ not in {"bullet", "enumerated", "citation"}:
+            logger.warning(
+                "unknown bibliography list type '{0}'.".format(list_))
+            list_ = "citation"
+        if list_ in {"bullet", "enumerated"}:
+            citation_node_class = docutils.nodes.list_item
+        else:
+            citation_node_class = docutils.nodes.citation
+        node = bibliography_node('')
+        self.state.document.note_explicit_target(node, node)
+        # we only know which citations to included at resolve stage
+        # but we need to know their ids before resolve stage
+        # so for now we generate a node, and thus, an id, for every entry
+        citation_nodes = {keyprefix + entry.key: citation_node_class()
+                          for entry in domain.get_entries(bibfiles)}
+        for citation_node in citation_nodes.values():
+            self.state.document.note_explicit_target(
+                citation_node, citation_node)
+        # create bibliography object
+        bibliography = BibliographyValue(
+            line=self.lineno,
+            list_=list_,
             enumtype=self.options.get("enumtype", "arabic"),
             start=self.options.get("start", 1),
             style=self.options.get(
                 "style", env.app.config.bibtex_default_style),
             filter_=filter_,
             labelprefix=self.options.get("labelprefix", ""),
-            keyprefix=self.options.get("keyprefix", ""),
-            labels={},
+            keyprefix=keyprefix,
             bibfiles=bibfiles,
+            citation_nodes=citation_nodes
         )
-        if bibcache.list_ not in {"bullet", "enumerated", "citation"}:
-            logger.warning(
-                "unknown bibliography list type '{0}'.".format(bibcache.list_))
-        for bibfile in bibfiles:
-            env.note_dependency(bibfile)
-        # if citations change, bibtex.json changes, and so might entries
-        env.note_dependency(
-            normpath_filename(env, "/bibtex.json"))
-        domain.bibliographies[id_] = bibcache
-        return [bibliography('', ids=[id_])]
+        bib_key = BibliographyKey(docname=env.docname, id_=node['ids'][0])
+        assert bib_key not in domain.bibliographies
+        domain.bibliographies[bib_key] = bibliography
+        return [node]

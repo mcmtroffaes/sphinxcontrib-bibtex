@@ -3,22 +3,23 @@
         :show-inheritance:
 
         .. autoattribute:: default_priority
-        .. automethod:: apply
+        .. automethod:: run
 
     .. autofunction:: node_text_transform
 
     .. autofunction:: transform_url_command
 """
-from typing import cast
 
 import docutils.nodes
 import docutils.transforms
 import sphinx.util
 
 from pybtex.plugin import find_plugin
+from sphinx.transforms.post_transforms import SphinxPostTransform
+from typing import cast
 
-from .cache import BibtexDomain
-from .nodes import bibliography
+from .domain import BibtexDomain, BibliographyKey
+from .nodes import bibliography as bibliography_node
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -51,74 +52,67 @@ def transform_url_command(textnode):
         return textnode
 
 
-def get_docnames(env):
-    rel = env.collect_relations()
-    docname = env.config.master_doc
-    while docname is not None:
-        yield docname
-        parent, prevdoc, nextdoc = rel[docname]
-        docname = nextdoc
-
-
-class BibliographyTransform(docutils.transforms.Transform):
-
+class BibliographyTransform(SphinxPostTransform):
     """A docutils transform to generate citation entries for
     bibliography nodes.
     """
 
-    # transform must be applied before references are resolved
-    default_priority = 10
-    """Priority of the transform. See
-    https://docutils.sourceforge.io/docs/ref/transforms.html
-    """
+    # transform must be applied before sphinx runs its ReferencesResolver
+    # which has priority 10, so when ReferencesResolver calls the cite domain
+    # resolve_xref, the target is present and all will work fine
+    default_priority = 5
 
-    def apply(self):
+    def run(self, **kwargs):
         """Transform each
         :class:`~sphinxcontrib.bibtex.nodes.bibliography` node into a
         list of citations.
         """
         env = self.document.settings.env
-        docnames = list(get_docnames(env))
-        for bibnode in self.document.traverse(bibliography):
-            domain = cast(BibtexDomain, env.get_domain('cite'))
-            id_ = bibnode['ids'][0]
-            bibcache = domain.bibliographies[id_]
-            entries = domain.get_bibliography_entries(
-                id_=id_, warn=logger.warning, docnames=docnames)
-            # locate and instantiate style and backend plugins
-            style = find_plugin('pybtex.style.formatting', bibcache.style)()
+        domain = cast(BibtexDomain, env.get_domain('cite'))
+        for bibnode in self.document.traverse(bibliography_node):
+            bib_key = BibliographyKey(
+                docname=env.docname, id_=bibnode['ids'][0])
+            bibliography = domain.bibliographies[bib_key]
+            citations = [citation for citation in domain.citations
+                         if citation.bibliography_key == bib_key]
             backend = find_plugin('pybtex.backends', 'docutils')()
             # create citation nodes for all references
-            if bibcache.list_ == "enumerated":
+            if bibliography.list_ == "enumerated":
                 nodes = docutils.nodes.enumerated_list()
-                nodes['enumtype'] = bibcache.enumtype
-                if bibcache.start >= 1:
-                    nodes['start'] = bibcache.start
-                    domain.enum_count[env.docname] = bibcache.start
+                nodes['enumtype'] = bibliography.enumtype
+                if bibliography.start >= 1:
+                    nodes['start'] = bibliography.start
+                    env.temp_data['bibtex_enum_count'] = bibliography.start
                 else:
-                    nodes['start'] = domain.enum_count[env.docname]
-            elif bibcache.list_ == "bullet":
+                    nodes['start'] = env.temp_data.setdefault(
+                        'bibtex_enum_count', 1)
+            elif bibliography.list_ == "bullet":
                 nodes = docutils.nodes.bullet_list()
             else:  # "citation"
                 nodes = docutils.nodes.paragraph()
-            # remind: style.format_entries modifies entries in unpickable way
-            for entry in style.format_entries(entries):
-                if bibcache.list_ in ["enumerated", "bullet"]:
-                    citation = docutils.nodes.list_item()
-                    citation += backend.paragraph(entry)
+            for citation in citations:
+                citation_node = bibliography.citation_nodes[citation.key]
+                if bibliography.list_ in {"enumerated", "bullet"}:
+                    citation_node += backend.paragraph(
+                        citation.formatted_entry)
                 else:  # "citation"
-                    citation = backend.citation(entry, self.document)
-                    citation['classes'].append('bibtex')
-                    # backend.citation(...) uses entry.key as citation label
-                    # we change it to entry.label later onwards
-                    # but we must note the entry.label now;
-                    # at this point, we also already prefix the label
-                    key = citation[0].astext()
-                    bibcache.labels[key] = bibcache.labelprefix + entry.label
-                node_text_transform(citation, transform_url_command)
-                nodes += citation
-                if bibcache.list_ == "enumerated":
-                    domain.enum_count[env.docname] += 1
+                    # backrefs only supported in same document
+                    backrefs = [
+                        citation_ref.citation_ref_id
+                        for citation_ref in domain.citation_refs
+                        if env.docname == citation_ref.docname
+                        and citation.key in citation_ref.keys]
+                    if backrefs:
+                        citation_node['backrefs'] = backrefs
+                    citation_node += docutils.nodes.label(
+                        '', citation.label, support_smartquotes=False)
+                    citation_node += backend.paragraph(
+                        citation.formatted_entry)
+                citation_node['docname'] = env.docname
+                node_text_transform(citation_node, transform_url_command)
+                nodes.append(citation_node)
+                if bibliography.list_ == "enumerated":
+                    env.temp_data['bibtex_enum_count'] += 1
             if env.bibtex_bibliography_header is not None:
                 nodes = [env.bibtex_bibliography_header.deepcopy(), nodes]
             bibnode.replace_self(nodes)

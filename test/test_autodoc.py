@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
     test_autodoc
     ~~~~~~~~~~~~
@@ -6,8 +5,8 @@
     Test with autodoc.
 """
 
+import common
 import pytest
-import re
 
 
 @pytest.mark.sphinx('html', testroot='autodoc')
@@ -15,48 +14,25 @@ def test_autodoc(app, warning):
     app.builder.build_all()
     assert not warning.getvalue()
     output = (app.outdir / "doc_cite.html").read_text()
-    assert len(re.findall("\\[One\\]", output)) == 1
-    assert len(re.findall("\\[Two\\]", output)) == 1
-    assert len(re.findall("\\[Thr\\]", output)) == 1
-    assert len(re.findall("\\[Fou\\]", output)) == 1
-    assert len(re.findall("\\[Fiv\\]", output)) == 1
-    assert len(re.findall("\\[Six\\]", output)) == 1
-    assert len(re.findall("\\[Sev\\]", output)) == 1
-    assert len(re.findall("\\[Eig\\]", output)) == 1
-    assert len(re.findall("\\[Nin\\]", output)) == 1
-    assert len(re.findall("\\[Ten\\]", output)) == 1
-    assert len(re.findall("\\[Ele\\]", output)) == 1
-    assert len(re.findall("Een", output)) == 1
-    assert len(re.findall("Twee", output)) == 1
-    assert len(re.findall("Drie", output)) == 1
-    assert len(re.findall("Vier", output)) == 1
-    assert len(re.findall("Vijf", output)) == 1
-    assert len(re.findall("Zes", output)) == 1
-    assert len(re.findall("Zeven", output)) == 1
-    assert len(re.findall("Acht", output)) == 1
-    assert len(re.findall("Negen", output)) == 1
-    assert len(re.findall("Tien", output)) == 1
-    assert len(re.findall("Elf", output)) == 1
+    labels = ['One', 'Two', 'Thr', 'Fou', 'Fiv', 'Six', 'Sev', 'Eig', 'Nin',
+              'Ten', 'Ele']
+    titles = ['Een', 'Twee', 'Drie', 'Vier', 'Vijf', 'Zes', 'Zeven', 'Acht',
+              'Negen', 'Tien', 'Elf']
+    for label, title in zip(labels, titles):
+        assert len(common.html_citation_refs(label=label).findall(output)) == 1
+        assert len(common.html_citations(label=label).findall(output)) == 1
+        match_ref = common.html_citation_refs(label=label).search(output)
+        match = common.html_citations(label=label).search(output)
+        assert match_ref
+        assert match
+        assert match_ref.group('refid') == match.group('id_')
+        assert title in match.group('text')
     output2 = (app.outdir / "doc_footcite.html").read_text()
-    assert len(re.findall(">1<", output2)) == 2
-    assert len(re.findall(">2<", output2)) == 2
-    assert len(re.findall(">3<", output2)) == 2
-    assert len(re.findall(">4<", output2)) == 2
-    assert len(re.findall(">5<", output2)) == 2
-    assert len(re.findall(">6<", output2)) == 2
-    assert len(re.findall(">7<", output2)) == 2
-    assert len(re.findall(">8<", output2)) == 2
-    assert len(re.findall(">9<", output2)) == 2
-    assert len(re.findall(">10<", output2)) == 2
-    assert len(re.findall(">11<", output2)) == 2
-    assert len(re.findall("Een", output2)) == 1
-    assert len(re.findall("Twee", output2)) == 1
-    assert len(re.findall("Drie", output2)) == 1
-    assert len(re.findall("Vier", output2)) == 1
-    assert len(re.findall("Vijf", output2)) == 1
-    assert len(re.findall("Zes", output2)) == 1
-    assert len(re.findall("Zeven", output2)) == 1
-    assert len(re.findall("Acht", output2)) == 1
-    assert len(re.findall("Negen", output2)) == 1
-    assert len(re.findall("Tien", output2)) == 1
-    assert len(re.findall("Elf", output2)) == 1
+    assert len(common.html_footnote_refs().findall(output2)) == 11
+    for title in titles:
+        text = ".*" + title + ".*"
+        assert len(common.html_footnotes(text=text).findall(output2)) == 1
+        match = common.html_footnotes(text=text).search(output2)
+        assert match
+        id_ = match.group('id_')
+        assert len(common.html_footnote_refs(refid=id_).findall(output2)) == 1

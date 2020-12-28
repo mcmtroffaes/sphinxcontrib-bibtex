@@ -1,0 +1,108 @@
+app.build
+  builder.build(to_build, ...) [to_build is a list of files]
+    builder.read() [via updated_docnames = set(self.read())]
+      events.emit("env-get-outdated", added, changed, removed)
+      events.emit('env-before-read-docs', self.env, docnames)
+      builder._read_serial(docnames)
+        for doc in docnames:
+          events.emit('env-purge-doc', self.env, docname)
+          env.clear_doc(docname)
+            domain.clear_doc(docname) [for every domain]
+          builder.read_doc(docname)
+            env.prepare_settings
+              env.temp_data['docname']
+              env.temp_data['default_role']
+              env.temp_data['default_domain']
+            sphinx.io.read_doc(app, env, doc2path(docname))
+            reader.read(...) [reads source and then calls...]
+              parser.parse(...) [parser is sphinx.parsers.RSTParser]
+              statemachine.run(...) [statemachine is docutils.parsers.rst.states.RSTStateMachine]
+                statemachine.footnote_reference(...)
+                statemachine.citation(...)
+<document><paragraph><citation_reference ids="id1" refname="citationlabel">CitationLabel</citation_reference></paragraph><citation ids="citationlabel" names="citationlabel"><label>CitationLabel</label><paragraph>Citation Text.</paragraph></citation></document>
+            publisher.apply_transforms
+              [a lot of stuff here, a few of interest:]
+              sphinx.transforms.UnreferencedFootnotesDetector
+              sphinx.domains.citation.CitationDefinitionTransform
+                [keeps track of all citation nodes across all documents]
+                citation_node['docname'] = env.docname
+                domain['citation'].note_citation
+                  domaindata['citations'][label_node.astext()] = (citation_node['docname'], citation_node['ids'][0], citation_node.line) 
+                label_node['support_smartquotes'] = False
+              sphinx.domains.citation.CitationReferenceTransform
+                [keeps track of citation_reference nodes, and replaces them with pending_xref so domain['citation'].resolve_xref will catch them later]
+                target = citation_reference_node.astext()
+                ref = pending_xref(target, refdomain='citation', reftype='ref',
+                                   reftarget=target, refwarn=True,
+                                   support_smartquotes=False,
+                                   ids=citation_reference_node["ids"],
+                                   classes=citation_reference_node.get('classes', []))
+                ref += docutils.nodes.inline(target, '[%s]' % target)
+                copy_source_info(citation_reference_node, ref)
+                citation_reference_node.replace_self(ref)
+                domain['citation'].note_citation_reference
+                  self.citation_refs.add(target)
+              sphinx.transforms.references.SphinxDomains
+                domain.process_doc [for each domain]
+              sphinx.transforms.DoctreeReadEvent
+                emit('doctree-read', self.document)
+            [doctree is now created]
+            env.events.emit('source-read', env.docname, arg)
+            env.temp_data.clear()
+            builder.write_doctree [saves doctree to pickled file]
+    [back into the builder.read function]
+    events.emit('env-updated', builder.env)
+  [back into the builder.build function]
+  pickle.dump(builder.env, f, pickle.HIGHEST_PROTOCOL)
+  builder.env.check_consistency()
+    domain.check_consistency() [for every domain]
+  builder.write(...)
+    for doc in docnames:
+      env.get_and_resolve_doctree(doc, env)
+        env.apply_post_transforms
+          sphinx.builders.latex.transforms.CitationReferenceTransform
+          sphinx.transforms.post_transforms.ReferencesResolver
+            for each pending_xref node:
+              contnode = node[0]
+              reftype = node['reftype'] [= 'ref' in standard run, see above]
+              reftarget = node['reftarget'] [this is the label in standard run]
+              refdoc = env.docname or node['refdoc'] [doc of the citation_reference_node, if same as env.docname then no need to specify]
+              domain.resolve_xref(env, refdoc, self.app.builder,
+                                  reftype, reftarget, node, contnode)
+                [for the citation domain, this does the following]
+                citation_node_docname, citation_node_id, citation_node_line = domaindata['citation'].citations[reftarget]
+                make_refnode(builder, refdoc [= env.docname], citation_node_docname, citation_node_id, contnode)
+                  docutils.nodes.reference('', '', internal=True)
+                  # here the uri is constructed across documents etc.
+                [the pending ref is replaced with this reference node]
+                [if the resolve_xref returns None = missing link, if it raises NoUri, then no url is generated but no error]
+          sphinx.builders.latex.transforms.BibliographyTransform
+
+Transform Stages For Docutils Test
+==================================
+
+* docutils reader:
+  <citation_reference ids="id1" refname="citationlabel">CitationLabel</citation_reference>
+  <citation ids="citationlabel" names="citationlabel"><label>CitationLabel</label><paragraph>Citation Text.</paragraph></citation>
+
+* sphinx.domains.citation.CitationDefinitionTransform
+  <citation docname="index" ids="citationlabel" names="citationlabel"><label support_smartquotes="False">CitationLabel</label><paragraph>Citation Text.</paragraph></citation>
+
+* sphinx.domains.citation.CitationReferenceTransform
+  <pending_xref ids="id1" refdomain="citation" reftarget="CitationLabel" reftype="ref" refwarn="True" support_smartquotes="False"><inline>[CitationLabel]</inline></pending_xref>
+
+* sphinx.transforms.post_transforms.ReferencesResolver
+  <reference ids="id1" internal="True" refid="citationlabel"><inline>[CitationLabel]</inline></reference>
+
+Transform Stages For BibTeX Test
+================================
+
+* docutils reader:
+  <pending_xref ids="id1" refdoc="index" refdomain="cite" refexplicit="False" reftarget="testkey" reftype="cite" refwarn="False"><literal classes="xref cite">testkey</literal></pending_xref>
+  <bibliography ids="['bibtex-bibliography-index-1']"/>
+
+* sphinxcontrib.bibtex.transforms.BibliographyTransform
+  <paragraph ids="bibtex-bibliography-index-1"><citation docname="index" ids="bibtex-citation-testkey" names="bibtex-citation-testkey"><label>Las20</label><paragraph>Firstname Lastname. The title. 2020.</paragraph></citation></paragraph>
+
+* sphinx.transforms.post_transforms.ReferencesResolver
+  <inline classes="cite" ids="id1"><reference internal="True" refid="bibtex-citation-testkey">[Las20]</reference></inline>

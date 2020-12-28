@@ -3,12 +3,13 @@
 
         .. automethod:: run
 """
+
 from typing import cast
 
 from docutils.parsers.rst import Directive
 from sphinx.environment import BuildEnvironment
 
-from .cache import BibtexDomain
+from .domain import BibtexDomain
 from .foot_nodes import footbibliography
 
 

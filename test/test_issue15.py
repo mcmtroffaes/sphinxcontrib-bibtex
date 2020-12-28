@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
     test_issue15
     ~~~~~~~~~~~~
@@ -11,7 +10,7 @@ import re
 
 
 @pytest.mark.sphinx('html', testroot='issue15')
-def test_duplicate_label(app, warning):
+def test_entries_order(app, warning):
     app.builder.build_all()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
