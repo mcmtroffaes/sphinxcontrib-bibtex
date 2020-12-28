@@ -1,5 +1,33 @@
-2.0.1 (in development)
-----------------------
+2.1.0 (28 December 2020)
+------------------------
+
+* The extension no longer relies on the ``bibtex.json`` method. Instead, the
+  extension uses check_consistency to identify all citation cross-references,
+  resolve_xref for citation references, and a SphinxPostTransform for
+  bibliography citations, so that ``bibtex.json`` is no longer needed and thus
+  Sphinx no longer needs to run twice as in the past if the file did not exist
+  (closes issues #214 and #215).
+  *Thanks to everyone who chimed in on this, especially everyone who
+  made helpful suggestions to find better implementation approaches,
+  and everyone who helped with testing.*
+
+* Citations with multiple keys will now reside in the same bracket
+  (closes issue #94).
+
+* Consistent use of doctutils note_explicit_target to set ids, to ensure no
+  clashing ids.
+
+* Improved and robustified test suit, using regular expressions to verify
+  generated html.
+
+* The test suite now includes a patched version of the awesome but abandoned
+  sphinx-natbib extension, to help comparing and testing implementations and
+  features.
+  The long term intention is to fully support sphinx-natbib style citations.
+
+* **BACKWARD INCOMPATIBLE**
+  The API has been refactored to accommodate the new design.
+  Refer to the API documentation for details.
 
 2.0.0 (12 December 2020)
 ------------------------

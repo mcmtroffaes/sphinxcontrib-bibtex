@@ -16,7 +16,9 @@ For formatting, the extension relies on
 `pybtex <https://pybtex.org/>`_
 written by Andrey Golovizin.
 The extension is inspired by Matthew Brett's
-`bibstuff.sphinxext.bibref <https://github.com/matthew-brett/bibstuff>`_.
+`bibstuff.sphinxext.bibref <https://github.com/matthew-brett/bibstuff>`_
+and Weston Nielson's
+`sphinx-natbib <https://github.com/mcmtroffaes/sphinxcontrib-bibtex/blob/develop/test/natbib.py>`_.
 
 * Download: https://pypi.org/project/sphinxcontrib-bibtex/#files
 

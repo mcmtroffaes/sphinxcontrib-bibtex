@@ -16,14 +16,21 @@ If you know of any other, leave a message on the issue tracker.
   `dschwilk/bibstuff <https://github.com/dschwilk/bibstuff>`_.
 
 * Weston Nielson's
-  sphinx-natbib.
-  Similar to sphinxcontrib-bibtex but appears to be stalled in alpha stage.
-  Interestingly, supports natbib-style citations.
-  Apparently no longer maintained,
+  sphinx-natbib. This extension is
+  similar to sphinxcontrib-bibtex,
+  and aims to support `natbib <https://ctan.org/pkg/natbib>`_
+  style citations.
+  Sadly, sphinx-natbib appears no longer maintained
   and the original repository is no longer available.
-  The most recent fork appears to be at
-  `github.com/f-i/sphinx-natbib <https://github.com/f-i/sphinx-natbib>`_.
+  A `patched version of sphinx-natbib
+  <https://github.com/mcmtroffaes/sphinxcontrib-bibtex/blob/develop/test/natbib.py>`_,
+  with various bug fixes,
+  is maintained in the test suite of sphinxcontrib-bibtex,
+  for the purpose of comparison.
+  Additionally, a few forks of the original repository
+  can be `found on github
+  <https://github.com/search?q=sphinx-natbib>`_.
 
 * Jeff Terrace's Sphinx Thesis Resource
   `sphinxtr <https://github.com/jterrace/sphinxtr>`_,
-  a fork of Sphinx which includes a fork of sphinx-natbib.
+  is a fork of Sphinx which includes a fork of sphinx-natbib.
