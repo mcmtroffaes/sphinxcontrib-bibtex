@@ -55,7 +55,7 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_transform(FootBibliographyTransform)
 
     return {
-        'env_version': 5,
+        'env_version': 6,
         'parallel_read_safe': True,
         'parallel_write_safe': True,
         }
