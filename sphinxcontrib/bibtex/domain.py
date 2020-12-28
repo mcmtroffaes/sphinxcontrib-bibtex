@@ -19,7 +19,7 @@
 """
 
 import ast
-from typing import List, Dict, NamedTuple, cast, Optional, Iterable, Tuple, Set
+from typing import List, Dict, NamedTuple, cast, Iterable, Tuple, Set
 
 import docutils.frontend
 import docutils.nodes
@@ -213,11 +213,11 @@ class BibliographyValue(NamedTuple):
 
 class Citation(NamedTuple):
     """Information about a citation."""
-    citation_id: Optional[str]   #: Unique id of this citation.
+    citation_id: str                   #: Unique id of this citation.
     bibliography_key: BibliographyKey  #: Key of its bibliography directive.
-    key: str                     #: Unique citation id used for referencing.
-    label: str                   #: Label (with brackets and label prefix).
-    formatted_entry: FormattedEntry  #: Entry as formatted by pybtex.
+    key: str                           #: Key (with prefix).
+    label: str                         #: Label (with prefix).
+    formatted_entry: FormattedEntry    #: Entry as formatted by pybtex.
 
 
 class CitationRef(NamedTuple):
@@ -314,33 +314,27 @@ class BibtexDomain(Domain):
         # known when resolve_xref is called.
         docnames = list(get_docnames(self.env))
         # we keep track of this to quickly check for duplicates
-        used_keys = set()
+        used_keys: Set[str] = set()
         used_labels: Dict[str, Set[str]] = {}
         for bibliography_key, bibliography in self.bibliographies.items():
             for formatted_entry in self.get_formatted_entries(
                     bibliography_key, docnames):
                 key = bibliography.keyprefix + formatted_entry.key
                 label = bibliography.labelprefix + formatted_entry.label
-                if bibliography.list_ != 'citation':
-                    # no warning in this case, just don't generate link
-                    citation_id = None
-                elif key in used_keys:
+                if bibliography.list_ == 'citation' and key in used_keys:
                     logger.warning(
                         'duplicate citation for key %s' % key,
                         location=(bibliography_key.docname, bibliography.line))
-                    # no id for this one
-                    citation_id = None
-                else:
-                    citation_id = bibliography.citation_nodes[key]['ids'][0]
                 self.citations.append(Citation(
-                    citation_id=citation_id,
+                    citation_id=bibliography.citation_nodes[key]['ids'][0],
                     bibliography_key=bibliography_key,
                     key=key,
                     label=label,
                     formatted_entry=formatted_entry,
                 ))
-                used_keys.add(key)
-                used_labels.setdefault(label, set()).add(key)
+                if bibliography.list_ == 'citation':
+                    used_keys.add(key)
+                    used_labels.setdefault(label, set()).add(key)
         for label, keys in used_labels.items():
             if len(keys) > 1:
                 logger.warning(
