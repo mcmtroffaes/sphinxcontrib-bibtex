@@ -19,7 +19,7 @@
 * Consistent use of doctutils note_explicit_target to set ids, to ensure no
   clashing ids.
 
-* Improved and robustified test suit, using regular expressions to verify
+* Improved and robustified test suite, using regular expressions to verify
   generated html.
 
 * The test suite now includes a patched version of the awesome but abandoned
