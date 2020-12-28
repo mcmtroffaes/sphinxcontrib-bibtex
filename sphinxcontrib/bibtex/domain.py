@@ -229,8 +229,7 @@ class CitationRef(NamedTuple):
 
 
 class BibtexDomain(Domain):
-
-    """Global bibtex extension information cache."""
+    """Sphinx domain for the bibtex extension."""
 
     name = 'cite'
     label = 'BibTeX Citations'
