@@ -316,7 +316,6 @@ class BibtexDomain(Domain):
         # we keep track of this to quickly check for duplicates
         used_keys = set()
         used_labels: Dict[str, Set[str]] = {}
-        used_ids = set()
         for bibliography_key, bibliography in self.bibliographies.items():
             for formatted_entry in self.get_formatted_entries(
                     bibliography_key, docnames):
@@ -342,7 +341,6 @@ class BibtexDomain(Domain):
                 ))
                 used_keys.add(key)
                 used_labels.setdefault(label, set()).add(key)
-                used_ids.add(citation_id)
         for label, keys in used_labels.items():
             if len(keys) > 1:
                 logger.warning(
