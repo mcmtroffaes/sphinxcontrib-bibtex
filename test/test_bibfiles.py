@@ -91,7 +91,8 @@ def test_bibfiles_encoding(app, warning):
 def test_bibfiles_encoding_bad(make_app, app_params):
     args, kwargs = app_params
     with pytest.raises(PybtexError, match="can't decode byte 0xc4"):
-        make_app(*args, **kwargs)
+        # note: assignment is needed for pytest
+        app = make_app(*args, **kwargs)  # noqa: F841
 
 
 @pytest.mark.sphinx('html', testroot='bibfiles_encoding',
@@ -99,4 +100,5 @@ def test_bibfiles_encoding_bad(make_app, app_params):
 def test_bibfiles_encoding_invalid(make_app, app_params):
     args, kwargs = app_params
     with pytest.raises(LookupError, match="unknown encoding"):
-        make_app(*args, **kwargs)
+        # note: assignment is needed for pytest
+        app = make_app(*args, **kwargs)  # noqa: F841
