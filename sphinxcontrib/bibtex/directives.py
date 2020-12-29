@@ -122,7 +122,7 @@ class BibliographyDirective(Directive):
             citation_node_class = docutils.nodes.list_item
         else:
             citation_node_class = docutils.nodes.citation
-        node = bibliography_node('')
+        node = bibliography_node('', docname=env.docname)
         self.state.document.note_explicit_target(node, node)
         # we only know which citations to included at resolve stage
         # but we need to know their ids before resolve stage
