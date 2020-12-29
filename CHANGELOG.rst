@@ -3,6 +3,8 @@
 
 * Fix latex builder KeyError exception (see issue #221, reported by jedbrown).
 
+* Fix citation references across documents in latex build.
+
 2.1.0 (28 December 2020)
 ------------------------
 
