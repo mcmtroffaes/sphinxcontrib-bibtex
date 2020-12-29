@@ -70,8 +70,10 @@ class BibliographyTransform(SphinxPostTransform):
         env = self.document.settings.env
         domain = cast(BibtexDomain, env.get_domain('cite'))
         for bibnode in self.document.traverse(bibliography_node):
+            # reminder: env.docname may be equal to 'index' instead of
+            # bibnode['docname'] in post-transform phase (e.g. latex builder)
             bib_key = BibliographyKey(
-                docname=env.docname, id_=bibnode['ids'][0])
+                docname=bibnode['docname'], id_=bibnode['ids'][0])
             bibliography = domain.bibliographies[bib_key]
             citations = [citation for citation in domain.citations
                          if citation.bibliography_key == bib_key]
@@ -100,7 +102,7 @@ class BibliographyTransform(SphinxPostTransform):
                     backrefs = [
                         citation_ref.citation_ref_id
                         for citation_ref in domain.citation_refs
-                        if env.docname == citation_ref.docname
+                        if bib_key.docname == citation_ref.docname
                         and citation.key in citation_ref.keys]
                     if backrefs:
                         citation_node['backrefs'] = backrefs
@@ -108,7 +110,7 @@ class BibliographyTransform(SphinxPostTransform):
                         '', citation.label, support_smartquotes=False)
                     citation_node += backend.paragraph(
                         citation.formatted_entry)
-                citation_node['docname'] = env.docname
+                citation_node['docname'] = bib_key.docname
                 node_text_transform(citation_node, transform_url_command)
                 nodes.append(citation_node)
                 if bibliography.list_ == "enumerated":

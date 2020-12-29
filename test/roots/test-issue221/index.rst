@@ -1,0 +1,4 @@
+:cite:`testkey`
+
+.. toctree::
+   sources
