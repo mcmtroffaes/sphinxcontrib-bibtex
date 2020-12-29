@@ -1,16 +1,9 @@
-"""
-    test_filter
-    ~~~~~~~~~~~
-
-    Test filter option.
-"""
-
 import pytest
 
 
 @pytest.mark.sphinx('html', testroot='filter')
 def test_filter(app, warning):
-    app.builder.build_all()
+    app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     assert 'Tralalala' in output
@@ -56,3 +49,23 @@ def test_filter(app, warning):
     assert 'Tralalala' not in output
     assert 'ideetje' not in output
     assert 'Jakkamakka' in output
+
+
+@pytest.mark.sphinx('html', testroot='filter_fix_author_keyerror')
+def test_filter_fix_author_keyerror(app):
+    app.build()
+
+
+@pytest.mark.sphinx('html', testroot='filter_option_clash')
+def test_filter_option_clash(app, warning):
+    app.builder.build_all()
+    warnings = warning.getvalue()
+    assert ':filter: overrides :all:' in warnings
+    assert ':filter: overrides :cited:' in warnings
+    assert ':filter: overrides :notcited:' in warnings
+
+
+@pytest.mark.sphinx('html', testroot='filter_syntax_error')
+def test_filter_syntax_error(app, warning):
+    app.builder.build_all()
+    assert warning.getvalue().count('syntax error in :filter: expression') == 9
