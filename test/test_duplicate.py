@@ -30,6 +30,19 @@ def test_duplicate_citation(app, warning):
     assert len(set(ids)) == 2, "citation ids not unique"
 
 
+@pytest.mark.sphinx('html', testroot='duplicate_nearly_identical_entries')
+def test_duplicate_nearly_identical_entries(app, warning):
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
+    cits = list(common.html_citations().finditer(output))
+    cit_refs = list(common.html_citation_refs().finditer(output))
+    assert len(cits) == len(cit_refs) == 2
+    assert ({cit.group('label') for cit in cits}
+            == {cit_ref.group('label') for cit_ref in cit_refs}
+            == {'xyz19a', 'xyz19b'})
+
+
 @pytest.mark.sphinx('html', testroot='duplicate_nearly_identical_keys')
 def test_duplicate_nearly_identical_keys(app, warning):
     app.build()
