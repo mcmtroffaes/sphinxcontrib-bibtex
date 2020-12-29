@@ -373,7 +373,7 @@ class BibtexDomain(Domain):
             else:
                 # other builders can use general reference node
                 refnode = make_refnode(
-                    builder, env.docname,
+                    builder, fromdocname,
                     citation.bibliography_key.docname,
                     citation.citation_id, refcontnode)
             node += refnode
