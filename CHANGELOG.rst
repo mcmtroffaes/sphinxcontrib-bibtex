@@ -1,5 +1,7 @@
-2.1.1a0 (in development)
+2.1.1 (29 December 2020)
 ------------------------
+
+* Fix latex builder KeyError exception (see issue #221, reported by jedbrown).
 
 2.1.0 (28 December 2020)
 ------------------------
