@@ -12,8 +12,18 @@ def get_citations(code):
             for match in common.html_citations().finditer(code)}
 
 
-@pytest.mark.sphinx('html', testroot='label_prefix')
-def test_label_prefix(app, warning):
+@pytest.mark.sphinx('html', testroot='label_prefix_1')
+def test_label_prefix_1(app, warning):
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "doc1.html").read_text()
+    assert get_citations(output) == get_citation_refs(output) == {'A1'}
+    output = (app.outdir / "doc2.html").read_text()
+    assert get_citations(output) == get_citation_refs(output) == {'B1'}
+
+
+@pytest.mark.sphinx('html', testroot='label_prefix_2')
+def test_label_prefix_2(app, warning):
     doc1_refs = {'AFM12', 'ABlu83', 'AGIH02', 'AWS14'}
     doc1_cites = {'ABlu83', 'AFM12', 'AGIH02', 'AWS14'}
     doc2_refs = {'BShi13'}
