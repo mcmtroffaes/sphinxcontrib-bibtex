@@ -28,4 +28,5 @@ def test_latex_multidoc(app, warning):
     match = common.latex_citations().search(output)
     match_ref = common.latex_citation_refs().search(output)
     assert match.group('docname') == match_ref.group('docname') == 'sources'
+    assert match.group('id_') is not None
     assert match_ref.group('refid') == match.group('id_')
