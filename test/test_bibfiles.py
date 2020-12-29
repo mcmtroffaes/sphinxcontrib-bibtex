@@ -100,3 +100,9 @@ def test_bibfiles_encoding_invalid(make_app, app_params):
     args, kwargs = app_params
     with pytest.raises(LookupError, match="unknown encoding"):
         make_app(*args, **kwargs)
+
+
+@pytest.mark.sphinx('html', testroot='bibfiles_subfolder')
+def test_bibfiles_subfolder(app, warning):
+    app.build()
+    assert not warning.getvalue()
