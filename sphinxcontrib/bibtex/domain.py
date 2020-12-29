@@ -240,12 +240,12 @@ class BibtexDomain(Domain):
         """Map each bib filename to some information about the file (including
         the parsed data).
         """
-        return self.data.setdefault('bibfiles', {})  # filename -> cache
+        return self.data.setdefault('bibfiles', {})
 
     @property
     def bibliographies(self) -> Dict[BibliographyKey, BibliographyValue]:
         """Map storing information about each bibliography directive."""
-        return self.data.setdefault('bibliographies', {})  # id -> cache
+        return self.data.setdefault('bibliographies', {})
 
     @property
     def citations(self) -> List[Citation]:
