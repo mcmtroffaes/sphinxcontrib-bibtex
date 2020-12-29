@@ -1,3 +1,5 @@
+from pybtex.exceptions import PybtexError
+
 import common
 import pytest
 import re
@@ -72,5 +74,29 @@ def test_bibfiles_not_found(app, warning):
 @pytest.mark.sphinx('html', testroot='bibfiles_missing_conf')
 def test_bibfiles_missing_conf(make_app, app_params):
     args, kwargs = app_params
-    with pytest.raises(ExtensionError):
+    with pytest.raises(ExtensionError, match="bibtex_bibfiles"):
+        make_app(*args, **kwargs)
+
+
+@pytest.mark.sphinx('html', testroot='bibfiles_encoding')
+def test_bibfiles_encoding(app, warning):
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
+    assert u"Äpplé" in output
+
+
+@pytest.mark.sphinx('html', testroot='bibfiles_encoding',
+                    confoverrides={'bibtex_encoding': 'ascii'})
+def test_bibfiles_encoding_bad(make_app, app_params):
+    args, kwargs = app_params
+    with pytest.raises(PybtexError, match="can't decode byte 0xc4"):
+        make_app(*args, **kwargs)
+
+
+@pytest.mark.sphinx('html', testroot='bibfiles_encoding',
+                    confoverrides={'bibtex_encoding': 'invalid'})
+def test_bibfiles_encoding_invalid(make_app, app_params):
+    args, kwargs = app_params
+    with pytest.raises(LookupError, match="unknown encoding"):
         make_app(*args, **kwargs)
