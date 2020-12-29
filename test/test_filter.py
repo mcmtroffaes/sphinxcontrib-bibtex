@@ -58,7 +58,7 @@ def test_filter_fix_author_keyerror(app):
 
 @pytest.mark.sphinx('html', testroot='filter_option_clash')
 def test_filter_option_clash(app, warning):
-    app.builder.build_all()
+    app.build()
     warnings = warning.getvalue()
     assert ':filter: overrides :all:' in warnings
     assert ':filter: overrides :cited:' in warnings
@@ -67,5 +67,5 @@ def test_filter_option_clash(app, warning):
 
 @pytest.mark.sphinx('html', testroot='filter_syntax_error')
 def test_filter_syntax_error(app, warning):
-    app.builder.build_all()
+    app.build()
     assert warning.getvalue().count('syntax error in :filter: expression') == 9

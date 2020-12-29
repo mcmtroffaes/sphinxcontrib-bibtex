@@ -11,7 +11,7 @@ import re
 
 @pytest.mark.sphinx('html', testroot='issue187')
 def test_issue187(app, warning):
-    app.builder.build_all()
+    app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding='utf-8')
     assert len(re.findall(

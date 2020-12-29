@@ -11,7 +11,7 @@ import pytest
 
 @pytest.mark.sphinx('html', testroot='issue205')
 def test_issue205(app, warning):
-    app.builder.build_all()
+    app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     # ensure Man09 is cited

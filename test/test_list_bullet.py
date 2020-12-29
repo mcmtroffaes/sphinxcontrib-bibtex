@@ -11,7 +11,7 @@ import re
 
 @pytest.mark.sphinx('html', testroot='list_bullet')
 def test_list_bullet(app, warning):
-    app.builder.build_all()
+    app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     assert re.search(

@@ -11,7 +11,7 @@ import pytest
 
 @pytest.mark.sphinx('html', testroot='issue61')
 def test_multiple_keys(app, warning):
-    app.builder.build_all()
+    app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     cits = {match.group('label')

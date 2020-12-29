@@ -11,7 +11,7 @@ import pytest
 
 @pytest.mark.sphinx('html', testroot='autodoc')
 def test_autodoc(app, warning):
-    app.builder.build_all()
+    app.build()
     assert not warning.getvalue()
     output = (app.outdir / "doc_cite.html").read_text()
     labels = ['One', 'Two', 'Thr', 'Fou', 'Fiv', 'Six', 'Sev', 'Eig', 'Nin',

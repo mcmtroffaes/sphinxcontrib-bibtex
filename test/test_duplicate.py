@@ -7,7 +7,7 @@ import pytest
 @pytest.mark.sphinx('html', testroot='duplicate_label')
 def test_duplicate_label(app, warning):
     # see github issue 14
-    app.builder.build_all()
+    app.build()
     assert "duplicate label 1 for keys Test,Test2" in warning.getvalue()
     output = (app.outdir / "doc1.html").read_text()
     output2 = (app.outdir / "doc2.html").read_text()
@@ -17,7 +17,7 @@ def test_duplicate_label(app, warning):
 
 @pytest.mark.sphinx('html', testroot='duplicate_citation')
 def test_duplicate_citation(app, warning):
-    app.builder.build_all()
+    app.build()
     warning.seek(0)
     warnings = list(warning.readlines())
     assert len(warnings) == 1
@@ -32,7 +32,7 @@ def test_duplicate_citation(app, warning):
 
 @pytest.mark.sphinx('html', testroot='duplicate_nearly_identical_keys')
 def test_duplicate_nearly_identical_keys(app, warning):
-    app.builder.build_all()
+    app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     # assure both citations and citation references are present

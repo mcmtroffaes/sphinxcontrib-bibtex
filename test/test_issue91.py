@@ -4,7 +4,7 @@ import pytest
 
 @pytest.mark.sphinx('html', testroot='issue91')
 def test_issue91(app, warning):
-    app.builder.build_all()
+    app.build()
     assert not warning.getvalue()
     # default style is plain; check output
     output = (app.outdir / "index.html").read_text()

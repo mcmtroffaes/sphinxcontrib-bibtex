@@ -11,7 +11,7 @@ import pytest
 
 @pytest.mark.sphinx('html', testroot='list_citation')
 def test_list_citation(app, warning):
-    app.builder.build_all()
+    app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     assert common.html_citations(label='1', text='.*Akkerdju.*').search(output)

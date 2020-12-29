@@ -11,6 +11,6 @@ import re
 
 @pytest.mark.sphinx('html', testroot='invalid_cite_option')
 def test_invalid_cite_option(app, warning):
-    app.builder.build_all()
+    app.build()
     assert re.search(
         'unknown option: "thisisintentionallyinvalid"', warning.getvalue())

@@ -11,7 +11,7 @@ import pytest
 
 @pytest.mark.sphinx('html', testroot='issue_173')
 def test_issue_173(app, warning):
-    app.builder.build_all()
+    app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding='utf-8')
     assert common.html_citation_refs(label="xyz19a").search(output)

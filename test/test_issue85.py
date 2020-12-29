@@ -10,5 +10,5 @@ import pytest
 
 @pytest.mark.sphinx('html', testroot='issue85')
 def test_issue77(app, warning):
-    app.builder.build_all()
+    app.build()
     assert not warning.getvalue()
