@@ -78,7 +78,7 @@ def test_bibfiles_missing_conf(make_app, app_params):
         make_app(*args, **kwargs)
 
 
-@pytest.mark.sphinx('html', testroot='bibfiles_encoding')
+@pytest.mark.sphinx('html', testroot='bibfiles_encoding', freshenv=True)
 def test_bibfiles_encoding(app, warning):
     app.build()
     assert not warning.getvalue()
@@ -86,19 +86,17 @@ def test_bibfiles_encoding(app, warning):
     assert u"Äpplé" in output
 
 
-@pytest.mark.sphinx('html', testroot='bibfiles_encoding',
+@pytest.mark.sphinx('html', testroot='bibfiles_encoding', freshenv=True,
                     confoverrides={'bibtex_encoding': 'ascii'})
 def test_bibfiles_encoding_bad(make_app, app_params):
     args, kwargs = app_params
     with pytest.raises(PybtexError, match="can't decode byte 0xc4"):
-        # note: assignment is needed for pytest
-        app = make_app(*args, **kwargs)  # noqa: F841
+        make_app(*args, **kwargs)
 
 
-@pytest.mark.sphinx('html', testroot='bibfiles_encoding',
+@pytest.mark.sphinx('html', testroot='bibfiles_encoding', freshenv=True,
                     confoverrides={'bibtex_encoding': 'invalid'})
 def test_bibfiles_encoding_invalid(make_app, app_params):
     args, kwargs = app_params
     with pytest.raises(LookupError, match="unknown encoding"):
-        # note: assignment is needed for pytest
-        app = make_app(*args, **kwargs)  # noqa: F841
+        make_app(*args, **kwargs)
