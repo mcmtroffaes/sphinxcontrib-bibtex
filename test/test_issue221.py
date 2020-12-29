@@ -19,4 +19,4 @@ def test_issue221(app, warning):
     assert [cit.group('docname') for cit in cits] == ['sources']
     assert [cit_ref.group('docname') for cit_ref in cit_refs] == ['sources']
     assert ([cit.group('id_') for cit in cits] ==
-            [cit.group('refid') for cit in cit_refs])
+            [cit_ref.group('refid') for cit_ref in cit_refs])
