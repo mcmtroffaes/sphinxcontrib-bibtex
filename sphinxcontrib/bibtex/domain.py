@@ -368,7 +368,7 @@ class BibtexDomain(Domain):
                 # latex builder needs a citation_reference
                 refnode = docutils.nodes.citation_reference(
                     '', refcontnode,
-                    docname=env.docname,
+                    docname=citation.bibliography_key.docname,
                     refname=citation.citation_id)
             else:
                 # other builders can use general reference node
