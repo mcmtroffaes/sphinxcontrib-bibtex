@@ -42,10 +42,10 @@ class FootBibliographyTransform(SphinxTransform):
         for bibnode in self.document.traverse(footbibliography):
             domain = cast(BibtexDomain, self.env.get_domain('cite'))
             id_ = bibnode['ids'][0]
+            keys = self.env.temp_data.get(
+                "bibtex_foot_citation_refs", {}).get(id_, {})
             entries = [
-                get_bibliography_entry(domain.bibfiles, key)
-                for key in self.env.temp_data[
-                    "bibtex_foot_citation_refs"][id_]]
+                get_bibliography_entry(domain.bibfiles, key) for key in keys]
             assert None not in entries
             # locate and instantiate style and backend plugins
             style = find_plugin(
