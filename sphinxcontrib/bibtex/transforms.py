@@ -117,7 +117,7 @@ class BibliographyTransform(SphinxPostTransform):
                 if bibliography.list_ == "enumerated":
                     env.temp_data['bibtex_enum_count'] += 1
             if citations:
-                final_node = env.bibtex_bibliography_header.deepcopy()
+                final_node = domain.bibliography_header.deepcopy()
                 final_node += nodes
                 bibnode.replace_self(final_node)
             else:

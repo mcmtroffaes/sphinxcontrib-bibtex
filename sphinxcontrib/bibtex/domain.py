@@ -233,29 +233,45 @@ class BibtexDomain(Domain):
 
     name = 'cite'
     label = 'BibTeX Citations'
-    data_version = 2
+    data_version = 3
+    initial_data = dict(
+        bibfiles={},
+        bibliography_header=docutils.nodes.paragraph(),
+        footbibliography_header=docutils.nodes.paragraph(),
+        bibliographies={},
+        citations=[],
+        citation_refs=[],
+    )
 
     @property
     def bibfiles(self) -> Dict[str, BibFile]:
         """Map each bib filename to some information about the file (including
         the parsed data).
         """
-        return self.data.setdefault('bibfiles', {})
+        return self.data['bibfiles']
+
+    @property
+    def bibliography_header(self) -> docutils.nodes.Element:
+        return self.data['bibliography_header']
+
+    @property
+    def footbibliography_header(self) -> docutils.nodes.Element:
+        return self.data['footbibliography_header']
 
     @property
     def bibliographies(self) -> Dict[BibliographyKey, BibliographyValue]:
         """Map storing information about each bibliography directive."""
-        return self.data.setdefault('bibliographies', {})
+        return self.data['bibliographies']
 
     @property
     def citations(self) -> List[Citation]:
         """Citation data."""
-        return self.data.setdefault('citations', [])
+        return self.data['citations']
 
     @property
     def citation_refs(self) -> List[CitationRef]:
         """Citation reference data."""
-        return self.data.setdefault('citation_refs', [])
+        return self.data['citation_refs']
 
     def __init__(self, env: BuildEnvironment):
         super().__init__(env)
@@ -270,18 +286,17 @@ class BibtexDomain(Domain):
                 env.app.config.bibtex_encoding)
         # parse bibliography headers
         for directive in ("bibliography", "footbibliography"):
-            conf_name = "bibtex_{0}_header".format(directive)
-            if not hasattr(env, conf_name):
+            header = getattr(env.app.config, "bibtex_%s_header" % directive)
+            if header:
                 parser = docutils.parsers.rst.Parser()
                 settings = docutils.frontend.OptionParser(
                     components=(docutils.parsers.rst.Parser,)
                 ).get_default_values()
                 document = docutils.utils.new_document(
-                    "{0}_header".format(directive), settings)
-                parser.parse(getattr(env.app.config, conf_name), document)
-                setattr(env, conf_name,
-                        document[0] if len(document) > 0
-                        else docutils.nodes.paragraph())
+                    "%s_header" % directive, settings)
+                parser.parse(header, document)
+                if len(document) > 0:
+                    self.data["%s_header" % directive] = document[0]
 
     def clear_doc(self, docname: str) -> None:
         self.data['citations'] = [

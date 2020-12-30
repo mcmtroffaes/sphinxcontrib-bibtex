@@ -37,7 +37,7 @@ class FootCiteRole(XRefRole):
             foot_bibliography = env.temp_data["bibtex_foot_bibliography"]
         except KeyError:
             env.temp_data["bibtex_foot_bibliography"] = foot_bibliography = \
-                env.bibtex_footbibliography_header.deepcopy()
+                domain.footbibliography_header.deepcopy()
         foot_old_refs = env.temp_data.setdefault("bibtex_foot_old_refs", set())
         foot_new_refs = env.temp_data.setdefault("bibtex_foot_new_refs", set())
         style = find_plugin(

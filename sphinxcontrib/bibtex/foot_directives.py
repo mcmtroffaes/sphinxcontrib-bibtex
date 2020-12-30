@@ -55,5 +55,5 @@ class FootBibliographyDirective(Directive):
             foot_new_refs.clear()
             foot_bibliography, env.temp_data["bibtex_foot_bibliography"] = (
                 env.temp_data["bibtex_foot_bibliography"],
-                env.bibtex_footbibliography_header.deepcopy())
+                domain.footbibliography_header.deepcopy())
             return [foot_bibliography]
