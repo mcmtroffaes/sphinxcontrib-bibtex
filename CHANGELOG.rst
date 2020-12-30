@@ -1,5 +1,9 @@
-2.1.2 (in development)
-----------------------
+2.1.2 (30 December 2020)
+------------------------
+
+* Fix KeyError exception when building documents with footbibliography
+  directives but without any footnotes needing to be generated for this
+  directive (see issue #223, reported by drammock).
 
 2.1.1 (29 December 2020)
 ------------------------
