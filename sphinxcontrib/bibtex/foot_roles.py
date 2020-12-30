@@ -27,9 +27,14 @@ class FootCiteRole(XRefRole):
                      is_ref: bool
                      ) -> Tuple[List[docutils.nodes.Node],
                                 List[docutils.nodes.system_message]]:
-        """Transform reference node into a footnote reference, and
-        add footnote to bibliography node stored in temp_data if not yet
-        present.
+        """Transform node into footnote references, and
+        add footnotes to a node stored in the environment's temporary data
+        if they are not yet present.
+
+        .. seealso::
+
+           The node containing all footnotes is inserted into the document by
+           :meth:`.foot_directives.FootBibliographyDirective.run`.
         """
         domain = cast(BibtexDomain, self.env.get_domain('cite'))
         keys = [key.strip() for key in self.target.split(',')]  # type: ignore
