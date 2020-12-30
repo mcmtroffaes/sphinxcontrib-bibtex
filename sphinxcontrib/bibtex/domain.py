@@ -309,8 +309,8 @@ class BibtexDomain(Domain):
         # but before any post transforms are applied. We use it to
         # determine which citations will be added to which bibliography
         # directive, and also to format the labels. We need to format
-        # the labels and construct the citation ids here because they must be
-        # known when resolve_xref is called.
+        # the labels here because they must be known when resolve_xref is
+        # called.
         docnames = list(get_docnames(self.env))
         # we keep track of this to quickly check for duplicates
         used_keys: Set[str] = set()
