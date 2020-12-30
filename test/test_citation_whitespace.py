@@ -1,16 +1,10 @@
-"""
-    test_issue205
-    ~~~~~~~~~~~~~
-
-    Test cites spanning multiple lines.
-"""
-
 import common
 import pytest
 
 
-@pytest.mark.sphinx('html', testroot='issue205')
-def test_issue205(app, warning):
+# test cites spanning multiple lines (issue 205)
+@pytest.mark.sphinx('html', testroot='citation_whitespace')
+def test_citation_whitespace(app, warning):
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
