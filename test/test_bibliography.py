@@ -14,9 +14,18 @@ def citations(output):
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_empty', freshenv=True)
-def test_bibliography_empty_works(app, warning):
+def test_bibliography_empty(app, warning):
     app.build()
     assert not warning.getvalue()
+
+
+@pytest.mark.sphinx('html', testroot='bibliography_header')
+def test_bibliography_header(app, warning):
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text(encoding='utf-8')
+    assert 'Regular Citations' in output
+    assert 'Footnote Citations' in output
 
 
 @pytest.mark.sphinx(
