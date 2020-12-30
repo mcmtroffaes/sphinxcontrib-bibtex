@@ -1,18 +1,12 @@
-"""
-    test_issue2
-    ~~~~~~~~~~~
-
-    Test mixing of ``:cite:`` and ``[]_``.
-"""
-
 from typing import cast
 import pytest
 
 from sphinxcontrib.bibtex.domain import BibtexDomain
 
 
-@pytest.mark.sphinx('html', testroot='issue2')
-def test_mixing_citation_styles(app, warning):
+# test mixing of ``:cite:`` and ``[]_`` (issue 2)
+@pytest.mark.sphinx('html', testroot='citation_mixed')
+def test_citation_mixed(app, warning):
     app.build()
     assert not warning.getvalue()
     domain = cast(BibtexDomain, app.env.get_domain('cite'))
