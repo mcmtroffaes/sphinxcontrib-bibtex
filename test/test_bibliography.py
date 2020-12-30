@@ -119,7 +119,7 @@ def test_bibliography_label_prefix_2(app, warning):
 
 
 # test order of bibliography entries when using an unsorted style
-@pytest.mark.sphinx('html', testroot='issue15')
+@pytest.mark.sphinx('html', testroot='bibliography_order_unsorted')
 def test_bibliography_order_unsorted(app, warning):
     app.build()
     assert not warning.getvalue()
