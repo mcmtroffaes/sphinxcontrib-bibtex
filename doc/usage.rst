@@ -487,7 +487,7 @@ and sorting plugins
 A few minimal examples demonstrating how to create a custom label styles
 are available here:
 
-* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-issue77
+* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-bibliography_style_label
 * https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-custom_labels
 
 Custom Bibliography Header

@@ -1,16 +1,9 @@
-"""
-    test_issue77
-    ~~~~~~~~~~~~
-
-    Test label style.
-"""
-
 import common
 import pytest
 
 
-@pytest.mark.sphinx('html', testroot='issue77')
-def test_issue77(app, warning):
+@pytest.mark.sphinx('html', testroot='bibliography_style_label')
+def test_bibliography_style_label(app, warning):
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
