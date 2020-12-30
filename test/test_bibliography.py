@@ -1,5 +1,6 @@
 import common
 import pytest
+import re
 
 
 def citation_refs(output):
