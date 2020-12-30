@@ -1,16 +1,9 @@
-"""
-    test_issue61
-    ~~~~~~~~~~~~
-
-    Test multiple keys in a single cite.
-"""
-
 import common
 import pytest
 
 
-@pytest.mark.sphinx('html', testroot='issue61')
-def test_multiple_keys(app, warning):
+@pytest.mark.sphinx('html', testroot='citation_multiple_keys')
+def test_citation_multiple_keys(app, warning):
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
