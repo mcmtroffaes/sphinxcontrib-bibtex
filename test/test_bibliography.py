@@ -1,3 +1,4 @@
+import common
 import pytest
 
 
@@ -19,3 +20,12 @@ def test_bibliography_empty_no_header(app, warning):
     assert 'Footnote Citations' not in output
     assert '<rubric' not in output
     assert output.count('<target') == 2
+
+
+@pytest.mark.sphinx('html', testroot='bibliography_style_label')
+def test_bibliography_style_label(app, warning):
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
+    assert len(common.html_citation_refs(label='APAa').findall(output)) == 1
+    assert len(common.html_citation_refs(label='APAb').findall(output)) == 1
