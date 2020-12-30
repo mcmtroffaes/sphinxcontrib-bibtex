@@ -2,14 +2,14 @@ import common
 import pytest
 
 
-def get_citation_refs(code):
+def citation_refs(output):
     return {match.group('label')
-            for match in common.html_citation_refs().finditer(code)}
+            for match in common.html_citation_refs().finditer(output)}
 
 
-def get_citations(code):
+def citations(output):
     return {match.group('label')
-            for match in common.html_citations().finditer(code)}
+            for match in common.html_citations().finditer(output)}
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_empty', freshenv=True)
@@ -74,13 +74,9 @@ def test_bibliography_key_prefix(app, warning):
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "doc0.html").read_text()
-    cits = get_citations(output)
-    citrefs = get_citation_refs(output)
-    assert cits == citrefs == {'AMan09', 'AEve03'}
+    assert citations(output) == citation_refs(output) == {'AMan09', 'AEve03'}
     output = (app.outdir / "doc1.html").read_text()
-    cits = get_citations(output)
-    citrefs = get_citation_refs(output)
-    assert cits == citrefs == {'BMan09'}
+    assert citations(output) == citation_refs(output) == {'BMan09'}
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_label_prefix_1')
@@ -88,9 +84,9 @@ def test_bibliography_label_prefix_1(app, warning):
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "doc1.html").read_text()
-    assert get_citations(output) == get_citation_refs(output) == {'A1'}
+    assert citations(output) == citation_refs(output) == {'A1'}
     output = (app.outdir / "doc2.html").read_text()
-    assert get_citations(output) == get_citation_refs(output) == {'B1'}
+    assert citations(output) == citation_refs(output) == {'B1'}
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_label_prefix_2')
@@ -105,14 +101,14 @@ def test_bibliography_label_prefix_2(app, warning):
     app.build()
     assert not warning.getvalue()
     output1 = (app.outdir / "doc1.html").read_text()
-    assert doc1_refs == get_citation_refs(output1)
-    assert doc1_cites == get_citations(output1)
+    assert doc1_refs == citation_refs(output1)
+    assert doc1_cites == citations(output1)
     output2 = (app.outdir / "doc2.html").read_text()
-    assert doc2_refs == get_citation_refs(output2)
-    assert doc2_cites == get_citations(output2)
+    assert doc2_refs == citation_refs(output2)
+    assert doc2_cites == citations(output2)
     output3 = (app.outdir / "summary.html").read_text()
-    assert sum_refs == get_citation_refs(output3)
-    assert sum_cites == get_citations(output3)
+    assert sum_refs == citation_refs(output3)
+    assert sum_cites == citations(output3)
     # check citation reference from summary to doc1
     match1 = common.html_citations(label='AFM12').search(output1)
     match3 = common.html_citation_refs(label='AFM12').search(output3)
