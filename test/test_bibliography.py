@@ -116,3 +116,14 @@ def test_bibliography_label_prefix_2(app, warning):
     assert match3
     assert match1.group('id_') == match3.group('refid')
     assert match3.group('refdoc') == 'doc1.html'
+
+
+# test order of bibliography entries when using an unsorted style
+@pytest.mark.sphinx('html', testroot='issue15')
+def test_bibliography_order_unsorted(app, warning):
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
+    assert re.search(
+        '<dd>.*Test 1.*</dd>.*<dd>.*Test 2.*</dd>',
+        output, re.DOTALL)
