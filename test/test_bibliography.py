@@ -69,6 +69,12 @@ def test_bibliography_style_nowebref(app, warning):
     assert 'http://dx.doi.org' not in output
 
 
+@pytest.mark.sphinx('html', testroot='bibliography_bad_option')
+def test_bibliography_bad_option(app, warning):
+    app.build()
+    assert 'unknown option: "thisisintentionallyinvalid"' in warning.getvalue()
+
+
 # see issue 87
 @pytest.mark.sphinx('html', testroot='bibliography_key_prefix')
 def test_bibliography_key_prefix(app, warning):
