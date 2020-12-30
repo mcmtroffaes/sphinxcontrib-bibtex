@@ -484,11 +484,11 @@ labelling plugins
 (using the ``pybtex.style.labels`` group),
 and sorting plugins
 (using the ``pybtex.style.sorting`` group).
-A few minimal examples demonstrating how to create a custom label styles
+A few minimal examples demonstrating how to create custom label styles
 are available here:
 
-* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-bibliography_style_label
-* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-custom_labels
+* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-bibliography_style_label_1
+* https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-bibliography_style_label_2
 
 Custom Bibliography Header
 ~~~~~~~~~~~~~~~~~~~~~~~~~~

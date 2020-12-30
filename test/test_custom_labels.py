@@ -1,5 +1,5 @@
 """
-    test_custom_labels
+    test_bibliography_style_label_1
     ~~~~~~~~~~~~~~~~~~
 
     Test a custom label style.
@@ -9,8 +9,8 @@ import common
 import pytest
 
 
-@pytest.mark.sphinx('html', testroot='custom_labels')
-def test_custom_labels(app, warning):
+@pytest.mark.sphinx('html', testroot='bibliography_style_label_1')
+def test_bibliography_style_label_1(app, warning):
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()

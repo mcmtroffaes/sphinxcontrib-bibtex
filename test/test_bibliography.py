@@ -22,8 +22,8 @@ def test_bibliography_empty_no_header(app, warning):
     assert output.count('<target') == 2
 
 
-@pytest.mark.sphinx('html', testroot='bibliography_style_label')
-def test_bibliography_style_label(app, warning):
+@pytest.mark.sphinx('html', testroot='bibliography_style_label_2')
+def test_bibliography_style_label_2(app, warning):
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
