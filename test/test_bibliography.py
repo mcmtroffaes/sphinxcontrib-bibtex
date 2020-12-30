@@ -39,7 +39,6 @@ def test_bibliography_empty_no_header(app, warning):
     assert 'Regular Citations' not in output
     assert 'Footnote Citations' not in output
     assert '<rubric' not in output
-    assert output.count('<target') == 2
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_style_label_1')

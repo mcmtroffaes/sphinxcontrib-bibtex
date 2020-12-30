@@ -280,7 +280,8 @@ class BibtexDomain(Domain):
                     "{0}_header".format(directive), settings)
                 parser.parse(getattr(env.app.config, conf_name), document)
                 setattr(env, conf_name,
-                        document[0] if len(document) > 0 else None)
+                        document[0] if len(document) > 0
+                        else docutils.nodes.paragraph())
 
     def clear_doc(self, docname: str) -> None:
         self.data['citations'] = [

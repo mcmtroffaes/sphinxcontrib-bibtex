@@ -14,12 +14,7 @@ def test_issue187(app, warning):
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding='utf-8')
-    assert len(re.findall(
-        'id="bibtex-footbibliography-index-0"', output)) == 1
-    assert len(re.findall(
-        'id="bibtex-footbibliography-index-1"', output)) == 1
-    assert len(re.findall(
-        'id="bibtex-footbibliography-index-2"', output)) == 1
+    assert output.count('<p class="rubric"') == 3
     assert len(re.findall('id="mandel"', output)) == 1
     assert len(re.findall('id="evensen"', output)) == 1
     assert len(re.findall('id="lorenc"', output)) == 1

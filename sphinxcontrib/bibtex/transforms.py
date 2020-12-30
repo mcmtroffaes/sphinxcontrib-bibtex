@@ -92,7 +92,7 @@ class BibliographyTransform(SphinxPostTransform):
             elif bibliography.list_ == "bullet":
                 nodes = docutils.nodes.bullet_list()
             else:  # "citation"
-                nodes = docutils.nodes.paragraph()
+                nodes = []
             for citation in citations:
                 citation_node = bibliography.citation_nodes[citation.key]
                 if bibliography.list_ in {"enumerated", "bullet"}:
@@ -116,9 +116,9 @@ class BibliographyTransform(SphinxPostTransform):
                 nodes.append(citation_node)
                 if bibliography.list_ == "enumerated":
                     env.temp_data['bibtex_enum_count'] += 1
-            if env.bibtex_bibliography_header is not None:
-                nodes = [env.bibtex_bibliography_header.deepcopy(), nodes]
             if citations:
-                bibnode.replace_self(nodes)
+                final_node = env.bibtex_bibliography_header.deepcopy()
+                final_node += nodes
+                bibnode.replace_self(final_node)
             else:
                 bibnode.replace_self(docutils.nodes.target())

@@ -10,7 +10,6 @@ from docutils.parsers.rst import Directive
 from sphinx.environment import BuildEnvironment
 
 from .domain import BibtexDomain
-from .foot_nodes import footbibliography
 
 
 def new_foot_bibliography_id(env: BuildEnvironment) -> None:
@@ -39,13 +38,22 @@ class FootBibliographyDirective(Directive):
     has_content = False
 
     def run(self):
-        """Set file dependencies, update footbib id, and create a node
-        that is to be transformed to the entries of the bibliography.
+        """Set file dependencies, and insert the foot_bibliography node
+        that was created earlier.
         """
-        env = self.state.document.settings.env
+        env = cast(BuildEnvironment, self.state.document.settings.env)
         domain = cast(BibtexDomain, env.get_domain('cite'))
         for bibfile in domain.bibfiles:
             env.note_dependency(bibfile)
-        id_ = env.temp_data["bibtex_foot_bibliography_id"]
-        new_foot_bibliography_id(env)
-        return [footbibliography('', ids=[id_])]
+        foot_old_refs = env.temp_data.setdefault("bibtex_foot_old_refs", set())
+        foot_new_refs = env.temp_data.setdefault("bibtex_foot_new_refs", set())
+        if not foot_new_refs:
+            return []
+        else:
+            # bibliography stored in env.temp_data["bibtex_foot_bibliography"]
+            foot_old_refs |= foot_new_refs
+            foot_new_refs.clear()
+            foot_bibliography, env.temp_data["bibtex_foot_bibliography"] = (
+                env.temp_data["bibtex_foot_bibliography"],
+                env.bibtex_footbibliography_header.deepcopy())
+            return [foot_bibliography]
