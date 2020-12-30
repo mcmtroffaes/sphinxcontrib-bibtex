@@ -1,1 +1,3 @@
+.. bibliography::
+
 .. footbibliography::

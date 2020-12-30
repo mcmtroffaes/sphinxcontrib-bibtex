@@ -15,6 +15,7 @@ import docutils.transforms
 import sphinx.util
 
 from pybtex.plugin import find_plugin
+from sphinx.environment import BuildEnvironment
 from sphinx.transforms.post_transforms import SphinxPostTransform
 from typing import cast
 
@@ -67,7 +68,7 @@ class BibliographyTransform(SphinxPostTransform):
         :class:`~sphinxcontrib.bibtex.nodes.bibliography` node into a
         list of citations.
         """
-        env = self.document.settings.env
+        env = cast(BuildEnvironment, self.document.settings.env)
         domain = cast(BibtexDomain, env.get_domain('cite'))
         for bibnode in self.document.traverse(bibliography_node):
             # reminder: env.docname may be equal to 'index' instead of
@@ -117,4 +118,7 @@ class BibliographyTransform(SphinxPostTransform):
                     env.temp_data['bibtex_enum_count'] += 1
             if env.bibtex_bibliography_header is not None:
                 nodes = [env.bibtex_bibliography_header.deepcopy(), nodes]
-            bibnode.replace_self(nodes)
+            if citations:
+                bibnode.replace_self(nodes)
+            else:
+                bibnode.replace_self(docutils.nodes.target())

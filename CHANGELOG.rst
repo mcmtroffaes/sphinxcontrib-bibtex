@@ -1,6 +1,9 @@
 2.1.3 (in development)
 ----------------------
 
+* No longer insert user defined header for bibliography directives if there are
+  no citations in it.
+
 2.1.2 (30 December 2020)
 ------------------------
 

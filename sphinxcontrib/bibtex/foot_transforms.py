@@ -62,4 +62,7 @@ class FootBibliographyTransform(SphinxTransform):
                 footnotes = [
                     self.env.bibtex_footbibliography_header.deepcopy(),
                     footnotes]
-            bibnode.replace_self(footnotes)
+            if entries:
+                bibnode.replace_self(footnotes)
+            else:
+                bibnode.replace_self(docutils.nodes.target())
