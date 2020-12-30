@@ -1,5 +1,5 @@
 """
-    test_custom_style
+    test_bibliography_style_nowebref
     ~~~~~~~~~~~~~~~~~
 
     Test a custom style.
@@ -8,8 +8,8 @@
 import pytest
 
 
-@pytest.mark.sphinx('html', testroot='custom_style')
-def test_custom_style(app, warning):
+@pytest.mark.sphinx('html', testroot='bibliography_style_nowebref')
+def test_bibliography_style_nowebref(app, warning):
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding='utf-8')

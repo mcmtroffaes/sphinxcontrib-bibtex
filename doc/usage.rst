@@ -471,7 +471,7 @@ Now ``mystyle`` will be available to you as a formatting style:
    bibtex_default_style = 'mystyle'
 
 An minimal example is available here:
-https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-custom_style
+https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-bibliography_style_nowebref
 
 The formatting code uses a very intuitive template engine.
 The source code for ``unsrt`` provides many great examples:
