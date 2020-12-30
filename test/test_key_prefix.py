@@ -3,8 +3,8 @@ import pytest
 
 
 # see issue 87
-@pytest.mark.sphinx('html', testroot='key_prefix')
-def test_key_prefix(app, warning):
+@pytest.mark.sphinx('html', testroot='bibliography_key_prefix')
+def test_bibliography_key_prefix(app, warning):
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "doc0.html").read_text()
