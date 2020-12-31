@@ -41,6 +41,15 @@ def test_bibliography_empty_no_header(app, warning):
     assert '<rubric' not in output
 
 
+@pytest.mark.sphinx('html', testroot='bibliography_style_default')
+def test_bibliography_style_default(app, warning):
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
+    # ensure Man09 is cited with plain style and not with alpha style
+    assert citation_refs(output) == citations(output) == {"1"}
+
+
 @pytest.mark.sphinx('html', testroot='bibliography_style_label_1')
 def test_bibliography_style_label_1(app, warning):
     app.build()
