@@ -10,6 +10,7 @@
 """
 
 import ast
+from typing import TYPE_CHECKING
 from typing import List, Dict, NamedTuple, cast, Iterable, Tuple, Set
 
 import docutils.frontend
@@ -24,15 +25,18 @@ from pybtex.plugin import find_plugin
 import pybtex.style.formatting
 from pybtex.style import FormattedEntry
 from sphinx.addnodes import pending_xref
-from sphinx.builders import Builder
 from sphinx.domains import Domain
-from sphinx.environment import BuildEnvironment
 from sphinx.errors import ExtensionError
 from sphinx.util.nodes import make_refnode
 
 from .bibfile import BibFile, normpath_filename, process_bibfile
 from .directives import BibliographyKey, BibliographyValue
 from .roles import CitationRef
+
+if TYPE_CHECKING:
+    from sphinx.application import Sphinx
+    from sphinx.builders import Builder
+    from sphinx.environment import BuildEnvironment
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -195,6 +199,11 @@ class Citation(NamedTuple):
     formatted_entry: FormattedEntry    #: Entry as formatted by pybtex.
 
 
+def env_updated(app: "Sphinx", env: "BuildEnvironment") -> Iterable[str]:
+    domain = cast(BibtexDomain, env.get_domain('cite'))
+    return domain.env_updated()
+
+
 class BibtexDomain(Domain):
     """Sphinx domain for the bibtex extension."""
 
@@ -240,8 +249,10 @@ class BibtexDomain(Domain):
         """Citation reference data."""
         return self.data['citation_refs']
 
-    def __init__(self, env: BuildEnvironment):
+    def __init__(self, env: "BuildEnvironment"):
         super().__init__(env)
+        # connect env-updated
+        env.app.connect('env-updated', env_updated)
         # check config
         if env.app.config.bibtex_bibfiles is None:
             raise ExtensionError(
@@ -284,7 +295,7 @@ class BibtexDomain(Domain):
                 self.citation_refs.append(citation_ref)
         # 'citations' domain data calculated in check_consistency phase
 
-    def check_consistency(self) -> None:
+    def env_updated(self) -> Iterable[str]:
         # This function is called when all doctrees are parsed,
         # but before any post transforms are applied. We use it to
         # determine which citations will be added to which bibliography
@@ -324,9 +335,10 @@ class BibtexDomain(Domain):
                                 label, used_labels[label], key),
                             location=(bibliography_key.docname,
                                       bibliography.line))
+        return []  # expects list of updated docnames
 
-    def resolve_xref(self, env: BuildEnvironment, fromdocname: str,
-                     builder: Builder, typ: str, target: str,
+    def resolve_xref(self, env: "BuildEnvironment", fromdocname: str,
+                     builder: "Builder", typ: str, target: str,
                      node: pending_xref, contnode: docutils.nodes.Element
                      ) -> docutils.nodes.Element:
         """Replace node by list of citation references (one for each key)."""

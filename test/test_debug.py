@@ -54,9 +54,6 @@ def test_debug_bibtex_citation(app, warning):
 
 
 # see issue 226
-@pytest.mark.skipif(
-    sphinx.version_info < (3, 5, 0, 'beta'),
-    reason='broken on older sphinx versions')
 @pytest.mark.sphinx('pseudoxml', testroot='debug_bibtex_citation')
 def test_rebuild_empty_outdir(make_app, app_params):
     args, kwargs = app_params
