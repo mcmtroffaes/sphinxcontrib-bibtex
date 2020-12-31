@@ -295,7 +295,7 @@ class BibtexDomain(Domain):
         docnames = list(get_docnames(self.env))
         # we keep track of this to quickly check for duplicates
         used_keys: Set[str] = set()
-        used_labels: Dict[str, Set[str]] = {}
+        used_labels: Dict[str, str] = {}
         for bibliography_key, bibliography in self.bibliographies.items():
             for formatted_entry in self.get_formatted_entries(
                     bibliography_key, docnames):
@@ -303,7 +303,7 @@ class BibtexDomain(Domain):
                 label = bibliography.labelprefix + formatted_entry.label
                 if bibliography.list_ == 'citation' and key in used_keys:
                     logger.warning(
-                        'duplicate citation for key %s' % key,
+                        'duplicate citation for key "%s"' % key,
                         location=(bibliography_key.docname, bibliography.line))
                 self.citations.append(Citation(
                     citation_id=bibliography.citation_nodes[key]['ids'][0],
@@ -314,12 +314,16 @@ class BibtexDomain(Domain):
                 ))
                 if bibliography.list_ == 'citation':
                     used_keys.add(key)
-                    used_labels.setdefault(label, set()).add(key)
-        for label, keys in used_labels.items():
-            if len(keys) > 1:
-                logger.warning(
-                    'duplicate label %s for keys %s' % (
-                        label, ','.join(sorted(keys))))
+                    if label not in used_labels:
+                        used_labels[label] = key
+                    elif used_labels[label] != key:
+                        # if used_label[label] == key then already
+                        # duplicate key warning
+                        logger.warning(
+                            'duplicate label "%s" for keys "%s" and "%s"' % (
+                                label, used_labels[label], key),
+                            location=(bibliography_key.docname,
+                                      bibliography.line))
 
     def resolve_xref(self, env: BuildEnvironment, fromdocname: str,
                      builder: Builder, typ: str, target: str,

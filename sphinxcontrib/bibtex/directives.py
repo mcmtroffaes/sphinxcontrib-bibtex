@@ -90,18 +90,22 @@ class BibliographyDirective(Directive):
         domain = cast("BibtexDomain", env.get_domain('cite'))
         if "filter" in self.options:
             if "all" in self.options:
-                logger.warning(":filter: overrides :all:")
+                logger.warning(":filter: overrides :all:",
+                               location=(env.docname, self.lineno))
             if "notcited" in self.options:
-                logger.warning(":filter: overrides :notcited:")
+                logger.warning(":filter: overrides :notcited:",
+                               location=(env.docname, self.lineno))
             if "cited" in self.options:
-                logger.warning(":filter: overrides :cited:")
+                logger.warning(":filter: overrides :cited:",
+                               location=(env.docname, self.lineno))
             try:
                 filter_ = ast.parse(self.options["filter"])
             except SyntaxError:
                 logger.warning(
                     "syntax error in :filter: expression" +
                     " (" + self.options["filter"] + "); "
-                    "the option will be ignored"
+                    "the option will be ignored",
+                    location=(env.docname, self.lineno)
                 )
                 filter_ = ast.parse("cited")
         elif "all" in self.options:
@@ -131,7 +135,8 @@ class BibliographyDirective(Directive):
         list_ = self.options.get("list", "citation")
         if list_ not in {"bullet", "enumerated", "citation"}:
             logger.warning(
-                "unknown bibliography list type '{0}'.".format(list_))
+                "unknown bibliography list type '{0}'.".format(list_),
+                location=(env.docname, self.lineno))
             list_ = "citation"
         if list_ in {"bullet", "enumerated"}:
             citation_node_class = docutils.nodes.list_item

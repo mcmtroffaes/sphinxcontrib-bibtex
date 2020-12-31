@@ -8,7 +8,8 @@ import pytest
 def test_duplicate_label(app, warning):
     # see github issue 14
     app.build()
-    assert "duplicate label 1 for keys Test,Test2" in warning.getvalue()
+    assert 'duplicate label "1" for keys "Test" and "Test2"' \
+           in warning.getvalue()
     output = (app.outdir / "doc1.html").read_text()
     output2 = (app.outdir / "doc2.html").read_text()
     assert common.html_citations(label="1").search(output)
@@ -21,7 +22,7 @@ def test_duplicate_citation(app, warning):
     warning.seek(0)
     warnings = list(warning.readlines())
     assert len(warnings) == 1
-    assert "duplicate citation for key Test" in warnings[0]
+    assert 'duplicate citation for key "Test"' in warnings[0]
     # assure distinct citation ids
     output = (app.outdir / "index.html").read_text()
     ids = [match.group('id_')
