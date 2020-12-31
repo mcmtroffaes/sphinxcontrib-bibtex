@@ -151,3 +151,21 @@ def test_bibliography_order_unsorted(app, warning):
     assert re.search(
         '<dd>.*Test 1.*</dd>.*<dd>.*Test 2.*</dd>',
         output, re.DOTALL)
+
+
+# see issue 187
+@pytest.mark.sphinx('html', testroot='bibliography_multi_foot')
+def test_bibliography_multi_foot(app, warning):
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text(encoding='utf-8')
+    assert output.count('<p class="rubric"') == 3
+    assert len(re.findall('id="mandel"', output)) == 1
+    assert len(re.findall('id="evensen"', output)) == 1
+    assert len(re.findall('id="lorenc"', output)) == 1
+    assert len(re.findall(
+        'class="footnote-reference brackets" href="#mandel"', output)) == 2
+    assert len(re.findall(
+        'class="footnote-reference brackets" href="#evensen"', output)) == 1
+    assert len(re.findall(
+        'class="footnote-reference brackets" href="#lorenc"', output)) == 1
