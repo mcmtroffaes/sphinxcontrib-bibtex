@@ -1,7 +1,7 @@
 doc02
 =====
 
-:cite:`Sh:1`
+:cite:`Sh:2`
 
 .. bibliography::
    :list: enumerated

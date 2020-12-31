@@ -1,7 +1,7 @@
 doc06
 =====
 
-:cite:`Sh:1`
+:cite:`Sh:6`
 
 .. bibliography::
    :list: enumerated

@@ -1,5 +1,5 @@
 doc20
 =====
 
-:cite:`Sh:1`
+:cite:`ScSh:20`
 

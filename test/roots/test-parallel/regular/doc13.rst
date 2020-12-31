@@ -1,7 +1,7 @@
 doc13
 =====
 
-:cite:`Sh:1`
+:cite:`Sh:13`
 
 .. bibliography::
    :list: enumerated

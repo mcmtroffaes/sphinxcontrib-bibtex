@@ -1,5 +1,5 @@
 doc23
 =====
 
-:cite:`Sh:1`
+:cite:`GlSh:23`
 
