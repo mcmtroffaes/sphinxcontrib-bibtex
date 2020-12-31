@@ -6,6 +6,7 @@
 """
 
 import docutils.nodes
+import sphinx.util.logging
 
 from typing import cast, Tuple, List
 from pybtex.plugin import find_plugin
@@ -15,6 +16,9 @@ from sphinx.roles import XRefRole
 from .domain import BibtexDomain
 from .bibfile import get_bibliography_entry
 from .transforms import node_text_transform, transform_url_command
+
+
+logger = sphinx.util.logging.getLogger(__name__)
 
 
 class FootCiteRole(XRefRole):
@@ -50,8 +54,7 @@ class FootCiteRole(XRefRole):
             self.config.bibtex_default_style)()
         ref_nodes = []
         for key in keys:
-            entry = get_bibliography_entry(
-                domain.bibfiles, key, location=(env.docname, self.lineno))
+            entry = get_bibliography_entry(domain.bibfiles, key)
             if entry is not None:
                 ref_nodes.append(
                     self.backend.footnote_reference(entry, document))
@@ -61,4 +64,7 @@ class FootCiteRole(XRefRole):
                     node_text_transform(footnote, transform_url_command)
                     foot_bibliography += footnote
                     foot_new_refs.add(key)
+            else:
+                logger.warning('could not find bibtex key "%s"' % key,
+                               location=(env.docname, self.lineno))
         return ref_nodes, []

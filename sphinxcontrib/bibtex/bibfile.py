@@ -78,8 +78,7 @@ def process_bibfile(bibfiles: Dict[str, BibFile],
 
 
 def get_bibliography_entry(
-        bibfiles: Dict[str, BibFile], key: str,
-        location: Tuple[str, int]) -> Optional[Entry]:
+        bibfiles: Dict[str, BibFile], key: str) -> Optional[Entry]:
     """Return bibliography entry from *bibfiles* for the given *key*."""
     for bibfile in bibfiles.values():
         try:
@@ -87,6 +86,4 @@ def get_bibliography_entry(
         except KeyError:
             pass
     else:
-        logger.warning('could not find bibtex key "%s"' % key,
-                       location=location)
         return None
