@@ -14,7 +14,7 @@
 """
 
 import os.path
-from typing import NamedTuple, Dict, Optional, Tuple
+from typing import NamedTuple, Dict, Optional
 
 from pybtex.database.input import bibtex
 from pybtex.database import BibliographyData, Entry
