@@ -12,13 +12,6 @@ from sphinx.environment import BuildEnvironment
 from .domain import BibtexDomain
 
 
-def new_foot_bibliography_id(env: BuildEnvironment) -> None:
-    """Generate a new footbibliography id for the given build environment."""
-    env.temp_data["bibtex_foot_bibliography_id"] = \
-        'bibtex-footbibliography-%s-%s' % (
-            env.docname, env.new_serialno('bibtex'))
-
-
 class FootBibliographyDirective(Directive):
 
     """Class for processing the :rst:dir:`footbibliography` directive."""
