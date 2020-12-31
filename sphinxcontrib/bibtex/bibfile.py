@@ -14,7 +14,7 @@
 """
 
 import os.path
-from typing import NamedTuple, Dict, Optional
+from typing import NamedTuple, Dict, Optional, Tuple
 
 from pybtex.database.input import bibtex
 from pybtex.database import BibliographyData, Entry
@@ -78,7 +78,8 @@ def process_bibfile(bibfiles: Dict[str, BibFile],
 
 
 def get_bibliography_entry(
-        bibfiles: Dict[str, BibFile], key: str) -> Optional[Entry]:
+        bibfiles: Dict[str, BibFile], key: str,
+        location: Tuple[str, int]) -> Optional[Entry]:
     """Return bibliography entry from *bibfiles* for the given *key*."""
     for bibfile in bibfiles.values():
         try:
@@ -86,5 +87,6 @@ def get_bibliography_entry(
         except KeyError:
             pass
     else:
-        logger.warning("could not find bibtex key {0}.".format(key))
+        logger.warning('could not find bibtex key "%s"' % key,
+                       location=location)
         return None

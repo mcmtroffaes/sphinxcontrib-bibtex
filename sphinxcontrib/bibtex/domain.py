@@ -332,9 +332,9 @@ class BibtexDomain(Domain):
         """Replace node by list of citation references (one for each key)."""
         keys = [key.strip() for key in target.split(',')]
         if builder.name != 'latex':
-            node = docutils.nodes.inline(rawsource=target, text='[')
+            citations_node = docutils.nodes.inline(rawsource=target, text='[')
         else:
-            node = docutils.nodes.inline(rawsource=target, text='')
+            citations_node = docutils.nodes.inline(rawsource=target, text='')
         # map citation keys that can be resolved to their citation data
         citations = {
             cit.key: cit for cit in self.citations
@@ -345,8 +345,9 @@ class BibtexDomain(Domain):
                 citation = citations[key]
             except KeyError:
                 # TODO can handle missing reference warning using the domain
-                logger.warning('could not find bibtex key %s' % key)
-                node += docutils.nodes.inline('', key)
+                logger.warning('could not find bibtex key "%s"' % key,
+                               location=node)
+                citations_node += docutils.nodes.inline('', key)
                 continue
             refcontnode = docutils.nodes.inline('', citation.label)
             if builder.name == 'latex':
@@ -361,12 +362,12 @@ class BibtexDomain(Domain):
                     builder, fromdocname,
                     citation.bibliography_key.docname,
                     citation.citation_id, refcontnode)
-            node += refnode
+            citations_node += refnode
             if i != len(keys) - 1 and builder.name != 'latex':
-                node += docutils.nodes.Text(',')
+                citations_node += docutils.nodes.Text(',')
         if builder.name != 'latex':
-            node += docutils.nodes.Text(']')
-        return node
+            citations_node += docutils.nodes.Text(']')
+        return citations_node
 
     def get_all_cited_keys(self, docnames):
         """Yield all citation keys for given *docnames* in order, then

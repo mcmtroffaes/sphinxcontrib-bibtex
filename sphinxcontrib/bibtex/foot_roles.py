@@ -50,7 +50,8 @@ class FootCiteRole(XRefRole):
             self.config.bibtex_default_style)()
         ref_nodes = []
         for key in keys:
-            entry = get_bibliography_entry(domain.bibfiles, key)
+            entry = get_bibliography_entry(
+                domain.bibfiles, key, location=(env.docname, self.lineno))
             if entry is not None:
                 ref_nodes.append(
                     self.backend.footnote_reference(entry, document))
