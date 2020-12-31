@@ -3,7 +3,7 @@
 
 * Fix unresolved references when running the latex build immediately after
   the html build, or when rerunning the html build after deleting the
-  generated html files not not deleting the pickled doctrees/environment
+  generated html files without deleting the pickled doctrees/environment
   (see issue #226, reported by skirpichev).
 
 * No longer insert user defined header for bibliography directives if there are
