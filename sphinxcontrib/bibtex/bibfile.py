@@ -14,31 +14,33 @@
 """
 
 import os.path
-from typing import NamedTuple, Dict, Optional
+from typing import TYPE_CHECKING, Dict, Optional, NamedTuple
 
-from pybtex.database.input import bibtex
-from pybtex.database import BibliographyData, Entry
-import sphinx.util
-from sphinx.environment import BuildEnvironment
+from pybtex.database.input.bibtex import Parser
+from sphinx.util.logging import getLogger
+
+if TYPE_CHECKING:
+    from pybtex.database import BibliographyData, Entry
+    from sphinx.environment import BuildEnvironment
 
 
-logger = sphinx.util.logging.getLogger(__name__)
+logger = getLogger(__name__)
 
 
 class BibFile(NamedTuple):
     """Contains information about a parsed bib file."""
-    mtime: float            #: modification time of bib file when last parsed
-    data: BibliographyData  #: parsed data from pybtex
+    mtime: float              #: modification time of bib file when last parsed
+    data: "BibliographyData"  #: parsed data from pybtex
 
 
-def normpath_filename(env: BuildEnvironment, filename: str) -> str:
+def normpath_filename(env: "BuildEnvironment", filename: str) -> str:
     """Return normalised path to *filename* for the given environment *env*."""
     return os.path.normpath(env.relfn2path(filename.strip())[1])
 
 
-def parse_bibfile(bibfilename: str, encoding: str) -> BibliographyData:
+def parse_bibfile(bibfilename: str, encoding: str) -> "BibliographyData":
     """Parse *bibfilename* with given *encoding*, and return parsed data."""
-    parser = bibtex.Parser(encoding)
+    parser = Parser(encoding)
     logger.info("parsing bibtex file {0}... ".format(bibfilename), nonl=True)
     parser.parse_file(bibfilename)
     logger.info("parsed {0} entries"
@@ -78,7 +80,7 @@ def process_bibfile(bibfiles: Dict[str, BibFile],
 
 
 def get_bibliography_entry(
-        bibfiles: Dict[str, BibFile], key: str) -> Optional[Entry]:
+        bibfiles: Dict[str, BibFile], key: str) -> Optional["Entry"]:
     """Return bibliography entry from *bibfiles* for the given *key*."""
     for bibfile in bibfiles.values():
         try:
