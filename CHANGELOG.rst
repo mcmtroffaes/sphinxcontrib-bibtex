@@ -1,10 +1,21 @@
 2.1.3 (in development)
 ----------------------
 
+* Fix unresolved references when running the latex build immediately after
+  the html build, or when rerunning the html build after deleting the
+  generated html files not not deleting the pickled doctrees/environment
+  (see issue #226, reported by skirpichev).
+
 * No longer insert user defined header for bibliography directives if there are
   no citations in it.
 
+* Warnings now consistently provide source file and line number of where the
+  issue originated.
+
 * Simpler and faster implementation of footcite and footbibliography.
+
+* Improved type annotations throughout the API, now using forward
+  declarations where possible.
 
 2.1.2 (30 December 2020)
 ------------------------
