@@ -270,9 +270,8 @@ class BibtexDomain(Domain):
             citation for citation in self.citations
             if citation.bibliography_key.docname != docname]
         self.data['citation_refs'] = [
-            ref for ref in self.citation_refs
-            if ref.docname != docname]
-        for bib_key, bib_value in list(self.bibliographies.items()):
+            ref for ref in self.citation_refs if ref.docname != docname]
+        for bib_key in list(self.bibliographies.keys()):
             if bib_key.docname == docname:
                 del self.bibliographies[bib_key]
 
