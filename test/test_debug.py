@@ -3,7 +3,6 @@ to help understand what docutils/sphinx are doing.
 """
 
 import pytest
-import sphinx
 
 
 docutils_citation_xml = """
