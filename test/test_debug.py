@@ -3,6 +3,7 @@ to help understand what docutils/sphinx are doing.
 """
 
 import pytest
+import sphinx
 
 
 docutils_citation_xml = """
@@ -50,3 +51,19 @@ def test_debug_bibtex_citation(app, warning):
     assert not warning.getvalue()
     output = (app.outdir / "index.pseudoxml").read_text()
     assert output.split('\n')[1:] == bibtex_citation_xml.split('\n')[1:]
+
+
+# see issue 226
+@pytest.mark.skipif(
+    sphinx.version_info < (3, 5, 0, 'beta'),
+    reason='broken on older sphinx versions')
+@pytest.mark.sphinx('pseudoxml', testroot='debug_bibtex_citation')
+def test_rebuild_empty_outdir(make_app, app_params):
+    args, kwargs = app_params
+    app0 = make_app(freshenv=True, *args, **kwargs)
+    app0.build()
+    assert not app0._warning.getvalue()
+    app0.outdir.rmtree()
+    app1 = make_app(freshenv=False, *args, **kwargs)
+    app1.build()
+    assert 'could not find bibtex key' not in app1._warning.getvalue()
