@@ -33,7 +33,7 @@ from .bibfile import BibFile, normpath_filename, process_bibfile
 from .directives import BibliographyKey, BibliographyValue
 from .roles import CitationRef
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from sphinx.application import Sphinx
     from sphinx.builders import Builder
     from sphinx.environment import BuildEnvironment

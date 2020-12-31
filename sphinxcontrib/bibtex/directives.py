@@ -20,7 +20,7 @@ from docutils.parsers.rst import Directive, directives
 from .bibfile import normpath_filename
 from .nodes import bibliography as bibliography_node
 
-if TYPE_CHECKING:
+if TYPE_CHECKING:  # pragma: no cover
     from sphinx.environment import BuildEnvironment
     from .domain import BibtexDomain
 
