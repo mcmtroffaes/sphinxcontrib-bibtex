@@ -20,23 +20,23 @@ import docutils.utils
 import sphinx.util
 import re
 
-from pybtex.database import Entry
 from pybtex.plugin import find_plugin
-import pybtex.style.formatting
-from pybtex.style import FormattedEntry
-from sphinx.addnodes import pending_xref
 from sphinx.domains import Domain
 from sphinx.errors import ExtensionError
 from sphinx.util.nodes import make_refnode
 
 from .bibfile import BibFile, normpath_filename, process_bibfile
-from .directives import BibliographyKey, BibliographyValue
-from .roles import CitationRef
 
 if TYPE_CHECKING:  # pragma: no cover
+    from pybtex.database import Entry
+    from pybtex.style import FormattedEntry
+    from pybtex.style.formatting import BaseStyle
+    from sphinx.addnodes import pending_xref
     from sphinx.application import Sphinx
     from sphinx.builders import Builder
     from sphinx.environment import BuildEnvironment
+    from .directives import BibliographyKey, BibliographyValue
+    from .roles import CitationRef
 
 
 logger = sphinx.util.logging.getLogger(__name__)
@@ -192,11 +192,11 @@ def get_docnames(env):
 
 class Citation(NamedTuple):
     """Information about a citation."""
-    citation_id: str                   #: Unique id of this citation.
-    bibliography_key: BibliographyKey  #: Key of its bibliography directive.
-    key: str                           #: Key (with prefix).
-    label: str                         #: Label (with prefix).
-    formatted_entry: FormattedEntry    #: Entry as formatted by pybtex.
+    citation_id: str                     #: Unique id of this citation.
+    bibliography_key: "BibliographyKey"  #: Key of its bibliography directive.
+    key: str                             #: Key (with prefix).
+    label: str                           #: Label (with prefix).
+    formatted_entry: "FormattedEntry"    #: Entry as formatted by pybtex.
 
 
 def env_updated(app: "Sphinx", env: "BuildEnvironment") -> Iterable[str]:
@@ -235,7 +235,7 @@ class BibtexDomain(Domain):
         return self.data['footbibliography_header']
 
     @property
-    def bibliographies(self) -> Dict[BibliographyKey, BibliographyValue]:
+    def bibliographies(self) -> Dict["BibliographyKey", "BibliographyValue"]:
         """Map storing information about each bibliography directive."""
         return self.data['bibliographies']
 
@@ -245,7 +245,7 @@ class BibtexDomain(Domain):
         return self.data['citations']
 
     @property
-    def citation_refs(self) -> List[CitationRef]:
+    def citation_refs(self) -> List["CitationRef"]:
         """Citation reference data."""
         return self.data['citation_refs']
 
@@ -293,7 +293,7 @@ class BibtexDomain(Domain):
         for citation_ref in otherdata['citation_refs']:
             if citation_ref.docname in docnames:
                 self.citation_refs.append(citation_ref)
-        # 'citations' domain data calculated in check_consistency phase
+        # 'citations' domain data calculated in env_updated
 
     def env_updated(self) -> Iterable[str]:
         # This function is called when all doctrees are parsed,
@@ -339,7 +339,7 @@ class BibtexDomain(Domain):
 
     def resolve_xref(self, env: "BuildEnvironment", fromdocname: str,
                      builder: "Builder", typ: str, target: str,
-                     node: pending_xref, contnode: docutils.nodes.Element
+                     node: "pending_xref", contnode: docutils.nodes.Element
                      ) -> docutils.nodes.Element:
         """Replace node by list of citation references (one for each key)."""
         keys = [key.strip() for key in target.split(',')]
@@ -391,7 +391,7 @@ class BibtexDomain(Domain):
                 yield key
 
     def get_entries(
-            self, bibfiles: List[str]) -> Iterable[Entry]:
+            self, bibfiles: List[str]) -> Iterable["Entry"]:
         """Return all bibliography entries from the bib files, unsorted (i.e.
         in order of appearance in the bib files.
         """
@@ -400,8 +400,8 @@ class BibtexDomain(Domain):
                 yield entry
 
     def get_filtered_entries(
-            self, bibliography_key: BibliographyKey
-            ) -> Iterable[Tuple[str, Entry]]:
+            self, bibliography_key: "BibliographyKey"
+            ) -> Iterable[Tuple[str, "Entry"]]:
         """Return unsorted bibliography entries filtered by the filter
         expression.
         """
@@ -429,8 +429,8 @@ class BibtexDomain(Domain):
                 yield key, entry
 
     def get_sorted_entries(
-            self, bibliography_key: BibliographyKey, docnames: List[str]
-            ) -> Iterable[Tuple[str, Entry]]:
+            self, bibliography_key: "BibliographyKey", docnames: List[str]
+            ) -> Iterable[Tuple[str, "Entry"]]:
         """Return filtered bibliography entries sorted by citation order."""
         entries = dict(
             self.get_filtered_entries(bibliography_key))
@@ -446,15 +446,14 @@ class BibtexDomain(Domain):
             yield key, entry
 
     def get_formatted_entries(
-            self, bibliography_key: BibliographyKey, docnames: List[str]
-            ) -> Iterable[FormattedEntry]:
+            self, bibliography_key: "BibliographyKey", docnames: List[str]
+            ) -> Iterable["FormattedEntry"]:
         """Get sorted bibliography entries along with their pybtex labels,
         with additional sorting and formatting applied from the pybtex style.
         """
         bibliography = self.bibliographies[bibliography_key]
         entries = dict(
             self.get_sorted_entries(bibliography_key, docnames))
-        style = cast(
-            pybtex.style.formatting.BaseStyle,
-            find_plugin('pybtex.style.formatting', bibliography.style)())
+        style = cast("BaseStyle", find_plugin(
+            'pybtex.style.formatting', bibliography.style)())
         return style.format_entries(entries.values())
