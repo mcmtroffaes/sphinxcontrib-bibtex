@@ -2,16 +2,7 @@
     Classes and methods to maintain any bibtex information that is stored
     outside the doctree.
 
-    .. autoclass:: BibliographyKey
-        :members:
-
-    .. autoclass:: BibliographyValue
-        :members:
-
     .. autoclass:: Citation
-        :members:
-
-    .. autoclass:: CitationRef
         :members:
 
     .. autoclass:: BibtexDomain
@@ -40,6 +31,9 @@ from sphinx.errors import ExtensionError
 from sphinx.util.nodes import make_refnode
 
 from .bibfile import BibFile, normpath_filename, process_bibfile
+from .directives import BibliographyKey, BibliographyValue
+from .roles import CitationRef
+
 
 logger = sphinx.util.logging.getLogger(__name__)
 
@@ -192,25 +186,6 @@ def get_docnames(env):
         docname = nextdoc
 
 
-class BibliographyKey(NamedTuple):
-    docname: str
-    id_: str
-
-
-class BibliographyValue(NamedTuple):
-    """Contains information about a bibliography directive."""
-    line: int            #: Line number of the directive in the document.
-    bibfiles: List[str]  #: List of bib files for this directive.
-    style: str           #: The pybtex style.
-    list_: str           #: The list type.
-    enumtype: str        #: The sequence type (for enumerated lists).
-    start: int           #: The start of the sequence (for enumerated lists).
-    labelprefix: str     #: String prefix for pybtex generated labels.
-    keyprefix: str       #: String prefix for citation keys.
-    filter_: ast.AST     #: Parsed filter expression.
-    citation_nodes: Dict[str, docutils.nodes.citation]  #: key -> citation node
-
-
 class Citation(NamedTuple):
     """Information about a citation."""
     citation_id: str                   #: Unique id of this citation.
@@ -218,14 +193,6 @@ class Citation(NamedTuple):
     key: str                           #: Key (with prefix).
     label: str                         #: Label (with prefix).
     formatted_entry: FormattedEntry    #: Entry as formatted by pybtex.
-
-
-class CitationRef(NamedTuple):
-    """Information about a citation reference."""
-    citation_ref_id: str  #: Unique id of this citation reference.
-    docname: str          #: Document name.
-    line: int             #: Line number.
-    keys: List[str]       #: Citation keys (including key prefix).
 
 
 class BibtexDomain(Domain):

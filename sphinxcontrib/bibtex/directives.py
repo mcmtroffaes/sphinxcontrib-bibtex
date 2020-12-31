@@ -1,37 +1,50 @@
 """
+    .. autoclass:: BibliographyKey
+        :members:
+
+    .. autoclass:: BibliographyValue
+        :members:
+
     .. autoclass:: BibliographyDirective
 
         .. automethod:: run
-
-    .. autofunction:: process_start_option
 """
 
 import ast  # parse(), used for filter
 import docutils.nodes
 import sphinx.util
 
-from typing import cast
+from typing import TYPE_CHECKING, cast, NamedTuple, List, Dict
 from docutils.parsers.rst import Directive, directives
-from sphinx.environment import BuildEnvironment
 
 from .bibfile import normpath_filename
-from .domain import BibliographyValue, BibtexDomain, BibliographyKey
 from .nodes import bibliography as bibliography_node
+
+if TYPE_CHECKING:
+    from sphinx.environment import BuildEnvironment
+    from .domain import BibtexDomain
 
 
 logger = sphinx.util.logging.getLogger(__name__)
 
 
-def process_start_option(value):
-    """Process and validate the start option value
-    of a :rst:dir:`bibliography` directive.
-    If *value* is ``continue`` then this function returns -1,
-    otherwise *value* is converted into a positive integer.
-    """
-    if value == "continue":
-        return -1
-    else:
-        return directives.positive_int(value)
+class BibliographyKey(NamedTuple):
+    docname: str
+    id_: str
+
+
+class BibliographyValue(NamedTuple):
+    """Contains information about a bibliography directive."""
+    line: int            #: Line number of the directive in the document.
+    bibfiles: List[str]  #: List of bib files for this directive.
+    style: str           #: The pybtex style.
+    list_: str           #: The list type.
+    enumtype: str        #: The sequence type (for enumerated lists).
+    start: int           #: The start of the sequence (for enumerated lists).
+    labelprefix: str     #: String prefix for pybtex generated labels.
+    keyprefix: str       #: String prefix for citation keys.
+    filter_: ast.AST     #: Parsed filter expression.
+    citation_nodes: Dict[str, docutils.nodes.citation]  #: key -> citation node
 
 
 class BibliographyDirective(Directive):
@@ -61,7 +74,9 @@ class BibliographyDirective(Directive):
         'style': directives.unchanged,
         'list': directives.unchanged,
         'enumtype': directives.unchanged,
-        'start': process_start_option,
+        'start': (
+            lambda value:
+            directives.positive_int(value) if value != 'continue' else -1),
         'labelprefix': directives.unchanged,
         'keyprefix': directives.unchanged,
     }
@@ -71,8 +86,8 @@ class BibliographyDirective(Directive):
         node that is to be transformed to the entries of the
         bibliography.
         """
-        env = cast(BuildEnvironment, self.state.document.settings.env)
-        domain = cast(BibtexDomain, env.get_domain('cite'))
+        env = cast("BuildEnvironment", self.state.document.settings.env)
+        domain = cast("BibtexDomain", env.get_domain('cite'))
         if "filter" in self.options:
             if "all" in self.options:
                 logger.warning(":filter: overrides :all:")

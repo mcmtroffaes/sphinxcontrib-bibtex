@@ -1,4 +1,7 @@
 """
+    .. autoclass:: CitationRef
+        :members:
+
     .. autoclass:: CiteRole
         :show-inheritance:
 
@@ -7,11 +10,20 @@
 
 import docutils.nodes
 
-from typing import cast
+from typing import TYPE_CHECKING, cast, NamedTuple, List
 from pybtex.plugin import find_plugin
 from sphinx.roles import XRefRole
 
-from .domain import BibtexDomain, CitationRef
+if TYPE_CHECKING:
+    from .domain import BibtexDomain
+
+
+class CitationRef(NamedTuple):
+    """Information about a citation reference."""
+    citation_ref_id: str  #: Unique id of this citation reference.
+    docname: str          #: Document name.
+    line: int             #: Line number.
+    keys: List[str]       #: Citation keys (including key prefix).
 
 
 class CiteRole(XRefRole):
@@ -26,7 +38,7 @@ class CiteRole(XRefRole):
         """
         node['refdomain'] = 'cite'
         document.note_explicit_target(node, node)  # for backrefs
-        domain = cast(BibtexDomain, env.get_domain('cite'))
+        domain = cast("BibtexDomain", env.get_domain('cite'))
         domain.citation_refs.append(CitationRef(
             citation_ref_id=node['ids'][0],
             docname=env.docname,
