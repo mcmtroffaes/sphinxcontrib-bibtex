@@ -313,12 +313,12 @@ class BibtexDomain(Domain):
         for bib_key, bib_value in otherdata['bibliographies'].items():
             if bib_key.docname in docnames:
                 self.bibliographies[bib_key] = bib_value
+        for citation in otherdata['citations']:
+            if citation.bibliography_key.docname in docnames:
+                self.citations.append(citation)
         for citation_ref in otherdata['citation_refs']:
             if citation_ref.docname in docnames:
                 self.citation_refs.append(citation_ref)
-        # citations created during check_consistency so never pickled
-        assert not self.citations
-        assert not otherdata['citations']
 
     def check_consistency(self) -> None:
         # This function is called when all doctrees are parsed,
