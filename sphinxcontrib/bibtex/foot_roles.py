@@ -5,20 +5,21 @@
         .. automethod:: result_nodes
 """
 
-import docutils.nodes
-import sphinx.util.logging
-
-from typing import cast, Tuple, List
+from typing import TYPE_CHECKING, cast, Tuple, List
 from pybtex.plugin import find_plugin
-from sphinx.environment import BuildEnvironment
 from sphinx.roles import XRefRole
+from sphinx.util.logging import getLogger
 
-from .domain import BibtexDomain
 from .bibfile import get_bibliography_entry
 from .transforms import node_text_transform, transform_url_command
 
+if TYPE_CHECKING:
+    import docutils.nodes
+    from sphinx.environment import BuildEnvironment
+    from .domain import BibtexDomain
 
-logger = sphinx.util.logging.getLogger(__name__)
+
+logger = getLogger(__name__)
 
 
 class FootCiteRole(XRefRole):
@@ -26,11 +27,11 @@ class FootCiteRole(XRefRole):
 
     backend = find_plugin('pybtex.backends', 'docutils')()
 
-    def result_nodes(self, document: docutils.nodes.document,
-                     env: BuildEnvironment, node: docutils.nodes.Element,
+    def result_nodes(self, document: "docutils.nodes.document",
+                     env: "BuildEnvironment", node: "docutils.nodes.Element",
                      is_ref: bool
-                     ) -> Tuple[List[docutils.nodes.Node],
-                                List[docutils.nodes.system_message]]:
+                     ) -> Tuple[List["docutils.nodes.Node"],
+                                List["docutils.nodes.system_message"]]:
         """Transform node into footnote references, and
         add footnotes to a node stored in the environment's temporary data
         if they are not yet present.
@@ -40,7 +41,7 @@ class FootCiteRole(XRefRole):
            The node containing all footnotes is inserted into the document by
            :meth:`.foot_directives.FootBibliographyDirective.run`.
         """
-        domain = cast(BibtexDomain, self.env.get_domain('cite'))
+        domain = cast("BibtexDomain", self.env.get_domain('cite'))
         keys = [key.strip() for key in self.target.split(',')]  # type: ignore
         try:
             foot_bibliography = env.temp_data["bibtex_foot_bibliography"]

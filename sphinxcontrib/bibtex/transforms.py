@@ -11,19 +11,20 @@
 """
 
 import docutils.nodes
-import docutils.transforms
-import sphinx.util
 
+from typing import TYPE_CHECKING, cast
 from pybtex.plugin import find_plugin
-from sphinx.environment import BuildEnvironment
 from sphinx.transforms.post_transforms import SphinxPostTransform
-from typing import cast
+from sphinx.util.logging import getLogger
 
-from .domain import BibtexDomain, BibliographyKey
+from .directives import BibliographyKey
 from .nodes import bibliography as bibliography_node
 
+if TYPE_CHECKING:
+    from sphinx.environment import BuildEnvironment
+    from .domain import BibtexDomain
 
-logger = sphinx.util.logging.getLogger(__name__)
+logger = getLogger(__name__)
 
 
 def node_text_transform(node, transform):
@@ -62,14 +63,15 @@ class BibliographyTransform(SphinxPostTransform):
     # which has priority 10, so when ReferencesResolver calls the cite domain
     # resolve_xref, the target is present and all will work fine
     default_priority = 5
+    backend = find_plugin('pybtex.backends', 'docutils')()
 
     def run(self, **kwargs):
         """Transform each
         :class:`~sphinxcontrib.bibtex.nodes.bibliography` node into a
         list of citations.
         """
-        env = cast(BuildEnvironment, self.document.settings.env)
-        domain = cast(BibtexDomain, env.get_domain('cite'))
+        env = cast("BuildEnvironment", self.document.settings.env)
+        domain = cast("BibtexDomain", env.get_domain('cite'))
         for bibnode in self.document.traverse(bibliography_node):
             # reminder: env.docname may be equal to 'index' instead of
             # bibnode['docname'] in post-transform phase (e.g. latex builder)
@@ -78,7 +80,6 @@ class BibliographyTransform(SphinxPostTransform):
             bibliography = domain.bibliographies[bib_key]
             citations = [citation for citation in domain.citations
                          if citation.bibliography_key == bib_key]
-            backend = find_plugin('pybtex.backends', 'docutils')()
             # create citation nodes for all references
             if bibliography.list_ == "enumerated":
                 nodes = docutils.nodes.enumerated_list()
@@ -96,7 +97,7 @@ class BibliographyTransform(SphinxPostTransform):
             for citation in citations:
                 citation_node = bibliography.citation_nodes[citation.key]
                 if bibliography.list_ in {"enumerated", "bullet"}:
-                    citation_node += backend.paragraph(
+                    citation_node += self.backend.paragraph(
                         citation.formatted_entry)
                 else:  # "citation"
                     # backrefs only supported in same document
@@ -109,7 +110,7 @@ class BibliographyTransform(SphinxPostTransform):
                         citation_node['backrefs'] = backrefs
                     citation_node += docutils.nodes.label(
                         '', citation.label, support_smartquotes=False)
-                    citation_node += backend.paragraph(
+                    citation_node += self.backend.paragraph(
                         citation.formatted_entry)
                 citation_node['docname'] = bib_key.docname
                 node_text_transform(citation_node, transform_url_command)
