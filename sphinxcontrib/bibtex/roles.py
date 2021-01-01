@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING, cast, NamedTuple, List
 from pybtex.plugin import find_plugin
 from sphinx.roles import XRefRole
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from .domain import BibtexDomain
 
 

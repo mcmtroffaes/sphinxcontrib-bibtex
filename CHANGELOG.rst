@@ -1,5 +1,7 @@
-2.1.3 (in development)
+2.1.3 (1 January 2021)
 ----------------------
+
+* Sphinx 2.1 or later is now formally required (up from 2.0).
 
 * Fix unresolved references when running the latex build immediately after
   the html build, or when rerunning the html build after deleting the

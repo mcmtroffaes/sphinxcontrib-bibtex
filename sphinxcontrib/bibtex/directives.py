@@ -20,7 +20,7 @@ import sphinx.util
 from .bibfile import normpath_filename
 from .nodes import bibliography as bibliography_node
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from sphinx.environment import BuildEnvironment
     from .domain import BibtexDomain
 

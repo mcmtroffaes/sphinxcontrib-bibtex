@@ -6,10 +6,11 @@ import pytest
 
 @pytest.mark.skipif(not parallel_available,
                     reason='sphinx parallel builds not available')
-@pytest.mark.sphinx('html', testroot='parallel', parallel=4)
+@pytest.mark.sphinx('html', testroot='parallel')
 def test_parallel(make_app, app_params):
     args, kwargs = app_params
     app0 = make_app(*args, **kwargs)
+    app0.parallel = 4
     app0.build()
     assert not app0._warning.getvalue()
     # update files to trigger merge of citations domain data
