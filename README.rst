@@ -26,8 +26,8 @@ and Weston Nielson's
 
 * Development: https://github.com/mcmtroffaes/sphinxcontrib-bibtex/
 
-.. |travis| image:: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex.png?branch=develop
-    :target: https://travis-ci.org/mcmtroffaes/sphinxcontrib-bibtex
+.. |travis| image:: https://travis-ci.com/mcmtroffaes/sphinxcontrib-bibtex.png?branch=develop
+    :target: https://travis-ci.com/mcmtroffaes/sphinxcontrib-bibtex
     :alt: travis-ci
 
 .. |codecov| image:: https://codecov.io/gh/mcmtroffaes/sphinxcontrib-bibtex/branch/develop/graph/badge.svg
