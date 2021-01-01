@@ -27,7 +27,7 @@ from sphinx.util.nodes import make_refnode
 
 from .bibfile import BibFile, normpath_filename, process_bibfile
 
-if TYPE_CHECKING:  # pragma: no cover
+if TYPE_CHECKING:
     from pybtex.database import Entry
     from pybtex.style import FormattedEntry
     from pybtex.style.formatting import BaseStyle
