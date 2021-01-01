@@ -1,24 +1,28 @@
 language: python
 dist: focal
-python:
-  - "3.9-dev"
-  - "3.8"
-  - "3.7"
-  - "3.6"
-  - "pypy3"
+jobs:
+  include:
+  - python: "3.9"
+  - python: "3.9"
+    env: SPHINX_VERSION=2.1
+  - python: "3.8"
+  - python: "3.7"
+  - python: "3.6"
+  - python: "pypy3"
 branches:
   only:
     - develop
 install:
   - "pip install pybtex"  # for dev version: git+https://bitbucket.org/pybtex-devs/pybtex
-  - "pip install codecov pytest pytest-cov" # required for tests
+  - "pip install codecov pytest pytest-cov"  # required for tests
+  - "if [[ -n '$SPHINX_VERSION' ]]; then pip install sphinx==$SPHINX_VERSION; fi"
   - "pip install ."
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.8' ]]; then pip install check-manifest flake8; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.9' ]]; then pip install check-manifest flake8; fi"
 script:
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.8' ]]; then check-manifest; fi"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.8' ]]; then flake8; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.9' ]]; then check-manifest; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.9' ]]; then flake8; fi"
   - "pushd doc"
-  - "if [[ $TRAVIS_PYTHON_VERSION == '3.8' ]]; then make html; fi"
+  - "if [[ $TRAVIS_PYTHON_VERSION == '3.9' ]]; then make html; fi"
   - "popd"
   - "pushd test"
   - "pytest --cov=sphinxcontrib.bibtex --cov=natbib"
