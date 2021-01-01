@@ -13,4 +13,4 @@ def rootdir():
 
 # monkey patch for path class on old sphinx versions
 if not hasattr(path, "read_text"):
-    path.read_text = path.text
+    path.read_text = path.text  # type: ignore
