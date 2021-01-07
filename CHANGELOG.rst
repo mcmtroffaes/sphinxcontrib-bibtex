@@ -1,6 +1,9 @@
 2.1.4 (in development)
 ----------------------
 
+* Fix ValueError exception when having citations from orphans (see issue #228,
+  reported by VincentRouvreau).
+
 2.1.3 (1 January 2021)
 ----------------------
 
