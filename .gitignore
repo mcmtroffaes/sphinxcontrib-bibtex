@@ -9,3 +9,4 @@ doc/_build/
 venv/
 htmlcov/
 .idea/
+*.egg-info/
