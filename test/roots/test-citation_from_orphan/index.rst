@@ -1,0 +1,5 @@
+Contents
+========
+
+.. bibliography::
+   :style: plain

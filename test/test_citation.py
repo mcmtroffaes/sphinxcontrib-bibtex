@@ -55,3 +55,10 @@ def test_citation_whitespace(app, warning):
     # ensure Man09 is cited
     assert len(common.html_citation_refs(label='Fir').findall(output)) == 1
     assert len(common.html_citation_refs(label='Sec').findall(output)) == 1
+
+
+# test document not in toctree (issue 228)
+@pytest.mark.sphinx('pseudoxml', testroot='citation_from_orphan')
+def test_citation_from_orphan(app, warning):
+    app.build()
+    assert not warning.getvalue()
