@@ -184,10 +184,14 @@ def get_docnames(env):
     """Ged document names in order."""
     rel = env.collect_relations()
     docname = env.config.master_doc
+    docnames = set()
     while docname is not None:
+        docnames.add(docname)
         yield docname
         parent, prevdoc, nextdoc = rel[docname]
         docname = nextdoc
+    for docname in sorted(env.found_docs - docnames):
+        yield docname
 
 
 class Citation(NamedTuple):
