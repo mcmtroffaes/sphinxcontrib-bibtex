@@ -181,7 +181,7 @@ class _FilterVisitor(ast.NodeVisitor):
 
 
 def get_docnames(env):
-    """Ged document names in order."""
+    """Get document names in order."""
     rel = env.collect_relations()
     docname = env.config.master_doc
     docnames = set()
