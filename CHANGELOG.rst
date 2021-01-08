@@ -1,4 +1,4 @@
-2.1.4 (in development)
+2.1.4 (8 January 2021)
 ----------------------
 
 * Fix ValueError exception when having citations from orphans (see issue #228,
