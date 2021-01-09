@@ -92,13 +92,10 @@ class Citations(object):
         self.parser = None
         self.data = None
         self.ref_map = {}
-
-        file_name = env.relfn2path(self.conf.get('file'),
-                                   env.app.config.master_doc)[1]
-        if file_name:
-            self.file_name = file_name
-            self.parser = bibtex.Parser()
-            self.data = self.parser.parse_file(self.file_name)
+        self.file_name = env.relfn2path(self.conf['file'],
+                                        env.app.config.master_doc)[1]
+        self.parser = bibtex.Parser()
+        self.data = self.parser.parse_file(self.file_name)
 
     def get(self, key):
         return self.data.entries.get(key)
@@ -146,13 +143,12 @@ class CitationTransform(object):
         author = author.replace('}', '')
         return author
 
-    def cite(self, cmd, refuri, global_keys=None):
+    def cite(self, cmd, refuri, global_keys):
         """
         Return a docutils Node consisting of properly formatted citations
         children nodes.
         """
-        if global_keys is not None:
-            self.global_keys = global_keys
+        self.global_keys = global_keys
         bo, bc = self.config['brackets']
         sep = u'%s ' % self.config['separator']
         style = self.config['style']
