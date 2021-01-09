@@ -277,8 +277,7 @@ class BibtexDomain(Domain):
                 document = docutils.utils.new_document(
                     "%s_header" % directive, settings)
                 parser.parse(header, document)
-                if len(document) > 0:
-                    self.data["%s_header" % directive] = document[0]
+                self.data["%s_header" % directive] = document[0]
 
     def clear_doc(self, docname: str) -> None:
         self.data['citations'] = [
