@@ -24,6 +24,8 @@ script:
   - "pushd doc"
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.9' ]]; then make html; fi"
   - "popd"
+  - "pushd test"
   - "pytest --cov=sphinxcontrib.bibtex --cov=natbib"
+  - "popd"
 after_success:
   - "codecov"
