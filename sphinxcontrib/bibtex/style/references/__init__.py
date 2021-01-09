@@ -75,14 +75,15 @@ class BaseReferenceStyle(Plugin, Generic[ReferenceInfo]):
 
     def _data_from_references(
             self,
-            references: Iterable[Tuple["FormattedEntry", ReferenceInfo]]):
+            references: Iterable[Tuple["FormattedEntry", ReferenceInfo]]
+            ) -> Dict[str, Any]:
         for entry, info in references:
             yield dict(entry=entry, style=self, reference_info=info)
 
     def format_references(
             self,
             references: Iterable[Tuple["FormattedEntry", ReferenceInfo]],
-            capfirst=False):
+            capfirst=False) -> "BaseText":
         children = [self.get_inner_template().format_data(data)
                     for data in self._data_from_references(references)]
         return self.get_outer_template(children, capfirst=capfirst).format()

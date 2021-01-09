@@ -13,7 +13,7 @@ def html_citation_refs(refid=RE_ID, label=RE_LABEL):
     return re.compile(
         r'<a class="reference internal" '
         r'href="(?P<refdoc>[^#]+)?#(?P<refid>{refid})">'
-        r'<span>(?P<label>{label})</span>'
+        r'(?P<label>{label})'
         r'</a>'.format(refid=refid, label=label))
 
 

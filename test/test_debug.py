@@ -22,8 +22,7 @@ bibtex_citation_xml = """
         <inline ids="id1">
             [
             <reference internal="True" refid="id3">
-                <inline>
-                    tes
+                tes
             ]
     <paragraph ids="id2">
         <citation backrefs="id1" docname="index" ids="id3">

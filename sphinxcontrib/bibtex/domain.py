@@ -17,6 +17,7 @@ import docutils.frontend
 import docutils.nodes
 import docutils.parsers.rst
 import docutils.utils
+import pybtex_docutils
 import sphinx.util
 import re
 
@@ -26,8 +27,11 @@ from sphinx.errors import ExtensionError
 from sphinx.util.nodes import make_refnode
 
 from .bibfile import BibFile, normpath_filename, process_bibfile
+from .style.references import BaseReferenceText
+from .style.references.label import LabelParentheticalReferenceStyle, LabelTextualReferenceStyle
 
 if TYPE_CHECKING:
+    from pybtex.backends import BaseBackend
     from pybtex.database import Entry
     from pybtex.style import FormattedEntry
     from pybtex.style.formatting import BaseStyle
@@ -203,6 +207,45 @@ class Citation(NamedTuple):
     formatted_entry: "FormattedEntry"    #: Entry as formatted by pybtex.
 
 
+class SphinxReferenceInfo(NamedTuple):
+    """Tuple containing reference info to enable sphinx to resolve a reference
+    to a citation.
+    """
+    builder: "Builder"
+    fromdocname: str
+    todocname: str
+    citation_id: str
+
+
+class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
+    """Pybtex rich text class for citation references with the docutils
+    backend, for use with :class:`SphinxReferenceInfo`.
+    """
+
+    def render(self, backend: "BaseBackend"):
+        if not isinstance(backend, pybtex_docutils.Backend):
+            raise TypeError(
+                "SphinxReferenceText only supports the docutils backend")
+        info = self.info[0]
+        if info.builder.name == 'latex':
+            # latex builder needs a citation_reference
+            return [docutils.nodes.citation_reference(
+                '', *super().render(backend),
+                docname=info.todocname,
+                refname=info.citation_id)]
+        else:
+            children = super().render(backend)
+            # make_refnode only takes a single child
+            refnode = make_refnode(
+                info.builder,
+                info.fromdocname,
+                info.todocname,
+                info.citation_id,
+                children[0])
+            refnode.extend(children[1:])
+            return [refnode]
+
+
 def env_updated(app: "Sphinx", env: "BuildEnvironment") -> Iterable[str]:
     domain = cast(BibtexDomain, env.get_domain('cite'))
     return domain.env_updated()
@@ -221,6 +264,11 @@ class BibtexDomain(Domain):
         bibliographies={},
         citations=[],
         citation_refs=[],
+    )
+    backend = pybtex_docutils.Backend()
+    reference_styles = dict(
+        p=LabelParentheticalReferenceStyle(SphinxReferenceText),
+        t=LabelTextualReferenceStyle(SphinxReferenceText),
     )
 
     @property
@@ -346,43 +394,26 @@ class BibtexDomain(Domain):
                      ) -> docutils.nodes.Element:
         """Replace node by list of citation references (one for each key)."""
         keys = [key.strip() for key in target.split(',')]
-        if builder.name != 'latex':
-            citations_node = docutils.nodes.inline(rawsource=target, text='[')
-        else:
-            citations_node = docutils.nodes.inline(rawsource=target, text='')
-        # map citation keys that can be resolved to their citation data
         citations: Dict[str, Citation] = {
             cit.key: cit for cit in self.citations
             if cit.key in keys
             and self.bibliographies[cit.bibliography_key].list_ == 'citation'}
-        for i, key in enumerate(keys):
-            try:
-                citation = citations[key]
-            except KeyError:
-                # TODO can handle missing reference warning using the domain
+        for key in keys:
+            if key not in citations:
                 logger.warning('could not find bibtex key "%s"' % key,
                                location=node)
-                citations_node += docutils.nodes.inline('', key)
-                continue
-            refcontnode = docutils.nodes.inline('', citation.label)
-            if builder.name == 'latex':
-                # latex builder needs a citation_reference
-                refnode = docutils.nodes.citation_reference(
-                    '', refcontnode,
-                    docname=citation.bibliography_key.docname,
-                    refname=citation.citation_id)
-            else:
-                # other builders can use general reference node
-                refnode = make_refnode(
-                    builder, fromdocname,
-                    citation.bibliography_key.docname,
-                    citation.citation_id, refcontnode)
-            citations_node += refnode
-            if i != len(keys) - 1 and builder.name != 'latex':
-                citations_node += docutils.nodes.Text(',')
-        if builder.name != 'latex':
-            citations_node += docutils.nodes.Text(']')
-        return citations_node
+        references = [
+            (citation.formatted_entry, SphinxReferenceInfo(
+                builder=builder,
+                fromdocname=fromdocname,
+                todocname=citation.bibliography_key.docname,
+                citation_id=citation.citation_id))
+            for citation in citations.values()]
+        formatted_references = \
+            self.reference_styles['p'].format_references(references)
+        result_node = docutils.nodes.inline(
+            target, *formatted_references.render(self.backend))
+        return result_node
 
     def get_all_cited_keys(self, docnames):
         """Yield all citation keys for given *docnames* in order, then
