@@ -4,6 +4,7 @@ include INSTALL.rst
 include CHANGELOG.rst
 include LICENSE.rst
 include requirements.txt
+recursive-include sphinxcontrib *.py
 recursive-include doc *
 recursive-include test *
 global-exclude *.pyc
