@@ -1,13 +1,8 @@
-import docutils.nodes
-import pybtex_docutils
-
-from pybtex.backends import BaseBackend
 from pybtex.plugin import Plugin, find_plugin
 from pybtex.richtext import Text, BaseMultipartText
 from pybtex.style.template import node, _format_list
-from sphinx.util.nodes import make_refnode
 from typing import TYPE_CHECKING, TypeVar, Generic, Tuple, List, Union
-from typing import Iterable, Optional, cast, Any, Type, Dict, NamedTuple
+from typing import Iterable, Optional, cast, Any, Type, Dict
 
 from sphinxcontrib.bibtex.style.names.last import NameStyle as LastNameStyle
 
@@ -16,7 +11,6 @@ if TYPE_CHECKING:
     from pybtex.style import FormattedEntry
     from pybtex.style.names import BaseNameStyle
     from pybtex.style.template import Node
-    from sphinx.builders import Builder
 
 
 ReferenceInfo = TypeVar('ReferenceInfo')

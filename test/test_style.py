@@ -14,7 +14,8 @@ if TYPE_CHECKING:
 def test_style_names_last():
     from pybtex.database import Person
     from sphinxcontrib.bibtex.style.names.last import NameStyle
-    name = Person(string=r"Charles Louis Xavier Joseph de la Vall{\'e}e Poussin")
+    name = Person(
+        string=r"Charles Louis Xavier Joseph de la Vall{\'e}e Poussin")
     last = NameStyle().format
     assert last(name).format().render_as('latex') == "de~la Vall{é}e~Poussin"
     assert (
@@ -45,16 +46,17 @@ def test_simple_reference_style():
     cit_style = cast(
         BaseStyle, find_plugin('pybtex.style.formatting', 'unsrtalpha')())
     ref_style = SimpleReferenceStyle(SimpleReferenceText)
-    author1 = Person('First Last')
-    author2 = Person('Ein Zwei')
-    author3 = Person('Primo Secundo')
+    auth1 = Person('First Last')
+    auth2 = Person('Ein Zwei')
+    auth3 = Person('Primo Secundo')
     fields1 = dict(title='The Book', year='2000', publisher='Santa')
-    entry1 = Entry(type_='book', fields=fields1, persons=dict(author=[author1]))
-    entry2 = Entry(type_='book', fields=fields1, persons=dict(author=[author2]))
-    entry3 = Entry(type_='book', fields=fields1, persons=dict(author=[author3]))
+    entry1 = Entry(type_='book', fields=fields1, persons=dict(author=[auth1]))
+    entry2 = Entry(type_='book', fields=fields1, persons=dict(author=[auth2]))
+    entry3 = Entry(type_='book', fields=fields1, persons=dict(author=[auth3]))
     entries = cit_style.format_entries([entry1, entry2, entry3])
     infos = ["#id1", "#id2", "#id3"]
     backend = find_plugin('pybtex.backends', 'html')()
-    assert ref_style.format_references(zip(entries, infos)).render(backend) == \
-           '{<a href="#id1">Las00</a>;<a href="#id2">Zwe00</a>'\
-           ';<a href="#id3">Sec00</a>}'
+    assert \
+        ref_style.format_references(zip(entries, infos)).render(backend) == \
+        '{<a href="#id1">Las00</a>;<a href="#id2">Zwe00</a>' \
+        ';<a href="#id3">Sec00</a>}'
