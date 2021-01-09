@@ -4,7 +4,7 @@ from pybtex.richtext import HRef
 from pybtex.style.formatting import BaseStyle
 from pybtex.style.template import Node, join
 from sphinxcontrib.bibtex.style.references import \
-    BaseReferenceText, BaseReferenceStyle, label, reference
+    BaseReferenceText, BaseReferenceStyle, entry_label, reference
 from typing import TYPE_CHECKING, List, cast
 
 if TYPE_CHECKING:
@@ -31,7 +31,7 @@ class SimpleReferenceStyle(BaseReferenceStyle):
         return join['{', join(';')[children], '}']
 
     def get_inner_template(self) -> "Node":
-        return reference[label]
+        return reference[entry_label]
 
 
 class SimpleReferenceText(BaseReferenceText[str]):

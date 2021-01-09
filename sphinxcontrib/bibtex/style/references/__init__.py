@@ -20,7 +20,7 @@ To be implemented by clients; see for instance :class:`SphinxReferenceInfo`.
 
 
 @node
-def label(children, data) -> "BaseText":
+def entry_label(children, data) -> "BaseText":
     """Node for inserting the label of a formatted entry."""
     assert not children
     entry = cast("FormattedEntry", data['entry'])

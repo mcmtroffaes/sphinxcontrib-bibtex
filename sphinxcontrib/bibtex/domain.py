@@ -28,7 +28,8 @@ from sphinx.util.nodes import make_refnode
 
 from .bibfile import BibFile, normpath_filename, process_bibfile
 from .style.references import BaseReferenceText
-from .style.references.label import LabelParentheticalReferenceStyle, LabelTextualReferenceStyle
+from .style.references.label import \
+    LabelParentheticalReferenceStyle, LabelTextualReferenceStyle
 
 if TYPE_CHECKING:
     from pybtex.backends import BaseBackend
