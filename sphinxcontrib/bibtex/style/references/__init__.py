@@ -1,16 +1,20 @@
 import docutils.nodes
 import pybtex_docutils
+
 from pybtex.backends import BaseBackend
 from pybtex.plugin import Plugin, find_plugin
 from pybtex.richtext import Text, BaseMultipartText
 from pybtex.style.template import node, _format_list
 from sphinx.util.nodes import make_refnode
-from typing import TYPE_CHECKING, TypeVar, Generic, Tuple, List
+from typing import TYPE_CHECKING, TypeVar, Generic, Tuple, List, Union
 from typing import Iterable, Optional, cast, Any, Type, Dict, NamedTuple
+
+from sphinxcontrib.bibtex.style.names.last import NameStyle as LastNameStyle
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText
     from pybtex.style import FormattedEntry
+    from pybtex.style.names import BaseNameStyle
     from pybtex.style.template import Node
     from sphinx.builders import Builder
 
@@ -63,16 +67,16 @@ class BaseReferenceStyle(Plugin, Generic[ReferenceInfo]):
     """
 
     ReferenceText: Type[BaseReferenceText[ReferenceInfo]]
-    default_name_style = 'lastfirst'
+    default_name_style: Union[str, "BaseNameStyle"] = LastNameStyle
     left_bracket = '['
     right_bracket = ']'
 
     def __init__(
             self, reference_text_type: Type[BaseReferenceText[ReferenceInfo]],
-            name_style: Optional[str] = None):
+            name_style: Optional[Union[str, "BaseNameStyle"]] = None):
         super().__init__()
         self.ReferenceText = reference_text_type
-        self.name_style = find_plugin(
+        self.name_style: "BaseNameStyle" = find_plugin(
             'pybtex.style.names', name_style or self.default_name_style)()
 
     def _data_from_references(
