@@ -352,7 +352,7 @@ class BibtexDomain(Domain):
         else:
             citations_node = docutils.nodes.inline(rawsource=target, text='')
         # map citation keys that can be resolved to their citation data
-        citations = {
+        citations: Dict[str, Citation] = {
             cit.key: cit for cit in self.citations
             if cit.key in keys
             and self.bibliographies[cit.bibliography_key].list_ == 'citation'}
