@@ -124,9 +124,7 @@ class CitationTransform(object):
         return ','.join([r.key for r in self.refs])
 
     def get_ref_num(self, key):
-        for i, k in enumerate(self.global_keys):
-            if k == key:
-                return i + 1
+        return list(self.global_keys.keys()).index(key) + 1
 
     def get_author(self, authors, all_authors=False):
         if len(authors) == 0:
