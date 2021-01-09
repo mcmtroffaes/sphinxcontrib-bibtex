@@ -109,7 +109,8 @@ class BibliographyTransform(SphinxPostTransform):
                     if backrefs:
                         citation_node['backrefs'] = backrefs
                     citation_node += docutils.nodes.label(
-                        '', citation.label, support_smartquotes=False)
+                        '', citation.formatted_entry.label,
+                        support_smartquotes=False)
                     citation_node += self.backend.paragraph(
                         citation.formatted_entry)
                 citation_node['docname'] = bib_key.docname

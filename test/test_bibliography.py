@@ -125,13 +125,14 @@ def test_bibliography_label_prefix_2(app, warning):
     app.build()
     assert not warning.getvalue()
     output1 = (app.outdir / "doc1.html").read_text()
-    assert doc1_refs == citation_refs(output1)
+    # use <= instead of == as there are some extra reference nodes
+    assert doc1_refs <= citation_refs(output1)
     assert doc1_cites == citations(output1)
     output2 = (app.outdir / "doc2.html").read_text()
-    assert doc2_refs == citation_refs(output2)
+    assert doc2_refs <= citation_refs(output2)
     assert doc2_cites == citations(output2)
     output3 = (app.outdir / "summary.html").read_text()
-    assert sum_refs == citation_refs(output3)
+    assert sum_refs <= citation_refs(output3)
     assert sum_cites == citations(output3)
     # check citation reference from summary to doc1
     match1 = common.html_citations(label='AFM12').search(output1)

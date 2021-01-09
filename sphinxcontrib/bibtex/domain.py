@@ -203,7 +203,6 @@ class Citation(NamedTuple):
     citation_id: str                     #: Unique id of this citation.
     bibliography_key: "BibliographyKey"  #: Key of its bibliography directive.
     key: str                             #: Key (with prefix).
-    label: str                           #: Label (with prefix).
     formatted_entry: "FormattedEntry"    #: Entry as formatted by pybtex.
 
 
@@ -371,7 +370,6 @@ class BibtexDomain(Domain):
                     citation_id=bibliography.citation_nodes[key]['ids'][0],
                     bibliography_key=bibliography_key,
                     key=key,
-                    label=label,
                     formatted_entry=formatted_entry,
                 ))
                 if bibliography.list_ == 'citation':
@@ -490,4 +488,7 @@ class BibtexDomain(Domain):
             self.get_sorted_entries(bibliography_key, docnames))
         style = cast("BaseStyle", find_plugin(
             'pybtex.style.formatting', bibliography.style)())
-        return style.format_entries(entries.values())
+        sorted_entries = style.sort(entries.values())
+        labels = style.format_labels(sorted_entries)
+        for label, entry in zip(labels, sorted_entries):
+            yield style.format_entry(bibliography.labelprefix + label, entry)
