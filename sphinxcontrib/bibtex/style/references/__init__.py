@@ -29,8 +29,8 @@ To be implemented by clients; see for instance :class:`SphinxReferenceInfo`.
 # copied from pybtex join but extended to allow "et al" formatting
 @node
 def join(children, data, sep='', sep2=None, last_sep=None, other=None):
-
     """Join text fragments together.
+
     >>> print(str(join.format()))
     <BLANKLINE>
     >>> print(str(join['a', 'b', 'c', 'd', 'e'].format()))
@@ -64,7 +64,8 @@ def join(children, data, sep='', sep2=None, last_sep=None, other=None):
 @node
 def sentence(children, data, capfirst=False, capitalize=False, add_period=True,
              sep=', ', sep2=None, last_sep=None, other=None):
-    """Join text fragments, capitalyze the first letter, add a period to the end.
+    """Join text fragments, capitalize the first letter,
+    and add a period to the end.
 
     >>> print(str(sentence.format()))
     <BLANKLINE>

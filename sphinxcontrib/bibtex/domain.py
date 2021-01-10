@@ -244,7 +244,7 @@ class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
                 info.todocname,
                 info.citation_id,
                 children[0])
-            refnode.extend(children[1:])
+            refnode.extend(children[1:])  # type: ignore
             return [refnode]
 
 
