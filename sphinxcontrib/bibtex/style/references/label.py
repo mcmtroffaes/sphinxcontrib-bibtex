@@ -1,44 +1,44 @@
-from pybtex.style.template import join, sentence, words, names
-from . import BaseReferenceStyle, reference, entry_label
+from typing import TYPE_CHECKING, List
+from pybtex.style.template import words
+from . import (
+    BaseReferenceStyle,
+    reference, entry_label, join, Role,
+)
 
 
-class LabelParentheticalReferenceStyle(BaseReferenceStyle):
+if TYPE_CHECKING:
+    from pybtex.richtext import BaseText
+    from pybtex.style.template import Node
+
+
+class LabelReferenceStyle(BaseReferenceStyle):
     """Simple parenthetical references by label."""
 
-    references_sep = ','
+    def get_parenthetical_outer_template(
+            self, role: Role, children: List["BaseText"]) -> "Node":
+        return self.get_outer_template_helper(
+            children,
+            separators=self.outer_separators[role.type_],
+            brackets=role.brackets,
+            capfirst=False)
 
-    def get_outer_template(self, children, capfirst=False):
-        return join[
-            self.left_bracket,
-            join(sep=self.references_sep)[children],
-            self.right_bracket,
-        ]
-
-    def get_inner_template(self):
+    def get_parenthetical_inner_template(self, role: Role) -> "Node":
         return reference[entry_label]
 
+    def get_textual_outer_template(
+            self, role: Role, children: List["BaseText"]) -> "Node":
+        return self.get_outer_template_helper(
+            children,
+            separators=self.outer_separators[role.type_],
+            brackets=False,
+            capfirst=role.capfirst)
 
-class LabelTextualReferenceStyle(BaseReferenceStyle):
-    """Simple textual references by last name and label."""
-
-    references_sep = '; '
-    names_sep = ', '
-    names_sep2 = ' and '
-    names_last_sep = ', and '
-
-    def get_outer_template(self, children, capfirst=False):
-        return sentence(
-            capfirst=capfirst,
-            add_period=False,
-            sep=self.references_sep)[children]
-
-    def get_inner_template(self):
+    def get_textual_inner_template(self, role: Role) -> "Node":
         return words[
-             names('author', sep=self.names_sep, sep2=self.names_sep2,
-                   last_sep=self.names_last_sep),
-             join[
-                 self.left_bracket,
-                 reference[entry_label],
-                 self.right_bracket
-             ]
+            self.get_names_template_helper(role.full_authors),
+            join[
+                self.left_bracket if role.brackets else '',
+                reference[entry_label],
+                self.right_bracket if role.brackets else ''
+            ]
         ]

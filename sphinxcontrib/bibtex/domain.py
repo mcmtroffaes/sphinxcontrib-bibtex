@@ -27,9 +27,10 @@ from sphinx.errors import ExtensionError
 from sphinx.util.nodes import make_refnode
 
 from .bibfile import BibFile, normpath_filename, process_bibfile
-from .style.references import BaseReferenceText
-from .style.references.label import \
-    LabelParentheticalReferenceStyle, LabelTextualReferenceStyle
+from .style.references import (
+    BaseReferenceText, BaseReferenceStyle, roles_by_name,
+)
+from .style.references.label import LabelReferenceStyle
 
 if TYPE_CHECKING:
     from pybtex.backends import BaseBackend
@@ -204,6 +205,7 @@ class Citation(NamedTuple):
     citation_id: str                     #: Unique id of this citation.
     bibliography_key: "BibliographyKey"  #: Key of its bibliography directive.
     key: str                             #: Key (with prefix).
+    entry: "Entry"                       #: Entry from pybtex.
     formatted_entry: "FormattedEntry"    #: Entry as formatted by pybtex.
 
 
@@ -266,10 +268,8 @@ class BibtexDomain(Domain):
         citation_refs=[],
     )
     backend = pybtex_docutils.Backend()
-    reference_styles = dict(
-        p=LabelParentheticalReferenceStyle(SphinxReferenceText),
-        t=LabelTextualReferenceStyle(SphinxReferenceText),
-    )
+    reference_style: BaseReferenceStyle = \
+        LabelReferenceStyle(SphinxReferenceText)
 
     @property
     def bibfiles(self) -> Dict[str, BibFile]:
@@ -359,7 +359,7 @@ class BibtexDomain(Domain):
         used_keys: Set[str] = set()
         used_labels: Dict[str, str] = {}
         for bibliography_key, bibliography in self.bibliographies.items():
-            for formatted_entry in self.get_formatted_entries(
+            for entry, formatted_entry in self.get_formatted_entries(
                     bibliography_key, docnames):
                 key = bibliography.keyprefix + formatted_entry.key
                 label = bibliography.labelprefix + formatted_entry.label
@@ -371,6 +371,7 @@ class BibtexDomain(Domain):
                     citation_id=bibliography.citation_nodes[key]['ids'][0],
                     bibliography_key=bibliography_key,
                     key=key,
+                    entry=entry,
                     formatted_entry=formatted_entry,
                 ))
                 if bibliography.list_ == 'citation':
@@ -402,14 +403,15 @@ class BibtexDomain(Domain):
                 logger.warning('could not find bibtex key "%s"' % key,
                                location=node)
         references = [
-            (citation.formatted_entry, SphinxReferenceInfo(
+            (citation.entry, citation.formatted_entry, SphinxReferenceInfo(
                 builder=builder,
                 fromdocname=fromdocname,
                 todocname=citation.bibliography_key.docname,
                 citation_id=citation.citation_id))
             for citation in citations.values()]
         formatted_references = \
-            self.reference_styles['p'].format_references(references)
+            self.reference_style.format_references(
+                roles_by_name['p'], references)
         result_node = docutils.nodes.inline(
             target, *formatted_references.render(self.backend))
         return result_node
@@ -492,4 +494,7 @@ class BibtexDomain(Domain):
         sorted_entries = style.sort(entries.values())
         labels = style.format_labels(sorted_entries)
         for label, entry in zip(labels, sorted_entries):
-            yield style.format_entry(bibliography.labelprefix + label, entry)
+            yield (
+                entry,
+                style.format_entry(bibliography.labelprefix + label, entry),
+            )
