@@ -225,8 +225,7 @@ class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
     """
 
     def render(self, backend: "BaseBackend"):
-        if not isinstance(backend, pybtex_docutils.Backend):
-            raise TypeError(
+        assert (isinstance(backend, pybtex_docutils.Backend),
                 "SphinxReferenceText only supports the docutils backend")
         info = self.info[0]
         if info.builder.name == 'latex':
