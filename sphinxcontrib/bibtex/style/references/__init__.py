@@ -29,21 +29,7 @@ To be implemented by clients; see for instance :class:`SphinxReferenceInfo`.
 # copied from pybtex join but extended to allow "et al" formatting
 @node
 def join(children, data, sep='', sep2=None, last_sep=None, other=None):
-    """Join text fragments together.
-
-    >>> print(str(join.format()))
-    <BLANKLINE>
-    >>> print(str(join['a', 'b', 'c', 'd', 'e'].format()))
-    abcde
-    >>> join_sep = join(sep=', ', sep2=' and ', last_sep=', and ')
-    >>> print(str(join_sep['Tom', 'Jerry'].format()))
-    Tom and Jerry
-    >>> print(str(join_sep['Billy', 'Willy', 'Dilly'].format()))
-    Billy, Willy, and Dilly
-    >>> join_other = join(other=' et al.')
-    >>> print(str(join_other['Billy', 'Willy', 'Dilly'].format()))
-    Billy et al.
-    """
+    """Join text fragments together."""
 
     if sep2 is None:
         sep2 = sep
@@ -66,18 +52,6 @@ def sentence(children, data, capfirst=False, capitalize=False, add_period=True,
              sep=', ', sep2=None, last_sep=None, other=None):
     """Join text fragments, capitalize the first letter,
     and add a period to the end.
-
-    >>> print(str(sentence.format()))
-    <BLANKLINE>
-    >>> print(str(sentence(capitalize=True, sep=' ')[
-    ...     'mary', 'had', 'a', 'little', 'lamb'].format()))
-    Mary had a little lamb.
-    >>> print(str(sentence(capitalize=False, add_period=False)[
-    ...     'uno', 'dos', 'tres'].format()))
-    uno, dos, tres
-    >>> print(str(sentence(other=' and more')[
-    ...     'uno', 'dos', 'tres'].format()))
-    Uno and more.
     """
     text = join(sep=sep, sep2=sep2, last_sep=last_sep, other=other)[
         children
