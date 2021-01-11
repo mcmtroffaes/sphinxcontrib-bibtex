@@ -133,7 +133,7 @@ class Role(NamedTuple):
     full_authors: bool
 
     def name(self):
-        cap = 'cap' if self.capfirst else ''
+        cap = 'c' if self.capfirst else ''
         if self.type_ in {RoleType.PARENTHETICAL, RoleType.TEXTUAL}:
             bra = '' if self.brackets else 'al'
             par = ''
@@ -160,12 +160,12 @@ _roles = [
         full_authors=full_authors,
     )
     for type_ in RoleType
-    for brackets in (False, True)
+    for brackets in (True, False)
     for capfirst in (
-        (False, True) if RoleType not in (RoleType.LABEL, RoleType.YEAR)
+        (False, True) if type_ not in {RoleType.LABEL, RoleType.YEAR}
         else (False,))
     for full_authors in (
-        (False, True) if RoleType not in (RoleType.LABEL, RoleType.YEAR)
+        (False, True) if type_ not in {RoleType.LABEL, RoleType.YEAR}
         else (False,))
 ]
 
@@ -289,7 +289,7 @@ class BaseReferenceStyle(Plugin, Generic[ReferenceInfo]):
         return join[
             self.left_bracket if brackets else '',
             sentence(
-                capitalize=capfirst,
+                capfirst=capfirst,
                 add_period=False,
                 sep=separators.sep,
                 sep2=separators.sep2,
