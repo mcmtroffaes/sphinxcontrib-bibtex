@@ -22,10 +22,12 @@ import sphinx.util
 import re
 
 from pybtex.plugin import find_plugin
-from sphinx.domains import Domain
+from sphinx.domains import Domain, ObjType
 from sphinx.errors import ExtensionError
+from sphinx.locale import _
 from sphinx.util.nodes import make_refnode
 
+from .roles import CiteRole
 from .bibfile import BibFile, normpath_filename, process_bibfile
 from .style.references import (
     BaseReferenceText, BaseReferenceStyle, roles_by_name,
@@ -43,7 +45,6 @@ if TYPE_CHECKING:
     from sphinx.environment import BuildEnvironment
     from .directives import BibliographyKey, BibliographyValue
     from .roles import CitationRef
-
 
 logger = sphinx.util.logging.getLogger(__name__)
 
@@ -225,8 +226,8 @@ class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
     """
 
     def render(self, backend: "BaseBackend"):
-        assert (isinstance(backend, pybtex_docutils.Backend),
-                "SphinxReferenceText only supports the docutils backend")
+        assert isinstance(backend, pybtex_docutils.Backend), \
+               "SphinxReferenceText only supports the docutils backend"
         info = self.info[0]
         if info.builder.name == 'latex':
             # latex builder needs a citation_reference
@@ -266,6 +267,10 @@ class BibtexDomain(Domain):
         citations=[],
         citation_refs=[],
     )
+    object_types = dict(
+        citation=ObjType(_('citation'), *roles_by_name.keys(), searchprio=-1),
+    )
+    roles = dict((name, CiteRole()) for name in roles_by_name)
     backend = pybtex_docutils.Backend()
     reference_style: BaseReferenceStyle = \
         LabelReferenceStyle(SphinxReferenceText)
@@ -410,7 +415,7 @@ class BibtexDomain(Domain):
             for citation in citations.values()]
         formatted_references = \
             self.reference_style.format_references(
-                roles_by_name['p'], references)
+                roles_by_name[node.get('reftype', 'p')], references)
         result_node = docutils.nodes.inline(
             target, *formatted_references.render(self.backend))
         return result_node

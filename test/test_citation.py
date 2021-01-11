@@ -62,3 +62,11 @@ def test_citation_whitespace(app, warning):
 def test_citation_from_orphan(app, warning):
     app.build()
     assert not warning.getvalue()
+
+
+@pytest.mark.sphinx('html', testroot='citation_roles')
+def test_citation_roles(app, warning):
+    app.build()
+    output = (app.outdir / "index.html").read_text()
+    print(output)
+    assert not warning.getvalue()
