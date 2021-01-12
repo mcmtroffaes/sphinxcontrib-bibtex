@@ -31,6 +31,7 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_config_value("bibtex_encoding", "utf-8-sig", "html")
     app.add_config_value("bibtex_bibliography_header", "", "html")
     app.add_config_value("bibtex_footbibliography_header", "", "html")
+    app.add_config_value("bibtex_reference_style", "label", "html")
     app.add_domain(BibtexDomain)
     app.add_directive("bibliography", BibliographyDirective)
     app.add_role("cite", CiteRole())

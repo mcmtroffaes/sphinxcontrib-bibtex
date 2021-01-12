@@ -1,7 +1,7 @@
 import dataclasses
 
 from . import GroupReferenceStyle
-from .. import ReferenceInfo, BaseStandardReferenceStyle
+from .. import ReferenceInfo, BaseStandardReferenceStyle, Separators
 from ..authoryear import AuthorYearReferenceStyle
 from ..onlyauthor import OnlyAuthorReferenceStyle
 from ..onlylabel import OnlyLabelReferenceStyle
@@ -13,10 +13,10 @@ class AuthorYearGroupReferenceStyle(
         GroupReferenceStyle[ReferenceInfo],
         BaseStandardReferenceStyle[ReferenceInfo]):
 
-    author_year_sep: str = ', '
+    author_year_sep: str
 
     def __post_init__(self):
-        self.styles += [
+        self.styles.extend([
             AuthorYearReferenceStyle(
                 ReferenceText=self.ReferenceText,
                 name_style=self.name_style,
@@ -54,5 +54,5 @@ class AuthorYearGroupReferenceStyle(
                 outer_separators=self.outer_separators,
                 names_separators=self.names_separators,
             )
-        ]
+        ])
         super().__post_init__()

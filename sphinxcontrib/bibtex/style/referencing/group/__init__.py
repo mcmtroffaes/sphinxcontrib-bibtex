@@ -1,6 +1,5 @@
 import dataclasses
 from typing import List, Dict, TYPE_CHECKING
-from pybtex.plugin import Plugin
 
 from .. import ReferenceInfo, BaseReferenceStyle
 
@@ -14,13 +13,11 @@ class GroupReferenceStyle(BaseReferenceStyle[ReferenceInfo]):
     """Composes a group of reference styles into a single consistent style."""
 
     #: List of style types.
-    styles: List[BaseReferenceStyle[ReferenceInfo]] \
-        = dataclasses.field(default_factory=list)
+    styles: List[BaseReferenceStyle[ReferenceInfo]]
 
     #: Dictionary from role names to styles.
     #: Automatically initialized from :attr:`styles`.
-    role_style: Dict[str, BaseReferenceStyle[ReferenceInfo]] \
-        = dataclasses.field(default_factory=dict, init=False)
+    role_style: Dict[str, BaseReferenceStyle[ReferenceInfo]]
 
     def __post_init__(self):
         super().__post_init__()

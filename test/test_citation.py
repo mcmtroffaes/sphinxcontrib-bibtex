@@ -4,6 +4,9 @@ import pytest
 from sphinxcontrib.bibtex.domain import BibtexDomain
 from typing import cast
 
+from sphinxcontrib.bibtex.style.referencing.group.authoryear import \
+    AuthorYearGroupReferenceStyle
+
 
 @pytest.mark.sphinx('html', testroot='citation_not_found')
 def test_citation_not_found(app, warning):
@@ -65,6 +68,14 @@ def test_citation_from_orphan(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='citation_roles')
-def test_citation_roles(app, warning):
+def test_citation_roles_label(app, warning):
+    app.build()
+    assert not warning.getvalue()
+
+
+@pytest.mark.sphinx(
+    'html', testroot='citation_roles',
+    confoverrides={'bibtex_reference_style': 'authoryear'})
+def test_citation_roles_authoryear(app, warning):
     app.build()
     assert not warning.getvalue()

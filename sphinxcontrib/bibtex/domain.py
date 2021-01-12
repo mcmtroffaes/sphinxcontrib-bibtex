@@ -10,7 +10,7 @@
 """
 
 import ast
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Type
 from typing import List, Dict, NamedTuple, cast, Iterable, Tuple, Set
 
 import docutils.frontend
@@ -22,6 +22,7 @@ import sphinx.util
 import re
 
 from pybtex.plugin import find_plugin
+from pybtex.richtext import Text, Tag
 from sphinx.domains import Domain, ObjType
 from sphinx.errors import ExtensionError
 from sphinx.locale import _
@@ -29,7 +30,9 @@ from sphinx.util.nodes import make_refnode
 
 from .roles import CiteRole
 from .bibfile import BibFile, normpath_filename, process_bibfile
-from .style.referencing import BaseReferenceText, BaseReferenceStyle
+from .style.names.last import NameStyle as LastNameStyle
+from .style.referencing import BaseReferenceText, BaseReferenceStyle, Separators
+from .style.referencing.group.authoryear import AuthorYearGroupReferenceStyle
 from .style.referencing.group.label import LabelGroupReferenceStyle
 
 if TYPE_CHECKING:
@@ -266,8 +269,7 @@ class BibtexDomain(Domain):
         citation_refs=[],
     )
     backend = pybtex_docutils.Backend()
-    reference_style: BaseReferenceStyle = \
-        LabelGroupReferenceStyle(SphinxReferenceText)
+    reference_style: BaseReferenceStyle
 
     @property
     def bibfiles(self) -> Dict[str, BibFile]:
@@ -300,6 +302,46 @@ class BibtexDomain(Domain):
         return self.data['citation_refs']
 
     def __init__(self, env: "BuildEnvironment"):
+        # set up referencing style
+        default_names_separators = Separators(
+            sep=', ', sep2=' and ', last_sep=', and ',
+            other=Text(' ', Tag('em', 'et al.')))
+        if env.app.config.bibtex_reference_style == 'label':
+            self.reference_style = \
+                LabelGroupReferenceStyle(
+                    SphinxReferenceText,
+                    left_bracket='[',
+                    right_bracket=']',
+                    name_style=LastNameStyle(),
+                    abbreviate_names=True,
+                    outer_separators=Separators(sep=', '),
+                    names_separators=default_names_separators,
+                    styles=[],
+                    role_style={},
+                )
+        elif env.app.config.bibtex_reference_style == 'authoryear':
+            self.reference_style = \
+                AuthorYearGroupReferenceStyle(
+                    SphinxReferenceText,
+                    left_bracket='[',
+                    right_bracket=']',
+                    name_style=LastNameStyle(),
+                    abbreviate_names=True,
+                    outer_separators=Separators(sep=', '),
+                    names_separators=default_names_separators,
+                    author_year_sep=', ',
+                    styles=[],
+                    role_style={},
+                )
+        elif isinstance(env.app.config.bibtex_reference_style,
+                        BaseReferenceStyle):
+            self.reference_style = env.app.config.bibtex_reference_style
+        else:
+            raise ValueError(
+                f"bibtex_reference_style: "
+                f"{env.app.config.bibtex_reference_style!r} "
+                f"must be 'label', 'authoryear', or an instance of "
+                f"BaseReferenceStyle")
         # set up object types and roles for referencing style
         role_names = self.reference_style.get_role_names()
         self.object_types = dict(

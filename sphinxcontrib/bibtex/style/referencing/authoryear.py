@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 class AuthorYearReferenceStyle(BaseStandardReferenceStyle):
     """Author-year style references."""
 
-    author_year_sep: str = ', '
+    author_year_sep: str
 
     def get_role_names(self) -> Iterable[str]:
         return [

@@ -1,15 +1,12 @@
 import dataclasses
 from abc import ABC
 
-from pybtex.plugin import Plugin
 from pybtex.richtext import Text, BaseMultipartText, Tag
 from pybtex.style.template import node, _format_list, FieldIsMissing
 from typing import (
     TYPE_CHECKING, TypeVar, Generic, Tuple, List, Union, NamedTuple
 )
 from typing import Iterable, Optional, cast, Any, Type, Dict
-
-from sphinxcontrib.bibtex.style.names.last import NameStyle as LastNameStyle
 
 if TYPE_CHECKING:
     from pybtex.database import Entry
@@ -123,7 +120,7 @@ class Separators(NamedTuple):
 
 
 @dataclasses.dataclass(frozen=True)
-class BaseReferenceStyle(Plugin, Generic[ReferenceInfo]):
+class BaseReferenceStyle(Generic[ReferenceInfo]):
     """Abstract base class for reference styles.
     Custom styles can override the outer and inner templates.
     """
@@ -186,31 +183,24 @@ class BaseStandardReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
     """
 
     #: Style used for formatting author names.
-    name_style: "BaseNameStyle" = dataclasses.field(
-        default_factory=LastNameStyle)
+    name_style: "BaseNameStyle"
 
     #: Whether or not to abbreviate first names.
-    abbreviate_names: bool = True
+    abbreviate_names: bool
 
     #: Left bracket.
-    left_bracket: Union["BaseText", str] = '['
+    left_bracket: Union["BaseText", str]
 
     #: Right bracket.
-    right_bracket: Union["BaseText", str] = ']'
+    right_bracket: Union["BaseText", str]
 
     #: Separators used for outer template (i.e. in between references
     #: if multiple keys are referenced in a single citation).
-    outer_separators: Separators = dataclasses.field(
-        default_factory=lambda: Separators(sep=', ')
-    )
+    outer_separators: Separators
 
     #: Inner template typically has some field value or names.
     #: Generally, only names use separators, and these are stored here.
-    names_separators: Separators = dataclasses.field(
-        default_factory=lambda: Separators(
-            sep=', ', sep2=' and ', last_sep=', and ',
-            other=Text(' ', Tag('em', 'et al.')))
-    )
+    names_separators: Separators
 
     def get_author_template(self, full_authors: bool) -> "Node":
         """Returns a template formatting the authors with correct separators
