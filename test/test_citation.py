@@ -68,5 +68,4 @@ def test_citation_from_orphan(app, warning):
 def test_citation_roles(app, warning):
     app.build()
     output = (app.outdir / "index.html").read_text()
-    print(output)
     assert not warning.getvalue()

@@ -4,34 +4,38 @@ Contents
 Single Citations
 ----------------
 
-* p :cite:p:`testone`
-* ps :cite:ps:`testone`
-* cp :cite:cp:`testone`
-* cps :cite:cps:`testone`
-* alp :cite:alp:`testone`
-* alps :cite:alps:`testone`
-* calp :cite:calp:`testone`
-* calps :cite:calps:`testone`
-* t :cite:t:`testone`
-* ts :cite:ts:`testone`
-* ct :cite:ct:`testone`
-* cts :cite:cts:`testone`
-* alt :cite:alt:`testone`
-* alts :cite:alts:`testone`
-* calt :cite:calt:`testone`
-* calts :cite:calts:`testone`
-* labelpar :cite:labelpar:`testone`
-* label :cite:label:`testone`
-* yearpar :cite:yearpar:`testone`
-* year :cite:year:`testone`
-* authorpar :cite:authorpar:`testone`
-* authorpars :cite:authorpars:`testone`
-* cauthorpar :cite:cauthorpar:`testone`
-* cauthorpars :cite:cauthorpars:`testone`
-* author :cite:author:`testone`
-* authors :cite:authors:`testone`
-* cauthor :cite:cauthor:`testone`
-* cauthors :cite:cauthors:`testone`
+====================== =====================================
+role                   result
+====================== =====================================
+``:cite:p:``           :cite:p:`testone`
+``:cite:ps:``          :cite:ps:`testone`
+``:cite:cp:``          :cite:cp:`testone`
+``:cite:cps:``         :cite:cps:`testone`
+``:cite:alp:``         :cite:alp:`testone`
+``:cite:alps:``        :cite:alps:`testone`
+``:cite:calp:``        :cite:calp:`testone`
+``:cite:calps:``       :cite:calps:`testone`
+``:cite:t:``           :cite:t:`testone`
+``:cite:ts:``          :cite:ts:`testone`
+``:cite:ct:``          :cite:ct:`testone`
+``:cite:cts:``         :cite:cts:`testone`
+``:cite:alt:``         :cite:alt:`testone`
+``:cite:alts:``        :cite:alts:`testone`
+``:cite:calt:``        :cite:calt:`testone`
+``:cite:calts:``       :cite:calts:`testone`
+``:cite:labelpar:``    :cite:labelpar:`testone`
+``:cite:label:``       :cite:label:`testone`
+``:cite:yearpar:``     :cite:yearpar:`testone`
+``:cite:year:``        :cite:year:`testone`
+``:cite:authorpar:``   :cite:authorpar:`testone`
+``:cite:authorpars:``  :cite:authorpars:`testone`
+``:cite:cauthorpar:``  :cite:cauthorpar:`testone`
+``:cite:cauthorpars:`` :cite:cauthorpars:`testone`
+``:cite:author:``      :cite:author:`testone`
+``:cite:authors:``     :cite:authors:`testone`
+``:cite:cauthor:``     :cite:cauthor:`testone`
+``:cite:cauthors:``    :cite:cauthors:`testone`
+====================== =====================================
 
 Double Citations
 ----------------
