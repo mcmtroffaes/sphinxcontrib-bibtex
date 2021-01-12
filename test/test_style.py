@@ -3,9 +3,9 @@ from pybtex.plugin import find_plugin
 from pybtex.richtext import HRef
 from pybtex.style.formatting import BaseStyle
 from pybtex.style.template import Node
-from sphinxcontrib.bibtex.style.references import (
-    BaseReferenceText, BaseReferenceStyle, Role,
-    entry_label, reference, roles_by_name, join
+from sphinxcontrib.bibtex.style.referencing import (
+    BaseReferenceText, BaseReferenceStyle,
+    entry_label, reference, join
 )
 from typing import TYPE_CHECKING, List, cast
 
@@ -28,19 +28,16 @@ def test_style_names_last():
 
 
 class SimpleReferenceStyle(BaseReferenceStyle):
-    def get_parenthetical_outer_template(
-            self, role: Role, children: List["BaseText"]) -> "Node":
+
+    def get_role_names(self):
+        return 'p'
+
+    def get_outer_template(
+            self, role_name: str, children: List["BaseText"]) -> "Node":
         return join['{', join(';')[children], '}']
 
-    def get_parenthetical_inner_template(self, role: Role) -> "Node":
+    def get_inner_template(self, role_name: str) -> "Node":
         return reference[entry_label]
-
-    def get_textual_outer_template(
-            self, role: Role, children: List["BaseText"]) -> "Node":
-        return join('; ')[children]
-
-    def get_textual_inner_template(self, role: Role) -> "Node":
-        return reference[self.get_names_template_helper(full_authors=False)]
 
 
 class SimpleReferenceText(BaseReferenceText[str]):
@@ -68,12 +65,6 @@ def test_simple_reference_style():
     references = list(zip(entries, formatted_entries, infos))
     backend = find_plugin('pybtex.backends', 'html')()
     assert \
-        ref_style.format_references(
-            roles_by_name['p'], references).render(backend) == \
+        ref_style.format_references('p', references).render(backend) == \
         '{<a href="#id1">Las00</a>;<a href="#id2">Zwe00</a>' \
         ';<a href="#id3">Sec00</a>}'
-    assert \
-        ref_style.format_references(
-            roles_by_name['t'], references).render(backend) == \
-        '<a href="#id1">Last</a>; <a href="#id2">Zwei</a>; ' \
-        '<a href="#id3">Secundo</a>'

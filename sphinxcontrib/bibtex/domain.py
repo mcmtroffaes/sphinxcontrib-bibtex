@@ -29,10 +29,8 @@ from sphinx.util.nodes import make_refnode
 
 from .roles import CiteRole
 from .bibfile import BibFile, normpath_filename, process_bibfile
-from .style.references import (
-    BaseReferenceText, BaseReferenceStyle, roles_by_name,
-)
-from .style.references.label import LabelReferenceStyle
+from .style.referencing import BaseReferenceText, BaseReferenceStyle
+from .style.referencing.group.label import LabelGroupReferenceStyle
 
 if TYPE_CHECKING:
     from pybtex.backends import BaseBackend
@@ -267,13 +265,9 @@ class BibtexDomain(Domain):
         citations=[],
         citation_refs=[],
     )
-    object_types = dict(
-        citation=ObjType(_('citation'), *roles_by_name.keys(), searchprio=-1),
-    )
-    roles = dict((name, CiteRole()) for name in roles_by_name)
     backend = pybtex_docutils.Backend()
     reference_style: BaseReferenceStyle = \
-        LabelReferenceStyle(SphinxReferenceText)
+        LabelGroupReferenceStyle(SphinxReferenceText)
 
     @property
     def bibfiles(self) -> Dict[str, BibFile]:
@@ -306,6 +300,13 @@ class BibtexDomain(Domain):
         return self.data['citation_refs']
 
     def __init__(self, env: "BuildEnvironment"):
+        # set up object types and roles for referencing style
+        role_names = self.reference_style.get_role_names()
+        self.object_types = dict(
+            citation=ObjType(_('citation'), *role_names, searchprio=-1),
+        )
+        self.roles = dict((name, CiteRole()) for name in role_names)
+        # initialize the domain
         super().__init__(env)
         # connect env-updated
         env.app.connect('env-updated', env_updated)
@@ -414,8 +415,7 @@ class BibtexDomain(Domain):
                 citation_id=citation.citation_id))
             for citation in citations.values()]
         formatted_references = \
-            self.reference_style.format_references(
-                roles_by_name[typ], references)
+            self.reference_style.format_references(typ, references)
         result_node = docutils.nodes.inline(rawsource=target)
         result_node += formatted_references.render(self.backend)
         return result_node

@@ -1,4 +1,4 @@
-from sphinxcontrib.bibtex.style.references import join, sentence
+from sphinxcontrib.bibtex.style.referencing import join, sentence
 
 
 def test_join():

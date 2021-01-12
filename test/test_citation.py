@@ -67,5 +67,4 @@ def test_citation_from_orphan(app, warning):
 @pytest.mark.sphinx('html', testroot='citation_roles')
 def test_citation_roles(app, warning):
     app.build()
-    output = (app.outdir / "index.html").read_text()
     assert not warning.getvalue()
