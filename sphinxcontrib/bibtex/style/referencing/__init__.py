@@ -187,7 +187,7 @@ class BaseStandardReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
 
     #: Style used for formatting author names.
     name_style: "BaseNameStyle" = dataclasses.field(
-        default_factory=lambda: LastNameStyle())
+        default_factory=LastNameStyle)
 
     #: Whether or not to abbreviate first names.
     abbreviate_names: bool = True
