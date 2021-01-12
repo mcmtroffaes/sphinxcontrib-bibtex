@@ -338,7 +338,7 @@ class BibtexDomain(Domain):
                         BaseReferenceStyle):
             self.reference_style = env.app.config.bibtex_reference_style
         else:
-            raise ValueError(
+            raise ExtensionError(
                 f"bibtex_reference_style: "
                 f"{env.app.config.bibtex_reference_style!r} "
                 f"must be 'label', 'authoryear', or an instance of "

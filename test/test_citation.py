@@ -1,6 +1,7 @@
 import common
 import pytest
 
+from sphinx.errors import ExtensionError
 from sphinxcontrib.bibtex.domain import BibtexDomain
 from typing import cast
 
@@ -76,3 +77,11 @@ def test_citation_roles_label(app, warning):
 def test_citation_roles_authoryear(app, warning):
     app.build()
     assert not warning.getvalue()
+
+
+@pytest.mark.sphinx('pseudoxml', testroot='debug_bibtex_citation',
+                    confoverrides={'bibtex_reference_style': 'blablabla'})
+def test_reference_style_invalid(make_app, app_params):
+    args, kwargs = app_params
+    with pytest.raises(ExtensionError, match="bibtex_reference_style"):
+        make_app(*args, **kwargs)
