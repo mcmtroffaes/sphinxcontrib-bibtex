@@ -4,9 +4,6 @@ import pytest
 from sphinxcontrib.bibtex.domain import BibtexDomain
 from typing import cast
 
-from sphinxcontrib.bibtex.style.referencing.group.authoryear import \
-    AuthorYearGroupReferenceStyle
-
 
 @pytest.mark.sphinx('html', testroot='citation_not_found')
 def test_citation_not_found(app, warning):

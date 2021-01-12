@@ -1,7 +1,7 @@
 import dataclasses
 
 from . import GroupReferenceStyle
-from .. import ReferenceInfo, BaseStandardReferenceStyle, Separators
+from .. import ReferenceInfo, BaseStandardReferenceStyle
 from ..authoryear import AuthorYearReferenceStyle
 from ..onlyauthor import OnlyAuthorReferenceStyle
 from ..onlylabel import OnlyLabelReferenceStyle

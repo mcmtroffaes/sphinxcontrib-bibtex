@@ -10,7 +10,7 @@
 """
 
 import ast
-from typing import TYPE_CHECKING, Type
+from typing import TYPE_CHECKING
 from typing import List, Dict, NamedTuple, cast, Iterable, Tuple, Set
 
 import docutils.frontend
@@ -31,7 +31,8 @@ from sphinx.util.nodes import make_refnode
 from .roles import CiteRole
 from .bibfile import BibFile, normpath_filename, process_bibfile
 from .style.names.last import NameStyle as LastNameStyle
-from .style.referencing import BaseReferenceText, BaseReferenceStyle, Separators
+from .style.referencing import \
+    BaseReferenceText, BaseReferenceStyle, Separators
 from .style.referencing.group.authoryear import AuthorYearGroupReferenceStyle
 from .style.referencing.group.label import LabelGroupReferenceStyle
 

@@ -1,7 +1,7 @@
 import dataclasses
 from abc import ABC
 
-from pybtex.richtext import Text, BaseMultipartText, Tag
+from pybtex.richtext import Text, BaseMultipartText
 from pybtex.style.template import node, _format_list, FieldIsMissing
 from typing import (
     TYPE_CHECKING, TypeVar, Generic, Tuple, List, Union, NamedTuple
