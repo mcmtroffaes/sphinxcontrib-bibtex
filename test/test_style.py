@@ -2,12 +2,13 @@ from pybtex.database import Person, Entry
 from pybtex.plugin import find_plugin
 from pybtex.richtext import HRef
 from pybtex.style.formatting import BaseStyle
-from pybtex.style.template import Node
+from pybtex.style.template import Node, FieldIsMissing
 from sphinxcontrib.bibtex.style.referencing import (
     BaseReferenceText, BaseReferenceStyle,
-    entry_label, reference, join
+    entry_label, reference, join, names
 )
 from typing import TYPE_CHECKING, List, cast
+import pytest
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText
@@ -25,6 +26,12 @@ def test_style_names_last():
         'de&nbsp;la Vall<span class="bibtex-protected">é</span>e&nbsp;Poussin')
     name2 = Person(first='First', last='Last', middle='Middle')
     assert last(name2).format().render_as('latex') == "Last"
+
+
+def test_style_names_no_author():
+    entry = Entry(type_='book')
+    with pytest.raises(FieldIsMissing):
+        names('author').format_data(dict(entry=entry))
 
 
 class SimpleReferenceStyle(BaseReferenceStyle):
