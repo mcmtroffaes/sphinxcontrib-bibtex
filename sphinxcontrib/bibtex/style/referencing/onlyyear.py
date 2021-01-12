@@ -1,4 +1,6 @@
 from typing import TYPE_CHECKING, List, Iterable
+
+from pybtex.style.template import field
 from . import BaseStandardReferenceStyle, reference
 
 
@@ -7,25 +9,19 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-class AuthorOnlyReferenceStyle(BaseStandardReferenceStyle):
-    """Reference by author names."""
+class OnlyYearReferenceStyle(BaseStandardReferenceStyle):
+    """Reference by year."""
 
     def get_role_names(self) -> Iterable[str]:
-        return [
-            f'{capfirst}author{parenthetical}{full_author}'
-            for parenthetical in ['par', '']
-            for capfirst in ['', 'c']
-            for full_author in ['', 's']
-        ]
+        return ['year', 'yearpar']
 
     def get_outer_template(
             self, role_name: str, children: List["BaseText"]) -> "Node":
         return self.get_standard_outer_template(
             children,
             brackets='par' in role_name,
-            capfirst='c' in role_name,
+            capfirst=False,
         )
 
     def get_inner_template(self, role_name: str) -> "Node":
-        return reference[
-            self.get_author_template(full_authors='s' in role_name)]
+        return reference[field('year')]

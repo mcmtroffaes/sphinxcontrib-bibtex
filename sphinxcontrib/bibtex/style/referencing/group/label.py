@@ -2,10 +2,10 @@ import dataclasses
 
 from . import GroupReferenceStyle
 from .. import ReferenceInfo, BaseStandardReferenceStyle
-from ..authoronly import AuthorOnlyReferenceStyle
 from ..label import LabelReferenceStyle
-from ..labelonly import LabelOnlyReferenceStyle
-from ..yearonly import YearOnlyReferenceStyle
+from ..onlyauthor import OnlyAuthorReferenceStyle
+from ..onlylabel import OnlyLabelReferenceStyle
+from ..onlyyear import OnlyYearReferenceStyle
 
 
 @dataclasses.dataclass(frozen=True)
@@ -24,7 +24,7 @@ class LabelGroupReferenceStyle(
                 outer_separators=self.outer_separators,
                 names_separators=self.names_separators,
             ),
-            AuthorOnlyReferenceStyle(
+            OnlyAuthorReferenceStyle(
                 ReferenceText=self.ReferenceText,
                 name_style=self.name_style,
                 abbreviate_names=self.abbreviate_names,
@@ -33,7 +33,7 @@ class LabelGroupReferenceStyle(
                 outer_separators=self.outer_separators,
                 names_separators=self.names_separators,
             ),
-            LabelOnlyReferenceStyle(
+            OnlyLabelReferenceStyle(
                 ReferenceText=self.ReferenceText,
                 name_style=self.name_style,
                 abbreviate_names=self.abbreviate_names,
@@ -42,7 +42,7 @@ class LabelGroupReferenceStyle(
                 outer_separators=self.outer_separators,
                 names_separators=self.names_separators,
             ),
-            YearOnlyReferenceStyle(
+            OnlyYearReferenceStyle(
                 ReferenceText=self.ReferenceText,
                 name_style=self.name_style,
                 abbreviate_names=self.abbreviate_names,

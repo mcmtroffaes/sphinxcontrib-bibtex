@@ -2,16 +2,18 @@ import dataclasses
 
 from . import GroupReferenceStyle
 from .. import ReferenceInfo, BaseStandardReferenceStyle
-from ..authoronly import AuthorOnlyReferenceStyle
 from ..authoryear import AuthorYearReferenceStyle
-from ..labelonly import LabelOnlyReferenceStyle
-from ..yearonly import YearOnlyReferenceStyle
+from ..onlyauthor import OnlyAuthorReferenceStyle
+from ..onlylabel import OnlyLabelReferenceStyle
+from ..onlyyear import OnlyYearReferenceStyle
 
 
 @dataclasses.dataclass(frozen=True)
 class AuthorYearGroupReferenceStyle(
         GroupReferenceStyle[ReferenceInfo],
         BaseStandardReferenceStyle[ReferenceInfo]):
+
+    author_year_sep: str = ', '
 
     def __post_init__(self):
         self.styles += [
@@ -25,7 +27,7 @@ class AuthorYearGroupReferenceStyle(
                 names_separators=self.names_separators,
                 author_year_sep=self.author_year_sep,
             ),
-            AuthorOnlyReferenceStyle(
+            OnlyAuthorReferenceStyle(
                 ReferenceText=self.ReferenceText,
                 name_style=self.name_style,
                 abbreviate_names=self.abbreviate_names,
@@ -34,7 +36,7 @@ class AuthorYearGroupReferenceStyle(
                 outer_separators=self.outer_separators,
                 names_separators=self.names_separators,
             ),
-            LabelOnlyReferenceStyle(
+            OnlyLabelReferenceStyle(
                 ReferenceText=self.ReferenceText,
                 name_style=self.name_style,
                 abbreviate_names=self.abbreviate_names,
@@ -43,7 +45,7 @@ class AuthorYearGroupReferenceStyle(
                 outer_separators=self.outer_separators,
                 names_separators=self.names_separators,
             ),
-            YearOnlyReferenceStyle(
+            OnlyYearReferenceStyle(
                 ReferenceText=self.ReferenceText,
                 name_style=self.name_style,
                 abbreviate_names=self.abbreviate_names,

@@ -7,7 +7,7 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-class LabelOnlyReferenceStyle(BaseStandardReferenceStyle):
+class OnlyLabelReferenceStyle(BaseStandardReferenceStyle):
     """Reference by label."""
 
     def get_role_names(self) -> Iterable[str]:
