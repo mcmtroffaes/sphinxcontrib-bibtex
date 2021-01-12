@@ -36,7 +36,10 @@ class CiteRole(XRefRole):
         """Associate the pending_xref with the cite domain,
         and note the cited citation keys.
         """
-        node['refdomain'] = 'cite'
+        if not node.get('refdomain'):
+            assert node['reftype'] == 'cite'
+            node['refdomain'] = 'cite'
+            node['reftype'] = 'p'
         document.note_explicit_target(node, node)  # for backrefs
         domain = cast("BibtexDomain", env.get_domain('cite'))
         domain.citation_refs.append(CitationRef(

@@ -415,7 +415,7 @@ class BibtexDomain(Domain):
             for citation in citations.values()]
         formatted_references = \
             self.reference_style.format_references(
-                roles_by_name[node.get('reftype', 'p')], references)
+                roles_by_name[typ], references)
         result_node = docutils.nodes.inline(rawsource=target)
         result_node += formatted_references.render(self.backend)
         return result_node
