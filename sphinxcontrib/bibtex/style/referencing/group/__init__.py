@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 @dataclasses.dataclass(frozen=True)
-class GroupReferenceStyle(BaseReferenceStyle[ReferenceInfo]):
+class BaseGroupReferenceStyle(BaseReferenceStyle[ReferenceInfo]):
     """Composes a group of reference styles into a single consistent style."""
 
     #: List of style types.

@@ -1,6 +1,6 @@
 import dataclasses
 
-from . import GroupReferenceStyle
+from . import BaseGroupReferenceStyle
 from .. import ReferenceInfo, BaseStandardReferenceStyle
 from ..label import LabelReferenceStyle
 from ..onlyauthor import OnlyAuthorReferenceStyle
@@ -10,7 +10,7 @@ from ..onlyyear import OnlyYearReferenceStyle
 
 @dataclasses.dataclass(frozen=True)
 class LabelGroupReferenceStyle(
-        GroupReferenceStyle[ReferenceInfo],
+        BaseGroupReferenceStyle[ReferenceInfo],
         BaseStandardReferenceStyle[ReferenceInfo]):
 
     def __post_init__(self):

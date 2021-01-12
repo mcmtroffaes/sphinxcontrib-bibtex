@@ -1,4 +1,3 @@
-
 import io
 from setuptools import setup, find_packages
 
@@ -11,6 +10,9 @@ def readfile(filename):
 readme = readfile("README.rst")[5:]  # skip title and badges
 requires = readfile("requirements.txt")
 version = readfile("VERSION")[0].strip()
+
+# common path for entry points
+ref_path = "sphinxcontrib.bibtex.style.referencing"
 
 setup(
     name='sphinxcontrib-bibtex',
@@ -48,4 +50,21 @@ setup(
     install_requires=requires,
     tests_require=['pytest', 'pytest-cov'],
     namespace_packages=['sphinxcontrib'],
+    entry_points={
+        'pybtex.style.names': [
+            'last = pybtex.style.names.last:NameStyle',
+        ],
+        'sphinxcontrib.bibtex.style.referencing.group': [
+            f'authoryear'
+            f' = {ref_path}.group.authoryear.AuthorYearGroupReferenceStyle',
+            f'label = {ref_path}.group.label.LabelGroupReferenceStyle',
+        ],
+        'sphinxcontrib.bibtex.style.referencing': [
+            f'authoryear = {ref_path}.authoryear.AuthorYearReferenceStyle',
+            f'label      = {ref_path}.label.LabelReferenceStyle',
+            f'onlyauthor = {ref_path}.onlyauthor.OnlyAuthorReferenceStyle',
+            f'onlylabel  = {ref_path}.onlylabel.OnlyLabelReferenceStyle',
+            f'onlyyear   = {ref_path}.onlyyear.OnlyYearReferenceStyle',
+        ],
+    }
 )

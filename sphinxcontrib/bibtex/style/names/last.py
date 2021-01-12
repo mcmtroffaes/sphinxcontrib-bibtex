@@ -2,7 +2,7 @@ from pybtex.style.names import BaseNameStyle, name_part
 from pybtex.style.template import join
 
 
-class NameStyle(BaseNameStyle):
+class LastNameStyle(BaseNameStyle):
 
     def format(self, person, abbr=True):
         """Format last names."""

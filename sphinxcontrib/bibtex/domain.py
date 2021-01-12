@@ -30,7 +30,7 @@ from sphinx.util.nodes import make_refnode
 
 from .roles import CiteRole
 from .bibfile import BibFile, normpath_filename, process_bibfile
-from .style.names.last import NameStyle as LastNameStyle
+from .style.names.last import LastNameStyle
 from .style.referencing import \
     BaseReferenceText, BaseReferenceStyle, Separators
 from .style.referencing.group.authoryear import AuthorYearGroupReferenceStyle

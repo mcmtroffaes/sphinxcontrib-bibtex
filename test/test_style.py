@@ -16,10 +16,10 @@ if TYPE_CHECKING:
 
 def test_style_names_last():
     from pybtex.database import Person
-    from sphinxcontrib.bibtex.style.names.last import NameStyle
+    from sphinxcontrib.bibtex.style.names.last import LastNameStyle
     name = Person(
         string=r"Charles Louis Xavier Joseph de la Vall{\'e}e Poussin")
-    last = NameStyle().format
+    last = LastNameStyle().format
     assert last(name).format().render_as('latex') == "de~la Vall{é}e~Poussin"
     assert (
         last(name).format().render_as('html') ==

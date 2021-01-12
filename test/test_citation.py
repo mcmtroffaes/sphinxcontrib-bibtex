@@ -2,8 +2,13 @@ import common
 import pytest
 
 from sphinx.errors import ExtensionError
-from sphinxcontrib.bibtex.domain import BibtexDomain
+from sphinxcontrib.bibtex.domain import BibtexDomain, SphinxReferenceText
 from typing import cast
+from pybtex.style.names.lastfirst import NameStyle as LastFirstNameStyle
+
+from sphinxcontrib.bibtex.style.referencing import Separators
+from sphinxcontrib.bibtex.style.referencing.group.authoryear import \
+    AuthorYearGroupReferenceStyle
 
 
 @pytest.mark.sphinx('html', testroot='citation_not_found')
@@ -85,3 +90,26 @@ def test_reference_style_invalid(make_app, app_params):
     args, kwargs = app_params
     with pytest.raises(ExtensionError, match="bibtex_reference_style"):
         make_app(*args, **kwargs)
+
+
+custom_reference_style = AuthorYearGroupReferenceStyle(
+    SphinxReferenceText,
+    left_bracket='(',
+    right_bracket=')',
+    name_style=LastFirstNameStyle(),
+    abbreviate_names=False,
+    outer_separators=Separators(sep='; '),
+    names_separators=Separators(sep=' & '),
+    author_year_sep=', ',
+    styles=[],
+    role_style={},
+)
+
+
+@pytest.mark.sphinx('pseudoxml', testroot='citation_roles',
+                    confoverrides={
+                        'bibtex_reference_style': custom_reference_style})
+def test_reference_style_custom(app):
+    app.build()
+    # TODO this still gives a warning, see if we can use entry points instead?
+    # assert not warning.getvalue()

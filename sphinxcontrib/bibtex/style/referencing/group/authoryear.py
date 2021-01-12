@@ -1,6 +1,6 @@
 import dataclasses
 
-from . import GroupReferenceStyle
+from . import BaseGroupReferenceStyle
 from .. import ReferenceInfo, BaseStandardReferenceStyle
 from ..authoryear import AuthorYearReferenceStyle
 from ..onlyauthor import OnlyAuthorReferenceStyle
@@ -10,7 +10,7 @@ from ..onlyyear import OnlyYearReferenceStyle
 
 @dataclasses.dataclass(frozen=True)
 class AuthorYearGroupReferenceStyle(
-        GroupReferenceStyle[ReferenceInfo],
+        BaseGroupReferenceStyle[ReferenceInfo],
         BaseStandardReferenceStyle[ReferenceInfo]):
 
     author_year_sep: str
