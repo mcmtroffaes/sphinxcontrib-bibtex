@@ -145,6 +145,9 @@ class BaseNamesReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
 
     def __post_init__(self):
         super().__post_init__()
+        # setting frozen instance attribute requires object.__setattr__
+        # inside of __post_init__
+        # https://docs.python.org/3/library/dataclasses.html#frozen-instances
         object.__setattr__(
             self, 'name_style', pybtex.plugin.find_plugin(
                 'pybtex.style.names', name=self.name_style_plugin)())
