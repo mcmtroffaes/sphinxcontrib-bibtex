@@ -17,17 +17,23 @@ import docutils.frontend
 import docutils.nodes
 import docutils.parsers.rst
 import docutils.utils
+import pybtex_docutils
+import pybtex.plugin
+import sphinxcontrib.bibtex.plugin
 import sphinx.util
 import re
 
-from pybtex.plugin import find_plugin
-from sphinx.domains import Domain
+from sphinx.domains import Domain, ObjType
 from sphinx.errors import ExtensionError
+from sphinx.locale import _
 from sphinx.util.nodes import make_refnode
 
+from .roles import CiteRole
 from .bibfile import BibFile, normpath_filename, process_bibfile
+from .style.referencing import BaseReferenceText, BaseReferenceStyle
 
 if TYPE_CHECKING:
+    from pybtex.backends import BaseBackend
     from pybtex.database import Entry
     from pybtex.style import FormattedEntry
     from pybtex.style.formatting import BaseStyle
@@ -37,7 +43,6 @@ if TYPE_CHECKING:
     from sphinx.environment import BuildEnvironment
     from .directives import BibliographyKey, BibliographyValue
     from .roles import CitationRef
-
 
 logger = sphinx.util.logging.getLogger(__name__)
 
@@ -199,8 +204,46 @@ class Citation(NamedTuple):
     citation_id: str                     #: Unique id of this citation.
     bibliography_key: "BibliographyKey"  #: Key of its bibliography directive.
     key: str                             #: Key (with prefix).
-    label: str                           #: Label (with prefix).
+    entry: "Entry"                       #: Entry from pybtex.
     formatted_entry: "FormattedEntry"    #: Entry as formatted by pybtex.
+
+
+class SphinxReferenceInfo(NamedTuple):
+    """Tuple containing reference info to enable sphinx to resolve a reference
+    to a citation.
+    """
+    builder: "Builder"
+    fromdocname: str
+    todocname: str
+    citation_id: str
+
+
+class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
+    """Pybtex rich text class for citation references with the docutils
+    backend, for use with :class:`SphinxReferenceInfo`.
+    """
+
+    def render(self, backend: "BaseBackend"):
+        assert isinstance(backend, pybtex_docutils.Backend), \
+               "SphinxReferenceText only supports the docutils backend"
+        info = self.info[0]
+        if info.builder.name == 'latex':
+            # latex builder needs a citation_reference
+            return [docutils.nodes.citation_reference(
+                '', *super().render(backend),
+                docname=info.todocname,
+                refname=info.citation_id)]
+        else:
+            children = super().render(backend)
+            # make_refnode only takes a single child
+            refnode = make_refnode(
+                info.builder,
+                info.fromdocname,
+                info.todocname,
+                info.citation_id,
+                children[0])
+            refnode.extend(children[1:])  # type: ignore
+            return [refnode]
 
 
 def env_updated(app: "Sphinx", env: "BuildEnvironment") -> Iterable[str]:
@@ -222,6 +265,8 @@ class BibtexDomain(Domain):
         citations=[],
         citation_refs=[],
     )
+    backend = pybtex_docutils.Backend()
+    reference_style: BaseReferenceStyle
 
     @property
     def bibfiles(self) -> Dict[str, BibFile]:
@@ -254,6 +299,19 @@ class BibtexDomain(Domain):
         return self.data['citation_refs']
 
     def __init__(self, env: "BuildEnvironment"):
+        # set up referencing style
+        style = sphinxcontrib.bibtex.plugin.find_plugin(
+                'sphinxcontrib.bibtex.style.referencing',
+                env.app.config.bibtex_reference_style)
+        self.reference_style = \
+            style(ReferenceText=SphinxReferenceText)
+        # set up object types and roles for referencing style
+        role_names = self.reference_style.get_role_names()
+        self.object_types = dict(
+            citation=ObjType(_('citation'), *role_names, searchprio=-1),
+        )
+        self.roles = dict((name, CiteRole()) for name in role_names)
+        # initialize the domain
         super().__init__(env)
         # connect env-updated
         env.app.connect('env-updated', env_updated)
@@ -277,8 +335,7 @@ class BibtexDomain(Domain):
                 document = docutils.utils.new_document(
                     "%s_header" % directive, settings)
                 parser.parse(header, document)
-                if len(document) > 0:
-                    self.data["%s_header" % directive] = document[0]
+                self.data["%s_header" % directive] = document[0]
 
     def clear_doc(self, docname: str) -> None:
         self.data['citations'] = [
@@ -312,10 +369,9 @@ class BibtexDomain(Domain):
         used_keys: Set[str] = set()
         used_labels: Dict[str, str] = {}
         for bibliography_key, bibliography in self.bibliographies.items():
-            for formatted_entry in self.get_formatted_entries(
+            for entry, formatted_entry in self.get_formatted_entries(
                     bibliography_key, docnames):
                 key = bibliography.keyprefix + formatted_entry.key
-                label = bibliography.labelprefix + formatted_entry.label
                 if bibliography.list_ == 'citation' and key in used_keys:
                     logger.warning(
                         'duplicate citation for key "%s"' % key,
@@ -324,19 +380,20 @@ class BibtexDomain(Domain):
                     citation_id=bibliography.citation_nodes[key]['ids'][0],
                     bibliography_key=bibliography_key,
                     key=key,
-                    label=label,
+                    entry=entry,
                     formatted_entry=formatted_entry,
                 ))
                 if bibliography.list_ == 'citation':
                     used_keys.add(key)
-                    if label not in used_labels:
-                        used_labels[label] = key
-                    elif used_labels[label] != key:
+                    if formatted_entry.label not in used_labels:
+                        used_labels[formatted_entry.label] = key
+                    elif used_labels[formatted_entry.label] != key:
                         # if used_label[label] == key then already
                         # duplicate key warning
                         logger.warning(
                             'duplicate label "%s" for keys "%s" and "%s"' % (
-                                label, used_labels[label], key),
+                                formatted_entry.label,
+                                used_labels[formatted_entry.label], key),
                             location=(bibliography_key.docname,
                                       bibliography.line))
         return []  # expects list of updated docnames
@@ -347,43 +404,26 @@ class BibtexDomain(Domain):
                      ) -> docutils.nodes.Element:
         """Replace node by list of citation references (one for each key)."""
         keys = [key.strip() for key in target.split(',')]
-        if builder.name != 'latex':
-            citations_node = docutils.nodes.inline(rawsource=target, text='[')
-        else:
-            citations_node = docutils.nodes.inline(rawsource=target, text='')
-        # map citation keys that can be resolved to their citation data
-        citations = {
+        citations: Dict[str, Citation] = {
             cit.key: cit for cit in self.citations
             if cit.key in keys
             and self.bibliographies[cit.bibliography_key].list_ == 'citation'}
-        for i, key in enumerate(keys):
-            try:
-                citation = citations[key]
-            except KeyError:
-                # TODO can handle missing reference warning using the domain
+        for key in keys:
+            if key not in citations:
                 logger.warning('could not find bibtex key "%s"' % key,
                                location=node)
-                citations_node += docutils.nodes.inline('', key)
-                continue
-            refcontnode = docutils.nodes.inline('', citation.label)
-            if builder.name == 'latex':
-                # latex builder needs a citation_reference
-                refnode = docutils.nodes.citation_reference(
-                    '', refcontnode,
-                    docname=citation.bibliography_key.docname,
-                    refname=citation.citation_id)
-            else:
-                # other builders can use general reference node
-                refnode = make_refnode(
-                    builder, fromdocname,
-                    citation.bibliography_key.docname,
-                    citation.citation_id, refcontnode)
-            citations_node += refnode
-            if i != len(keys) - 1 and builder.name != 'latex':
-                citations_node += docutils.nodes.Text(',')
-        if builder.name != 'latex':
-            citations_node += docutils.nodes.Text(']')
-        return citations_node
+        references = [
+            (citation.entry, citation.formatted_entry, SphinxReferenceInfo(
+                builder=builder,
+                fromdocname=fromdocname,
+                todocname=citation.bibliography_key.docname,
+                citation_id=citation.citation_id))
+            for citation in citations.values()]
+        formatted_references = \
+            self.reference_style.format_references(typ, references)
+        result_node = docutils.nodes.inline(rawsource=target)
+        result_node += formatted_references.render(self.backend)
+        return result_node
 
     def get_all_cited_keys(self, docnames):
         """Yield all citation keys for given *docnames* in order, then
@@ -458,6 +498,12 @@ class BibtexDomain(Domain):
         bibliography = self.bibliographies[bibliography_key]
         entries = dict(
             self.get_sorted_entries(bibliography_key, docnames))
-        style = cast("BaseStyle", find_plugin(
+        style = cast("BaseStyle", pybtex.plugin.find_plugin(
             'pybtex.style.formatting', bibliography.style)())
-        return style.format_entries(entries.values())
+        sorted_entries = style.sort(entries.values())
+        labels = style.format_labels(sorted_entries)
+        for label, entry in zip(labels, sorted_entries):
+            yield (
+                entry,
+                style.format_entry(bibliography.labelprefix + label, entry),
+            )

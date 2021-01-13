@@ -1,4 +1,3 @@
-
 import io
 from setuptools import setup, find_packages
 
@@ -11,6 +10,14 @@ def readfile(filename):
 readme = readfile("README.rst")[5:]  # skip title and badges
 requires = readfile("requirements.txt")
 version = readfile("VERSION")[0].strip()
+
+
+# make entry point specifications
+def plugin(plugin_name: str):
+    path = "sphinxcontrib.bibtex.style.referencing"
+    class_name = ''.join(part.capitalize() for part in plugin_name.split("_"))
+    return f"{plugin_name} = {path}.{plugin_name}:{class_name}ReferenceStyle"
+
 
 setup(
     name='sphinxcontrib-bibtex',
@@ -48,4 +55,20 @@ setup(
     install_requires=requires,
     tests_require=['pytest', 'pytest-cov'],
     namespace_packages=['sphinxcontrib'],
+    entry_points={
+        'pybtex.style.names': [
+            'last = sphinxcontrib.bibtex.style.names.last:LastNameStyle',
+        ],
+        'sphinxcontrib.bibtex.style.referencing': [
+            plugin('author_year'),
+            plugin('label'),
+            # plugin('super'),  # TODO
+            plugin('basic_author_year'),
+            plugin('basic_label'),
+            # plugin('basic_super'),  # TODO
+            plugin('extra_author'),
+            plugin('extra_label'),
+            plugin('extra_year'),
+        ],
+    }
 )

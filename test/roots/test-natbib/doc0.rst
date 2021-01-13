@@ -59,3 +59,5 @@ All the commands with the same reference:
 * title :cite:title:`Kristensen83`
 
 Title cite if there is no title :cite:title:`notitle`.
+
+Another special case :cite:t:`branchtest`.

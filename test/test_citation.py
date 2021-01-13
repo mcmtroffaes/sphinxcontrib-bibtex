@@ -1,8 +1,15 @@
+import dataclasses
+
 import common
 import pytest
+import sphinxcontrib.bibtex.plugin
 
 from sphinxcontrib.bibtex.domain import BibtexDomain
 from typing import cast
+
+from sphinxcontrib.bibtex.style.referencing import ReferenceInfo
+from sphinxcontrib.bibtex.style.referencing.author_year import \
+    AuthorYearReferenceStyle
 
 
 @pytest.mark.sphinx('html', testroot='citation_not_found')
@@ -60,5 +67,58 @@ def test_citation_whitespace(app, warning):
 # test document not in toctree (issue 228)
 @pytest.mark.sphinx('pseudoxml', testroot='citation_from_orphan')
 def test_citation_from_orphan(app, warning):
+    app.build()
+    assert not warning.getvalue()
+
+
+@pytest.mark.sphinx('html', testroot='citation_roles')
+def test_citation_roles_label(app, warning):
+    app.build()
+    assert not warning.getvalue()
+
+
+@pytest.mark.sphinx(
+    'html', testroot='citation_roles',
+    confoverrides={'bibtex_reference_style': 'author_year'})
+def test_citation_roles_authoryear(app, warning):
+    app.build()
+    assert not warning.getvalue()
+
+
+@pytest.mark.sphinx('pseudoxml', testroot='debug_bibtex_citation',
+                    confoverrides={'bibtex_reference_style': 'non_existing'})
+def test_reference_style_invalid(make_app, app_params):
+    args, kwargs = app_params
+    with pytest.raises(ImportError, match='plugin .*non_existing not found'):
+        make_app(*args, **kwargs)
+
+
+@dataclasses.dataclass(frozen=True)
+class CustomReferenceStyle(AuthorYearReferenceStyle[ReferenceInfo]):
+    left_bracket = '('
+    right_bracket = ')'
+    name_style = 'lastfirst'
+    abbreviate_names = False
+    outer_sep = '; '
+    outer_sep2 = '; '
+    outer_last_sep = '; '
+    names_sep = ' & '
+    names_sep2 = None
+    names_last_sep = None
+    names_other = None
+    author_year_sep = ', '
+
+
+sphinxcontrib.bibtex.plugin.register_plugin(
+    'sphinxcontrib.bibtex.style.referencing',
+    'xxx_custom_xxx', CustomReferenceStyle)
+
+
+@pytest.mark.sphinx('pseudoxml', testroot='citation_roles',
+                    confoverrides={
+                        'bibtex_reference_style': 'xxx_custom_xxx'})
+def test_reference_style_custom(make_app, app_params, warning):
+    args, kwargs = app_params
+    app = make_app(*args, **kwargs)
     app.build()
     assert not warning.getvalue()
