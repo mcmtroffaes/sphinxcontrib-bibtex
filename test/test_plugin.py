@@ -16,9 +16,9 @@ def test_plugin_register_not_forced():
         pass
 
     assert not register_plugin(
-        "sphinxcontrib.bibtex.style.referencing", "numbers", Plugin)
+        "sphinxcontrib.bibtex.style.referencing", "label", Plugin)
     assert find_plugin(
-        "sphinxcontrib.bibtex.style.referencing", "numbers") is not Plugin
+        "sphinxcontrib.bibtex.style.referencing", "label") is not Plugin
 
 
 def test_plugin_register_forced():

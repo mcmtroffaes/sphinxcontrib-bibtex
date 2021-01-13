@@ -61,14 +61,14 @@ setup(
         ],
         'sphinxcontrib.bibtex.style.referencing': [
             plugin('author_year'),
-            plugin('numbers'),
+            plugin('label'),
             # plugin('super'),  # TODO
             plugin('basic_author_year'),
-            plugin('basic_numbers'),
-            # plugin('basic_super'),  # TODO
-            plugin('basic_author'),
             plugin('basic_label'),
-            plugin('basic_year'),
+            # plugin('basic_super'),  # TODO
+            plugin('extra_author'),
+            plugin('extra_label'),
+            plugin('extra_year'),
         ],
     }
 )

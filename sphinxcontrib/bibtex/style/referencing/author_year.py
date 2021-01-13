@@ -6,9 +6,9 @@ from sphinxcontrib.bibtex.style.referencing import (
     BaseGroupReferenceStyle
 )
 from .basic_author_year import BasicAuthorYearReferenceStyle
-from .basic_author import BasicAuthorReferenceStyle
-from .basic_label import BasicLabelReferenceStyle
-from .basic_year import BasicYearReferenceStyle
+from .extra_author import ExtraAuthorReferenceStyle
+from .extra_label import ExtraLabelReferenceStyle
+from .extra_year import ExtraYearReferenceStyle
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText
@@ -34,7 +34,7 @@ class AuthorYearReferenceStyle(
                 names_separators=self.names_separators,
                 author_year_sep=self.author_year_sep,
             ),
-            BasicAuthorReferenceStyle(
+            ExtraAuthorReferenceStyle(
                 ReferenceText=self.ReferenceText,
                 name_style_plugin=self.name_style_plugin,
                 abbreviate_names=self.abbreviate_names,
@@ -43,13 +43,13 @@ class AuthorYearReferenceStyle(
                 outer_separators=self.outer_separators,
                 names_separators=self.names_separators,
             ),
-            BasicLabelReferenceStyle(
+            ExtraLabelReferenceStyle(
                 ReferenceText=self.ReferenceText,
                 left_bracket=self.left_bracket,
                 right_bracket=self.right_bracket,
                 outer_separators=self.outer_separators,
             ),
-            BasicYearReferenceStyle(
+            ExtraYearReferenceStyle(
                 ReferenceText=self.ReferenceText,
                 left_bracket=self.left_bracket,
                 right_bracket=self.right_bracket,
