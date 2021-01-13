@@ -1,12 +1,13 @@
+import dataclasses
+
 import common
 import pytest
+import sphinxcontrib.bibtex.plugin
 
-from sphinx.errors import ExtensionError
-from sphinxcontrib.bibtex.domain import BibtexDomain, SphinxReferenceText
+from sphinxcontrib.bibtex.domain import BibtexDomain
 from typing import cast
-from pybtex.style.names.lastfirst import NameStyle as LastFirstNameStyle
 
-from sphinxcontrib.bibtex.style.referencing import Separators
+from sphinxcontrib.bibtex.style.referencing import Separators, ReferenceInfo
 from sphinxcontrib.bibtex.style.referencing.group.authoryear import \
     AuthorYearGroupReferenceStyle
 
@@ -88,28 +89,31 @@ def test_citation_roles_authoryear(app, warning):
                     confoverrides={'bibtex_reference_style': 'blablabla'})
 def test_reference_style_invalid(make_app, app_params):
     args, kwargs = app_params
-    with pytest.raises(ExtensionError, match="bibtex_reference_style"):
+    with pytest.raises(ImportError, match='plugin .*blablabla not found'):
         make_app(*args, **kwargs)
 
 
-custom_reference_style = AuthorYearGroupReferenceStyle(
-    SphinxReferenceText,
-    left_bracket='(',
-    right_bracket=')',
-    name_style=LastFirstNameStyle(),
-    abbreviate_names=False,
-    outer_separators=Separators(sep='; '),
-    names_separators=Separators(sep=' & '),
-    author_year_sep=', ',
-    styles=[],
-    role_style={},
-)
+@dataclasses.dataclass(frozen=True)
+class CustomReferenceStyle(AuthorYearGroupReferenceStyle[ReferenceInfo]):
+    left_bracket = '('
+    right_bracket = ')'
+    name_style_plugin = 'lastfirst'
+    abbreviate_names = False
+    outer_separators = Separators(sep='; ')
+    names_separators = Separators(sep=' & ')
+    author_year_sep = ', '
+
+
+sphinxcontrib.bibtex.plugin.register_plugin(
+    'sphinxcontrib.bibtex.style.referencing.group',
+    'xxx_custom_xxx', CustomReferenceStyle)
 
 
 @pytest.mark.sphinx('pseudoxml', testroot='citation_roles',
                     confoverrides={
-                        'bibtex_reference_style': custom_reference_style})
-def test_reference_style_custom(app):
+                        'bibtex_reference_style': 'xxx_custom_xxx'})
+def test_reference_style_custom(make_app, app_params, warning):
+    args, kwargs = app_params
+    app = make_app(*args, **kwargs)
     app.build()
-    # TODO this still gives a warning, see if we can use entry points instead?
-    # assert not warning.getvalue()
+    assert not warning.getvalue()

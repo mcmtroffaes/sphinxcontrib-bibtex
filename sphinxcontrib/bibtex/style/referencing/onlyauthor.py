@@ -1,5 +1,10 @@
+import dataclasses
+
 from typing import TYPE_CHECKING, List, Iterable
-from . import BaseStandardReferenceStyle, reference
+from . import (
+    ReferenceInfo, BaseStandardReferenceStyle, BaseNamesReferenceStyle,
+    reference
+)
 
 
 if TYPE_CHECKING:
@@ -7,7 +12,10 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-class OnlyAuthorReferenceStyle(BaseStandardReferenceStyle):
+@dataclasses.dataclass(frozen=True)
+class OnlyAuthorReferenceStyle(
+        BaseStandardReferenceStyle[ReferenceInfo],
+        BaseNamesReferenceStyle[ReferenceInfo]):
     """Reference by author names."""
 
     def get_role_names(self) -> Iterable[str]:

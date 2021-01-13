@@ -1,8 +1,10 @@
 import dataclasses
-from typing import TYPE_CHECKING, List, Iterable
+from typing import TYPE_CHECKING, List, Iterable, Union
 from pybtex.style.template import words, field
-from . import BaseStandardReferenceStyle, reference, join
-
+from . import (
+    ReferenceInfo, BaseStandardReferenceStyle, BaseNamesReferenceStyle,
+    reference, join
+)
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText
@@ -10,10 +12,12 @@ if TYPE_CHECKING:
 
 
 @dataclasses.dataclass(frozen=True)
-class AuthorYearReferenceStyle(BaseStandardReferenceStyle):
+class AuthorYearReferenceStyle(
+        BaseStandardReferenceStyle[ReferenceInfo],
+        BaseNamesReferenceStyle[ReferenceInfo]):
     """Author-year style references."""
 
-    author_year_sep: str
+    author_year_sep: Union["BaseText", str] = ', '
 
     def get_role_names(self) -> Iterable[str]:
         return [

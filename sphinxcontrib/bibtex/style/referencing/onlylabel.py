@@ -1,13 +1,17 @@
-from typing import TYPE_CHECKING, List, Iterable
-from . import BaseStandardReferenceStyle, reference, entry_label
+import dataclasses
 
+from typing import TYPE_CHECKING, List, Iterable
+from . import (
+    ReferenceInfo, BaseStandardReferenceStyle, reference, entry_label
+)
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText
     from pybtex.style.template import Node
 
 
-class OnlyLabelReferenceStyle(BaseStandardReferenceStyle):
+@dataclasses.dataclass(frozen=True)
+class OnlyLabelReferenceStyle(BaseStandardReferenceStyle[ReferenceInfo]):
     """Reference by label."""
 
     def get_role_names(self) -> Iterable[str]:

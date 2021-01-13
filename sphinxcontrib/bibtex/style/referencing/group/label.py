@@ -1,7 +1,9 @@
 import dataclasses
 
-from . import BaseGroupReferenceStyle
-from .. import ReferenceInfo, BaseStandardReferenceStyle
+from .. import (
+    ReferenceInfo, BaseStandardReferenceStyle, BaseNamesReferenceStyle,
+    BaseGroupReferenceStyle
+)
 from ..label import LabelReferenceStyle
 from ..onlyauthor import OnlyAuthorReferenceStyle
 from ..onlylabel import OnlyLabelReferenceStyle
@@ -11,13 +13,15 @@ from ..onlyyear import OnlyYearReferenceStyle
 @dataclasses.dataclass(frozen=True)
 class LabelGroupReferenceStyle(
         BaseGroupReferenceStyle[ReferenceInfo],
-        BaseStandardReferenceStyle[ReferenceInfo]):
+        BaseNamesReferenceStyle[ReferenceInfo],
+        BaseStandardReferenceStyle[ReferenceInfo],
+):
 
     def __post_init__(self):
         self.styles.extend([
             LabelReferenceStyle(
                 ReferenceText=self.ReferenceText,
-                name_style=self.name_style,
+                name_style_plugin=self.name_style_plugin,
                 abbreviate_names=self.abbreviate_names,
                 left_bracket=self.left_bracket,
                 right_bracket=self.right_bracket,
@@ -26,7 +30,7 @@ class LabelGroupReferenceStyle(
             ),
             OnlyAuthorReferenceStyle(
                 ReferenceText=self.ReferenceText,
-                name_style=self.name_style,
+                name_style_plugin=self.name_style_plugin,
                 abbreviate_names=self.abbreviate_names,
                 left_bracket=self.left_bracket,
                 right_bracket=self.right_bracket,
@@ -35,21 +39,15 @@ class LabelGroupReferenceStyle(
             ),
             OnlyLabelReferenceStyle(
                 ReferenceText=self.ReferenceText,
-                name_style=self.name_style,
-                abbreviate_names=self.abbreviate_names,
                 left_bracket=self.left_bracket,
                 right_bracket=self.right_bracket,
                 outer_separators=self.outer_separators,
-                names_separators=self.names_separators,
             ),
             OnlyYearReferenceStyle(
                 ReferenceText=self.ReferenceText,
-                name_style=self.name_style,
-                abbreviate_names=self.abbreviate_names,
                 left_bracket=self.left_bracket,
                 right_bracket=self.right_bracket,
                 outer_separators=self.outer_separators,
-                names_separators=self.names_separators,
             )
         ])
         super().__post_init__()

@@ -1,7 +1,9 @@
+import dataclasses
+
 from typing import TYPE_CHECKING, List, Iterable
 from pybtex.style.template import words
 from . import (
-    BaseStandardReferenceStyle,
+    ReferenceInfo, BaseStandardReferenceStyle, BaseNamesReferenceStyle,
     reference, entry_label, join
 )
 
@@ -10,7 +12,10 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-class LabelReferenceStyle(BaseStandardReferenceStyle):
+@dataclasses.dataclass(frozen=True)
+class LabelReferenceStyle(
+        BaseStandardReferenceStyle[ReferenceInfo],
+        BaseNamesReferenceStyle[ReferenceInfo]):
     """Reference by label if parenthetical,
     and by author and label if textual.
     """

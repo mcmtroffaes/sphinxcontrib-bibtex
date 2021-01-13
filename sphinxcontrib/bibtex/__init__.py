@@ -25,7 +25,6 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     * register transforms
     * connect events to functions
     """
-
     app.add_config_value("bibtex_default_style", "alpha", "html")
     app.add_config_value("bibtex_bibfiles", None, "html")
     app.add_config_value("bibtex_encoding", "utf-8-sig", "html")

@@ -1,7 +1,8 @@
-from typing import TYPE_CHECKING, List, Iterable
+import dataclasses
 
+from typing import TYPE_CHECKING, List, Iterable
 from pybtex.style.template import field
-from . import BaseStandardReferenceStyle, reference
+from . import ReferenceInfo, BaseStandardReferenceStyle, reference
 
 
 if TYPE_CHECKING:
@@ -9,7 +10,8 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-class OnlyYearReferenceStyle(BaseStandardReferenceStyle):
+@dataclasses.dataclass(frozen=True)
+class OnlyYearReferenceStyle(BaseStandardReferenceStyle[ReferenceInfo]):
     """Reference by year."""
 
     def get_role_names(self) -> Iterable[str]:
