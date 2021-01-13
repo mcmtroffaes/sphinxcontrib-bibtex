@@ -301,7 +301,7 @@ class BibtexDomain(Domain):
     def __init__(self, env: "BuildEnvironment"):
         # set up referencing style
         style = sphinxcontrib.bibtex.plugin.find_plugin(
-                'sphinxcontrib.bibtex.style.referencing.group',
+                'sphinxcontrib.bibtex.style.referencing',
                 env.app.config.bibtex_reference_style)
         self.reference_style = \
             style(ReferenceText=SphinxReferenceText)

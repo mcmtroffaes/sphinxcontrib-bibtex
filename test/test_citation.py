@@ -8,8 +8,8 @@ from sphinxcontrib.bibtex.domain import BibtexDomain
 from typing import cast
 
 from sphinxcontrib.bibtex.style.referencing import Separators, ReferenceInfo
-from sphinxcontrib.bibtex.style.referencing.group.authoryear import \
-    AuthorYearGroupReferenceStyle
+from sphinxcontrib.bibtex.style.referencing.author_year import \
+    AuthorYearReferenceStyle
 
 
 @pytest.mark.sphinx('html', testroot='citation_not_found')
@@ -79,22 +79,22 @@ def test_citation_roles_label(app, warning):
 
 @pytest.mark.sphinx(
     'html', testroot='citation_roles',
-    confoverrides={'bibtex_reference_style': 'authoryear'})
+    confoverrides={'bibtex_reference_style': 'author_year'})
 def test_citation_roles_authoryear(app, warning):
     app.build()
     assert not warning.getvalue()
 
 
 @pytest.mark.sphinx('pseudoxml', testroot='debug_bibtex_citation',
-                    confoverrides={'bibtex_reference_style': 'blablabla'})
+                    confoverrides={'bibtex_reference_style': 'non_existing'})
 def test_reference_style_invalid(make_app, app_params):
     args, kwargs = app_params
-    with pytest.raises(ImportError, match='plugin .*blablabla not found'):
+    with pytest.raises(ImportError, match='plugin .*non_existing not found'):
         make_app(*args, **kwargs)
 
 
 @dataclasses.dataclass(frozen=True)
-class CustomReferenceStyle(AuthorYearGroupReferenceStyle[ReferenceInfo]):
+class CustomReferenceStyle(AuthorYearReferenceStyle[ReferenceInfo]):
     left_bracket = '('
     right_bracket = ')'
     name_style_plugin = 'lastfirst'
@@ -105,7 +105,7 @@ class CustomReferenceStyle(AuthorYearGroupReferenceStyle[ReferenceInfo]):
 
 
 sphinxcontrib.bibtex.plugin.register_plugin(
-    'sphinxcontrib.bibtex.style.referencing.group',
+    'sphinxcontrib.bibtex.style.referencing',
     'xxx_custom_xxx', CustomReferenceStyle)
 
 

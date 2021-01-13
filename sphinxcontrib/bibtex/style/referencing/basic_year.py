@@ -1,8 +1,9 @@
 import dataclasses
 
-from sphinxcontrib.bibtex.style.template import reference, entry_label
-from sphinxcontrib.bibtex.richtext import ReferenceInfo
 from typing import TYPE_CHECKING, List, Iterable
+from pybtex.style.template import field
+from sphinxcontrib.bibtex.richtext import ReferenceInfo
+from sphinxcontrib.bibtex.style.template import reference
 from . import BaseStandardReferenceStyle
 
 if TYPE_CHECKING:
@@ -11,11 +12,11 @@ if TYPE_CHECKING:
 
 
 @dataclasses.dataclass(frozen=True)
-class OnlyLabelReferenceStyle(BaseStandardReferenceStyle[ReferenceInfo]):
-    """Reference by label."""
+class BasicYearReferenceStyle(BaseStandardReferenceStyle[ReferenceInfo]):
+    """Reference by year."""
 
     def get_role_names(self) -> Iterable[str]:
-        return ['label', 'labelpar']
+        return ['year', 'yearpar']
 
     def get_outer_template(
             self, role_name: str, children: List["BaseText"]) -> "Node":
@@ -26,4 +27,4 @@ class OnlyLabelReferenceStyle(BaseStandardReferenceStyle[ReferenceInfo]):
         )
 
     def get_inner_template(self, role_name: str) -> "Node":
-        return reference[entry_label]
+        return reference[field('year')]

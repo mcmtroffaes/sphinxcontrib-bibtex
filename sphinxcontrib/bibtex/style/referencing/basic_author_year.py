@@ -1,9 +1,8 @@
 import dataclasses
-
-from typing import TYPE_CHECKING, List, Iterable
-from pybtex.style.template import words
-from sphinxcontrib.bibtex.style.template import reference, entry_label, join
+from typing import TYPE_CHECKING, List, Iterable, Union
+from sphinxcontrib.bibtex.style.template import reference, join
 from sphinxcontrib.bibtex.richtext import ReferenceInfo
+from pybtex.style.template import words, field
 from . import BaseStandardReferenceStyle, BaseNamesReferenceStyle
 
 if TYPE_CHECKING:
@@ -12,12 +11,12 @@ if TYPE_CHECKING:
 
 
 @dataclasses.dataclass(frozen=True)
-class LabelReferenceStyle(
+class BasicAuthorYearReferenceStyle(
         BaseStandardReferenceStyle[ReferenceInfo],
         BaseNamesReferenceStyle[ReferenceInfo]):
-    """Reference by label if parenthetical,
-    and by author and label if textual.
-    """
+    """Author-year style references."""
+
+    author_year_sep: Union["BaseText", str] = ', '
 
     def get_role_names(self) -> Iterable[str]:
         return [
@@ -42,13 +41,19 @@ class LabelReferenceStyle(
 
     def get_inner_template(self, role_name: str) -> "Node":
         if 'p' in role_name:  # parenthetical
-            return reference[entry_label]
+            return reference[
+                join(sep=self.author_year_sep)[
+                    self.get_author_template(
+                        full_authors='s' in role_name),
+                    field('year')
+                ]
+            ]
         else:  # textual
             return words[
                 self.get_author_template(full_authors='s' in role_name),
                 join[
                     self.left_bracket,
-                    reference[entry_label],
+                    reference[field('year')],
                     self.right_bracket
                 ]
             ]

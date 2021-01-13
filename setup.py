@@ -11,8 +11,13 @@ readme = readfile("README.rst")[5:]  # skip title and badges
 requires = readfile("requirements.txt")
 version = readfile("VERSION")[0].strip()
 
-# common path for entry points
-ref_path = "sphinxcontrib.bibtex.style.referencing"
+
+# make entry point specifications
+def plugin(plugin_name: str):
+    path = "sphinxcontrib.bibtex.style.referencing"
+    class_name = ''.join(part.capitalize() for part in plugin_name.split("_"))
+    return f"{plugin_name} = {path}.{plugin_name}:{class_name}ReferenceStyle"
+
 
 setup(
     name='sphinxcontrib-bibtex',
@@ -54,17 +59,16 @@ setup(
         'pybtex.style.names': [
             'last = sphinxcontrib.bibtex.style.names.last:LastNameStyle',
         ],
-        'sphinxcontrib.bibtex.style.referencing.group': [
-            f'authoryear'
-            f' = {ref_path}.group.authoryear:AuthorYearGroupReferenceStyle',
-            f'label = {ref_path}.group.label:LabelGroupReferenceStyle',
-        ],
         'sphinxcontrib.bibtex.style.referencing': [
-            f'authoryear = {ref_path}.authoryear:AuthorYearReferenceStyle',
-            f'label      = {ref_path}.label:LabelReferenceStyle',
-            f'onlyauthor = {ref_path}.onlyauthor:OnlyAuthorReferenceStyle',
-            f'onlylabel  = {ref_path}.onlylabel:OnlyLabelReferenceStyle',
-            f'onlyyear   = {ref_path}.onlyyear:OnlyYearReferenceStyle',
+            plugin('author_year'),
+            plugin('numbers'),
+            # plugin('super'),  # TODO
+            plugin('basic_author_year'),
+            plugin('basic_numbers'),
+            # plugin('basic_super'),  # TODO
+            plugin('basic_author'),
+            plugin('basic_label'),
+            plugin('basic_year'),
         ],
     }
 )

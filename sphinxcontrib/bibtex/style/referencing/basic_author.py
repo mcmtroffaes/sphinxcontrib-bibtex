@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 @dataclasses.dataclass(frozen=True)
-class OnlyAuthorReferenceStyle(
+class BasicAuthorReferenceStyle(
         BaseStandardReferenceStyle[ReferenceInfo],
         BaseNamesReferenceStyle[ReferenceInfo]):
     """Reference by author names."""
