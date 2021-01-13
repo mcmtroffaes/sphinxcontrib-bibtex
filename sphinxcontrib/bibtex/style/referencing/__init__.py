@@ -98,8 +98,7 @@ class BaseBracketReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
             brackets=False, capfirst=False) -> "Node":
         """A helper function for creating an outer template.
 
-        Formats *children* using :attr:`outer_separators`,
-        adding :attr:`left_bracket` and :attr:`right_bracket` if requested,
+        Formats *children* with separators, adding brackets if requested,
         and capitalizing the first word if requested.
         """
         return join[
