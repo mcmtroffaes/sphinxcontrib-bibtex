@@ -6,9 +6,9 @@ from pybtex.richtext import Text, Tag
 from sphinxcontrib.bibtex.richtext import ReferenceInfo, BaseReferenceText
 from sphinxcontrib.bibtex.style.template import names, sentence, join
 from typing import (
-    TYPE_CHECKING, Generic, Tuple, List, Union, NamedTuple
+    TYPE_CHECKING, Generic, Tuple, List, Union, NamedTuple, Iterable,
+    Optional, Type, Dict
 )
-from typing import Iterable, Optional, Type, Dict
 
 if TYPE_CHECKING:
     from pybtex.database import Entry
