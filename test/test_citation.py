@@ -7,7 +7,7 @@ import sphinxcontrib.bibtex.plugin
 from sphinxcontrib.bibtex.domain import BibtexDomain
 from typing import cast
 
-from sphinxcontrib.bibtex.style.referencing import Separators, ReferenceInfo
+from sphinxcontrib.bibtex.style.referencing import ReferenceInfo
 from sphinxcontrib.bibtex.style.referencing.author_year import \
     AuthorYearReferenceStyle
 
@@ -99,8 +99,13 @@ class CustomReferenceStyle(AuthorYearReferenceStyle[ReferenceInfo]):
     right_bracket = ')'
     name_style_plugin = 'lastfirst'
     abbreviate_names = False
-    outer_separators = Separators(sep='; ')
-    names_separators = Separators(sep=' & ')
+    outer_sep = '; '
+    outer_sep2 = '; '
+    outer_last_sep = '; '
+    names_sep = ' & '
+    names_sep2 = None
+    names_last_sep = None
+    names_other = None
     author_year_sep = ', '
 
 

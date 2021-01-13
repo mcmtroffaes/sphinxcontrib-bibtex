@@ -18,13 +18,6 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-class Separators(NamedTuple):
-    sep: Union["BaseText", str] = ''
-    sep2: Optional[Union["BaseText", str]] = None
-    last_sep: Optional[Union["BaseText", str]] = None
-    other: Optional[Union["BaseText", str]] = None
-
-
 @dataclasses.dataclass(frozen=True)
 class BaseReferenceStyle(Generic[ReferenceInfo], ABC):
     """Abstract base class for reference styles.
@@ -96,7 +89,9 @@ class BaseBracketReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
 
     #: Separators used for outer template (i.e. in between references
     #: if multiple keys are referenced in a single citation).
-    outer_separators: Separators = Separators(', ')
+    outer_sep: Union["BaseText", str] = ', '
+    outer_sep2: Optional[Union["BaseText", str]] = None
+    outer_last_sep: Optional[Union["BaseText", str]] = None
 
     def get_standard_outer_template(
             self, children: List["BaseText"],
@@ -112,10 +107,9 @@ class BaseBracketReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
             sentence(
                 capfirst=capfirst,
                 add_period=False,
-                sep=self.outer_separators.sep,
-                sep2=self.outer_separators.sep2,
-                last_sep=self.outer_separators.last_sep,
-                other=self.outer_separators.other,
+                sep=self.outer_sep,
+                sep2=self.outer_sep2,
+                last_sep=self.outer_last_sep,
             )[children],
             self.right_bracket if brackets else '',
         ]
@@ -137,11 +131,11 @@ class BaseNamesReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
     #: Whether or not to abbreviate first names.
     abbreviate_names: bool = True
 
-    #: Inner template typically has some field value or names.
-    #: Generally, only names use separators, and these are stored here.
-    names_separators: Separators = Separators(
-            sep=', ', sep2=' and ', last_sep=', and ',
-            other=Text(' ', Tag('em', 'et al.')))
+    #: Separators for formatting author names.
+    names_sep: Union["BaseText", str] = ', '
+    names_sep2: Optional[Union["BaseText", str]] = ' and '
+    names_last_sep: Optional[Union["BaseText", str]] = ', and '
+    names_other: Optional[Union["BaseText", str]] = Text(' ', Tag('em', 'et al.'))
 
     def __post_init__(self):
         super().__post_init__()
@@ -158,10 +152,10 @@ class BaseNamesReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
         """
         return names(
             'author',
-            sep=self.names_separators.sep,
-            sep2=self.names_separators.sep2,
-            last_sep=self.names_separators.last_sep,
-            other=None if full_authors else self.names_separators.other,
+            sep=self.names_sep,
+            sep2=self.names_sep2,
+            last_sep=self.names_last_sep,
+            other=None if full_authors else self.names_other,
         )
 
 

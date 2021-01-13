@@ -16,6 +16,7 @@ class BasicAuthorYearReferenceStyle(
         BaseNamesReferenceStyle[ReferenceInfo]):
     """Author-year style references."""
 
+    """Separator between author and year for textual citations."""
     author_year_sep: Union["BaseText", str] = ', '
 
     def get_role_names(self) -> Iterable[str]:
