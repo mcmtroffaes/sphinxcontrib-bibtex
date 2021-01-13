@@ -2,10 +2,9 @@ import dataclasses
 
 from typing import TYPE_CHECKING, List, Iterable
 from pybtex.style.template import words
-from . import (
-    ReferenceInfo, BaseStandardReferenceStyle, BaseNamesReferenceStyle,
-    reference, entry_label, join
-)
+from sphinxcontrib.bibtex.style.template import reference, entry_label, join
+from sphinxcontrib.bibtex.richtext import ReferenceInfo
+from . import BaseStandardReferenceStyle, BaseNamesReferenceStyle
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText

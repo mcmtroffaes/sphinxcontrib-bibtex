@@ -1,9 +1,9 @@
 import dataclasses
 
+from sphinxcontrib.bibtex.style.template import reference, entry_label
+from sphinxcontrib.bibtex.richtext import ReferenceInfo
 from typing import TYPE_CHECKING, List, Iterable
-from . import (
-    ReferenceInfo, BaseStandardReferenceStyle, reference, entry_label
-)
+from . import BaseStandardReferenceStyle
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText

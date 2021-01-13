@@ -4,7 +4,9 @@ from pybtex.richtext import HRef
 from pybtex.style.formatting import BaseStyle
 from pybtex.style.template import Node, FieldIsMissing
 from sphinxcontrib.bibtex.style.referencing import (
-    BaseReferenceText, BaseReferenceStyle,
+    BaseReferenceText, BaseReferenceStyle
+)
+from sphinxcontrib.bibtex.style.template import (
     entry_label, reference, join, names
 )
 from typing import TYPE_CHECKING, List, cast

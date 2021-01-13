@@ -1,10 +1,9 @@
 import dataclasses
 
+from sphinxcontrib.bibtex.style.template import reference
+from sphinxcontrib.bibtex.richtext import ReferenceInfo
 from typing import TYPE_CHECKING, List, Iterable
-from . import (
-    ReferenceInfo, BaseStandardReferenceStyle, BaseNamesReferenceStyle,
-    reference
-)
+from . import BaseStandardReferenceStyle, BaseNamesReferenceStyle
 
 
 if TYPE_CHECKING:
