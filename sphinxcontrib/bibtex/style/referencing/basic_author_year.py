@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING, List, Iterable, Union
 from sphinxcontrib.bibtex.style.template import reference, join
 from sphinxcontrib.bibtex.richtext import ReferenceInfo
 from pybtex.style.template import words, field
-from . import BaseStandardReferenceStyle, BaseNamesReferenceStyle
+from . import BaseBracketReferenceStyle, BaseNamesReferenceStyle
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass(frozen=True)
 class BasicAuthorYearReferenceStyle(
-        BaseStandardReferenceStyle[ReferenceInfo],
+        BaseBracketReferenceStyle[ReferenceInfo],
         BaseNamesReferenceStyle[ReferenceInfo]):
     """Author-year style references."""
 

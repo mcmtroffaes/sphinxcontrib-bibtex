@@ -71,7 +71,7 @@ class BaseReferenceStyle(Generic[ReferenceInfo], ABC):
 
             Standard implementations should normally implement this method
             by calling
-            :meth:`BaseStandardReferenceStyle.get_standard_outer_template`
+            :meth:`BaseBracketReferenceStyle.get_standard_outer_template`
             with the appropriate arguments.
         """
         raise NotImplementedError
@@ -82,7 +82,7 @@ class BaseReferenceStyle(Generic[ReferenceInfo], ABC):
 
 
 @dataclasses.dataclass(frozen=True)
-class BaseStandardReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
+class BaseBracketReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
     """Helper base class for reference styles.
     This class provides brackets, as well as separators
     and a function to facilitate formatting of the outer template.

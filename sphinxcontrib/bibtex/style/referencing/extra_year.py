@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, List, Iterable
 from pybtex.style.template import field
 from sphinxcontrib.bibtex.richtext import ReferenceInfo
 from sphinxcontrib.bibtex.style.template import reference
-from . import BaseStandardReferenceStyle
+from . import BaseBracketReferenceStyle
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText
@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 
 @dataclasses.dataclass(frozen=True)
-class ExtraYearReferenceStyle(BaseStandardReferenceStyle[ReferenceInfo]):
+class ExtraYearReferenceStyle(BaseBracketReferenceStyle[ReferenceInfo]):
     """Reference by year."""
 
     def get_role_names(self) -> Iterable[str]:

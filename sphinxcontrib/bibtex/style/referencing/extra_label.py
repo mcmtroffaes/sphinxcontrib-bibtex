@@ -3,7 +3,7 @@ import dataclasses
 from sphinxcontrib.bibtex.style.template import reference, entry_label
 from sphinxcontrib.bibtex.richtext import ReferenceInfo
 from typing import TYPE_CHECKING, List, Iterable
-from . import BaseStandardReferenceStyle
+from . import BaseBracketReferenceStyle
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 @dataclasses.dataclass(frozen=True)
-class ExtraLabelReferenceStyle(BaseStandardReferenceStyle[ReferenceInfo]):
+class ExtraLabelReferenceStyle(BaseBracketReferenceStyle[ReferenceInfo]):
     """Reference by label."""
 
     def get_role_names(self) -> Iterable[str]:

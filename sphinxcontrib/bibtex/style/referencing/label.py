@@ -1,7 +1,7 @@
 import dataclasses
 
 from sphinxcontrib.bibtex.style.referencing import (
-    ReferenceInfo, BaseStandardReferenceStyle, BaseNamesReferenceStyle,
+    ReferenceInfo, BaseBracketReferenceStyle, BaseNamesReferenceStyle,
     BaseGroupReferenceStyle
 )
 from .basic_label import BasicLabelReferenceStyle
@@ -14,7 +14,7 @@ from .extra_year import ExtraYearReferenceStyle
 class LabelReferenceStyle(
         BaseGroupReferenceStyle[ReferenceInfo],
         BaseNamesReferenceStyle[ReferenceInfo],
-        BaseStandardReferenceStyle[ReferenceInfo],
+        BaseBracketReferenceStyle[ReferenceInfo],
 ):
 
     def __post_init__(self):

@@ -2,7 +2,7 @@ import dataclasses
 from typing import Union, TYPE_CHECKING
 
 from sphinxcontrib.bibtex.style.referencing import (
-    ReferenceInfo, BaseStandardReferenceStyle, BaseNamesReferenceStyle,
+    ReferenceInfo, BaseBracketReferenceStyle, BaseNamesReferenceStyle,
     BaseGroupReferenceStyle
 )
 from .basic_author_year import BasicAuthorYearReferenceStyle
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 class AuthorYearReferenceStyle(
         BaseGroupReferenceStyle[ReferenceInfo],
         BaseNamesReferenceStyle[ReferenceInfo],
-        BaseStandardReferenceStyle[ReferenceInfo]):
+        BaseBracketReferenceStyle[ReferenceInfo]):
 
     author_year_sep: Union["BaseText", str] = ', '
 

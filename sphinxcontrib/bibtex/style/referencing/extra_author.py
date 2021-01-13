@@ -3,7 +3,7 @@ import dataclasses
 from sphinxcontrib.bibtex.style.template import reference
 from sphinxcontrib.bibtex.richtext import ReferenceInfo
 from typing import TYPE_CHECKING, List, Iterable
-from . import BaseStandardReferenceStyle, BaseNamesReferenceStyle
+from . import BaseBracketReferenceStyle, BaseNamesReferenceStyle
 
 
 if TYPE_CHECKING:
@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass(frozen=True)
 class ExtraAuthorReferenceStyle(
-        BaseStandardReferenceStyle[ReferenceInfo],
+        BaseBracketReferenceStyle[ReferenceInfo],
         BaseNamesReferenceStyle[ReferenceInfo]):
     """Reference by author names."""
 
