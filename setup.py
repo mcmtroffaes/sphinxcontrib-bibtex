@@ -52,19 +52,19 @@ setup(
     namespace_packages=['sphinxcontrib'],
     entry_points={
         'pybtex.style.names': [
-            'last = pybtex.style.names.last:NameStyle',
+            'last = sphinxcontrib.bibtex.style.names.last:LastNameStyle',
         ],
         'sphinxcontrib.bibtex.style.referencing.group': [
             f'authoryear'
-            f' = {ref_path}.group.authoryear.AuthorYearGroupReferenceStyle',
-            f'label = {ref_path}.group.label.LabelGroupReferenceStyle',
+            f' = {ref_path}.group.authoryear:AuthorYearGroupReferenceStyle',
+            f'label = {ref_path}.group.label:LabelGroupReferenceStyle',
         ],
         'sphinxcontrib.bibtex.style.referencing': [
-            f'authoryear = {ref_path}.authoryear.AuthorYearReferenceStyle',
-            f'label      = {ref_path}.label.LabelReferenceStyle',
-            f'onlyauthor = {ref_path}.onlyauthor.OnlyAuthorReferenceStyle',
-            f'onlylabel  = {ref_path}.onlylabel.OnlyLabelReferenceStyle',
-            f'onlyyear   = {ref_path}.onlyyear.OnlyYearReferenceStyle',
+            f'authoryear = {ref_path}.authoryear:AuthorYearReferenceStyle',
+            f'label      = {ref_path}.label:LabelReferenceStyle',
+            f'onlyauthor = {ref_path}.onlyauthor:OnlyAuthorReferenceStyle',
+            f'onlylabel  = {ref_path}.onlylabel:OnlyLabelReferenceStyle',
+            f'onlyyear   = {ref_path}.onlyyear:OnlyYearReferenceStyle',
         ],
     }
 )
