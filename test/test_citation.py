@@ -97,7 +97,7 @@ def test_reference_style_invalid(make_app, app_params):
 class CustomReferenceStyle(AuthorYearReferenceStyle[ReferenceInfo]):
     left_bracket = '('
     right_bracket = ')'
-    name_style_plugin = 'lastfirst'
+    name_style = 'lastfirst'
     abbreviate_names = False
     outer_sep = '; '
     outer_sep2 = '; '

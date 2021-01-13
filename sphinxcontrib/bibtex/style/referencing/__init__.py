@@ -6,7 +6,7 @@ from pybtex.richtext import Text, Tag
 from sphinxcontrib.bibtex.richtext import ReferenceInfo, BaseReferenceText
 from sphinxcontrib.bibtex.style.template import names, sentence, join
 from typing import (
-    TYPE_CHECKING, Generic, Tuple, List, Union, NamedTuple, Iterable,
+    TYPE_CHECKING, Generic, Tuple, List, Union, Iterable,
     Optional, Type, Dict
 )
 
@@ -123,10 +123,11 @@ class BaseNamesReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
     """
 
     #: Plugin name of the style used for formatting author names.
-    name_style_plugin: str = 'last'
+    name_style: str = 'last'
 
-    #: Style used for formatting author names. Loaded from name_style_plugin.
-    name_style: "BaseNameStyle" = dataclasses.field(init=False)
+    #: Plugin class instance used for formatting author names.
+    #: Loaded from :attr:`name_style`.
+    name_style_plugin: "BaseNameStyle" = dataclasses.field(init=False)
 
     #: Whether or not to abbreviate first names.
     abbreviate_names: bool = True
@@ -135,7 +136,8 @@ class BaseNamesReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
     names_sep: Union["BaseText", str] = ', '
     names_sep2: Optional[Union["BaseText", str]] = ' and '
     names_last_sep: Optional[Union["BaseText", str]] = ', and '
-    names_other: Optional[Union["BaseText", str]] = Text(' ', Tag('em', 'et al.'))
+    names_other: Optional[Union["BaseText", str]] = \
+        Text(' ', Tag('em', 'et al.'))
 
     def __post_init__(self):
         super().__post_init__()
@@ -143,8 +145,8 @@ class BaseNamesReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
         # inside of __post_init__
         # https://docs.python.org/3/library/dataclasses.html#frozen-instances
         object.__setattr__(
-            self, 'name_style', pybtex.plugin.find_plugin(
-                'pybtex.style.names', name=self.name_style_plugin)())
+            self, 'name_style_plugin', pybtex.plugin.find_plugin(
+                'pybtex.style.names', name=self.name_style)())
 
     def get_author_template(self, full_authors: bool) -> "Node":
         """Returns a template formatting the authors with correct separators

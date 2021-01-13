@@ -57,8 +57,9 @@ def names(children, data, role, **kwargs):
     except KeyError:
         raise FieldIsMissing(role, data['entry'])
     style = data['style']
-    formatted_names = [style.name_style.format(person, style.abbreviate_names)
-                       for person in persons]
+    formatted_names = [
+        style.name_style_plugin.format(person, style.abbreviate_names)
+        for person in persons]
     return join(**kwargs)[formatted_names].format_data(data)
 
 
