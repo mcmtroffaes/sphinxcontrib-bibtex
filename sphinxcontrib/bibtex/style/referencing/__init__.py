@@ -64,7 +64,7 @@ class BaseReferenceStyle(Generic[ReferenceInfo], ABC):
 
             Standard implementations should normally implement this method
             by calling
-            :meth:`BaseBracketReferenceStyle.get_standard_outer_template`
+            :meth:`BaseBracketReferenceStyle.get_bracket_outer_template`
             with the appropriate arguments.
         """
         raise NotImplementedError
@@ -93,7 +93,7 @@ class BaseBracketReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
     outer_sep2: Optional[Union["BaseText", str]] = None
     outer_last_sep: Optional[Union["BaseText", str]] = None
 
-    def get_standard_outer_template(
+    def get_bracket_outer_template(
             self, children: List["BaseText"],
             brackets=False, capfirst=False) -> "Node":
         """A helper function for creating an outer template.

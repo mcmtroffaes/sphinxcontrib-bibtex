@@ -27,7 +27,7 @@ class ExtraAuthorReferenceStyle(
 
     def get_outer_template(
             self, role_name: str, children: List["BaseText"]) -> "Node":
-        return self.get_standard_outer_template(
+        return self.get_bracket_outer_template(
             children,
             brackets='par' in role_name,
             capfirst='c' in role_name,

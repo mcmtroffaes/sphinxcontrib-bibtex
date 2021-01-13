@@ -30,12 +30,12 @@ class BasicAuthorYearReferenceStyle(
     def get_outer_template(
             self, role_name: str, children: List["BaseText"]) -> "Node":
         if 'p' in role_name:  # parenthetical
-            return self.get_standard_outer_template(
+            return self.get_bracket_outer_template(
                 children,
                 brackets=True,
                 capfirst=False)
         else:  # textual
-            return self.get_standard_outer_template(
+            return self.get_bracket_outer_template(
                 children,
                 brackets=False,
                 capfirst='c' in role_name)
