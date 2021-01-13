@@ -2,7 +2,8 @@ import dataclasses
 
 from typing import TYPE_CHECKING, List, Iterable
 from pybtex.style.template import field
-from . import ReferenceInfo, BaseStandardReferenceStyle, reference
+from sphinxcontrib.bibtex.richtext import ReferenceInfo
+from . import BaseStandardReferenceStyle, reference
 
 
 if TYPE_CHECKING:

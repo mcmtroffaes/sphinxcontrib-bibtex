@@ -2,10 +2,11 @@ import dataclasses
 from abc import ABC
 
 import pybtex.plugin
-from pybtex.richtext import Text, BaseMultipartText, Tag
+from pybtex.richtext import Text, Tag
 from pybtex.style.template import node, _format_list, FieldIsMissing
+from sphinxcontrib.bibtex.richtext import ReferenceInfo, BaseReferenceText
 from typing import (
-    TYPE_CHECKING, TypeVar, Generic, Tuple, List, Union, NamedTuple
+    TYPE_CHECKING, Generic, Tuple, List, Union, NamedTuple
 )
 from typing import Iterable, Optional, cast, Any, Type, Dict
 
@@ -15,12 +16,6 @@ if TYPE_CHECKING:
     from pybtex.style import FormattedEntry
     from pybtex.style.names import BaseNameStyle
     from pybtex.style.template import Node
-
-
-ReferenceInfo = TypeVar('ReferenceInfo')
-"""Generic type parameter for types that store reference information.
-To be implemented by clients; see for instance :class:`SphinxReferenceInfo`.
-"""
 
 
 # copied from pybtex join but extended to allow "et al" formatting
@@ -97,20 +92,6 @@ def reference(children, data: Dict[str, Any]):
     style = cast(BaseReferenceStyle, data['style'])
     info = data['reference_info']
     return style.ReferenceText(info, *parts)
-
-
-class BaseReferenceText(BaseMultipartText, Generic[ReferenceInfo]):
-    """Generic rich text element for citation references.
-    Instances store some extra reference info that can be used when formatting.
-    This base class renders its children without further formatting.
-    Implementations must create a derivation from this class which
-    overrides the *render* method to create the desired output.
-    See for instance :class:`SphinxReferenceText`.
-    """
-
-    def __init__(self, info: ReferenceInfo, *parts: "BaseText"):
-        self.info = (info,)
-        super().__init__(*parts)
 
 
 class Separators(NamedTuple):
