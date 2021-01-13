@@ -372,7 +372,6 @@ class BibtexDomain(Domain):
             for entry, formatted_entry in self.get_formatted_entries(
                     bibliography_key, docnames):
                 key = bibliography.keyprefix + formatted_entry.key
-                label = bibliography.labelprefix + formatted_entry.label
                 if bibliography.list_ == 'citation' and key in used_keys:
                     logger.warning(
                         'duplicate citation for key "%s"' % key,
@@ -386,14 +385,15 @@ class BibtexDomain(Domain):
                 ))
                 if bibliography.list_ == 'citation':
                     used_keys.add(key)
-                    if label not in used_labels:
-                        used_labels[label] = key
-                    elif used_labels[label] != key:
+                    if formatted_entry.label not in used_labels:
+                        used_labels[formatted_entry.label] = key
+                    elif used_labels[formatted_entry.label] != key:
                         # if used_label[label] == key then already
                         # duplicate key warning
                         logger.warning(
                             'duplicate label "%s" for keys "%s" and "%s"' % (
-                                label, used_labels[label], key),
+                                formatted_entry.label,
+                                used_labels[formatted_entry.label], key),
                             location=(bibliography_key.docname,
                                       bibliography.line))
         return []  # expects list of updated docnames
