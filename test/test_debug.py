@@ -70,7 +70,8 @@ def test_debug_minimal_example(app, warning):
     assert not warning.getvalue()
     output = (app.outdir / "index.txt").read_text()
     assert [line for line in output.split('\n') if line] == [
-        'See Nelson [Nel87] for an introduction to non-standard analysis. Non-',
+        'See Nelson [Nel87] for an introduction '
+        'to non-standard analysis. Non-',
         'standard analysis is fun [Nel87].',
         '[Nel87] Edward Nelson. *Radically Elementary Probability Theory*.',
         '        Princeton University Press, 1987.']
