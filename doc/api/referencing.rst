@@ -12,7 +12,7 @@ Basic Styles
 
 Basic styles that support both textual and parenthetical citations.
 Should provide roles with names
-``t``, ``p``, ``ct``, ``cp``, ``ts``, ``ps``, ``cts``, and ``pts``,
+``p``, ``ps``, ``t``, ``ts``, ``ct``, and ``cts``.
 Here, ``t`` stands for textual and ``p`` for parenthetical.
 The ``c`` prefix causes the first letter to be capitalized,
 and the ``s`` suffix causes all authors to be named rather than
