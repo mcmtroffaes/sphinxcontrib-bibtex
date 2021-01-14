@@ -63,12 +63,6 @@ setup(
             plugin('author_year'),
             plugin('label'),
             # plugin('super'),  # TODO
-            plugin('basic_author_year'),
-            plugin('basic_label'),
-            # plugin('basic_super'),  # TODO
-            plugin('extra_author'),
-            plugin('extra_label'),
-            plugin('extra_year'),
         ],
     }
 )
