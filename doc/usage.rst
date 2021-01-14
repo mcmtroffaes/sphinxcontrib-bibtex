@@ -190,7 +190,7 @@ Roles and Directives
       .. code-block:: rest
 
         .. bibliography::
-           :cited:
+           :all:
 
    .. rst:directive:option:: notcited
 
