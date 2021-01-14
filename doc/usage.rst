@@ -163,7 +163,7 @@ Roles and Directives
 
    .. versionadded:: 2.2.0
 
-   Create a citation using just the year.
+   Create a citation using just the author(s).
    Use the ``par`` version to include brackets,
    and the ``c`` version to capitalize the first letter.
 

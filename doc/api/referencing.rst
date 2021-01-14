@@ -31,7 +31,7 @@ Extra Styles
 For styles providing additional roles, e.g. for citations that
 specifically use the label, the author, the year, etc.
 The convention for these styles is to have one role for producing
-whichever text needs to be had, and to have ``par`` suffix
+whichever text needs to be had, and to have a ``par`` suffix
 in the role name if the citation text needs to be embedded in
 brackets (for example ``label`` and ``labelpar``).
 
