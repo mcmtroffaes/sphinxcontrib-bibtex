@@ -135,16 +135,16 @@ class NamesReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
     abbreviate_names: bool = True
 
     #: Separator between authors.
-    names_sep: Union["BaseText", str] = ', '
+    name_sep: Union["BaseText", str] = ', '
 
     #: Separator between authors, if only two authors.
-    names_sep2: Optional[Union["BaseText", str]] = ' and '
+    name_sep2: Optional[Union["BaseText", str]] = ' and '
 
     #: Separator between authors, for last author if three or more authors.
-    names_last_sep: Optional[Union["BaseText", str]] = ', and '
+    name_last_sep: Optional[Union["BaseText", str]] = ', and '
 
     #: Abbreviation text if three or more authors.
-    names_other: Optional[Union["BaseText", str]] = \
+    name_other: Optional[Union["BaseText", str]] = \
         Text(' ', Tag('em', 'et al.'))
 
     def __post_init__(self):
@@ -162,10 +162,10 @@ class NamesReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
         """
         return names(
             'author',
-            sep=self.names_sep,
-            sep2=self.names_sep2,
-            last_sep=self.names_last_sep,
-            other=None if full_authors else self.names_other,
+            sep=self.name_sep,
+            sep2=self.name_sep2,
+            last_sep=self.name_last_sep,
+            other=None if full_authors else self.name_other,
         )
 
 

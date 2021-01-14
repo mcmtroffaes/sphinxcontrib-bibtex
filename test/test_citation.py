@@ -102,10 +102,10 @@ class CustomReferenceStyle(AuthorYearReferenceStyle[ReferenceInfo]):
     outer_sep = '; '
     outer_sep2 = '; '
     outer_last_sep = '; '
-    names_sep = ' & '
-    names_sep2 = None
-    names_last_sep = None
-    names_other = None
+    name_sep = ' & '
+    name_sep2 = None
+    name_last_sep = None
+    name_other = None
     author_year_sep = ', '
 
 
