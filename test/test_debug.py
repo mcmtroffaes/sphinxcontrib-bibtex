@@ -62,3 +62,15 @@ def test_rebuild_empty_outdir(make_app, app_params):
     app1 = make_app(freshenv=False, *args, **kwargs)
     app1.build()
     assert 'could not find bibtex key' not in app1._warning.getvalue()
+
+
+@pytest.mark.sphinx('text', testroot='debug_minimal_example')
+def test_debug_minimal_example(app, warning):
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.txt").read_text()
+    assert [line for line in output.split('\n') if line] == [
+        'See Nelson [Nel87] for an introduction to non-standard analysis. Non-',
+        'standard analysis is fun [Nel87].',
+        '[Nel87] Edward Nelson. *Radically Elementary Probability Theory*.',
+        '        Princeton University Press, 1987.']
