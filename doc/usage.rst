@@ -67,7 +67,8 @@ Currently available styles are:
   This is because, in docutils, every citation must have a label.
 
 Python packages can make new styles available through
-the ``sphinxcontrib.bibtex.style.referencing`` entry point group.
+the ``sphinxcontrib.bibtex.style.referencing``
+`entry point <https://packaging.python.org/guides/creating-and-discovering-plugins/#using-package-metadata>`_ group.
 See sphinxcontrib-bibtex's own ``setup.py`` script for examples.
 
 Roles and Directives
