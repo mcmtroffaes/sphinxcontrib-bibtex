@@ -82,7 +82,11 @@ class BracketReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
     #: Separators used for outer template (i.e. in between references
     #: if multiple keys are referenced in a single citation).
     outer_sep: Union["BaseText", str] = ', '
+
+    #: Separator for outer template, if only two items.
     outer_sep2: Optional[Union["BaseText", str]] = None
+
+    #: Separator for outer template, for last time if three or more items.
     outer_last_sep: Optional[Union["BaseText", str]] = None
 
     def get_bracket_outer_template(
@@ -121,10 +125,16 @@ class NamesReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
     #: Whether or not to abbreviate first names.
     abbreviate_names: bool = True
 
-    #: Separators for formatting author names.
+    #: Separator between authors.
     names_sep: Union["BaseText", str] = ', '
+
+    #: Separator between authors, if only two authors.
     names_sep2: Optional[Union["BaseText", str]] = ' and '
+
+    #: Separator between authors, for last author if three or more authors.
     names_last_sep: Optional[Union["BaseText", str]] = ', and '
+
+    #: Abbreviation text if three or more authors.
     names_other: Optional[Union["BaseText", str]] = \
         Text(' ', Tag('em', 'et al.'))
 
