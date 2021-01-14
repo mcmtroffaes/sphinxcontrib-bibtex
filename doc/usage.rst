@@ -137,7 +137,8 @@ Roles and Directives
 .. rst:role:: cite
 
    This is an alias for the :rst:role:`cite:p` role, and will create a
-   parenthetical citation reference. Provided for backward compatibility.
+   parenthetical citation reference. Provided for convenience and
+   compatibility with older versions.
 
 .. rst:role:: cite:label
 .. rst:role:: cite:labelpar
