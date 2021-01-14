@@ -64,14 +64,37 @@ def test_rebuild_empty_outdir(make_app, app_params):
     assert 'could not find bibtex key' not in app1._warning.getvalue()
 
 
-@pytest.mark.sphinx('text', testroot='debug_minimal_example')
+@pytest.mark.sphinx('pseudoxml', testroot='debug_minimal_example')
 def test_debug_minimal_example(app, warning):
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.txt").read_text()
-    assert [line for line in output.split('\n') if line] == [
-        'See Nelson [Nel87] for an introduction '
-        'to non-standard analysis. Non-',
-        'standard analysis is fun [Nel87].',
-        '[Nel87] Edward Nelson. *Radically Elementary Probability Theory*.',
-        '        Princeton University Press, 1987.']
+    output = (app.outdir / "index.pseudoxml").read_text()
+    assert [line for line in output.split('\n')][1:] == [
+        '    <paragraph>',
+        '        See ',
+        '        <inline ids="id1">',
+        '            Nelson [',
+        '            <reference internal="True" refid="id4">',
+        '                Nel87',
+        '            ]',
+        '         for an introduction to non-standard analysis.',
+        '        Non-standard analysis is fun ',
+        '        <inline ids="id2">',
+        '            [',
+        '            <reference internal="True" refid="id4">',
+        '                Nel87',
+        '            ]',
+        '        .',
+        '    <paragraph ids="id3">',
+        '        <citation backrefs="id1 id2" docname="index" ids="id4">',
+        '            <label support_smartquotes="False">',
+        '                Nel87',
+        '            <paragraph>',
+        '                Edward Nelson.',
+        '                 ',
+        '                <emphasis>',
+        '                    Radically Elementary Probability Theory',
+        '                .',
+        '                 ',
+        '                Princeton University Press, 1987.',
+        '']
