@@ -2,11 +2,10 @@
 ----------------------
 
 * New natbib/biblatex inspired roles for textual and parenthetical
-  citation references.
+  citation references (see issue #203 reported by matthew-brett).
   For textual citation references, use ``:cite:t:``
   and for parenthetical citation references, use ``:cite:p:``.
-  The old ``:cite:`` role is an alias for ``:cite:p:``
-  (see issue #203 reported by matthew-brett).
+  The old ``:cite:`` role is an alias for ``:cite:p:``.
 
 * Use the ``s`` suffix to include the full author list
   rather than abbreviating it with "et al.":
