@@ -3,7 +3,7 @@ import dataclasses
 from sphinxcontrib.bibtex.style.template import reference
 from sphinxcontrib.bibtex.richtext import ReferenceInfo
 from typing import TYPE_CHECKING, List, Iterable
-from . import BaseBracketReferenceStyle, BaseNamesReferenceStyle
+from . import BracketReferenceStyleMixin, NamesReferenceStyleMixin
 
 
 if TYPE_CHECKING:
@@ -13,8 +13,8 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass(frozen=True)
 class ExtraAuthorReferenceStyle(
-        BaseBracketReferenceStyle[ReferenceInfo],
-        BaseNamesReferenceStyle[ReferenceInfo]):
+        BracketReferenceStyleMixin[ReferenceInfo],
+        NamesReferenceStyleMixin[ReferenceInfo]):
     """Reference just by author names."""
 
     def get_role_names(self) -> Iterable[str]:

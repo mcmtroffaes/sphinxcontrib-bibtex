@@ -68,7 +68,7 @@ class BaseReferenceStyle(Generic[ReferenceInfo], ABC):
 
 
 @dataclasses.dataclass(frozen=True)
-class BaseBracketReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
+class BracketReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
     """Helper base class for reference styles.
     This class provides brackets, as well as separators
     and a function to facilitate formatting of the outer template.
@@ -108,7 +108,7 @@ class BaseBracketReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
 
 
 @dataclasses.dataclass(frozen=True)
-class BaseNamesReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
+class NamesReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
     """Helper base class for reference styles.
     This class has additional data and helper functions
     to facilitate formatting of author names.
@@ -155,7 +155,7 @@ class BaseNamesReferenceStyle(BaseReferenceStyle[ReferenceInfo], ABC):
 
 # not an ABC, could be used directly if desired
 @dataclasses.dataclass(frozen=True)
-class BaseGroupReferenceStyle(BaseReferenceStyle[ReferenceInfo]):
+class GroupReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo]):
     """Composes a group of reference styles into a single consistent style."""
 
     #: List of style types.

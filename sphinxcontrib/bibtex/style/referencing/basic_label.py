@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING, List, Iterable
 from pybtex.style.template import words
 from sphinxcontrib.bibtex.style.template import reference, entry_label, join
 from sphinxcontrib.bibtex.richtext import ReferenceInfo
-from . import BaseBracketReferenceStyle, BaseNamesReferenceStyle
+from . import BracketReferenceStyleMixin, NamesReferenceStyleMixin
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText
@@ -13,8 +13,8 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass(frozen=True)
 class BasicLabelReferenceStyle(
-        BaseBracketReferenceStyle[ReferenceInfo],
-        BaseNamesReferenceStyle[ReferenceInfo]):
+        BracketReferenceStyleMixin[ReferenceInfo],
+        NamesReferenceStyleMixin[ReferenceInfo]):
     """Reference by label if parenthetical,
     and by author and label if textual.
     """
