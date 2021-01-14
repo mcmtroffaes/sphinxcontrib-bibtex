@@ -565,19 +565,18 @@ Simply add the following code to your ``conf.py``:
 
 .. code-block:: python
 
+  import pybtex.plugin
   from pybtex.style.formatting.unsrt import Style as UnsrtStyle
   from pybtex.style.template import toplevel # ... and anything else needed
-  from pybtex.plugin import register_plugin
 
   class MyStyle(UnsrtStyle):
-
       def format_XXX(self, e):
           template = toplevel [
               # etc.
           ]
           return template.format_data(e)
 
-  register_plugin('pybtex.style.formatting', 'mystyle', MyStyle)
+  pybtex.plugin.register_plugin('pybtex.style.formatting', 'mystyle', MyStyle)
 
 Now ``mystyle`` will be available to you as a formatting style:
 
@@ -626,6 +625,12 @@ Simply add the following code to your ``conf.py``:
     sphinxcontrib.bibtex.plugin.register_plugin(
         'sphinxcontrib.bibtex.style.referencing',
         'author_year_round', MyReferenceStyle)
+
+
+    It is essential that you decorate your style as a dataclass,
+    and that you include a type annotation with every field,
+    to ensure these values are correctly passed to the
+    constructor when sphinxcontrib-bibtex instantiates your style.
 
 Now ``author_year_round`` will be available to you as a formatting style:
 
