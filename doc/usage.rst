@@ -169,56 +169,63 @@ Roles and Directives
 
 .. rst:directive:: .. bibliography::
 
-   .. rst:directive:option:: all: include all references (optional)
-   .. rst:directive:option:: notcited: include only non-cited references (optional)
-   .. rst:directive:option:: cited: include only cited references (the default, optional)
-   .. rst:directive:option:: style: the pybtex formatting style name; see further (optional)
-   .. rst:directive:option:: list: the type of list; see further (optional)
-   .. rst:directive:option:: enumtype: the type of enumeration; see further (optional)
-   .. rst:directive:option:: start: start of an enumerated list; see further (optional)
-   .. rst:directive:option:: labelprefix: the label prefix; see further (optional)
-   .. rst:directive:option:: keyprefix: the key prefix; see further (optional)
-   .. rst:directive:option:: filter: the filter specification; see further (optional)
-
    Create bibliography for all cited references.
    Citations in sphinx are resolved globally across all documents.
    Typically, you have a single bibliography directive across your
    entire project which collects all citations.
-
-   The ``all`` flag
-   forces all references to be included (equivalent to ``\nocite{*}``
-   in LaTeX). The ``notcited`` flag causes all references that were
-   not cited to be included. The ``cited`` flag is recognized as well
-   but is entirely optional. For example:
-
-   .. code-block:: rest
-
-     .. bibliography::
-        :cited:
-
-   which would be roughly equivalent to the following LaTeX code:
-
-   .. code-block:: latex
-
-      \begin{thebibliography}{1}
-        \bibitem{1987:nelson}
-        Edward~Nelson
-        \newblock {\em Radically Elementary Probability Theory}.
-        \newblock Princeton University Press, 1987.
-      \end{thebibliography}
-
-   You can also override the default bibliography style:
-
-   .. code-block:: rest
-
-     .. bibliography::
-        :style: unsrt
 
    .. warning::
 
       Sphinx will attempt to resolve references to the bibliography
       across all documents, so you must take care that no citation key
       is included more than once.
+
+   The following options are recognized (all are optional).
+
+   .. rst:directive:option:: all
+
+      Include all references, instead of just the cited ones
+      (equivalent to ``\nocite{*}`` in LaTeX). For example:
+
+      .. code-block:: rest
+
+        .. bibliography::
+           :cited:
+
+   .. rst:directive:option:: notcited
+
+      Causes all references that were not cited to be included.
+
+   .. rst:directive:option:: cited
+
+      This is the default and need not be specified.
+
+   .. rst:directive:option:: style
+
+      Overrides the default bibliography style. For example:
+
+      .. code-block:: rest
+
+        .. bibliography::
+           :style: unsrt
+
+   .. rst:directive:option:: list
+   .. rst:directive:option:: enumtype
+   .. rst:directive:option:: start
+
+      See :ref:`section-lists`.
+
+   .. rst:directive:option:: labelprefix
+
+      See :ref:`section-label-prefixing`.
+
+   .. rst:directive:option:: keyprefix
+
+      See :ref:`section-key-prefixing`.
+
+   .. rst:directive:option:: filter
+
+      See :ref:`section-filtering`.
 
 .. XXX not documenting disable-curly-bracket-strip for now; might remove it
 
@@ -295,6 +302,8 @@ and your books are in ``books1.bib`` and ``books2.bib``.
 The bib files must be specified as a path that
 is relative to the containing document.
 
+.. _section-lists:
+
 Bullet Lists and Enumerated Lists
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -341,6 +350,8 @@ The start can be any positive integer (1, 2, 3, ...) or
 :rst:dir:`bibliography` directive.
 This is helpful if you split up your bibliography but
 still want to enumerate the entries continuously.
+
+.. _section-label-prefixing:
 
 Label Prefixing
 ~~~~~~~~~~~~~~~
@@ -402,6 +413,8 @@ with links and backlinks as expected.
 .. seealso::
 
    :ref:`section-local-bibliographies`
+
+.. _section-filtering:
 
 Filtering
 ~~~~~~~~~
