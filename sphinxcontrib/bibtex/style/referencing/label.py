@@ -14,8 +14,10 @@ from .extra_year import ExtraYearReferenceStyle
 class LabelReferenceStyle(
         BaseGroupReferenceStyle[ReferenceInfo],
         BaseNamesReferenceStyle[ReferenceInfo],
-        BaseBracketReferenceStyle[ReferenceInfo],
-):
+        BaseBracketReferenceStyle[ReferenceInfo]):
+    """Textual or parenthetical reference by label,
+    or just by author, label, or year.
+    """
 
     def __post_init__(self):
         self.styles.extend([

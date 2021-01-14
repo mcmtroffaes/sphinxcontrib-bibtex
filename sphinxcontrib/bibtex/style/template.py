@@ -1,11 +1,34 @@
+"""
+.. autofunction:: sphinxcontrib.bibtex.style.template.join(\
+        sep='', sep2=None, last_sep=None, other=None)
+
+.. autofunction:: sphinxcontrib.bibtex.style.template.sentence(\
+        capfirst=False, capitalize=False, add_period=True, \
+        sep=', ', sep2=None, last_sep=None, other=None)
+
+.. autofunction:: sphinxcontrib.bibtex.style.template.names(\
+        role, sep='', sep2=None, last_sep=None, other=None)
+
+.. autofunction:: sphinxcontrib.bibtex.style.template.entry_label()
+
+.. autofunction:: sphinxcontrib.bibtex.style.template.reference()
+"""
+
 from pybtex.richtext import Text
-from pybtex.style.template import node, _format_list, FieldIsMissing
+from pybtex.style.template import Node, _format_list, FieldIsMissing
 from typing import TYPE_CHECKING, Dict, Any, cast
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText
     from pybtex.style import FormattedEntry
     from sphinxcontrib.bibtex.style.referencing import BaseReferenceStyle
+
+
+# extended from pybtex: also copies the docstring into the wrapped object
+def node(f):
+    n = Node(f.__name__, f)
+    n.__doc__ = f.__doc__
+    return n
 
 
 # copied from pybtex join but extended to allow "et al" formatting

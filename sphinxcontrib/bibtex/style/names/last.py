@@ -3,6 +3,7 @@ from pybtex.style.template import join
 
 
 class LastNameStyle(BaseNameStyle):
+    """A simple name style for formatting the last name of an author."""
 
     def format(self, person, abbr=True):
         """Format last names."""

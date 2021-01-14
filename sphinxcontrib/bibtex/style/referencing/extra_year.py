@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass(frozen=True)
 class ExtraYearReferenceStyle(BaseBracketReferenceStyle[ReferenceInfo]):
-    """Reference by year."""
+    """Reference just by year."""
 
     def get_role_names(self) -> Iterable[str]:
         return ['year', 'yearpar']

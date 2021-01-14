@@ -14,9 +14,9 @@ if TYPE_CHECKING:
 class BasicAuthorYearReferenceStyle(
         BaseBracketReferenceStyle[ReferenceInfo],
         BaseNamesReferenceStyle[ReferenceInfo]):
-    """Author-year style references."""
+    """Textual or parenthetical reference by author-year."""
 
-    """Separator between author and year for textual citations."""
+    #: Separator between author and year for textual citations.
     author_year_sep: Union["BaseText", str] = ', '
 
     def get_role_names(self) -> Iterable[str]:

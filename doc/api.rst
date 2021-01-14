@@ -11,3 +11,6 @@ Extension API
     api/transforms
     api/domains
     api/bibfile
+    api/referencing
+    api/plugin
+    api/pybtex

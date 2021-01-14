@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass(frozen=True)
 class ExtraLabelReferenceStyle(BaseBracketReferenceStyle[ReferenceInfo]):
-    """Reference by label."""
+    """Reference just by label."""
 
     def get_role_names(self) -> Iterable[str]:
         return ['label', 'labelpar']

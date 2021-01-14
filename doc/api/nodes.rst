@@ -1,4 +1,4 @@
-New Nodes
-=========
+New Docutils Nodes
+==================
 
 .. automodule:: sphinxcontrib.bibtex.nodes

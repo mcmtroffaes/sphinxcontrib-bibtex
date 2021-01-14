@@ -21,7 +21,8 @@ if TYPE_CHECKING:
 @dataclasses.dataclass(frozen=True)
 class BaseReferenceStyle(Generic[ReferenceInfo], ABC):
     """Abstract base class for reference styles.
-    Custom styles can override the outer and inner templates.
+    Custom styles must override the outer and inner template
+    functions.
     """
 
     #: Rich text class used for rendering references.
@@ -58,19 +59,11 @@ class BaseReferenceStyle(Generic[ReferenceInfo], ABC):
 
     def get_outer_template(
             self, role_name: str, children: List["BaseText"]) -> "Node":
-        """The outer template for formatting the references.
-
-        .. seealso::
-
-            Standard implementations should normally implement this method
-            by calling
-            :meth:`BaseBracketReferenceStyle.get_bracket_outer_template`
-            with the appropriate arguments.
-        """
+        """Returns outer template for formatting the references."""
         raise NotImplementedError
 
     def get_inner_template(self, role_name: str) -> "Node":
-        """The inner template for formatting the references."""
+        """Returns inner template for formatting the references."""
         raise NotImplementedError
 
 

@@ -19,8 +19,11 @@ class AuthorYearReferenceStyle(
         BaseBracketReferenceStyle[ReferenceInfo],
         BaseNamesReferenceStyle[ReferenceInfo],
         BaseGroupReferenceStyle[ReferenceInfo]):
+    """Textual or parenthetical reference by author-year,
+    or just by author, label, or year.
+    """
 
-    """Separator between author and year for textual citations."""
+    #: Separator between author and year for textual citations.
     author_year_sep: Union["BaseText", str] = ', '
 
     def __post_init__(self):
