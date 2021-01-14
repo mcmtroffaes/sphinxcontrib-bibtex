@@ -1,5 +1,47 @@
-2.1.5 (in development)
+2.2.0 (in development)
 ----------------------
+
+* New natbib/biblatex inspired roles for textual and parenthetical
+  citation references.
+  For textual citation references, use ``:cite:t:``
+  and for parenthetical citation references, use ``:cite:p:``.
+  The old ``:cite:`` role is an alias for ``:cite:p:``
+  (see issue #203 reported by matthew-brett).
+
+* Use the ``s`` suffix to include the full author list
+  rather than abbreviating it with "et al.":
+  ``:cite:ts:``, ``:cite:ps:``.
+
+* For textual citation references,
+  use the ``c`` prefix to capitalize the first letter:
+  ``:cite:ct:``, ``:cite:cts:``.
+
+* New natbib inspired roles for citing
+  just the author, year, or label, optionally with brackets,
+  and optionally capitalizing the first letter of the author:
+  ``:cite:author:``, ``:cite:authorpar:``,
+  ``:cite:cauthor:``, ``:cite:cauthorpar:``
+  ``:cite:year:``, ``:cite:yearpar:``,
+  ``:cite:label:``, ``:cite:labelpar:``
+  (see issue #71 reported by bk322).
+
+* To configure your referencing style,
+  an optional config setting ``bibtex_reference_style`` has been added.
+  If not specified, this defaults to the ``label`` style,
+  which will use the label to format citation references, matching the
+  referencing style as in previous versions.
+  The other style currently available is ``author_year``, for author-year
+  style referencing.
+
+* Reference styles can be fully customized to your heart's desire
+  (see issue #203 reported by amichuda).
+  They are based on pybtex's template system, which was already used for
+  customizing bibliography styles.
+  Refer to the user documentation for examples, and to the API documentation
+  for full details.
+
+* Other packages can register custom reference styles through entry points.
+  Refer to the user documentation for details.
 
 2.1.4 (8 January 2021)
 ----------------------
