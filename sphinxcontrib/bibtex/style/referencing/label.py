@@ -2,7 +2,7 @@ import dataclasses
 
 from sphinxcontrib.bibtex.style.referencing import (
     ReferenceInfo, BracketReferenceStyleMixin, NamesReferenceStyleMixin,
-    GroupReferenceStyleMixin
+    GroupReferenceStyle
 )
 from .basic_label import BasicLabelReferenceStyle
 from .extra_author import ExtraAuthorReferenceStyle
@@ -12,7 +12,7 @@ from .extra_year import ExtraYearReferenceStyle
 
 @dataclasses.dataclass(frozen=True)
 class LabelReferenceStyle(
-        GroupReferenceStyleMixin[ReferenceInfo],
+        GroupReferenceStyle[ReferenceInfo],
         NamesReferenceStyleMixin[ReferenceInfo],
         BracketReferenceStyleMixin[ReferenceInfo]):
     """Textual or parenthetical reference by label,

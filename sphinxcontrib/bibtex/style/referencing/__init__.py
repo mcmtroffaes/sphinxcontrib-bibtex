@@ -69,8 +69,7 @@ class BaseReferenceStyle(Generic[ReferenceInfo], ABC):
 
 @dataclasses.dataclass(frozen=True)
 class BracketReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
-    """Helper base class for reference styles.
-    This class provides brackets, as well as separators
+    """A mixin class which provides brackets, as well as separators
     and a function to facilitate formatting of the outer template.
     """
 
@@ -89,9 +88,8 @@ class BracketReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
     def get_bracket_outer_template(
             self, children: List["BaseText"],
             brackets=False, capfirst=False) -> "Node":
-        """A helper function for creating an outer template.
-
-        Formats *children* with separators, adding brackets if requested,
+        """Creates an outer template with separators,
+        adding brackets if requested,
         and capitalizing the first word if requested.
         """
         return join[
@@ -109,8 +107,7 @@ class BracketReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
 
 @dataclasses.dataclass(frozen=True)
 class NamesReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
-    """Helper base class for reference styles.
-    This class has additional data and helper functions
+    """A mixin class providing additional data and helper functions
     to facilitate formatting of author names.
     """
 
@@ -153,9 +150,9 @@ class NamesReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
         )
 
 
-# not an ABC, could be used directly if desired
+# not an ABC, can be used directly
 @dataclasses.dataclass(frozen=True)
-class GroupReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo]):
+class GroupReferenceStyle(BaseReferenceStyle[ReferenceInfo]):
     """Composes a group of reference styles into a single consistent style."""
 
     #: List of style types.

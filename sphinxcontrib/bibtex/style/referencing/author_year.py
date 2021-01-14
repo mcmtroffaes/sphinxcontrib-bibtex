@@ -3,7 +3,7 @@ from typing import Union, TYPE_CHECKING
 
 from sphinxcontrib.bibtex.style.referencing import (
     ReferenceInfo, BracketReferenceStyleMixin, NamesReferenceStyleMixin,
-    GroupReferenceStyleMixin
+    GroupReferenceStyle
 )
 from .basic_author_year import BasicAuthorYearReferenceStyle
 from .extra_author import ExtraAuthorReferenceStyle
@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 class AuthorYearReferenceStyle(
         BracketReferenceStyleMixin[ReferenceInfo],
         NamesReferenceStyleMixin[ReferenceInfo],
-        GroupReferenceStyleMixin[ReferenceInfo]):
+        GroupReferenceStyle[ReferenceInfo]):
     """Textual or parenthetical reference by author-year,
     or just by author, label, or year.
     """
