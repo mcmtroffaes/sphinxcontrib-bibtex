@@ -123,8 +123,8 @@ Roles and Directives
 
    Here too, multiple keys can be specified at once.
 
-.. rst:role:: cite:ts
 .. rst:role:: cite:ps
+.. rst:role:: cite:ts
 .. rst:role:: cite:ct
 .. rst:role:: cite:cts
 
