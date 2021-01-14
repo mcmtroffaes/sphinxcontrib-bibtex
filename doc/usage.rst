@@ -247,8 +247,7 @@ Roles and Directives
 
       See \footcite{1987:nelson} for an introduction to non-standard analysis.
 
-   As with :rst:role:`cite`,
-   multiple comma-separated keys can be specified at once:
+   As with all citation roles, multiple keys can be specified:
 
    .. code-block:: rest
 
