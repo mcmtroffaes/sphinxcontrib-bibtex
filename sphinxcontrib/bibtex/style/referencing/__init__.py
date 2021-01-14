@@ -26,7 +26,7 @@ class BaseReferenceStyle(Generic[ReferenceInfo], ABC):
 
     For consistency, all subclasses of this class must be decorated
     as a :class:`dataclasses.dataclass`,
-    and must provide a default value for all attributes
+    and must provide a type annotation and default value for all attributes
     (unless ``init=False`` is used, in which case they can be
     initialized in :meth:`~dataclasses.dataclass.__post_init__`).).
     This is because client code must be able to instantiate any reference style
