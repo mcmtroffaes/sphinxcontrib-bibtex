@@ -1,24 +1,26 @@
+import pybtex.plugin
+
 from pybtex.database import Person, Entry
-from pybtex.plugin import find_plugin
 from pybtex.richtext import HRef
-from pybtex.style.formatting import BaseStyle
 from pybtex.style.template import Node, FieldIsMissing
+# direct import of the plugin to ensure we are testing this specific class
+from sphinxcontrib.bibtex.style.names.last import LastNameStyle
 from sphinxcontrib.bibtex.style.referencing import (
     BaseReferenceText, BaseReferenceStyle
 )
 from sphinxcontrib.bibtex.style.template import (
     entry_label, reference, join, names
 )
-from typing import TYPE_CHECKING, List, cast
+from typing import TYPE_CHECKING, List
 import pytest
 
 if TYPE_CHECKING:
+    from pybtex.backends import BaseBackend
     from pybtex.richtext import BaseText
+    from pybtex.style.formatting import BaseStyle
 
 
 def test_style_names_last():
-    from pybtex.database import Person
-    from sphinxcontrib.bibtex.style.names.last import LastNameStyle
     name = Person(
         string=r"Charles Louis Xavier Joseph de la Vall{\'e}e Poussin")
     last = LastNameStyle().format
@@ -58,8 +60,8 @@ class SimpleReferenceText(BaseReferenceText[str]):
 
 
 def test_simple_reference_style():
-    cit_style = cast(
-        BaseStyle, find_plugin('pybtex.style.formatting', 'unsrtalpha')())
+    cit_style: "BaseStyle" = \
+        pybtex.plugin.find_plugin('pybtex.style.formatting', 'unsrtalpha')()
     ref_style = SimpleReferenceStyle(SimpleReferenceText)
     auth1 = Person('First Last')
     auth2 = Person('Ein Zwei')
@@ -72,7 +74,8 @@ def test_simple_reference_style():
     formatted_entries = list(cit_style.format_entries(entries))
     infos = ["#id1", "#id2", "#id3"]
     references = list(zip(entries, formatted_entries, infos))
-    backend = find_plugin('pybtex.backends', 'html')()
+    backend: "BaseBackend" = \
+        pybtex.plugin.find_plugin('pybtex.backends', 'html')()
     assert \
         ref_style.format_references('p', references).render(backend) == \
         '{<a href="#id1">Las00</a>;<a href="#id2">Zwe00</a>' \
