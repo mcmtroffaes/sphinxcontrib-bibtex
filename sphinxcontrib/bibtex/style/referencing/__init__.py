@@ -23,6 +23,15 @@ class BaseReferenceStyle(Generic[ReferenceInfo], ABC):
     """Abstract base class for reference styles.
     Custom styles must override the outer and inner template
     functions.
+
+    For consistency, all subclasses of this class must be decorated
+    as a :class:`dataclasses.dataclass` with ``frozen=True``,
+    and must provide a default value for all attributes
+    (unless ``init=False`` is used, in which case they can be
+    initialized in :meth:`~dataclasses.dataclass.__post_init__`).).
+    This is because client code must be able to instantiate any reference style
+    through ``ReferenceStyle(ReferenceText)`` without needing
+    to specify any additional arguments through the constructor.
     """
 
     #: Rich text class used for rendering references.
@@ -119,7 +128,7 @@ class NamesReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
     name_style: str = 'last'
 
     #: Plugin class instance used for formatting author names.
-    #: Loaded from :attr:`name_style`.
+    #: Automatically initialised from :attr:`name_style`.
     name_style_plugin: "BaseNameStyle" = dataclasses.field(init=False)
 
     #: Whether or not to abbreviate first names.
