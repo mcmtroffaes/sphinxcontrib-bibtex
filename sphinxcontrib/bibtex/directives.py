@@ -52,8 +52,12 @@ class BibliographyDirective(Directive):
 
     """Class for processing the :rst:dir:`bibliography` directive.
 
-    Parses the bibliography files, and produces a
-    :class:`~sphinxcontrib.bibtex.nodes.bibliography` node.
+    Produces a
+    :class:`~sphinxcontrib.bibtex.nodes.bibliography` node,
+    along with (empty) citation nodes that will be formatted later in the
+    *env-updated* stage, and inserted into the document in a post-transform.
+    We cannot insert the citation nodes here because we do not yet know
+    which keys have been cited.
 
     .. seealso::
 
