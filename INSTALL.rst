@@ -11,11 +11,16 @@ to your project's Sphinx configuration file ``conf.py``.
 Minimal Example
 ---------------
 
-In your project's documentation, you can then write for instance:
+In your project's documentation, you can use
+``:cite:t:`` for textual citation references,
+``:cite:p:`` for parenthetical citation references,
+and ``.. bibliography`` for inserting the bibliography.
+For instance:
 
 .. code-block:: rest
 
-   See :cite:`1987:nelson` for an introduction to non-standard analysis.
+   See :cite:t:`1987:nelson` for an introduction to non-standard analysis.
+   Non-standard analysis is fun :cite:p:`1987:nelson`.
 
    .. bibliography::
 
@@ -30,7 +35,8 @@ where :file:`refs.bib` would contain an entry::
 
 In the default style, this will get rendered as:
 
-See [Nel87a]_ for an introduction to non-standard analysis.
+See Nelson [Nel87a]_ for an introduction to non-standard analysis.
+Non-standard analysis is fun [Nel87a]_.
 
 .. [Nel87a] Edward Nelson. *Radically Elementary Probability Theory*. Princeton University Press, 1987.
 
