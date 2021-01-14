@@ -29,8 +29,9 @@ logger = sphinx.util.logging.getLogger(__name__)
 
 
 class BibliographyKey(NamedTuple):
-    docname: str
-    id_: str
+    """Unique key for each bibliography directive."""
+    docname: str  #: Name of the document where the bibliography resides.
+    id_: str      #: The id of the bibliography node in the document.
 
 
 class BibliographyValue(NamedTuple):
