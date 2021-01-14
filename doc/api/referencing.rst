@@ -1,8 +1,8 @@
 Referencing Styles
 ==================
 
-Abstract Base Classes
----------------------
+Abstract Base Classes and Mixin Classes
+---------------------------------------
 
 .. automodule:: sphinxcontrib.bibtex.style.referencing
    :members:
@@ -17,7 +17,7 @@ Here, ``t`` stands for textual and ``p`` for parenthetical.
 The ``c`` prefix causes the first letter to be capitalized,
 and the ``s`` suffix causes all authors to be named rather than
 shortening the list using "et al." or some other suffix as
-speficied by the style.
+specified by the style.
 
 .. automodule:: sphinxcontrib.bibtex.style.referencing.basic_label
    :members:
@@ -31,9 +31,9 @@ Extra Styles
 For styles providing additional roles, e.g. for citations that
 specifically use the label, the author, the year, etc.
 The convention for these styles is to have one role for producing
-whichever text needs to be had, and to have "par" suffix
+whichever text needs to be had, and to have ``par`` suffix
 in the role name if the citation text needs to be embedded in
-brackets (for example "label" and "labelpar").
+brackets (for example ``label`` and ``labelpar``).
 
 .. automodule:: sphinxcontrib.bibtex.style.referencing.extra_label
    :members:
