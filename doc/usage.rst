@@ -626,6 +626,7 @@ Simply add the following code to your ``conf.py``:
         'sphinxcontrib.bibtex.style.referencing',
         'author_year_round', MyReferenceStyle)
 
+.. warning::
 
     It is essential that you decorate your style as a dataclass,
     and that you include a type annotation with every field,
