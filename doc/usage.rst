@@ -64,6 +64,17 @@ Roles and Directives
 
 .. rst:directive:: .. bibliography::
 
+   .. rst:directive:option:: all: include all references (optional)
+   .. rst:directive:option:: notcited: include only non-cited references (optional)
+   .. rst:directive:option:: cited: include only cited references (the default, optional)
+   .. rst:directive:option:: style: the pybtex formatting style name; see further (optional)
+   .. rst:directive:option:: list: the type of list; see further (optional)
+   .. rst:directive:option:: enumtype: the type of enumeration; see further (optional)
+   .. rst:directive:option:: start: start of an enumerated list; see further (optional)
+   .. rst:directive:option:: labelprefix: the label prefix; see further (optional)
+   .. rst:directive:option:: keyprefix: the key prefix; see further (optional)
+   .. rst:directive:option:: filter: the filter specification; see further (optional)
+
    Create bibliography for all cited references.
    Citations in sphinx are resolved globally across all documents.
    Typically, you have a single bibliography directive across your
