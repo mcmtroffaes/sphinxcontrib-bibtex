@@ -14,7 +14,7 @@ Minimal Example
 In your project's documentation, you can use
 ``:cite:t:`` for textual citation references,
 ``:cite:p:`` for parenthetical citation references,
-and ``.. bibliography`` for inserting the bibliography.
+and ``.. bibliography::`` for inserting the bibliography.
 For `example <https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-debug_minimal_example>`_:
 
 .. code-block:: rest
