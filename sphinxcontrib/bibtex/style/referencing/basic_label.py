@@ -23,7 +23,7 @@ class BasicLabelReferenceStyle(
         return [
             f'{capfirst}{parenthetical}{full_author}'
             for parenthetical in ['p', 't']
-            for capfirst in ['', 'c']
+            for capfirst in (['', 'c'] if parenthetical == 't' else [''])
             for full_author in ['', 's']
         ]
 

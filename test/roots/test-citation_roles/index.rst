@@ -9,8 +9,6 @@ role                   result
 ====================== =====================================
 ``:cite:p:``           :cite:p:`testone`
 ``:cite:ps:``          :cite:ps:`testone`
-``:cite:cp:``          :cite:cp:`testone`
-``:cite:cps:``         :cite:cps:`testone`
 ``:cite:t:``           :cite:t:`testone`
 ``:cite:ts:``          :cite:ts:`testone`
 ``:cite:ct:``          :cite:ct:`testone`
@@ -37,8 +35,6 @@ role                   result
 ====================== =====================================
 ``:cite:p:``           :cite:p:`testone,testtwo`
 ``:cite:ps:``          :cite:ps:`testone,testtwo`
-``:cite:cp:``          :cite:cp:`testone,testtwo`
-``:cite:cps:``         :cite:cps:`testone,testtwo`
 ``:cite:t:``           :cite:t:`testone,testtwo`
 ``:cite:ts:``          :cite:ts:`testone,testtwo`
 ``:cite:ct:``          :cite:ct:`testone,testtwo`
@@ -65,8 +61,6 @@ role                   result
 ====================== =====================================
 ``:cite:p:``           :cite:p:`testone,testtwo,testthree`
 ``:cite:ps:``          :cite:ps:`testone,testtwo,testthree`
-``:cite:cp:``          :cite:cp:`testone,testtwo,testthree`
-``:cite:cps:``         :cite:cps:`testone,testtwo,testthree`
 ``:cite:t:``           :cite:t:`testone,testtwo,testthree`
 ``:cite:ts:``          :cite:ts:`testone,testtwo,testthree`
 ``:cite:ct:``          :cite:ct:`testone,testtwo,testthree`

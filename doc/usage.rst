@@ -42,9 +42,39 @@ For example:
 Roles and Directives
 --------------------
 
-.. rst:role:: cite
+.. rst:role:: cite:p
 
-   Create a citation to a bibliographic entry. For example:
+   Create a parenthetical citation reference to a bibliographic entry.
+   This will put the citation reference information
+   (author and year, or label, depending on the style) between brackets.
+   Similar to natbib's ``\citep`` command,
+   or biblatex's ``\parencite`` command.
+   For example:
+
+   .. code-block:: rest
+
+      We will make use of non-standard analysis :cite:p:`1987:nelson`.
+
+   which would be equivalent to the following LaTeX code:
+
+   .. code-block:: latex
+
+      We will make use of non-standard analysis \citep{1987:nelson}.
+
+   Multiple keys can be specified at once:
+
+   .. code-block:: rest
+
+      I love analysis :cite:p:`1987:nelson,2001:schechter`!
+
+.. rst:role:: cite:t
+
+   Create a textual citation. This will typically
+   render the name of the first author followed by the year or by the label,
+   depending on the citation reference style.
+   Similar to natbib's ``\citet`` command,
+   or biblatex's ``\textcite`` command.
+   For example:
 
    .. code-block:: rest
 
@@ -54,13 +84,23 @@ Roles and Directives
 
    .. code-block:: latex
 
-      See \cite{1987:nelson} for an introduction to non-standard analysis.
+      See \citet{1987:nelson} for an introduction to non-standard analysis.
 
-   Multiple comma-separated keys can be specified at once:
+   Here too, multiple keys can be specified at once.
 
-   .. code-block:: rest
+.. rst:role:: cite:ts
+.. rst:role:: cite:ps
+.. rst:role:: cite:ct
+.. rst:role:: cite:cts
 
-      See :cite:`1987:nelson,2001:schechter`.
+   All these roles modify :rst:role:`cite:p` and :rst:role:`cite:t`.
+   The ones starting with ``c`` will capitalize the first letter.
+   The ones ending with ``s`` will give the full author list.
+
+.. rst:role:: cite
+
+   This is an alias for the :rst:role:`cite:p` role, and will create a
+   parenthetical citation reference. Provided for backward compatibility.
 
 .. rst:directive:: .. bibliography::
 
