@@ -10,7 +10,7 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass
 class BasicAuthorYearReferenceStyle(
         BracketReferenceStyleMixin[ReferenceInfo],
         NamesReferenceStyleMixin[ReferenceInfo]):

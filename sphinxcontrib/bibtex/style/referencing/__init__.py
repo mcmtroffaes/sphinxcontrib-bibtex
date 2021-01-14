@@ -18,14 +18,14 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass
 class BaseReferenceStyle(Generic[ReferenceInfo], ABC):
     """Abstract base class for reference styles.
     Custom styles must override the outer and inner template
     functions.
 
     For consistency, all subclasses of this class must be decorated
-    as a :class:`dataclasses.dataclass` with ``frozen=True``,
+    as a :class:`dataclasses.dataclass`,
     and must provide a default value for all attributes
     (unless ``init=False`` is used, in which case they can be
     initialized in :meth:`~dataclasses.dataclass.__post_init__`).).
@@ -76,7 +76,7 @@ class BaseReferenceStyle(Generic[ReferenceInfo], ABC):
         raise NotImplementedError
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass
 class BracketReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
     """A mixin class which provides brackets, as well as separators
     and a function to facilitate formatting of the outer template.
@@ -118,7 +118,7 @@ class BracketReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
         ]
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass
 class NamesReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
     """A mixin class providing additional data and helper functions
     to facilitate formatting of author names.
@@ -170,7 +170,7 @@ class NamesReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
 
 
 # not an ABC, can be used directly
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass
 class GroupReferenceStyle(BaseReferenceStyle[ReferenceInfo]):
     """Composes a group of reference styles into a single consistent style."""
 

@@ -87,13 +87,13 @@ def test_citation_roles_authoryear(app, warning):
 
 @pytest.mark.sphinx('pseudoxml', testroot='debug_bibtex_citation',
                     confoverrides={'bibtex_reference_style': 'non_existing'})
-def test_reference_style_invalid(make_app, app_params):
+def test_citation_style_invalid(make_app, app_params):
     args, kwargs = app_params
     with pytest.raises(ImportError, match='plugin .*non_existing not found'):
         make_app(*args, **kwargs)
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass
 class CustomReferenceStyle(AuthorYearReferenceStyle[ReferenceInfo]):
     left_bracket = '('
     right_bracket = ')'
@@ -117,8 +117,15 @@ sphinxcontrib.bibtex.plugin.register_plugin(
 @pytest.mark.sphinx('pseudoxml', testroot='citation_roles',
                     confoverrides={
                         'bibtex_reference_style': 'xxx_custom_xxx'})
-def test_reference_style_custom(make_app, app_params, warning):
-    args, kwargs = app_params
-    app = make_app(*args, **kwargs)
+def test_citation_style_custom(app, warning):
     app.build()
     assert not warning.getvalue()
+
+
+@pytest.mark.sphinx('text', testroot='citation_style_round_brackets')
+def test_citation_style_round_brackets(app, warning):
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.txt").read_text()
+    assert "(Evensen, 2003)" in output
+    assert "Evensen (2003)" in output

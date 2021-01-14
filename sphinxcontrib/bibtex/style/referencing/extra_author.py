@@ -11,7 +11,7 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass
 class ExtraAuthorReferenceStyle(
         BracketReferenceStyleMixin[ReferenceInfo],
         NamesReferenceStyleMixin[ReferenceInfo]):

@@ -10,7 +10,7 @@ from .extra_label import ExtraLabelReferenceStyle
 from .extra_year import ExtraYearReferenceStyle
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass
 class LabelReferenceStyle(
         GroupReferenceStyle[ReferenceInfo],
         NamesReferenceStyleMixin[ReferenceInfo],

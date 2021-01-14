@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from pybtex.richtext import BaseText
 
 
-@dataclasses.dataclass(frozen=True)
+@dataclasses.dataclass
 class AuthorYearReferenceStyle(
         BracketReferenceStyleMixin[ReferenceInfo],
         NamesReferenceStyleMixin[ReferenceInfo],
