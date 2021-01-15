@@ -95,7 +95,7 @@ class BracketReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
     #: Separator for outer template, if only two items.
     outer_sep2: Optional[Union["BaseText", str]] = None
 
-    #: Separator for outer template, for last time if three or more items.
+    #: Separator for outer template, for last item if three or more items.
     outer_last_sep: Optional[Union["BaseText", str]] = None
 
     def get_bracket_outer_template(
