@@ -196,6 +196,18 @@ def test_citation_roles_authoryear(app, warning):
         assert re.search(pattern, output) is not None
 
 
+@pytest.mark.sphinx(
+    'html', testroot='citation_roles',
+    confoverrides={'bibtex_default_style': 'plain',
+                   'bibtex_reference_style': 'super'})
+def test_citation_roles_super(app, warning):
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
+    # just a cursory check that superscript references are present
+    assert '<sup><a class="reference internal" href="#' in output
+
+
 @pytest.mark.sphinx('pseudoxml', testroot='debug_bibtex_citation',
                     confoverrides={'bibtex_reference_style': 'non_existing'})
 def test_citation_style_invalid(make_app, app_params):
