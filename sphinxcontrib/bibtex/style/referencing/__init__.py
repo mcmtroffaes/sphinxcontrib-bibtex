@@ -120,14 +120,14 @@ class BracketStyle:
 @dataclasses.dataclass
 class PersonStyle:
     """A class providing additional data and helper functions
-    to facilitate formatting of author names.
+    to facilitate formatting of person names.
     """
 
-    #: Plugin name of the style used for formatting author names.
+    #: Plugin name of the style used for formatting person names.
     style: str = 'last'
 
-    #: Plugin class instance used for formatting author names.
-    #: Automatically initialised from :attr:`name_style`.
+    #: Plugin class instance used for formatting person names.
+    #: Automatically initialised from :attr:`style`.
     style_plugin: "BaseNameStyle" = dataclasses.field(init=False)
 
     #: Whether or not to abbreviate first names.
@@ -136,13 +136,13 @@ class PersonStyle:
     #: Separator between persons.
     sep: Union["BaseText", str] = ', '
 
-    #: Separator between authors, if only two persons.
+    #: Separator between persons, if only two persons.
     sep2: Optional[Union["BaseText", str]] = ' and '
 
-    #: Separator between authors, for last author if three or more authors.
+    #: Separator between persons, for last person if three or more persons.
     last_sep: Optional[Union["BaseText", str]] = ', and '
 
-    #: Abbreviation text if three or more authors.
+    #: Abbreviation text if three or more persons.
     other: Optional[Union["BaseText", str]] = \
         Text(' ', Tag('em', 'et al.'))
 
@@ -151,8 +151,8 @@ class PersonStyle:
             'pybtex.style.names', name=self.style)()
 
     def names(self, role: str, full: bool) -> "Node":
-        """Returns a template formatting the authors with correct separators
-        and using the full author list if so requested.
+        """Returns a template formatting the persons with correct separators
+        and using the full person list if so requested.
         """
         return names(
             role=role,
