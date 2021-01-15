@@ -19,8 +19,6 @@ role                   result
 ``:cite:year:``        :cite:year:`testthree`
 ``:cite:authorpar:``   :cite:authorpar:`testthree`
 ``:cite:authorpars:``  :cite:authorpars:`testthree`
-``:cite:cauthorpar:``  :cite:cauthorpar:`testthree`
-``:cite:cauthorpars:`` :cite:cauthorpars:`testthree`
 ``:cite:author:``      :cite:author:`testthree`
 ``:cite:authors:``     :cite:authors:`testthree`
 ``:cite:cauthor:``     :cite:cauthor:`testthree`
@@ -45,8 +43,6 @@ role                   result
 ``:cite:year:``        :cite:year:`testone,testtwo`
 ``:cite:authorpar:``   :cite:authorpar:`testone,testtwo`
 ``:cite:authorpars:``  :cite:authorpars:`testone,testtwo`
-``:cite:cauthorpar:``  :cite:cauthorpar:`testone,testtwo`
-``:cite:cauthorpars:`` :cite:cauthorpars:`testone,testtwo`
 ``:cite:author:``      :cite:author:`testone,testtwo`
 ``:cite:authors:``     :cite:authors:`testone,testtwo`
 ``:cite:cauthor:``     :cite:cauthor:`testone,testtwo`
@@ -71,8 +67,6 @@ role                   result
 ``:cite:year:``        :cite:year:`testone,testtwo,testthree`
 ``:cite:authorpar:``   :cite:authorpar:`testone,testtwo,testthree`
 ``:cite:authorpars:``  :cite:authorpars:`testone,testtwo,testthree`
-``:cite:cauthorpar:``  :cite:cauthorpar:`testone,testtwo,testthree`
-``:cite:cauthorpars:`` :cite:cauthorpars:`testone,testtwo,testthree`
 ``:cite:author:``      :cite:author:`testone,testtwo,testthree`
 ``:cite:authors:``     :cite:authors:`testone,testtwo,testthree`
 ``:cite:cauthor:``     :cite:cauthor:`testone,testtwo,testthree`

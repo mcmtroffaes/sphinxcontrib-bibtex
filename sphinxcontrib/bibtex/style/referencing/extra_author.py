@@ -24,7 +24,7 @@ class ExtraAuthorReferenceStyle(BaseReferenceStyle):
         return [
             f'{capfirst}author{parenthetical}{full_author}'
             for parenthetical in ['par', '']
-            for capfirst in ['', 'c']
+            for capfirst in (['', 'c'] if parenthetical == '' else [''])
             for full_author in ['', 's']
         ]
 
