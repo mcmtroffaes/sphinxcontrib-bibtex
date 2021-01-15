@@ -158,9 +158,11 @@ Roles and Directives
    Use the ``par`` version to include brackets.
 
 .. rst:role:: cite:author
+.. rst:role:: cite:authors
 .. rst:role:: cite:authorpar
+.. rst:role:: cite:authorpars
 .. rst:role:: cite:cauthor
-.. rst:role:: cite:cauthorpar
+.. rst:role:: cite:cauthors
 
    .. versionadded:: 2.2.0
 
