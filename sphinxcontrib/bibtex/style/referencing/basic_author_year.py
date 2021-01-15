@@ -52,11 +52,8 @@ class BasicAuthorYearTextualReferenceStyle(BaseReferenceStyle):
     person: PersonStyle = PersonStyle()
 
     def role_names(self) -> Iterable[str]:
-        return [
-            f'{capfirst}t{full_author}'
-            for capfirst in ['', 'c']
-            for full_author in ['', 's']
-        ]
+        return [f'{capfirst}t{full_author}'
+                for capfirst in ['', 'c'] for full_author in ['', 's']]
 
     def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
         return self.bracket.outer(

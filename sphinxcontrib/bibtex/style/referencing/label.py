@@ -3,7 +3,10 @@ import dataclasses
 from sphinxcontrib.bibtex.style.referencing import (
     BracketStyle, PersonStyle, GroupReferenceStyle
 )
-from .basic_label import BasicLabelReferenceStyle
+from .basic_label import (
+    BasicLabelParentheticalReferenceStyle,
+    BasicLabelTextualReferenceStyle,
+)
 from .extra_author import ExtraAuthorReferenceStyle
 from .extra_label import ExtraLabelReferenceStyle
 from .extra_year import ExtraYearReferenceStyle
@@ -23,7 +26,9 @@ class LabelReferenceStyle(GroupReferenceStyle):
 
     def __post_init__(self):
         self.styles.extend([
-            BasicLabelReferenceStyle(
+            BasicLabelParentheticalReferenceStyle(
+                bracket=self.bracket, person=self.person),
+            BasicLabelTextualReferenceStyle(
                 bracket=self.bracket, person=self.person),
             ExtraAuthorReferenceStyle(
                 bracket=self.bracket, person=self.person),

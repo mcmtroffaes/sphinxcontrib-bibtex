@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 @dataclasses.dataclass
-class BasicLabelReferenceStyle(BaseReferenceStyle):
+class BasicLabelParentheticalReferenceStyle(BaseReferenceStyle):
     """Reference by label if parenthetical,
     and by author and label if textual.
     """
@@ -23,35 +23,46 @@ class BasicLabelReferenceStyle(BaseReferenceStyle):
     person: PersonStyle = PersonStyle()
 
     def role_names(self) -> Iterable[str]:
-        return [
-            f'{capfirst}{parenthetical}{full_author}'
-            for parenthetical in ['p', 't']
-            for capfirst in (['', 'c'] if parenthetical == 't' else [''])
-            for full_author in ['', 's']
-        ]
+        return [f'p{full_author}' for full_author in ['', 's']]
 
-    def outer(
-            self, role_name: str, children: List["BaseText"]) -> "Node":
-        if 'p' in role_name:  # parenthetical
-            return self.bracket.outer(
-                children,
-                brackets=True,
-                capfirst=False)
-        else:  # textual
-            return self.bracket.outer(
-                children,
-                brackets=False,
-                capfirst='c' in role_name)
+    def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
+        return self.bracket.outer(
+            children,
+            brackets=True,
+            capfirst=False)
 
     def inner(self, role_name: str) -> "Node":
-        if 'p' in role_name:  # parenthetical
-            return reference[entry_label]
-        else:  # textual
-            return words[
-                self.person.names('author', full='s' in role_name),
-                join[
-                    self.bracket.left,
-                    reference[entry_label],
-                    self.bracket.right
-                ]
+        return reference[entry_label]
+
+
+@dataclasses.dataclass
+class BasicLabelTextualReferenceStyle(BaseReferenceStyle):
+    """Reference by label if parenthetical,
+    and by author and label if textual.
+    """
+
+    #: Bracket style.
+    bracket: BracketStyle = BracketStyle()
+
+    #: Person style.
+    person: PersonStyle = PersonStyle()
+
+    def role_names(self) -> Iterable[str]:
+        return [f'{capfirst}t{full_author}'
+                for capfirst in ['', 'c'] for full_author in ['', 's']]
+
+    def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
+        return self.bracket.outer(
+            children,
+            brackets=False,
+            capfirst='c' in role_name)
+
+    def inner(self, role_name: str) -> "Node":
+        return words[
+            self.person.names('author', full='s' in role_name),
+            join[
+                self.bracket.left,
+                reference[entry_label],
+                self.bracket.right
             ]
+        ]
