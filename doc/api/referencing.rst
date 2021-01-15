@@ -1,8 +1,8 @@
 Referencing Styles
 ==================
 
-Abstract Base Classes and Mixin Classes
----------------------------------------
+Base Classes For Composing Styles
+---------------------------------
 
 .. automodule:: sphinxcontrib.bibtex.style.referencing
    :members:

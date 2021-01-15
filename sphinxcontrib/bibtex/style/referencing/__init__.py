@@ -26,9 +26,8 @@ class BaseReferenceStyle(ABC):
     and must provide a type annotation and default value for all attributes
     (unless ``init=False`` is used, in which case they can be
     initialized in :meth:`~dataclasses.dataclass.__post_init__`).).
-    This is because client code must be able to instantiate any reference style
-    through ``ReferenceStyle(ReferenceText)`` without needing
-    to specify any additional arguments through the constructor.
+    This allows client code to instantiate any reference style
+    without needing to specify any arguments through the constructor.
     """
 
     # see https://stackoverflow.com/a/59987363 as to why this is here
