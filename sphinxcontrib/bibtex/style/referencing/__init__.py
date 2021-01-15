@@ -149,12 +149,8 @@ class NamesReferenceStyleMixin(BaseReferenceStyle[ReferenceInfo], ABC):
 
     def __post_init__(self):
         super().__post_init__()
-        # setting frozen instance attribute requires object.__setattr__
-        # inside of __post_init__
-        # https://docs.python.org/3/library/dataclasses.html#frozen-instances
-        object.__setattr__(
-            self, 'name_style_plugin', pybtex.plugin.find_plugin(
-                'pybtex.style.names', name=self.name_style)())
+        self.name_style_plugin = pybtex.plugin.find_plugin(
+            'pybtex.style.names', name=self.name_style)()
 
     def get_author_template(self, full_authors: bool) -> "Node":
         """Returns a template formatting the authors with correct separators
