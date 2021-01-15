@@ -1,9 +1,8 @@
 import dataclasses
 from typing import TYPE_CHECKING, List, Iterable, Union
 from sphinxcontrib.bibtex.style.template import reference, join
-from sphinxcontrib.bibtex.richtext import ReferenceInfo
 from pybtex.style.template import words, field
-from . import BracketReferenceStyleMixin, NamesReferenceStyleMixin
+from . import BaseReferenceStyle, BracketStyle, PersonStyle
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText
@@ -11,10 +10,14 @@ if TYPE_CHECKING:
 
 
 @dataclasses.dataclass
-class BasicAuthorYearReferenceStyle(
-        BracketReferenceStyleMixin[ReferenceInfo],
-        NamesReferenceStyleMixin[ReferenceInfo]):
+class BasicAuthorYearReferenceStyle(BaseReferenceStyle):
     """Textual or parenthetical reference by author-year."""
+
+    #: Template for bracket formatting.
+    bracket: BracketStyle = BracketStyle()
+
+    #: Template for author formatting.
+    person: PersonStyle = PersonStyle()
 
     #: Separator between author and year for textual citations.
     author_year_sep: Union["BaseText", str] = ', '
@@ -27,34 +30,34 @@ class BasicAuthorYearReferenceStyle(
             for full_author in ['', 's']
         ]
 
-    def get_outer_template(
+    def get_outer(
             self, role_name: str, children: List["BaseText"]) -> "Node":
         if 'p' in role_name:  # parenthetical
-            return self.get_bracket_outer_template(
+            return self.bracket.get_outer(
                 children,
                 brackets=True,
                 capfirst=False)
         else:  # textual
-            return self.get_bracket_outer_template(
+            return self.bracket.get_outer(
                 children,
                 brackets=False,
                 capfirst='c' in role_name)
 
-    def get_inner_template(self, role_name: str) -> "Node":
+    def get_inner(self, role_name: str) -> "Node":
         if 'p' in role_name:  # parenthetical
             return reference[
                 join(sep=self.author_year_sep)[
-                    self.get_author_template(
-                        full_authors='s' in role_name),
+                    self.person.names(
+                        'author', full='s' in role_name),
                     field('year')
                 ]
             ]
         else:  # textual
             return words[
-                self.get_author_template(full_authors='s' in role_name),
+                self.person.names('author', full='s' in role_name),
                 join[
-                    self.left_bracket,
+                    self.bracket.left,
                     reference[field('year')],
-                    self.right_bracket
+                    self.bracket.right
                 ]
             ]

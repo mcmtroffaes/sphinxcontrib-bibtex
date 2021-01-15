@@ -3,8 +3,7 @@ import dataclasses
 from typing import TYPE_CHECKING, List, Iterable
 from pybtex.style.template import words
 from sphinxcontrib.bibtex.style.template import reference, entry_label, join
-from sphinxcontrib.bibtex.richtext import ReferenceInfo
-from . import BracketReferenceStyleMixin, NamesReferenceStyleMixin
+from . import BracketStyle, PersonStyle, BaseReferenceStyle
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText
@@ -12,12 +11,13 @@ if TYPE_CHECKING:
 
 
 @dataclasses.dataclass
-class BasicLabelReferenceStyle(
-        BracketReferenceStyleMixin[ReferenceInfo],
-        NamesReferenceStyleMixin[ReferenceInfo]):
+class BasicLabelReferenceStyle(BaseReferenceStyle):
     """Reference by label if parenthetical,
     and by author and label if textual.
     """
+
+    bracket: BracketStyle = BracketStyle()
+    person: PersonStyle = PersonStyle()
 
     def get_role_names(self) -> Iterable[str]:
         return [
@@ -27,28 +27,28 @@ class BasicLabelReferenceStyle(
             for full_author in ['', 's']
         ]
 
-    def get_outer_template(
+    def get_outer(
             self, role_name: str, children: List["BaseText"]) -> "Node":
         if 'p' in role_name:  # parenthetical
-            return self.get_bracket_outer_template(
+            return self.bracket.get_outer(
                 children,
                 brackets=True,
                 capfirst=False)
         else:  # textual
-            return self.get_bracket_outer_template(
+            return self.bracket.get_outer(
                 children,
                 brackets=False,
                 capfirst='c' in role_name)
 
-    def get_inner_template(self, role_name: str) -> "Node":
+    def get_inner(self, role_name: str) -> "Node":
         if 'p' in role_name:  # parenthetical
             return reference[entry_label]
         else:  # textual
             return words[
-                self.get_author_template(full_authors='s' in role_name),
+                self.person.names('author', full='s' in role_name),
                 join[
-                    self.left_bracket,
+                    self.bracket.left,
                     reference[entry_label],
-                    self.right_bracket
+                    self.bracket.right
                 ]
             ]

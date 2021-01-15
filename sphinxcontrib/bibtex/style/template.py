@@ -16,12 +16,13 @@
 
 from pybtex.richtext import Text
 from pybtex.style.template import Node, _format_list, FieldIsMissing
-from typing import TYPE_CHECKING, Dict, Any, cast
+from typing import TYPE_CHECKING, Dict, Any, cast, Type
+
+from sphinxcontrib.bibtex.richtext import BaseReferenceText
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText
     from pybtex.style import FormattedEntry
-    from sphinxcontrib.bibtex.style.referencing import BaseReferenceStyle
 
 
 # extended from pybtex: also copies the docstring into the wrapped object
@@ -81,7 +82,7 @@ def names(children, data, role, **kwargs):
         raise FieldIsMissing(role, data['entry'])
     style = data['style']
     formatted_names = [
-        style.name_style_plugin.format(person, style.abbreviate_names)
+        style.person.style_plugin.format(person, style.person.abbreviate)
         for person in persons]
     return join(**kwargs)[formatted_names].format_data(data)
 
@@ -103,6 +104,7 @@ def reference(children, data: Dict[str, Any]):
     :class:`~sphinxcontrib.bibtex.style.referencing.BaseReferenceStyle`.
     """
     parts = _format_list(children, data)
-    style = cast("BaseReferenceStyle", data['style'])
     info = data['reference_info']
-    return style.ReferenceText(info, *parts)
+    reference_text_class: Type[BaseReferenceText] \
+        = data['reference_text_class']
+    return reference_text_class(info, *parts)

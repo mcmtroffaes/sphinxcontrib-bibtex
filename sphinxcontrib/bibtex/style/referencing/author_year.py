@@ -2,8 +2,7 @@ import dataclasses
 from typing import Union, TYPE_CHECKING
 
 from sphinxcontrib.bibtex.style.referencing import (
-    ReferenceInfo, BracketReferenceStyleMixin, NamesReferenceStyleMixin,
-    GroupReferenceStyle
+    BracketStyle, PersonStyle, GroupReferenceStyle
 )
 from .basic_author_year import BasicAuthorYearReferenceStyle
 from .extra_author import ExtraAuthorReferenceStyle
@@ -15,13 +14,16 @@ if TYPE_CHECKING:
 
 
 @dataclasses.dataclass
-class AuthorYearReferenceStyle(
-        BracketReferenceStyleMixin[ReferenceInfo],
-        NamesReferenceStyleMixin[ReferenceInfo],
-        GroupReferenceStyle[ReferenceInfo]):
+class AuthorYearReferenceStyle(GroupReferenceStyle):
     """Textual or parenthetical reference by author-year,
     or just by author, label, or year.
     """
+
+    #: Bracket style.
+    bracket: BracketStyle = BracketStyle()
+
+    #: Person style.
+    person: PersonStyle = PersonStyle()
 
     #: Separator between author and year for textual citations.
     author_year_sep: Union["BaseText", str] = ', '
@@ -29,49 +31,19 @@ class AuthorYearReferenceStyle(
     def __post_init__(self):
         self.styles.extend([
             BasicAuthorYearReferenceStyle(
-                ReferenceText=self.ReferenceText,
-                left_bracket=self.left_bracket,
-                right_bracket=self.right_bracket,
-                outer_sep=self.outer_sep,
-                outer_sep2=self.outer_sep2,
-                outer_last_sep=self.outer_last_sep,
-                name_style=self.name_style,
-                abbreviate_names=self.abbreviate_names,
-                name_sep=self.name_sep,
-                name_sep2=self.name_sep2,
-                name_last_sep=self.name_last_sep,
-                name_other=self.name_other,
+                bracket=self.bracket,
+                person=self.person,
                 author_year_sep=self.author_year_sep,
             ),
             ExtraAuthorReferenceStyle(
-                ReferenceText=self.ReferenceText,
-                left_bracket=self.left_bracket,
-                right_bracket=self.right_bracket,
-                outer_sep=self.outer_sep,
-                outer_sep2=self.outer_sep2,
-                outer_last_sep=self.outer_last_sep,
-                name_style=self.name_style,
-                abbreviate_names=self.abbreviate_names,
-                name_sep=self.name_sep,
-                name_sep2=self.name_sep2,
-                name_last_sep=self.name_last_sep,
-                name_other=self.name_other,
+                bracket=self.bracket,
+                person=self.person,
             ),
             ExtraLabelReferenceStyle(
-                ReferenceText=self.ReferenceText,
-                left_bracket=self.left_bracket,
-                right_bracket=self.right_bracket,
-                outer_sep=self.outer_sep,
-                outer_sep2=self.outer_sep2,
-                outer_last_sep=self.outer_last_sep,
+                bracket=self.bracket,
             ),
             ExtraYearReferenceStyle(
-                ReferenceText=self.ReferenceText,
-                left_bracket=self.left_bracket,
-                right_bracket=self.right_bracket,
-                outer_sep=self.outer_sep,
-                outer_sep2=self.outer_sep2,
-                outer_last_sep=self.outer_last_sep,
+                bracket=self.bracket,
             )
         ])
         super().__post_init__()

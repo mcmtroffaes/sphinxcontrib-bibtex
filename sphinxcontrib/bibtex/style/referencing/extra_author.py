@@ -1,9 +1,8 @@
 import dataclasses
 
 from sphinxcontrib.bibtex.style.template import reference
-from sphinxcontrib.bibtex.richtext import ReferenceInfo
 from typing import TYPE_CHECKING, List, Iterable
-from . import BracketReferenceStyleMixin, NamesReferenceStyleMixin
+from . import BracketStyle, PersonStyle, BaseReferenceStyle
 
 
 if TYPE_CHECKING:
@@ -12,10 +11,11 @@ if TYPE_CHECKING:
 
 
 @dataclasses.dataclass
-class ExtraAuthorReferenceStyle(
-        BracketReferenceStyleMixin[ReferenceInfo],
-        NamesReferenceStyleMixin[ReferenceInfo]):
+class ExtraAuthorReferenceStyle(BaseReferenceStyle):
     """Reference just by author names."""
+
+    bracket: BracketStyle = BracketStyle()
+    person: PersonStyle = PersonStyle()
 
     def get_role_names(self) -> Iterable[str]:
         return [
@@ -25,14 +25,14 @@ class ExtraAuthorReferenceStyle(
             for full_author in ['', 's']
         ]
 
-    def get_outer_template(
+    def get_outer(
             self, role_name: str, children: List["BaseText"]) -> "Node":
-        return self.get_bracket_outer_template(
+        return self.bracket.get_outer(
             children,
             brackets='par' in role_name,
             capfirst='c' in role_name,
         )
 
-    def get_inner_template(self, role_name: str) -> "Node":
+    def get_inner(self, role_name: str) -> "Node":
         return reference[
-            self.get_author_template(full_authors='s' in role_name)]
+            self.person.names('author', full='s' in role_name)]

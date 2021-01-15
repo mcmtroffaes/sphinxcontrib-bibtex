@@ -36,7 +36,9 @@ from sphinx.util.nodes import make_refnode
 
 from .roles import CiteRole
 from .bibfile import BibFile, normpath_filename, process_bibfile
-from .style.referencing import BaseReferenceText, BaseReferenceStyle
+from .style.referencing import (
+    BaseReferenceText, BaseReferenceStyle, format_references
+)
 
 if TYPE_CHECKING:
     from pybtex.backends import BaseBackend
@@ -309,8 +311,7 @@ class BibtexDomain(Domain):
         style = sphinxcontrib.bibtex.plugin.find_plugin(
                 'sphinxcontrib.bibtex.style.referencing',
                 env.app.config.bibtex_reference_style)
-        self.reference_style = \
-            style(ReferenceText=SphinxReferenceText)
+        self.reference_style = style()
         # set up object types and roles for referencing style
         role_names = self.reference_style.get_role_names()
         self.object_types = dict(
@@ -426,7 +427,8 @@ class BibtexDomain(Domain):
                 citation_id=citation.citation_id))
             for citation in citations.values()]
         formatted_references = \
-            self.reference_style.format_references(typ, references)
+            format_references(
+                self.reference_style, SphinxReferenceText, typ, references)
         result_node = docutils.nodes.inline(rawsource=target)
         result_node += formatted_references.render(self.backend)
         return result_node

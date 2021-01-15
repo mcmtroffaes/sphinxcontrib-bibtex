@@ -7,7 +7,8 @@ import sphinxcontrib.bibtex.plugin
 from sphinxcontrib.bibtex.domain import BibtexDomain
 from typing import cast
 
-from sphinxcontrib.bibtex.style.referencing import ReferenceInfo
+from sphinxcontrib.bibtex.style.referencing import \
+    BracketStyle, PersonStyle
 from sphinxcontrib.bibtex.style.referencing.author_year import \
     AuthorYearReferenceStyle
 
@@ -94,18 +95,22 @@ def test_citation_style_invalid(make_app, app_params):
 
 
 @dataclasses.dataclass
-class CustomReferenceStyle(AuthorYearReferenceStyle[ReferenceInfo]):
-    left_bracket = '('
-    right_bracket = ')'
-    name_style = 'lastfirst'
-    abbreviate_names = False
-    outer_sep = '; '
-    outer_sep2 = '; '
-    outer_last_sep = '; '
-    name_sep = ' & '
-    name_sep2 = None
-    name_last_sep = None
-    name_other = None
+class CustomReferenceStyle(AuthorYearReferenceStyle):
+    bracket = BracketStyle(
+        left='(',
+        right=')',
+        sep='; ',
+        sep2='; ',
+        last_sep='; ',
+    )
+    person = PersonStyle(
+        style='lastfirst',
+        abbreviate=False,
+        sep=' & ',
+        sep2=None,
+        last_sep=None,
+        other=None,
+    )
     author_year_sep = ', '
 
 

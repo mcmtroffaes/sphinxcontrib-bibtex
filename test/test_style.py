@@ -6,7 +6,7 @@ from pybtex.style.template import Node, FieldIsMissing
 # direct import of the plugin to ensure we are testing this specific class
 from sphinxcontrib.bibtex.style.names.last import LastNameStyle
 from sphinxcontrib.bibtex.style.referencing import (
-    BaseReferenceText, BaseReferenceStyle
+    BaseReferenceText, BaseReferenceStyle, format_references
 )
 from sphinxcontrib.bibtex.style.template import (
     entry_label, reference, join, names
@@ -43,11 +43,10 @@ class SimpleReferenceStyle(BaseReferenceStyle):
     def get_role_names(self):
         return 'p'
 
-    def get_outer_template(
-            self, role_name: str, children: List["BaseText"]) -> "Node":
+    def get_outer(self, role_name: str, children: List["BaseText"]) -> "Node":
         return join['{', join(';')[children], '}']
 
-    def get_inner_template(self, role_name: str) -> "Node":
+    def get_inner(self, role_name: str) -> "Node":
         return reference[entry_label]
 
 
@@ -62,7 +61,7 @@ class SimpleReferenceText(BaseReferenceText[str]):
 def test_simple_reference_style():
     cit_style: "BaseStyle" = \
         pybtex.plugin.find_plugin('pybtex.style.formatting', 'unsrtalpha')()
-    ref_style = SimpleReferenceStyle(SimpleReferenceText)
+    ref_style = SimpleReferenceStyle()
     auth1 = Person('First Last')
     auth2 = Person('Ein Zwei')
     auth3 = Person('Primo Secundo')
@@ -77,6 +76,7 @@ def test_simple_reference_style():
     backend: "BaseBackend" = \
         pybtex.plugin.find_plugin('pybtex.backends', 'html')()
     assert \
-        ref_style.format_references('p', references).render(backend) == \
+        format_references(ref_style, SimpleReferenceText,
+                          'p', references).render(backend) == \
         '{<a href="#id1">Las00</a>;<a href="#id2">Zwe00</a>' \
         ';<a href="#id3">Sec00</a>}'
