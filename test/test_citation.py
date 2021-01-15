@@ -72,18 +72,96 @@ def test_citation_from_orphan(app, warning):
     assert not warning.getvalue()
 
 
-@pytest.mark.sphinx('html', testroot='citation_roles')
+@pytest.mark.sphinx('text', testroot='citation_roles')
 def test_citation_roles_label(app, warning):
     app.build()
     assert not warning.getvalue()
+    output = (app.outdir / "index.txt").read_text()
+    tests = [
+        ("p",           " [dDEF03] "),
+        ("ps",          " [dDEF03] "),
+        ("t",           " de Du *et al.* [dDEF03] "),
+        ("ts",          " de Du, Em, and Fa [dDEF03] "),
+        ("ct",          " De Du *et al.* [dDEF03] "),
+        ("cts",         " De Du, Em, and Fa [dDEF03] "),
+        ("labelpar",    " [dDEF03] "),
+        ("label",       " dDEF03 "),
+        ("yearpar",     " [2003] "),
+        ("year",        " 2003 "),
+        ("authorpar",   " [de Du *et al.*] "),
+        ("authorpars",  " [de Du, Em, and Fa] "),
+        ("author",      " de Du *et al.* "),
+        ("authors",     " de Du, Em, and Fa "),
+        ("cauthor",     " De Du *et al.* "),
+        ("cauthors",    " De Du, Em, and Fa "),
+        ("p",           " [aA01, BC02] "),
+        ("ps",          " [aA01, BC02] "),
+        ("t",           " al Ap [aA01], Be and Ci [BC02] "),
+        ("ts",          " al Ap [aA01], Be and Ci [BC02] "),
+        ("ct",          " Al Ap [aA01], Be and Ci [BC02] "),
+        ("cts",         " Al Ap [aA01], Be and Ci [BC02] "),
+        ("labelpar",    " [aA01, BC02] "),
+        ("label",       " aA01, BC02 "),
+        ("yearpar",     " [2001, 2002] "),
+        ("year",        " 2001, 2002 "),
+        ("authorpar",   " [al Ap, Be and Ci] "),
+        ("authorpars",  " [al Ap, Be and Ci] "),
+        ("author",      " al Ap, Be and Ci "),
+        ("authors",     " al Ap, Be and Ci "),
+        ("cauthor",     " Al Ap, Be and Ci "),
+        ("cauthors",    " Al Ap, Be and Ci "),
+    ]
+    for role, text in tests:
+        escaped_text = re.escape(text)
+        pattern = f'":cite:{role}:".*{escaped_text}'
+        assert re.search(pattern, output) is not None
 
 
 @pytest.mark.sphinx(
-    'html', testroot='citation_roles',
+    'text', testroot='citation_roles',
     confoverrides={'bibtex_reference_style': 'author_year'})
 def test_citation_roles_authoryear(app, warning):
     app.build()
     assert not warning.getvalue()
+    output = (app.outdir / "index.txt").read_text()
+    tests = [
+        ("p",           " [de Du *et al.*, 2003] "),
+        ("ps",          " [de Du, Em, and Fa, 2003] "),
+        ("t",           " de Du *et al.* [2003] "),
+        ("ts",          " de Du, Em, and Fa [2003] "),
+        ("ct",          " De Du *et al.* [2003] "),
+        ("cts",         " De Du, Em, and Fa [2003] "),
+        ("labelpar",    " [dDEF03] "),
+        ("label",       " dDEF03 "),
+        ("yearpar",     " [2003] "),
+        ("year",        " 2003 "),
+        ("authorpar",   " [de Du *et al.*] "),
+        ("authorpars",  " [de Du, Em, and Fa] "),
+        ("author",      " de Du *et al.* "),
+        ("authors",     " de Du, Em, and Fa "),
+        ("cauthor",     " De Du *et al.* "),
+        ("cauthors",    " De Du, Em, and Fa "),
+        ("p",           " [al Ap, 2001, Be and Ci, 2002] "),
+        ("ps",          " [al Ap, 2001, Be and Ci, 2002] "),
+        ("t",           " al Ap [2001], Be and Ci [2002] "),
+        ("ts",          " al Ap [2001], Be and Ci [2002] "),
+        ("ct",          " Al Ap [2001], Be and Ci [2002] "),
+        ("cts",         " Al Ap [2001], Be and Ci [2002] "),
+        ("labelpar",    " [aA01, BC02] "),
+        ("label",       " aA01, BC02 "),
+        ("yearpar",     " [2001, 2002] "),
+        ("year",        " 2001, 2002 "),
+        ("authorpar",   " [al Ap, Be and Ci] "),
+        ("authorpars",  " [al Ap, Be and Ci] "),
+        ("author",      " al Ap, Be and Ci "),
+        ("authors",     " al Ap, Be and Ci "),
+        ("cauthor",     " Al Ap, Be and Ci "),
+        ("cauthors",    " Al Ap, Be and Ci "),
+    ]
+    for role, text in tests:
+        escaped_text = re.escape(text)
+        pattern = f'":cite:{role}:".*{escaped_text}'
+        assert re.search(pattern, output) is not None
 
 
 @pytest.mark.sphinx('pseudoxml', testroot='debug_bibtex_citation',
