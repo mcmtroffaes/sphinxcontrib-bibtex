@@ -218,10 +218,10 @@ class SphinxReferenceInfo(NamedTuple):
     """Tuple containing reference info to enable sphinx to resolve a reference
     to a citation.
     """
-    builder: "Builder"
-    fromdocname: str
-    todocname: str
-    citation_id: str
+    builder: "Builder"  #: The Sphinx builder.
+    fromdocname: str    #: Document name of the citation reference.
+    todocname: str      #: Document name of the bibliography.
+    citation_id: str    #: Unique id of the citation within the bibliography.
 
 
 class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
