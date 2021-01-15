@@ -1,5 +1,6 @@
 import io
 from setuptools import setup, find_packages
+from typing import Optional
 
 
 def readfile(filename):
@@ -13,10 +14,12 @@ version = readfile("VERSION")[0].strip()
 
 
 # make entry point specifications
-def plugin(plugin_name: str):
+def plugin(plugin_name: str, mod_name: Optional[str] = None):
+    if mod_name is None:
+        mod_name = plugin_name
     path = "sphinxcontrib.bibtex.style.referencing"
     class_name = ''.join(part.capitalize() for part in plugin_name.split("_"))
-    return f"{plugin_name} = {path}.{plugin_name}:{class_name}ReferenceStyle"
+    return f"{plugin_name} = {path}.{mod_name}:{class_name}ReferenceStyle"
 
 
 setup(
@@ -62,7 +65,7 @@ setup(
         'sphinxcontrib.bibtex.style.referencing': [
             plugin('author_year'),
             plugin('label'),
-            # plugin('super'),  # TODO
+            plugin('super', 'super_'),
         ],
     }
 )
