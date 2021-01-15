@@ -624,6 +624,8 @@ Custom Inline Citation References
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 You can create and register your own referencing styles.
+For instance, say we wish to use the author-year style with round brackets
+instead of the default square brackets.
 Simply add the following code to your ``conf.py``:
 
 .. code-block:: python
