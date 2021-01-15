@@ -4,7 +4,10 @@ from typing import Union, TYPE_CHECKING
 from sphinxcontrib.bibtex.style.referencing import (
     BracketStyle, PersonStyle, GroupReferenceStyle
 )
-from .basic_author_year import BasicAuthorYearReferenceStyle
+from .basic_author_year import (
+    BasicAuthorYearParentheticalReferenceStyle,
+    BasicAuthorYearTextualReferenceStyle,
+)
 from .extra_author import ExtraAuthorReferenceStyle
 from .extra_label import ExtraLabelReferenceStyle
 from .extra_year import ExtraYearReferenceStyle
@@ -30,10 +33,14 @@ class AuthorYearReferenceStyle(GroupReferenceStyle):
 
     def __post_init__(self):
         self.styles.extend([
-            BasicAuthorYearReferenceStyle(
+            BasicAuthorYearParentheticalReferenceStyle(
                 bracket=self.bracket,
                 person=self.person,
                 author_year_sep=self.author_year_sep,
+            ),
+            BasicAuthorYearTextualReferenceStyle(
+                bracket=self.bracket,
+                person=self.person,
             ),
             ExtraAuthorReferenceStyle(
                 bracket=self.bracket,
