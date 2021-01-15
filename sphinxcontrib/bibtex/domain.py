@@ -5,6 +5,12 @@
     .. autoclass:: Citation
         :members:
 
+    .. autoclass:: SphinxReferenceInfo
+        :members:
+
+    .. autoclass:: SphinxReferenceText
+        :members:
+
     .. autoclass:: BibtexDomain
         :members:
 """
