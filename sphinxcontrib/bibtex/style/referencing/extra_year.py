@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 class ExtraYearReferenceStyle(BaseReferenceStyle):
     """Reference just by year."""
 
+    #: Bracket style.
     bracket: BracketStyle = BracketStyle()
 
     def get_role_names(self) -> Iterable[str]:

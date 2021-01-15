@@ -13,10 +13,10 @@ if TYPE_CHECKING:
 class BasicAuthorYearReferenceStyle(BaseReferenceStyle):
     """Textual or parenthetical reference by author-year."""
 
-    #: Template for bracket formatting.
+    #: Bracket style.
     bracket: BracketStyle = BracketStyle()
 
-    #: Template for author formatting.
+    #: Person style.
     person: PersonStyle = PersonStyle()
 
     #: Separator between author and year for textual citations.

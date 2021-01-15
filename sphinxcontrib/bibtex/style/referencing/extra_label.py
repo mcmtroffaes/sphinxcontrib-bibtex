@@ -13,6 +13,7 @@ if TYPE_CHECKING:
 class ExtraLabelReferenceStyle(BaseReferenceStyle):
     """Reference just by label."""
 
+    #: Bracket style.
     bracket: BracketStyle = BracketStyle()
 
     def get_role_names(self) -> Iterable[str]:

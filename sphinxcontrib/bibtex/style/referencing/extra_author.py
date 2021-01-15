@@ -14,7 +14,10 @@ if TYPE_CHECKING:
 class ExtraAuthorReferenceStyle(BaseReferenceStyle):
     """Reference just by author names."""
 
+    #: Bracket style.
     bracket: BracketStyle = BracketStyle()
+
+    #: Person style.
     person: PersonStyle = PersonStyle()
 
     def get_role_names(self) -> Iterable[str]:

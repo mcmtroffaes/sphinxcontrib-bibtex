@@ -16,7 +16,10 @@ class BasicLabelReferenceStyle(BaseReferenceStyle):
     and by author and label if textual.
     """
 
+    #: Bracket style.
     bracket: BracketStyle = BracketStyle()
+
+    #: Person style.
     person: PersonStyle = PersonStyle()
 
     def get_role_names(self) -> Iterable[str]:
