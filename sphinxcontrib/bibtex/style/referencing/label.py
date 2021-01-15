@@ -18,8 +18,24 @@ class LabelReferenceStyle(GroupReferenceStyle):
     or just by author, label, or year.
     """
 
-    #: Bracket style.
-    bracket: BracketStyle = BracketStyle()
+    #: Bracket style for textual citations (:cite:t: and variations).
+    bracket_textual: BracketStyle = BracketStyle()
+
+    #: Bracket style for parenthetical citations
+    #: (:cite:p: and variations).
+    bracket_parenthetical: BracketStyle = BracketStyle()
+
+    #: Bracket style for author citations
+    #: (:cite:author: and variations).
+    bracket_author: BracketStyle = BracketStyle()
+
+    #: Bracket style for label citations
+    #: (:cite:label: and variations).
+    bracket_label: BracketStyle = BracketStyle()
+
+    #: Bracket style for year citations
+    #: (:cite:year: and variations).
+    bracket_year: BracketStyle = BracketStyle()
 
     #: Person style.
     person: PersonStyle = PersonStyle()
@@ -27,12 +43,12 @@ class LabelReferenceStyle(GroupReferenceStyle):
     def __post_init__(self):
         self.styles.extend([
             BasicLabelParentheticalReferenceStyle(
-                bracket=self.bracket, person=self.person),
+                bracket=self.bracket_parenthetical, person=self.person),
             BasicLabelTextualReferenceStyle(
-                bracket=self.bracket, person=self.person),
+                bracket=self.bracket_textual, person=self.person),
             ExtraAuthorReferenceStyle(
-                bracket=self.bracket, person=self.person),
-            ExtraLabelReferenceStyle(bracket=self.bracket),
-            ExtraYearReferenceStyle(bracket=self.bracket),
+                bracket=self.bracket_author, person=self.person),
+            ExtraLabelReferenceStyle(bracket=self.bracket_label),
+            ExtraYearReferenceStyle(bracket=self.bracket_year),
         ])
         super().__post_init__()

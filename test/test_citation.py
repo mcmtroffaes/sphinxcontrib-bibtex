@@ -204,24 +204,34 @@ def test_citation_style_invalid(make_app, app_params):
         make_app(*args, **kwargs)
 
 
+my_bracket = BracketStyle(
+    left='(',
+    right=')',
+    sep='; ',
+    sep2='; ',
+    last_sep='; ',
+)
+
+
+my_person = PersonStyle(
+    style='last',
+    abbreviate=False,
+    sep=' & ',
+    sep2=None,
+    last_sep=None,
+    other=' et al',
+)
+
+
 @dataclasses.dataclass
 class CustomReferenceStyle(AuthorYearReferenceStyle):
-    bracket: BracketStyle = BracketStyle(
-        left='(',
-        right=')',
-        sep='; ',
-        sep2='; ',
-        last_sep='; ',
-    )
-    person: PersonStyle = PersonStyle(
-        style='last',
-        abbreviate=False,
-        sep=' & ',
-        sep2=None,
-        last_sep=None,
-        other=' et al',
-    )
-    author_year_sep = ', '
+    bracket_textual: BracketStyle = my_bracket
+    bracket_parenthetical: BracketStyle = my_bracket
+    bracket_author: BracketStyle = my_bracket
+    bracket_label: BracketStyle = my_bracket
+    bracket_year: BracketStyle = my_bracket
+    person: PersonStyle = my_person
+    author_year_sep: str = ' '
 
 
 sphinxcontrib.bibtex.plugin.register_plugin(
@@ -237,8 +247,8 @@ def test_citation_style_custom(app, warning):
     assert not warning.getvalue()
     output = (app.outdir / "index.txt").read_text()
     tests = [
-        ("p",           " (de Du et al, 2003) "),
-        ("ps",          " (de Du & Em & Fa, 2003) "),
+        ("p",           " (de Du et al 2003) "),
+        ("ps",          " (de Du & Em & Fa 2003) "),
         ("t",           " de Du et al (2003) "),
         ("ts",          " de Du & Em & Fa (2003) "),
         ("ct",          " De Du et al (2003) "),
@@ -253,8 +263,8 @@ def test_citation_style_custom(app, warning):
         ("authors",     " de Du & Em & Fa "),
         ("cauthor",     " De Du et al "),
         ("cauthors",    " De Du & Em & Fa "),
-        ("p",           " (al Ap, 2001; Be & Ci, 2002) "),
-        ("ps",          " (al Ap, 2001; Be & Ci, 2002) "),
+        ("p",           " (al Ap 2001; Be & Ci 2002) "),
+        ("ps",          " (al Ap 2001; Be & Ci 2002) "),
         ("t",           " al Ap (2001); Be & Ci (2002) "),
         ("ts",          " al Ap (2001); Be & Ci (2002) "),
         ("ct",          " Al Ap (2001); Be & Ci (2002) "),
@@ -269,8 +279,8 @@ def test_citation_style_custom(app, warning):
         ("authors",     " al Ap; Be & Ci "),
         ("cauthor",     " Al Ap; Be & Ci "),
         ("cauthors",    " Al Ap; Be & Ci "),
-        ("p",           " (Ge, 2004; Hu, 2005; Ix, 2006) "),
-        ("ps",          " (Ge, 2004; Hu, 2005; Ix, 2006) "),
+        ("p",           " (Ge 2004; Hu 2005; Ix 2006) "),
+        ("ps",          " (Ge 2004; Hu 2005; Ix 2006) "),
         ("t",           " Ge (2004); Hu (2005); Ix (2006) "),
         ("ts",          " Ge (2004); Hu (2005); Ix (2006) "),
         ("ct",          " Ge (2004); Hu (2005); Ix (2006) "),
