@@ -20,7 +20,7 @@ class ExtraAuthorReferenceStyle(BaseReferenceStyle):
     #: Person style.
     person: PersonStyle = PersonStyle()
 
-    def get_role_names(self) -> Iterable[str]:
+    def role_names(self) -> Iterable[str]:
         return [
             f'{capfirst}author{parenthetical}{full_author}'
             for parenthetical in ['par', '']
@@ -28,14 +28,14 @@ class ExtraAuthorReferenceStyle(BaseReferenceStyle):
             for full_author in ['', 's']
         ]
 
-    def get_outer(
+    def outer(
             self, role_name: str, children: List["BaseText"]) -> "Node":
-        return self.bracket.get_outer(
+        return self.bracket.outer(
             children,
             brackets='par' in role_name,
             capfirst='c' in role_name,
         )
 
-    def get_inner(self, role_name: str) -> "Node":
+    def inner(self, role_name: str) -> "Node":
         return reference[
             self.person.names('author', full='s' in role_name)]

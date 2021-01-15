@@ -22,7 +22,7 @@ class BasicAuthorYearReferenceStyle(BaseReferenceStyle):
     #: Separator between author and year for textual citations.
     author_year_sep: Union["BaseText", str] = ', '
 
-    def get_role_names(self) -> Iterable[str]:
+    def role_names(self) -> Iterable[str]:
         return [
             f'{capfirst}{parenthetical}{full_author}'
             for parenthetical in ['p', 't']
@@ -30,20 +30,20 @@ class BasicAuthorYearReferenceStyle(BaseReferenceStyle):
             for full_author in ['', 's']
         ]
 
-    def get_outer(
+    def outer(
             self, role_name: str, children: List["BaseText"]) -> "Node":
         if 'p' in role_name:  # parenthetical
-            return self.bracket.get_outer(
+            return self.bracket.outer(
                 children,
                 brackets=True,
                 capfirst=False)
         else:  # textual
-            return self.bracket.get_outer(
+            return self.bracket.outer(
                 children,
                 brackets=False,
                 capfirst='c' in role_name)
 
-    def get_inner(self, role_name: str) -> "Node":
+    def inner(self, role_name: str) -> "Node":
         if 'p' in role_name:  # parenthetical
             return reference[
                 join(sep=self.author_year_sep)[

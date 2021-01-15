@@ -34,16 +34,16 @@ class BaseReferenceStyle(ABC):
     def __post_init__(self):
         pass
 
-    def get_role_names(self) -> Iterable[str]:
+    def role_names(self) -> Iterable[str]:
         """Get list of role names supported by this style."""
         raise NotImplementedError
 
-    def get_outer(
+    def outer(
             self, role_name: str, children: List["BaseText"]) -> "Node":
         """Returns outer template for formatting the references."""
         raise NotImplementedError
 
-    def get_inner(self, role_name: str) -> "Node":
+    def inner(self, role_name: str) -> "Node":
         """Returns inner template for formatting the references."""
         raise NotImplementedError
 
@@ -63,7 +63,7 @@ def format_references(
     the style's :meth:`~BaseReferenceStyle.get_outer` method.
     """
     children = [
-        style.get_inner(role_name).format_data(
+        style.inner(role_name).format_data(
             data=dict(
                 entry=entry,
                 formatted_entry=formatted_entry,
@@ -71,7 +71,7 @@ def format_references(
                 reference_text_class=reference_text_class,
                 style=style))
         for entry, formatted_entry, info in references]
-    return style.get_outer(role_name, children).format()
+    return style.outer(role_name, children).format()
 
 
 @dataclasses.dataclass
@@ -96,7 +96,7 @@ class BracketStyle:
     #: Separator for outer template, for last item if three or more items.
     last_sep: Optional[Union["BaseText", str]] = None
 
-    def get_outer(
+    def outer(
             self, children: List["BaseText"],
             brackets=False, capfirst=False) -> "Node":
         """Creates an outer template with separators,
@@ -180,22 +180,22 @@ class GroupReferenceStyle(BaseReferenceStyle):
         self.role_style.update(
             (role_name, style)
             for style in self.styles
-            for role_name in style.get_role_names()
+            for role_name in style.role_names()
         )
 
-    def get_role_names(self):
+    def role_names(self):
         return self.role_style.keys()
 
-    def get_outer(self, role_name: str, children: List["BaseText"]) -> "Node":
+    def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
         """Gets the outer template associated with *role_name*
         in one of the :attr:`styles`.
         """
         style = self.role_style[role_name]
-        return style.get_outer(role_name, children)
+        return style.outer(role_name, children)
 
-    def get_inner(self, role_name: str) -> "Node":
+    def inner(self, role_name: str) -> "Node":
         """Gets the inner template associated with *role_name*
         in one of the :attr:`styles`.
         """
         style = self.role_style[role_name]
-        return style.get_inner(role_name)
+        return style.inner(role_name)

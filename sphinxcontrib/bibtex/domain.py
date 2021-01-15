@@ -313,7 +313,7 @@ class BibtexDomain(Domain):
                 env.app.config.bibtex_reference_style)
         self.reference_style = style()
         # set up object types and roles for referencing style
-        role_names = self.reference_style.get_role_names()
+        role_names = self.reference_style.role_names()
         self.object_types = dict(
             citation=ObjType(_('citation'), *role_names, searchprio=-1),
         )

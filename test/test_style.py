@@ -40,13 +40,13 @@ def test_style_names_no_author():
 
 class SimpleReferenceStyle(BaseReferenceStyle):
 
-    def get_role_names(self):
+    def role_names(self):
         return 'p'
 
-    def get_outer(self, role_name: str, children: List["BaseText"]) -> "Node":
+    def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
         return join['{', join(';')[children], '}']
 
-    def get_inner(self, role_name: str) -> "Node":
+    def inner(self, role_name: str) -> "Node":
         return reference[entry_label]
 
 

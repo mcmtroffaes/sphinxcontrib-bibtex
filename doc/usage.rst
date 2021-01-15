@@ -628,13 +628,19 @@ Simply add the following code to your ``conf.py``:
 
     import dataclasses
     import sphinxcontrib.bibtex.plugin
+
+    from sphinxcontrib.bibtex.style.referencing import BracketStyle
     from sphinxcontrib.bibtex.style.referencing.author_year \
         import AuthorYearReferenceStyle
 
+
     @dataclasses.dataclass
     class MyReferenceStyle(AuthorYearReferenceStyle):
-        left_bracket: str = '('
-        right_bracket: str = ')'
+        bracket: BracketStyle = BracketStyle(
+            left='(',
+            right=')',
+        )
+
 
     sphinxcontrib.bibtex.plugin.register_plugin(
         'sphinxcontrib.bibtex.style.referencing',
