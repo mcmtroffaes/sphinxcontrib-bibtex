@@ -648,8 +648,8 @@ Simply add the following code to your ``conf.py``:
 
 .. warning::
 
-    It is essential that you decorate your style as a dataclass,
-    and that you include a type annotation with every field,
+    You must decorate your style as a dataclass,
+    and **include a type annotation with every field**,
     to ensure these values are correctly passed to the
     constructor when sphinxcontrib-bibtex instantiates your style.
 

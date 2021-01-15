@@ -1,7 +1,7 @@
-import dataclasses
-
 import common
+import dataclasses
 import pytest
+import re
 import sphinxcontrib.bibtex.plugin
 
 from sphinxcontrib.bibtex.domain import BibtexDomain
@@ -96,20 +96,20 @@ def test_citation_style_invalid(make_app, app_params):
 
 @dataclasses.dataclass
 class CustomReferenceStyle(AuthorYearReferenceStyle):
-    bracket = BracketStyle(
+    bracket: BracketStyle = BracketStyle(
         left='(',
         right=')',
         sep='; ',
         sep2='; ',
         last_sep='; ',
     )
-    person = PersonStyle(
-        style='lastfirst',
+    person: PersonStyle = PersonStyle(
+        style='last',
         abbreviate=False,
         sep=' & ',
         sep2=None,
         last_sep=None,
-        other=None,
+        other=' et al',
     )
     author_year_sep = ', '
 
@@ -119,12 +119,55 @@ sphinxcontrib.bibtex.plugin.register_plugin(
     'xxx_custom_xxx', CustomReferenceStyle)
 
 
-@pytest.mark.sphinx('pseudoxml', testroot='citation_roles',
+@pytest.mark.sphinx('text', testroot='citation_roles',
                     confoverrides={
                         'bibtex_reference_style': 'xxx_custom_xxx'})
 def test_citation_style_custom(app, warning):
     app.build()
     assert not warning.getvalue()
+    output = (app.outdir / "index.txt").read_text()
+    tests = [
+        ("p",           " (de Du et al, 2003) "),
+        ("ps",          " (de Du & Em & Fa, 2003) "),
+        ("t",           " de Du et al (2003) "),
+        ("ts",          " de Du & Em & Fa (2003) "),
+        ("ct",          " De Du et al (2003) "),
+        ("cts",         " De Du & Em & Fa (2003) "),
+        ("labelpar",    " (dDEF03) "),
+        ("label",       " dDEF03 "),
+        ("yearpar",     " (2003) "),
+        ("year",        " 2003 "),
+        ("authorpar",   " (de Du et al) "),
+        ("authorpars",  " (de Du & Em & Fa) "),
+        ("cauthorpar",  " (De Du et al) "),
+        ("cauthorpars", " (De Du & Em & Fa) "),
+        ("author",      " de Du et al "),
+        ("authors",     " de Du & Em & Fa "),
+        ("cauthor",     " De Du et al "),
+        ("cauthors",    " De Du & Em & Fa "),
+        ("p",           " (al Ap, 2001; Be & Ci, 2002) "),
+        ("ps",          " (al Ap, 2001; Be & Ci, 2002) "),
+        ("t",           " al Ap (2001); Be & Ci (2002) "),
+        ("ts",          " al Ap (2001); Be & Ci (2002) "),
+        ("ct",          " Al Ap (2001); Be & Ci (2002) "),
+        ("cts",         " Al Ap (2001); Be & Ci (2002) "),
+        ("labelpar",    " (aA01; BC02) "),
+        ("label",       " aA01; BC02 "),
+        ("yearpar",     " (2001; 2002) "),
+        ("year",        " 2001; 2002 "),
+        ("authorpar",   " (al Ap; Be & Ci) "),
+        ("authorpars",  " (al Ap; Be & Ci) "),
+        ("cauthorpar",  " (Al Ap; Be & Ci) "),
+        ("cauthorpars", " (Al Ap; Be & Ci) "),
+        ("author",      " al Ap; Be & Ci "),
+        ("authors",     " al Ap; Be & Ci "),
+        ("cauthor",     " Al Ap; Be & Ci "),
+        ("cauthors",    " Al Ap; Be & Ci "),
+    ]
+    for role, text in tests:
+        escaped_text = re.escape(text)
+        pattern = f'":cite:{role}:".*{escaped_text}'
+        assert re.search(pattern, output) is not None
 
 
 @pytest.mark.sphinx('text', testroot='citation_style_round_brackets')
