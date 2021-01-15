@@ -291,7 +291,7 @@ Splitting Bibliographies Per Bib File
 
 .. versionadded:: 2.0.0
 
-If want multiple bibliographies each of which only
+If you want multiple bibliographies each of which only
 contains references from specific bib files, you can specify
 the relevant bib files as an optional argument to the directive.
 
