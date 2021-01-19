@@ -6,6 +6,7 @@ include LICENSE.rst
 include requirements.txt
 include mypy.ini
 include pytest.ini
+include .coveragerc
 recursive-include sphinxcontrib *.py
 recursive-include doc *
 recursive-include test *

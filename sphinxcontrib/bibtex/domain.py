@@ -499,7 +499,7 @@ class BibtexDomain(Domain):
 
     def get_formatted_entries(
             self, bibliography_key: "BibliographyKey", docnames: List[str]
-            ) -> Iterable["FormattedEntry"]:
+            ) -> Iterable[Tuple["Entry", "FormattedEntry"]]:
         """Get sorted bibliography entries along with their pybtex labels,
         with additional sorting and formatting applied from the pybtex style.
         """
