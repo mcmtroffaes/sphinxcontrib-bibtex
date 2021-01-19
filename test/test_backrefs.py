@@ -5,7 +5,7 @@ import pytest
 
 
 @pytest.mark.sphinx('html', testroot='backrefs')
-def test_backrefs(app, warning):
+def test_backrefs(app, warning) -> None:
     app.build()
     output = (app.outdir / "index.html").read_text()
     match = common.html_citations(text=".*Test zero.*").search(output)

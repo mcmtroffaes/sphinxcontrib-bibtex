@@ -46,7 +46,7 @@ ROLES = [
 ]
 
 
-def parse_keys(rawtext):
+def parse_keys(rawtext) -> Tuple[List[str], str, str]:
     # Get the keys and any pre- and post-citation text
     # Spaces nor commas are allowed in cite keys, so we split on commas
     # first.  This will give us a list of keys, however, the last item may have
@@ -80,7 +80,7 @@ def parse_keys(rawtext):
         else:
             k = k[0]
         keys.append(k)
-    return (keys, pre, post)
+    return keys, pre, post
 
 
 class Citations(object):
@@ -269,7 +269,7 @@ class CitationXRefRole(XRefRole):
         if self.name == "cite:text":
             # A ``text`` citation is unique because it doesn't reference a
             # cite-key
-            keys = []
+            keys: List[str] = []
             pre, post = self.text, ''
         else:
             keys, pre, post = parse_keys(self.text)

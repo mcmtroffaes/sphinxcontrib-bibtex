@@ -17,7 +17,7 @@ status_parsing = "parsing bibtex file.*parsed [0-9]+ entries"
 # Test that updates to the bibfile generate the correct result when
 # Sphinx is run again.
 @pytest.mark.sphinx('html', testroot='bibfiles_out_of_date')
-def test_bibfiles_out_of_date(make_app, app_params):
+def test_bibfiles_out_of_date(make_app, app_params) -> None:
     args, kwargs = app_params
     app = make_app(*args, **kwargs)
     app.build()
@@ -62,7 +62,7 @@ def test_bibfiles_out_of_date(make_app, app_params):
 
 
 @pytest.mark.sphinx('html', testroot='bibfiles_not_found')
-def test_bibfiles_not_found(app, warning):
+def test_bibfiles_not_found(app, warning) -> None:
     app.build()
     warning.seek(0)
     warnings = warning.readlines()
@@ -72,14 +72,14 @@ def test_bibfiles_not_found(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='bibfiles_missing_conf')
-def test_bibfiles_missing_conf(make_app, app_params):
+def test_bibfiles_missing_conf(make_app, app_params) -> None:
     args, kwargs = app_params
     with pytest.raises(ExtensionError, match="bibtex_bibfiles"):
         make_app(*args, **kwargs)
 
 
 @pytest.mark.sphinx('html', testroot='bibfiles_encoding', freshenv=True)
-def test_bibfiles_encoding(app, warning):
+def test_bibfiles_encoding(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
@@ -88,7 +88,7 @@ def test_bibfiles_encoding(app, warning):
 
 @pytest.mark.sphinx('html', testroot='bibfiles_encoding', freshenv=True,
                     confoverrides={'bibtex_encoding': 'ascii'})
-def test_bibfiles_encoding_bad(make_app, app_params):
+def test_bibfiles_encoding_bad(make_app, app_params) -> None:
     args, kwargs = app_params
     with pytest.raises(PybtexError, match="can't decode byte 0xc4"):
         make_app(*args, **kwargs)
@@ -96,13 +96,13 @@ def test_bibfiles_encoding_bad(make_app, app_params):
 
 @pytest.mark.sphinx('html', testroot='bibfiles_encoding', freshenv=True,
                     confoverrides={'bibtex_encoding': 'invalid'})
-def test_bibfiles_encoding_invalid(make_app, app_params):
+def test_bibfiles_encoding_invalid(make_app, app_params) -> None:
     args, kwargs = app_params
     with pytest.raises(LookupError, match="unknown encoding"):
         make_app(*args, **kwargs)
 
 
 @pytest.mark.sphinx('html', testroot='bibfiles_subfolder')
-def test_bibfiles_subfolder(app, warning):
+def test_bibfiles_subfolder(app, warning) -> None:
     app.build()
     assert not warning.getvalue()

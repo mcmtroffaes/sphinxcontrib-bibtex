@@ -5,7 +5,7 @@ import pytest
 
 
 @pytest.mark.sphinx('html', testroot='duplicate_label')
-def test_duplicate_label(app, warning):
+def test_duplicate_label(app, warning) -> None:
     # see github issue 14
     app.build()
     assert 'duplicate label "1" for keys "Test" and "Test2"' \
@@ -17,7 +17,7 @@ def test_duplicate_label(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='duplicate_citation')
-def test_duplicate_citation(app, warning):
+def test_duplicate_citation(app, warning) -> None:
     app.build()
     warning.seek(0)
     warnings = list(warning.readlines())
@@ -32,7 +32,7 @@ def test_duplicate_citation(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='duplicate_nearly_identical_entries')
-def test_duplicate_nearly_identical_entries(app, warning):
+def test_duplicate_nearly_identical_entries(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
@@ -45,7 +45,7 @@ def test_duplicate_nearly_identical_entries(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='duplicate_nearly_identical_keys')
-def test_duplicate_nearly_identical_keys(app, warning):
+def test_duplicate_nearly_identical_keys(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
@@ -69,7 +69,7 @@ def test_duplicate_nearly_identical_keys(app, warning):
 # this test "accidentally" includes a user provided id which
 # clashes with a bibtex generated citation id
 @pytest.mark.sphinx('html', testroot='duplicate_citation_id')
-def test_duplicate_citation_id(app, warning):
+def test_duplicate_citation_id(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()

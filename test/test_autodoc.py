@@ -10,7 +10,7 @@ import pytest
 
 
 @pytest.mark.sphinx('html', testroot='autodoc')
-def test_autodoc(app, warning):
+def test_autodoc(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "doc_cite.html").read_text()
@@ -40,6 +40,6 @@ def test_autodoc(app, warning):
 
 # test that sphinx [source] links do not generate a warning (issue 17)
 @pytest.mark.sphinx('html', testroot='autodoc_viewcode')
-def test_autodoc_viewcode(app, warning):
+def test_autodoc_viewcode(app, warning) -> None:
     app.build()
     assert not warning.getvalue()

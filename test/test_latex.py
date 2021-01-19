@@ -3,7 +3,7 @@ import pytest
 
 
 @pytest.mark.sphinx('latex', testroot='latex_refs')
-def test_latex_refs(app, warning):
+def test_latex_refs(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "test.tex").read_text()
@@ -19,7 +19,7 @@ def test_latex_refs(app, warning):
 
 
 @pytest.mark.sphinx('latex', testroot='latex_multidoc')
-def test_latex_multidoc(app, warning):
+def test_latex_multidoc(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "test.tex").read_text()

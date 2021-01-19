@@ -7,7 +7,7 @@ collect_ignore = ['roots']
 
 
 @pytest.fixture(scope='session')
-def rootdir():
+def rootdir() -> path:
     return path(__file__).parent.abspath() / 'roots'
 
 

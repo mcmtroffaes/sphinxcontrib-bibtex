@@ -1,26 +1,28 @@
+from typing import Set
+
 import common
 import pytest
 import re
 
 
-def citation_refs(output):
+def citation_refs(output) -> Set[str]:
     return {match.group('label')
             for match in common.html_citation_refs().finditer(output)}
 
 
-def citations(output):
+def citations(output) -> Set[str]:
     return {match.group('label')
             for match in common.html_citations().finditer(output)}
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_empty', freshenv=True)
-def test_bibliography_empty(app, warning):
+def test_bibliography_empty(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_header')
-def test_bibliography_header(app, warning):
+def test_bibliography_header(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding='utf-8')
@@ -32,7 +34,7 @@ def test_bibliography_header(app, warning):
     'pseudoxml', testroot='bibliography_empty', freshenv=True, confoverrides={
         'bibtex_bibliography_header': '.. rubric:: Regular Citations',
         'bibtex_footbibliography_header': '.. rubric:: Footnote Citations'})
-def test_bibliography_empty_no_header(app, warning):
+def test_bibliography_empty_no_header(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.pseudoxml").read_text(encoding='utf-8')
@@ -42,7 +44,7 @@ def test_bibliography_empty_no_header(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_style_default')
-def test_bibliography_style_default(app, warning):
+def test_bibliography_style_default(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
@@ -51,7 +53,7 @@ def test_bibliography_style_default(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_style_label_1')
-def test_bibliography_style_label_1(app, warning):
+def test_bibliography_style_label_1(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
@@ -68,7 +70,7 @@ def test_bibliography_style_label_1(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_style_label_2')
-def test_bibliography_style_label_2(app, warning):
+def test_bibliography_style_label_2(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
@@ -77,7 +79,7 @@ def test_bibliography_style_label_2(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_style_nowebref')
-def test_bibliography_style_nowebref(app, warning):
+def test_bibliography_style_nowebref(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding='utf-8')
@@ -87,14 +89,14 @@ def test_bibliography_style_nowebref(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_bad_option')
-def test_bibliography_bad_option(app, warning):
+def test_bibliography_bad_option(app, warning) -> None:
     app.build()
     assert 'unknown option: "thisisintentionallyinvalid"' in warning.getvalue()
 
 
 # see issue 87
 @pytest.mark.sphinx('html', testroot='bibliography_key_prefix')
-def test_bibliography_key_prefix(app, warning):
+def test_bibliography_key_prefix(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "doc0.html").read_text()
@@ -104,7 +106,7 @@ def test_bibliography_key_prefix(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_label_prefix_1')
-def test_bibliography_label_prefix_1(app, warning):
+def test_bibliography_label_prefix_1(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "doc1.html").read_text()
@@ -114,7 +116,7 @@ def test_bibliography_label_prefix_1(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_label_prefix_2')
-def test_bibliography_label_prefix_2(app, warning):
+def test_bibliography_label_prefix_2(app, warning) -> None:
     doc1_refs = {'AFM12', 'ABlu83', 'AGIH02', 'AWS14'}
     doc1_cites = {'ABlu83', 'AFM12', 'AGIH02', 'AWS14'}
     doc2_refs = {'BShi13'}
@@ -145,7 +147,7 @@ def test_bibliography_label_prefix_2(app, warning):
 
 # test order of bibliography entries when using an unsorted style
 @pytest.mark.sphinx('html', testroot='bibliography_order_unsorted')
-def test_bibliography_order_unsorted(app, warning):
+def test_bibliography_order_unsorted(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
@@ -156,7 +158,7 @@ def test_bibliography_order_unsorted(app, warning):
 
 # see issue 187
 @pytest.mark.sphinx('html', testroot='bibliography_multi_foot')
-def test_bibliography_multi_foot(app, warning):
+def test_bibliography_multi_foot(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding='utf-8')

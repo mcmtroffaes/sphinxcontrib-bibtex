@@ -65,7 +65,7 @@ def test_rebuild_empty_outdir(make_app, app_params):
 
 
 @pytest.mark.sphinx('pseudoxml', testroot='debug_minimal_example')
-def test_debug_minimal_example(app, warning):
+def test_debug_minimal_example(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.pseudoxml").read_text()

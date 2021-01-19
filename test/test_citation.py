@@ -14,7 +14,7 @@ from sphinxcontrib.bibtex.style.referencing.author_year import \
 
 
 @pytest.mark.sphinx('html', testroot='citation_not_found')
-def test_citation_not_found(app, warning):
+def test_citation_not_found(app, warning) -> None:
     app.build()
     assert 'could not find bibtex key "nosuchkey1"' in warning.getvalue()
     assert 'could not find bibtex key "nosuchkey2"' in warning.getvalue()
@@ -22,7 +22,7 @@ def test_citation_not_found(app, warning):
 
 # test mixing of ``:cite:`` and ``[]_`` (issue 2)
 @pytest.mark.sphinx('html', testroot='citation_mixed')
-def test_citation_mixed(app, warning):
+def test_citation_mixed(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     domain = cast(BibtexDomain, app.env.get_domain('cite'))
@@ -36,7 +36,7 @@ def test_citation_mixed(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='citation_multiple_keys')
-def test_citation_multiple_keys(app, warning):
+def test_citation_multiple_keys(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
@@ -49,14 +49,14 @@ def test_citation_multiple_keys(app, warning):
 
 # see issue 85
 @pytest.mark.sphinx('html', testroot='citation_no_author_no_key')
-def test_citation_no_author_no_key(app, warning):
+def test_citation_no_author_no_key(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
 
 
 # test cites spanning multiple lines (issue 205)
 @pytest.mark.sphinx('html', testroot='citation_whitespace')
-def test_citation_whitespace(app, warning):
+def test_citation_whitespace(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
@@ -67,13 +67,13 @@ def test_citation_whitespace(app, warning):
 
 # test document not in toctree (issue 228)
 @pytest.mark.sphinx('pseudoxml', testroot='citation_from_orphan')
-def test_citation_from_orphan(app, warning):
+def test_citation_from_orphan(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
 
 
 @pytest.mark.sphinx('text', testroot='citation_roles')
-def test_citation_roles_label(app, warning):
+def test_citation_roles_label(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.txt").read_text()
@@ -136,7 +136,7 @@ def test_citation_roles_label(app, warning):
 @pytest.mark.sphinx(
     'text', testroot='citation_roles',
     confoverrides={'bibtex_reference_style': 'author_year'})
-def test_citation_roles_authoryear(app, warning):
+def test_citation_roles_authoryear(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.txt").read_text()
@@ -200,7 +200,7 @@ def test_citation_roles_authoryear(app, warning):
     'html', testroot='citation_roles',
     confoverrides={'bibtex_default_style': 'plain',
                    'bibtex_reference_style': 'super'})
-def test_citation_roles_super(app, warning):
+def test_citation_roles_super(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
@@ -210,7 +210,7 @@ def test_citation_roles_super(app, warning):
 
 @pytest.mark.sphinx('pseudoxml', testroot='debug_bibtex_citation',
                     confoverrides={'bibtex_reference_style': 'non_existing'})
-def test_citation_style_invalid(make_app, app_params):
+def test_citation_style_invalid(make_app, app_params) -> None:
     args, kwargs = app_params
     with pytest.raises(ImportError, match='plugin .*non_existing not found'):
         make_app(*args, **kwargs)
@@ -254,7 +254,7 @@ sphinxcontrib.bibtex.plugin.register_plugin(
 @pytest.mark.sphinx('text', testroot='citation_roles',
                     confoverrides={
                         'bibtex_reference_style': 'xxx_custom_xxx'})
-def test_citation_style_custom(app, warning):
+def test_citation_style_custom(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.txt").read_text()
@@ -315,7 +315,7 @@ def test_citation_style_custom(app, warning):
 
 
 @pytest.mark.sphinx('text', testroot='citation_style_round_brackets')
-def test_citation_style_round_brackets(app, warning):
+def test_citation_style_round_brackets(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.txt").read_text()
