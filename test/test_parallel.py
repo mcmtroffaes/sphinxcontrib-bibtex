@@ -7,7 +7,7 @@ import pytest
 @pytest.mark.skipif(not parallel_available,
                     reason='sphinx parallel builds not available')
 @pytest.mark.sphinx('html', testroot='parallel')
-def test_parallel(make_app, app_params):
+def test_parallel(make_app, app_params) -> None:
     args, kwargs = app_params
     app0 = make_app(*args, **kwargs)
     app0.parallel = 4

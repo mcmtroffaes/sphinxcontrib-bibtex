@@ -13,19 +13,19 @@ sys.path.append(os.path.dirname(__file__))  # ensure natbib extension is found
 
 
 @pytest.mark.sphinx('html', testroot='natbib')
-def test_natbib(app, warning):
+def test_natbib(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
 
 
 @pytest.mark.sphinx('latex', testroot='natbib')
-def test_natbib_latex(app, warning):
+def test_natbib_latex(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
 
 
 @pytest.mark.sphinx('html', testroot='natbib_keynotfound')
-def test_natbib_keynotfound(app, warning):
+def test_natbib_keynotfound(app, warning) -> None:
     app.build()
     warning.seek(0)
     warnings = warning.readlines()
@@ -34,7 +34,7 @@ def test_natbib_keynotfound(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='natbib_norefs')
-def test_natbib_norefs(app, warning):
+def test_natbib_norefs(app, warning) -> None:
     app.build()
     warning.seek(0)
     warnings = warning.readlines()
@@ -42,7 +42,7 @@ def test_natbib_norefs(app, warning):
     assert "WARNING: no `refs` directive found" in warnings[0]
 
 
-def test_natbib_citation_transform_str_repr():
+def test_natbib_citation_transform_str_repr() -> None:
     from natbib import CitationTransform, DEFAULT_CONF
     from pybtex.database import Entry
     ref = Entry(type_='misc')
@@ -55,7 +55,7 @@ def test_natbib_citation_transform_str_repr():
 
 
 @pytest.mark.sphinx('text', testroot='natbib_conf')
-def test_natbib_conf(app, warning):
+def test_natbib_conf(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.txt").read_text()

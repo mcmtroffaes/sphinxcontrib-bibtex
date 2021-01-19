@@ -3,14 +3,14 @@ import pytest
 from sphinxcontrib.bibtex.plugin import find_plugin, register_plugin
 
 
-def test_plugin_bad_group():
+def test_plugin_bad_group() -> None:
     with pytest.raises(ImportError, match="plugin group blablabla not found"):
         find_plugin("blablabla", "boo")
     with pytest.raises(ImportError, match="plugin group blablabla not found"):
         register_plugin("blablabla", "boo", type(None))
 
 
-def test_plugin_register_not_forced():
+def test_plugin_register_not_forced() -> None:
 
     class Plugin:
         pass
@@ -21,7 +21,7 @@ def test_plugin_register_not_forced():
         "sphinxcontrib.bibtex.style.referencing", "label") is not Plugin
 
 
-def test_plugin_register_forced():
+def test_plugin_register_forced() -> None:
 
     class PluginOld:
         pass

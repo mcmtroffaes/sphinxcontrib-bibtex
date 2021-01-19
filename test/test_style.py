@@ -11,7 +11,7 @@ from sphinxcontrib.bibtex.style.referencing import (
 from sphinxcontrib.bibtex.style.template import (
     entry_label, reference, join, names
 )
-from typing import TYPE_CHECKING, List
+from typing import TYPE_CHECKING, List, Iterable
 import pytest
 
 if TYPE_CHECKING:
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from pybtex.style.formatting import BaseStyle
 
 
-def test_style_names_last():
+def test_style_names_last() -> None:
     name = Person(
         string=r"Charles Louis Xavier Joseph de la Vall{\'e}e Poussin")
     last = LastNameStyle().format
@@ -32,7 +32,7 @@ def test_style_names_last():
     assert last(name2).format().render_as('latex') == "Last"
 
 
-def test_style_names_no_author():
+def test_style_names_no_author() -> None:
     entry = Entry(type_='book')
     with pytest.raises(FieldIsMissing):
         names('author').format_data(dict(entry=entry))
@@ -40,8 +40,8 @@ def test_style_names_no_author():
 
 class SimpleReferenceStyle(BaseReferenceStyle):
 
-    def role_names(self):
-        return 'p'
+    def role_names(self) -> Iterable[str]:
+        return ['p']
 
     def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
         return join['{', join(';')[children], '}']
@@ -58,7 +58,7 @@ class SimpleReferenceText(BaseReferenceText[str]):
         return HRef(url, *self.parts).render(backend)
 
 
-def test_simple_reference_style():
+def test_simple_reference_style() -> None:
     cit_style: "BaseStyle" = \
         pybtex.plugin.find_plugin('pybtex.style.formatting', 'unsrtalpha')()
     ref_style = SimpleReferenceStyle()
@@ -75,6 +75,7 @@ def test_simple_reference_style():
     references = list(zip(entries, formatted_entries, infos))
     backend: "BaseBackend" = \
         pybtex.plugin.find_plugin('pybtex.backends', 'html')()
+    assert 'p' in ref_style.role_names()
     assert \
         format_references(ref_style, SimpleReferenceText,
                           'p', references).render(backend) == \

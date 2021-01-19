@@ -4,7 +4,7 @@ import re
 
 
 @pytest.mark.sphinx('html', testroot='list_citation')
-def test_list_citation(app, warning):
+def test_list_citation(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
@@ -15,7 +15,7 @@ def test_list_citation(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='list_bullet')
-def test_list_bullet(app, warning):
+def test_list_bullet(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
@@ -30,7 +30,7 @@ def test_list_bullet(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='list_enumerated')
-def test_list_enumerated(app, warning):
+def test_list_enumerated(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
@@ -57,7 +57,7 @@ def test_list_enumerated(app, warning):
 
 
 @pytest.mark.sphinx('html', testroot='list_invalid')
-def test_list_invalid(app, warning):
+def test_list_invalid(app, warning) -> None:
     app.build()
     assert re.search(
         "unknown bibliography list type 'thisisintentionallyinvalid'",
