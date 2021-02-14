@@ -47,6 +47,18 @@ def test_citation_multiple_keys(app, warning) -> None:
     assert {"App", "Bra"} == cits == citrefs
 
 
+@pytest.mark.sphinx('html', testroot='citation_any_role')
+def test_citation_any_role(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
+    cits = {match.group('label')
+            for match in common.html_citations().finditer(output)}
+    citrefs = {match.group('label')
+               for match in common.html_citation_refs().finditer(output)}
+    assert {"App", "Bra"} == cits == citrefs
+
+
 # see issue 85
 @pytest.mark.sphinx('html', testroot='citation_no_author_no_key')
 def test_citation_no_author_no_key(app, warning) -> None:

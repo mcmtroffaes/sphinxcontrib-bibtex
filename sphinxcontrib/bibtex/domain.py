@@ -433,6 +433,25 @@ class BibtexDomain(Domain):
         result_node += formatted_references.render(self.backend)
         return result_node
 
+    def resolve_any_xref(self, env: "BuildEnvironment", fromdocname: str,
+                         builder: "Builder", target: str,
+                         node: "pending_xref", contnode: docutils.nodes.Element
+                         ) -> List[Tuple[str, docutils.nodes.Element]]:
+        """Replace node by list of citation references (one for each key),
+        provided that the target has citation keys.
+        """
+        keys = [key.strip() for key in target.split(',')]
+        citations: Set[str] = {
+            cit.key for cit in self.citations
+            if cit.key in keys
+            and self.bibliographies[cit.bibliography_key].list_ == 'citation'}
+        if any(key in citations for key in keys):
+            result_node = self.resolve_xref(
+                env, fromdocname, builder, 'p', target, node, contnode)
+            return [('p', result_node)]
+        else:
+            return []
+
     def get_all_cited_keys(self, docnames):
         """Yield all citation keys for given *docnames* in order, then
         ordered by citation order.
