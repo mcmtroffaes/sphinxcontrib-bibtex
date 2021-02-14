@@ -56,7 +56,7 @@ setup(
     include_package_data=True,
     python_requires='>=3.6',
     install_requires=requires,
-    tests_require=['pytest', 'pytest-cov', 'myst-parser'],
+    tests_require=['pytest', 'pytest-cov'],
     namespace_packages=['sphinxcontrib'],
     entry_points={
         'pybtex.style.names': [
