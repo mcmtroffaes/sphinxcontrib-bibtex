@@ -25,6 +25,10 @@ import docutils.parsers.rst
 import docutils.utils
 import pybtex_docutils
 import pybtex.plugin
+from pybtex.richtext import Tag
+from pybtex.style.template import FieldIsMissing
+from pybtex.style import FormattedEntry
+
 import sphinxcontrib.bibtex.plugin
 import sphinx.util
 import re
@@ -43,7 +47,6 @@ from .style.referencing import (
 if TYPE_CHECKING:
     from pybtex.backends import BaseBackend
     from pybtex.database import Entry
-    from pybtex.style import FormattedEntry
     from pybtex.style.formatting import BaseStyle
     from sphinx.addnodes import pending_xref
     from sphinx.application import Sphinx
@@ -530,7 +533,18 @@ class BibtexDomain(Domain):
         sorted_entries = style.sort(entries.values())
         labels = style.format_labels(sorted_entries)
         for label, entry in zip(labels, sorted_entries):
-            yield (
-                entry,
-                style.format_entry(bibliography.labelprefix + label, entry),
-            )
+            try:
+                yield (
+                    entry,
+                    style.format_entry(
+                        bibliography.labelprefix + label, entry),
+                )
+            except FieldIsMissing as exc:
+                logger.warning(
+                    str(exc),
+                    location=(bibliography_key.docname, bibliography.line))
+                yield(
+                    entry,
+                    FormattedEntry(entry.key, Tag('b', str(exc)),
+                                   bibliography.labelprefix + label)
+                )

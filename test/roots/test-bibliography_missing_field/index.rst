@@ -1,0 +1,3 @@
+:cite:`testkey`
+
+.. bibliography::

@@ -172,3 +172,9 @@ def test_bibliography_multi_foot(app, warning) -> None:
         'class="footnote-reference brackets" href="#evensen"', output)) == 1
     assert len(re.findall(
         'class="footnote-reference brackets" href="#lorenc"', output)) == 1
+
+
+@pytest.mark.sphinx('html', testroot='bibliography_missing_field')
+def test_bibliography_missing_field(app, warning) -> None:
+    app.build()
+    assert 'missing year in testkey' in warning.getvalue()
