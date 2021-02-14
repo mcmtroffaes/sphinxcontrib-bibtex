@@ -13,7 +13,7 @@ branches:
     - develop
 install:
   - "pip install pybtex"  # for dev version: git+https://bitbucket.org/pybtex-devs/pybtex
-  - "pip install codecov pytest coverage"
+  - "pip install codecov pytest coverage myst-parser"
   - "if [[ -n \"$SPHINX_VERSION\" ]]; then pip install sphinx==$SPHINX_VERSION; fi"
   - "pip install ."
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.9' ]]; then pip install check-manifest flake8; fi"
