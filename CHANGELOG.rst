@@ -1,6 +1,8 @@
 2.2.0 (in development)
 ----------------------
 
+* Support the ``:any:`` role (see issue #232).
+
 * New natbib/biblatex inspired roles for textual and parenthetical
   citation references (see issue #203 reported by matthew-brett).
   For textual citation references, use ``:cite:t:``
