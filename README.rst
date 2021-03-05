@@ -27,18 +27,18 @@ and Weston Nielson's
 
 * Development: https://github.com/mcmtroffaes/sphinxcontrib-bibtex/
 
-.. |travis| image:: https://travis-ci.com/mcmtroffaes/sphinxcontrib-bibtex.png?branch=develop
+.. |travis| image:: https://api.travis-ci.com/mcmtroffaes/sphinxcontrib-bibtex.png?branch=develop
     :target: https://travis-ci.com/mcmtroffaes/sphinxcontrib-bibtex
     :alt: travis-ci
 
 .. |codecov| image:: https://codecov.io/gh/mcmtroffaes/sphinxcontrib-bibtex/branch/develop/graph/badge.svg
-    :target: https://codecov.io/gh/mcmtroffaes/sphinxcontrib-bibtex
+    :target: https://app.codecov.io/gh/mcmtroffaes/sphinxcontrib-bibtex
     :alt: codecov
 
 .. |version| image:: https://img.shields.io/pypi/v/sphinxcontrib-bibtex.svg
-    :target: https://pypi.python.org/pypi/sphinxcontrib-bibtex/
+    :target: https://pypi.org/project/sphinxcontrib-bibtex/
     :alt: latest version
 
 .. |license| image:: https://img.shields.io/pypi/l/sphinxcontrib-bibtex.svg
-    :target: https://pypi.python.org/pypi/sphinxcontrib-bibtex/
+    :target: https://pypi.org/project/sphinxcontrib-bibtex/
     :alt: license
