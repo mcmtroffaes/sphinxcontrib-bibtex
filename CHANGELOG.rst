@@ -1,5 +1,5 @@
-2.2.0 (in development)
-----------------------
+2.2.0 (5 March 2021)
+--------------------
 
 * Support the ``:any:`` role (see issue #232).
 
@@ -43,6 +43,9 @@
 
 * Other packages can register custom reference styles through entry points.
   Refer to the user documentation for details.
+
+* Propagate pybtex FieldIsMissing exception as a warning (see issue
+  #235 reported by Zac-HD).
 
 2.1.4 (8 January 2021)
 ----------------------
