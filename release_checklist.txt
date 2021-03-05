@@ -9,7 +9,7 @@
   - all workarounds are properly documented
   - fixed workarounds are removed
   - git clean -xfd
-  - python setup.py install --user && cd doc && make html
+  - python setup.py install --user && cd doc && make html && make linkcheck
 * make pull request on github
   - travis build passes
   - coverage at 100%
