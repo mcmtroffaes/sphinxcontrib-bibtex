@@ -8,8 +8,11 @@ jobs:
   - python: "3.9"
     env: SPHINX_PRE=1
   - python: "3.8"
+    env: SPHINX_VERSION=3.5.3  # weird docutils dependency bug on 3.5.4
   - python: "3.7"
+    env: SPHINX_VERSION=3.5.3  # weird docutils dependency bug on 3.5.4
   - python: "3.6"
+    env: SPHINX_VERSION=3.5.3  # weird docutils dependency bug on 3.5.4
 branches:
   only:
     - develop
@@ -18,7 +21,6 @@ install:
   - "pip install codecov pytest coverage"
   - "if [[ -n \"$SPHINX_PRE\" ]]; then pip install --pre sphinx; fi"
   - "if [[ -n \"$SPHINX_VERSION\" ]]; then pip install sphinx==$SPHINX_VERSION; fi"
-  - "pip install -r requirements.txt"
   - "pip install ."
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.9' ]]; then pip install check-manifest flake8; fi"
 script:
