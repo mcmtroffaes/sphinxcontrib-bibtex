@@ -18,6 +18,7 @@ install:
   - "pip install codecov pytest coverage"
   - "if [[ -n \"$SPHINX_PRE\" ]]; then pip install --pre sphinx; fi"
   - "if [[ -n \"$SPHINX_VERSION\" ]]; then pip install sphinx==$SPHINX_VERSION; fi"
+  - "pip install -r requirements.txt"
   - "pip install ."
   - "if [[ $TRAVIS_PYTHON_VERSION == '3.9' ]]; then pip install check-manifest flake8; fi"
 script:
