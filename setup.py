@@ -1,16 +1,18 @@
 import io
+import re
 from setuptools import setup, find_packages
 from typing import Optional
 
 
 def readfile(filename):
     with io.open(filename, encoding="utf-8") as stream:
-        return stream.read().split("\n")
+        return stream.read()
 
 
-readme = readfile("README.rst")[5:]  # skip title and badges
-requires = readfile("requirements.txt")
-version = readfile("VERSION")[0].strip()
+readme = readfile("README.rst").split("\n")[5:]  # skip title and badges
+requires = readfile("requirements.txt").split("\n")
+version = re.search("'version': '(.+)'",
+                    readfile("sphinxcontrib/bibtex/__init__.py")).group(1)
 
 
 # make entry point specifications

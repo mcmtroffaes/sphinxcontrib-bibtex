@@ -10,6 +10,9 @@
 # All configuration values have a default; values that are commented out
 # serve to show the default.
 
+import re  # for extracting version
+
+
 # -- General configuration -----------------------------------------------
 
 # If your documentation needs a minimal Sphinx version, state it here.
@@ -38,8 +41,8 @@ copyright = u'2011-2021, Matthias C. M. Troffaes'
 # built documents.
 #
 # The full version, including alpha/beta/rc tags.
-with open("../VERSION", "rt") as version_file:
-    release = version_file.read().strip()
+with open("../sphinxcontrib/bibtex/__init__.py", "rt") as version_file:
+    release = re.search("'version': '(.+)'", version_file.read()).group(1)
 # The short X.Y version.
 version = '.'.join(release.split('.')[:2])
 
