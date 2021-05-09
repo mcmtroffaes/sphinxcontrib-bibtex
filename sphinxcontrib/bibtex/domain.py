@@ -238,23 +238,16 @@ class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
         assert isinstance(backend, pybtex_docutils.Backend), \
                "SphinxReferenceText only supports the docutils backend"
         info = self.info[0]
-        if info.builder.name == 'latex':
-            # latex builder needs a citation_reference
-            return [docutils.nodes.citation_reference(
-                '', *super().render(backend),
-                docname=info.todocname,
-                refname=info.citation_id)]
-        else:
-            children = super().render(backend)
-            # make_refnode only takes a single child
-            refnode = make_refnode(
-                info.builder,
-                info.fromdocname,
-                info.todocname,
-                info.citation_id,
-                children[0])
-            refnode.extend(children[1:])  # type: ignore
-            return [refnode]
+        children = super().render(backend)
+        # make_refnode only takes a single child
+        refnode = make_refnode(
+            info.builder,
+            info.fromdocname,
+            info.todocname,
+            info.citation_id,
+            children[0])
+        refnode.extend(children[1:])  # type: ignore
+        return [refnode]
 
 
 def env_updated(app: "Sphinx", env: "BuildEnvironment") -> Iterable[str]:
@@ -429,11 +422,21 @@ class BibtexDomain(Domain):
                 todocname=citation.bibliography_key.docname,
                 citation_id=citation.citation_id))
             for citation in citations.values()]
-        formatted_references = \
-            format_references(
-                self.reference_style, SphinxReferenceText, typ, references)
         result_node = docutils.nodes.inline(rawsource=target)
-        result_node += formatted_references.render(self.backend)
+        if builder.name != "latex":
+            formatted_references = \
+                format_references(
+                    self.reference_style, SphinxReferenceText, typ, references)
+            result_node += formatted_references.render(self.backend)
+        else:
+            # latex backend does its own rendering with \sphinxcite
+            result_node += [
+                docutils.nodes.citation_reference(
+                    '', '',
+                    docname=info.todocname,
+                    refname=info.citation_id)
+                for _, _, info in references
+            ]
         return result_node
 
     def resolve_any_xref(self, env: "BuildEnvironment", fromdocname: str,
