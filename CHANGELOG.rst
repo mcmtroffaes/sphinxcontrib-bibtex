@@ -1,6 +1,18 @@
 2.2.2 (in development)
 ----------------------
 
+* Add ``:footcite:p:`` and ``:footcite:t:`` roles.
+  For capitalizing the first letter and/or listing the full author list,
+  you can use ``:footcite:ct:``, ``:footcite:ts:``, and ``:footcite:cts:``.
+
+* To configure your footnote referencing style,
+  an optional config setting ``bibtex_foot_reference_style`` has been added.
+  If not specified, this defaults to the ``foot`` style,
+  which will use plain footnote references for citation references, matching
+  the referencing style as in previous versions.
+  Footnote reference styles can be fully customized to your heart's desire,
+  similar to regular citation reference styles.
+
 2.2.1 (16 May 2021)
 -------------------
 
