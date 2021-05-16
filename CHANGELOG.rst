@@ -1,6 +1,13 @@
 2.2.1 (in development)
 ----------------------
 
+* The LaTeX output now uses hyperlink instead of sphinxcite. This fixes
+  issues with double brackets and other mismatches between LaTeX and
+  HTML outputs (see issue #244 reported by zhi-wang).
+
+* The setup function now also returns the version of the extension (see
+  issue #239 reported by lcnittl).
+
 2.2.0 (5 March 2021)
 --------------------
 
