@@ -52,10 +52,6 @@ class FootReferenceText(BaseReferenceText[FootReferenceInfo]):
         info.document.note_footnote_ref(refnode)
         return [refnode]
 
-    def __bool__(self):
-        # has no parts, yet always has content
-        return True
-
 
 class FootCiteRole(XRefRole):
     """Class for processing the :rst:role:`footcite` role."""
