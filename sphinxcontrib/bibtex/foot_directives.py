@@ -10,6 +10,7 @@ from docutils.parsers.rst import Directive
 if TYPE_CHECKING:
     from sphinx.environment import BuildEnvironment
     from .domain import BibtexDomain
+    from .foot_domain import BibtexFootDomain
 
 
 class FootBibliographyDirective(Directive):
@@ -33,10 +34,11 @@ class FootBibliographyDirective(Directive):
             foot_old_refs |= foot_new_refs
             foot_new_refs.clear()
             # bibliography stored in env.temp_data["bibtex_foot_bibliography"]
-            domain = cast("BibtexDomain", env.get_domain('cite'))
+            foot_domain = cast("BibtexFootDomain", env.get_domain('footcite'))
             foot_bibliography, env.temp_data["bibtex_foot_bibliography"] = (
                 env.temp_data["bibtex_foot_bibliography"],
-                domain.footbibliography_header.deepcopy())
+                foot_domain.bibliography_header.deepcopy())
+            domain = cast("BibtexDomain", env.get_domain('cite'))
             for bibfile in domain.bibfiles:
                 env.note_dependency(bibfile)
             return [foot_bibliography]
