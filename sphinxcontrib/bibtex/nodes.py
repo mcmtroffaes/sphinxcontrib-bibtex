@@ -24,7 +24,6 @@ class raw_latex(
 
 def visit_raw_latex(self: LaTeXTranslator, node: raw_latex):
     self.body.append(node.rawsource)
-    raise SkipNode
 
 
 def depart_raw_latex(self: LaTeXTranslator, node: raw_latex):
