@@ -40,6 +40,7 @@ from sphinx.util.nodes import make_refnode
 
 from .roles import CiteRole
 from .bibfile import BibFile, normpath_filename, process_bibfile
+from .nodes import raw_latex
 from .style.referencing import (
     BaseReferenceText, BaseReferenceStyle, format_references
 )
@@ -239,11 +240,12 @@ class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
                "SphinxReferenceText only supports the docutils backend"
         info = self.info[0]
         if info.builder.name == 'latex':
-            # latex builder needs a citation_reference
-            return [docutils.nodes.citation_reference(
-                '', *super().render(backend),
-                docname=info.todocname,
-                refname=info.citation_id)]
+            key = f'cite.{info.todocname}:{info.citation_id}'
+            return (
+                [raw_latex(f'\\hyperlink{{{key}}}{{')]
+                + super().render(backend)
+                + [raw_latex('}')]
+            )
         else:
             children = super().render(backend)
             # make_refnode only takes a single child
