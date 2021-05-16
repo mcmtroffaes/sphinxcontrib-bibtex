@@ -7,7 +7,7 @@ from typing import Any, Dict
 from sphinx.application import Sphinx
 
 from .domain import BibtexDomain
-from .nodes import bibliography
+from .nodes import bibliography, raw_latex, visit_raw_latex, depart_raw_latex
 from .roles import CiteRole
 from .directives import BibliographyDirective
 from .transforms import BibliographyTransform
@@ -35,6 +35,8 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_directive("bibliography", BibliographyDirective)
     app.add_role("cite", CiteRole())
     app.add_node(bibliography, override=True)
+    app.add_node(raw_latex, latex=(visit_raw_latex, depart_raw_latex),
+                 override=True)
     app.add_post_transform(BibliographyTransform)
     app.add_directive("footbibliography", FootBibliographyDirective)
     app.add_role("footcite", FootCiteRole())
