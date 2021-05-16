@@ -260,7 +260,8 @@ Roles and Directives
 
    .. versionadded:: 2.2.2
 
-   Create a footnote reference to a bibliographic entry. For example:
+   Create a parenthetical footnote reference to a bibliographic entry.
+   For example:
 
    .. code-block:: rest
 
@@ -282,7 +283,7 @@ Roles and Directives
 
    .. versionadded:: 2.2.2
 
-   Create a footnote reference to a bibliographic entry. For example:
+   Create a textual footnote reference to a bibliographic entry. For example:
 
    .. code-block:: rest
 
