@@ -60,12 +60,12 @@ class CustomReferenceStyle(FootReferenceStyle):
 
 sphinxcontrib.bibtex.plugin.register_plugin(
     'sphinxcontrib.bibtex.style.referencing',
-    'xxx_custom_xxx', CustomReferenceStyle)
+    'xxx_foot_custom_xxx', CustomReferenceStyle)
 
 
-@pytest.mark.sphinx('text', testroot='citation_roles',
+@pytest.mark.sphinx('text', testroot='footcite_roles',
                     confoverrides={
-                        'bibtex_foot_reference_style': 'xxx_custom_xxx'})
+                        'bibtex_foot_reference_style': 'xxx_foot_custom_xxx'})
 def test_footcite_style_custom(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
@@ -76,7 +76,7 @@ def test_footcite_style_custom(app, warning) -> None:
         ("ts",          " de Du & Em & Fa[1] "),
         ("ct",          " De Du et al[1] "),
         ("cts",         " De Du & Em & Fa[1] "),
-        ("p",           " [1][2] "),
+        ("p",           " [2][3] "),
         ("t",           " al Ap[2]; Be & Ci[3] "),
         ("ts",          " al Ap[2]; Be & Ci[3] "),
         ("ct",          " Al Ap[2]; Be & Ci[3] "),

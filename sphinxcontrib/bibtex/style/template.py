@@ -122,4 +122,6 @@ def footnote_reference(children, data: Dict[str, Any]):
     info = data['reference_info']
     reference_text_class: Type[BaseReferenceText] \
         = data['reference_text_class']
-    return reference_text_class(info)
+    # we need to give the footnote text some fake content
+    # otherwise pybtex richtext engine will mess things up
+    return reference_text_class(info, '#')

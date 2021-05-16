@@ -39,3 +39,5 @@ role                   result
 ``:footcite:ct:``      :footcite:ct:`testfour,testfive,testsix`
 ``:footcite:cts:``     :footcite:cts:`testfour,testfive,testsix`
 ====================== ====================================================
+
+.. footbibliography::
