@@ -42,7 +42,7 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_role("footcite", FootCiteRole())
 
     return {
-        'version': '2.2.1a0',
+        'version': '2.2.1',
         'env_version': 7,
         'parallel_read_safe': True,
         'parallel_write_safe': True,
