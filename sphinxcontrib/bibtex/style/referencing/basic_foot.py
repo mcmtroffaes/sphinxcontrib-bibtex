@@ -13,7 +13,7 @@ class BasicFootParentheticalReferenceStyle(BaseReferenceStyle):
     """Parenthetical footnote reference."""
 
     def role_names(self) -> Iterable[str]:
-        return ['p']
+        return ['p', 'ps']
 
     def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
         return join[children]

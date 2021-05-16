@@ -3,7 +3,8 @@
 
 * Add ``:footcite:p:`` and ``:footcite:t:`` roles.
   For capitalizing the first letter and/or listing the full author list,
-  you can use ``:footcite:ct:``, ``:footcite:ts:``, and ``:footcite:cts:``.
+  you can use ``:footcite:ct:``, ``:footcite:ts:``, ``:footcite:cts:``,
+  and ``:footcite:ps:``.
 
 * To configure your footnote referencing style,
   an optional config setting ``bibtex_foot_reference_style`` has been added.

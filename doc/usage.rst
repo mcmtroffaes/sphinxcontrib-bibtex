@@ -297,6 +297,7 @@ Roles and Directives
 
    Here too, multiple keys can be specified at once.
 
+.. rst:role:: footcite:ps
 .. rst:role:: footcite:ts
 .. rst:role:: footcite:ct
 .. rst:role:: footcite:cts
