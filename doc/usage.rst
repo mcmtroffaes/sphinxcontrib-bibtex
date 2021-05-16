@@ -73,6 +73,14 @@ Currently available built-in styles are:
   Similar to natbib's ``super`` style
   and biblatex's ``\supercite`` command.
 
+The inline referencing style for footnote citations can be configured through
+the ``bibtex_foot_reference_style`` variable in your ``conf.py``.
+Currently available built-in styles are:
+
+* ``foot``: Use footnotes for parenthetical citations, and author with
+  footnote for a textual citations.
+  This is the default style (and currently also the only built-in style).
+
 Python packages can make new styles available through
 the ``sphinxcontrib.bibtex.style.referencing``
 `entry point <https://packaging.python.org/guides/creating-and-discovering-plugins/#using-package-metadata>`_ group.
@@ -248,27 +256,63 @@ Roles and Directives
      .. bibliography::
         :disable-curly-bracket-strip:
 
-.. rst:role:: footcite
+.. rst:role:: footcite:p
 
-   .. versionadded:: 2.0.0
+   .. versionadded:: 2.2.2
 
    Create a footnote reference to a bibliographic entry. For example:
 
    .. code-block:: rest
 
-      See :footcite:`1987:nelson` for an introduction to non-standard analysis.
+      We will make use of non-standard analysis :footcite:p:`1987:nelson`.
 
    which would be equivalent to the following LaTeX code:
 
    .. code-block:: latex
 
-      See \footcite{1987:nelson} for an introduction to non-standard analysis.
+      We will make use of non-standard analysis \footcite{1987:nelson}.
 
    As with all citation roles, multiple keys can be specified:
 
    .. code-block:: rest
 
-      See :footcite:`1987:nelson,2001:schechter`.
+      I love analysis :footcite:p:`1987:nelson,2001:schechter`!
+
+.. rst:role:: footcite:t
+
+   .. versionadded:: 2.2.2
+
+   Create a footnote reference to a bibliographic entry. For example:
+
+   .. code-block:: rest
+
+      See :footcite:t:`1987:nelson` for an introduction to non-standard analysis.
+
+   which would be equivalent to the following LaTeX code:
+
+   .. code-block:: latex
+
+      See Nelson\footcite{1987:nelson} for an introduction to non-standard analysis.
+
+   Here too, multiple keys can be specified at once.
+
+.. rst:role:: footcite:ts
+.. rst:role:: footcite:ct
+.. rst:role:: footcite:cts
+
+   .. versionadded:: 2.2.2
+
+   All these roles modify :rst:role:`footcite:t`.
+   The ones starting with ``c`` will capitalize the first letter.
+   The ones ending with ``s`` will give the full author list.
+
+.. rst:role:: footcite
+
+   .. versionadded:: 2.0.0
+
+   This is an alias for the :rst:role:`footcite:p` role, and will create a
+   parenthetical footnote citation reference. Provided for convenience and
+   compatibility with older versions.
 
 .. rst:directive:: .. footbibliography::
 

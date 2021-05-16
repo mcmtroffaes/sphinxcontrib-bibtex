@@ -264,6 +264,16 @@ def env_updated(app: "Sphinx", env: "BuildEnvironment") -> Iterable[str]:
     return domain.env_updated()
 
 
+def parse_header(header: str, source_path: str):
+    parser = docutils.parsers.rst.Parser()
+    settings = docutils.frontend.OptionParser(
+        components=(docutils.parsers.rst.Parser,)
+    ).get_default_values()
+    document = docutils.utils.new_document(source_path, settings)
+    parser.parse(header, document)
+    return document[0]
+
+
 class BibtexDomain(Domain):
     """Sphinx domain for the bibtex extension."""
 
@@ -291,10 +301,6 @@ class BibtexDomain(Domain):
     @property
     def bibliography_header(self) -> docutils.nodes.Element:
         return self.data['bibliography_header']
-
-    @property
-    def footbibliography_header(self) -> docutils.nodes.Element:
-        return self.data['footbibliography_header']
 
     @property
     def bibliographies(self) -> Dict["BibliographyKey", "BibliographyValue"]:
@@ -336,18 +342,11 @@ class BibtexDomain(Domain):
             process_bibfile(
                 self.bibfiles, normpath_filename(env, "/" + bibfile),
                 env.app.config.bibtex_encoding)
-        # parse bibliography headers
-        for directive in ("bibliography", "footbibliography"):
-            header = getattr(env.app.config, "bibtex_%s_header" % directive)
-            if header:
-                parser = docutils.parsers.rst.Parser()
-                settings = docutils.frontend.OptionParser(
-                    components=(docutils.parsers.rst.Parser,)
-                ).get_default_values()
-                document = docutils.utils.new_document(
-                    "%s_header" % directive, settings)
-                parser.parse(header, document)
-                self.data["%s_header" % directive] = document[0]
+        # parse bibliography header
+        header = getattr(env.app.config, "bibtex_bibliography_header")
+        if header:
+            self.data["bibliography_header"] = \
+                parse_header(header, "bibliography_header")
 
     def clear_doc(self, docname: str) -> None:
         self.data['citations'] = [
