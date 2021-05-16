@@ -5,7 +5,7 @@
         :members:
 """
 
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, List, Dict, Tuple
 
 import docutils.nodes
 import docutils.utils
@@ -22,6 +22,8 @@ from .style.referencing import BaseReferenceStyle
 
 if TYPE_CHECKING:
     from sphinx.environment import BuildEnvironment
+    from sphinx.addnodes import pending_xref
+    from sphinx.builders import Builder
 
 logger = sphinx.util.logging.getLogger(__name__)
 
@@ -60,3 +62,12 @@ class BibtexFootDomain(Domain):
         if header:
             self.data["bibliography_header"] = \
                 parse_header(header, "foot_bibliography_header")
+
+    def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
+        pass
+
+    def resolve_any_xref(self, env: "BuildEnvironment", fromdocname: str,
+                         builder: "Builder", target: str,
+                         node: "pending_xref", contnode: docutils.nodes.Element
+                         ) -> List[Tuple[str, docutils.nodes.Element]]:
+        return []
