@@ -3,7 +3,6 @@
 """
 
 from docutils import nodes
-from docutils.nodes import SkipNode
 from sphinx.writers.latex import LaTeXTranslator
 
 
