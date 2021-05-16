@@ -1,5 +1,5 @@
-2.2.1 (in development)
-----------------------
+2.2.1 (16 May 2021)
+-------------------
 
 * The LaTeX output now uses hyperlink instead of sphinxcite. This fixes
   issues with double brackets and other mismatches between LaTeX and
