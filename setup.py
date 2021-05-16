@@ -68,6 +68,7 @@ setup(
             plugin('author_year'),
             plugin('label'),
             plugin('super', 'super_'),
+            plugin('foot', 'foot'),
         ],
     }
 )

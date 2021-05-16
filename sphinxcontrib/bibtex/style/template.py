@@ -108,3 +108,18 @@ def reference(children, data: Dict[str, Any]):
     reference_text_class: Type[BaseReferenceText] \
         = data['reference_text_class']
     return reference_text_class(info, *parts)
+
+
+@node
+def footnote_reference(children, data: Dict[str, Any]):
+    """Node for inserting a footnote reference. The children of the node
+    comprise the content of the reference, and any referencing information
+    is stored in the *reference_info* key of the *data*.
+    The data must also contain a *style* key pointing to the corresponding
+    :class:`~sphinxcontrib.bibtex.style.referencing.BaseReferenceStyle`.
+    """
+    assert not children
+    info = data['reference_info']
+    reference_text_class: Type[BaseReferenceText] \
+        = data['reference_text_class']
+    return reference_text_class(info)
