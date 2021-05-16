@@ -1,5 +1,8 @@
 """
     .. autoclass:: bibliography
+    .. autoclass:: raw_latex
+    .. autofunction:: visit_raw_latex
+    .. autofunction:: depart_raw_latex
 """
 
 from docutils import nodes
@@ -22,8 +25,12 @@ class raw_latex(
 
 
 def visit_raw_latex(self: LaTeXTranslator, node: raw_latex):
+    """Called when entering a raw_latex node. Appends the node's raw source
+    to the latex body.
+    """
     self.body.append(node.rawsource)
 
 
 def depart_raw_latex(self: LaTeXTranslator, node: raw_latex):
+    """Called when leaving a raw_latex node."""
     pass
