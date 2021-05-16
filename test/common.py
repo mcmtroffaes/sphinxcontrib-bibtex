@@ -77,5 +77,4 @@ def latex_citations(docname=RE_DOCNAME, id_=RE_ID,
 
 def latex_citation_refs(docname=RE_DOCNAME, refid=RE_ID):
     return re.compile(
-        r'\\hyperlink{{cite[.](?P<docname>{docname}):(?P<refid>{refid})}}'.format(
-            docname=docname, refid=refid))
+        rf'\\hyperlink{{cite[.](?P<docname>{docname}):(?P<refid>{refid})}}')
