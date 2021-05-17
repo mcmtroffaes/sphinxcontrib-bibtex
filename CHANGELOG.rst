@@ -14,6 +14,9 @@
   Footnote reference styles can be fully customized to your heart's desire,
   similar to regular citation reference styles.
 
+* The separator between the text and the reference of all textual citation
+  styles can now be customized.
+
 2.2.1 (16 May 2021)
 -------------------
 
