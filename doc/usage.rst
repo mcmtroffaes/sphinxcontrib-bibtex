@@ -198,6 +198,8 @@ Roles and Directives
    Citations in sphinx are resolved globally across all documents.
    Typically, you have a single bibliography directive across your
    entire project which collects all citations.
+   Citation keys can also be explicitly listed under the directive;
+   see :ref:`section-listing-citation-keys`.
 
    .. warning::
 
@@ -220,6 +222,7 @@ Roles and Directives
    .. rst:directive:option:: notcited
 
       Causes all references that were not cited to be included.
+      Listed references remain included.
 
    .. rst:directive:option:: cited
 
@@ -250,7 +253,8 @@ Roles and Directives
 
    .. rst:directive:option:: filter
 
-      See :ref:`section-filtering`.
+      See :ref:`section-filtering`. Note that listed references are always
+      included, regardless of any filtering.
 
 .. XXX not documenting disable-curly-bracket-strip for now; might remove it
 
@@ -414,6 +418,47 @@ The start can be any positive integer (1, 2, 3, ...) or
 This is helpful if you split up your bibliography but
 still want to enumerate the entries continuously.
 
+.. _section-listing-citation-keys:
+
+Listing Citation Keys
+~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.2.2
+
+If you have many citations to include that are not referenced anywhere,
+then instead of using :rst:role:`cite:empty`
+it can be more convenient to simply list the citation keys directly under
+the bibliography directive where you want them to appear.
+Such references can be listed by having one bibtex key per line under the
+directive.
+The keys should not have a key prefix if you are using that option
+(see :ref:`section-key-prefixing`).
+For example:
+
+.. code-block:: rest
+
+   .. bibliography::
+
+      nelson1987
+      boole1854
+
+This would cause the bibliography to generate citations for all cited
+references, in addition to citations with bibtex keys ``nelson1987``
+and ``boole1854``.
+The listed keys are always included regardless of filtering.
+So, if you only want the listed keys to be included, you can use the
+``:filter: False`` option:
+
+.. code-block:: rest
+
+   .. bibliography::
+      :filter: False
+
+      nelson1987
+      boole1854
+
+See :ref:`section-filtering` for more information on filtering.
+
 .. _section-label-prefixing:
 
 Label Prefixing
@@ -473,6 +518,17 @@ whilst in the other document you could have:
 The bibliographies will then both generate an entry for ``boole1854``,
 with links and backlinks as expected.
 
+If you list citation keys, you should include those *without* key prefix.
+For example:
+
+.. code-block:: rest
+
+   .. bibliography::
+      :labelprefix: B
+      :keyprefix: b-
+
+      nelson1987
+
 .. seealso::
 
    :ref:`section-local-bibliographies`
@@ -485,6 +541,7 @@ Filtering
 .. versionadded:: 0.2.7
 
 Whilst the ``cited``, ``all``, and ``notcited`` options
+along with :ref:`section-listing-citation-keys`
 will cover many use cases,
 sometimes more advanced selection of bibliographic entries is desired.
 For this purpose, you can use the ``filter`` option:
@@ -669,7 +726,7 @@ https://bitbucket.org/pybtex-devs/pybtex/src/master/pybtex/style/formatting/unsr
 
 The above example only demonstrates a custom formatting style plugin.
 It is also possible to register custom author/editor naming plugins
-(using the ``pybtex.style.names`` group)
+(using the ``pybtex.style.names`` group),
 labelling plugins
 (using the ``pybtex.style.labels`` group),
 and sorting plugins

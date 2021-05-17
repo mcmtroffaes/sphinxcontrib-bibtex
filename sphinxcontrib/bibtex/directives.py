@@ -46,6 +46,7 @@ class BibliographyValue(NamedTuple):
     keyprefix: str       #: String prefix for citation keys.
     filter_: ast.AST     #: Parsed filter expression.
     citation_nodes: Dict[str, docutils.nodes.citation]  #: key -> citation node
+    keys: List[str]      #: Keys listed as content of the directive.
 
 
 class BibliographyDirective(Directive):
@@ -70,7 +71,7 @@ class BibliographyDirective(Directive):
     required_arguments = 0
     optional_arguments = 1
     final_argument_whitespace = True
-    has_content = False
+    has_content = True
     option_spec = {
         'cited': directives.flag,
         'notcited': directives.flag,
@@ -157,6 +158,14 @@ class BibliographyDirective(Directive):
         for citation_node in citation_nodes.values():
             self.state.document.note_explicit_target(
                 citation_node, citation_node)
+        # check and get keys
+        keys = []
+        for key in self.content:
+            if keyprefix + key not in citation_nodes:
+                logger.warning('could not find bibtex key "%s"' % key,
+                               location=(env.docname, self.lineno))
+            else:
+                keys.append(key)
         # create bibliography object
         bibliography = BibliographyValue(
             line=self.lineno,
@@ -169,7 +178,8 @@ class BibliographyDirective(Directive):
             labelprefix=self.options.get("labelprefix", ""),
             keyprefix=keyprefix,
             bibfiles=bibfiles,
-            citation_nodes=citation_nodes
+            citation_nodes=citation_nodes,
+            keys=keys,
         )
         bib_key = BibliographyKey(docname=env.docname, id_=node['ids'][0])
         assert bib_key not in domain.bibliographies

@@ -178,3 +178,24 @@ def test_bibliography_multi_foot(app, warning) -> None:
 def test_bibliography_missing_field(app, warning) -> None:
     app.build()
     assert 'missing year in testkey' in warning.getvalue()
+
+
+@pytest.mark.sphinx('html', testroot='bibliography_content')
+def test_bibliography_content(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output1 = (app.outdir / "doc1.html").read_text()
+    output2 = (app.outdir / "doc2.html").read_text()
+    output3 = (app.outdir / "doc3.html").read_text()
+    assert citation_refs(output1) == {'One', 'Two'}
+    assert citations(output1) == {'One', 'Two', 'Thr'}
+    assert citation_refs(output2) == {'Fou', 'Fiv'}
+    assert citations(output2) == {'Fiv', 'Six'}
+    assert not citation_refs(output3)
+    assert citations(output3) == {'Fou'}
+
+
+@pytest.mark.sphinx('html', testroot='bibliography_bad_key')
+def test_bibliography_bad_key(app, warning) -> None:
+    app.build()
+    assert 'could not find bibtex key "badkey"' in warning.getvalue()
