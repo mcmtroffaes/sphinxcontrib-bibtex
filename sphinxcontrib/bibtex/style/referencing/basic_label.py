@@ -1,7 +1,6 @@
 import dataclasses
 
-from typing import TYPE_CHECKING, List, Iterable
-from pybtex.style.template import words
+from typing import TYPE_CHECKING, List, Iterable, Union
 from sphinxcontrib.bibtex.style.template import reference, entry_label, join
 from . import BracketStyle, PersonStyle, BaseReferenceStyle
 
@@ -47,6 +46,9 @@ class BasicLabelTextualReferenceStyle(BaseReferenceStyle):
     #: Person style.
     person: PersonStyle = PersonStyle()
 
+    #: Separator between text and reference.
+    text_reference_sep: Union["BaseText", str] = ' '
+
     def role_names(self) -> Iterable[str]:
         return [f'{capfirst}t{full_author}'
                 for capfirst in ['', 'c'] for full_author in ['', 's']]
@@ -58,7 +60,7 @@ class BasicLabelTextualReferenceStyle(BaseReferenceStyle):
             capfirst='c' in role_name)
 
     def inner(self, role_name: str) -> "Node":
-        return words[
+        return join(sep=self.text_reference_sep)[
             self.person.names('author', full='s' in role_name),
             join[
                 self.bracket.left,

@@ -1,5 +1,5 @@
 import dataclasses
-from typing import TYPE_CHECKING, List, Iterable
+from typing import TYPE_CHECKING, List, Iterable, Union
 from sphinxcontrib.bibtex.style.template import footnote_reference, join
 from . import BaseReferenceStyle, PersonStyle, BracketStyle
 
@@ -32,6 +32,9 @@ class BasicFootTextualReferenceStyle(BaseReferenceStyle):
     #: Person style.
     person: PersonStyle = PersonStyle()
 
+    #: Separator between text and reference.
+    text_reference_sep: Union["BaseText", str] = ' '
+
     def role_names(self) -> Iterable[str]:
         return [f'{capfirst}t{full_author}'
                 for capfirst in ['', 'c'] for full_author in ['', 's']]
@@ -43,7 +46,7 @@ class BasicFootTextualReferenceStyle(BaseReferenceStyle):
             capfirst='c' in role_name)
 
     def inner(self, role_name: str) -> "Node":
-        return join[
+        return join(sep=self.text_reference_sep)[
             self.person.names('author', full='s' in role_name),
             footnote_reference,
         ]
