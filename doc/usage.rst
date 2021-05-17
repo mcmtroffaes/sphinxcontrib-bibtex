@@ -304,7 +304,7 @@ Roles and Directives
 
    .. versionadded:: 2.2.2
 
-   All these roles modify :rst:role:`footcite:t`.
+   All these roles modify :rst:role:`footcite:p` and :rst:role:`footcite:t`.
    The ones starting with ``c`` will capitalize the first letter.
    The ones ending with ``s`` will give the full author list.
 
