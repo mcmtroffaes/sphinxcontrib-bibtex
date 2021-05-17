@@ -48,6 +48,9 @@ class AuthorYearReferenceStyle(GroupReferenceStyle):
     #: Separator between author and year for parenthetical citations.
     author_year_sep: Union["BaseText", str] = ', '
 
+    #: Separator between text and reference for textual citations.
+    text_reference_sep: Union["BaseText", str] = ' '
+
     def __post_init__(self):
         self.styles.extend([
             BasicAuthorYearParentheticalReferenceStyle(
@@ -58,6 +61,7 @@ class AuthorYearReferenceStyle(GroupReferenceStyle):
             BasicAuthorYearTextualReferenceStyle(
                 bracket=self.bracket_textual,
                 person=self.person,
+                text_reference_sep=self.text_reference_sep,
             ),
             ExtraAuthorReferenceStyle(
                 bracket=self.bracket_author, person=self.person),

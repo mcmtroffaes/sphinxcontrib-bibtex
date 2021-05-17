@@ -1,4 +1,5 @@
 import dataclasses
+from typing import Union, TYPE_CHECKING
 
 from sphinxcontrib.bibtex.style.referencing import (
     BracketStyle, PersonStyle, GroupReferenceStyle
@@ -11,6 +12,9 @@ from .extra_author import ExtraAuthorReferenceStyle
 from .extra_label import ExtraLabelReferenceStyle
 from .extra_year import ExtraYearReferenceStyle
 from .extra_empty import ExtraEmptyReferenceStyle
+
+if TYPE_CHECKING:
+    from pybtex.richtext import BaseText
 
 
 @dataclasses.dataclass
@@ -41,12 +45,18 @@ class LabelReferenceStyle(GroupReferenceStyle):
     #: Person style.
     person: PersonStyle = PersonStyle()
 
+    #: Separator between text and reference for textual citations.
+    text_reference_sep: Union["BaseText", str] = ' '
+
     def __post_init__(self):
         self.styles.extend([
             BasicLabelParentheticalReferenceStyle(
                 bracket=self.bracket_parenthetical, person=self.person),
             BasicLabelTextualReferenceStyle(
-                bracket=self.bracket_textual, person=self.person),
+                bracket=self.bracket_textual,
+                person=self.person,
+                text_reference_sep=self.text_reference_sep,
+            ),
             ExtraAuthorReferenceStyle(
                 bracket=self.bracket_author, person=self.person),
             ExtraLabelReferenceStyle(bracket=self.bracket_label),
