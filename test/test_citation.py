@@ -106,6 +106,7 @@ def test_citation_roles_label(app, warning) -> None:
         ("authors",     " de Du, Em, and Fa "),
         ("cauthor",     " De Du *et al.* "),
         ("cauthors",    " De Du, Em, and Fa "),
+        ("empty",       " AAA  AAA "),
         ("p",           " [aA01, BC02] "),
         ("ps",          " [aA01, BC02] "),
         ("t",           " al Ap [aA01], Be and Ci [BC02] "),
@@ -122,6 +123,7 @@ def test_citation_roles_label(app, warning) -> None:
         ("authors",     " al Ap, Be and Ci "),
         ("cauthor",     " Al Ap, Be and Ci "),
         ("cauthors",    " Al Ap, Be and Ci "),
+        ("empty",       " BBB  BBB "),
         ("p",           " [Ge04, Hu05, Ix06] "),
         ("ps",          " [Ge04, Hu05, Ix06] "),
         ("t",           " Ge [Ge04], Hu [Hu05], Ix [Ix06] "),
@@ -138,11 +140,14 @@ def test_citation_roles_label(app, warning) -> None:
         ("authors",     " Ge, Hu, Ix "),
         ("cauthor",     " Ge, Hu, Ix "),
         ("cauthors",    " Ge, Hu, Ix "),
+        ("empty",       " CCC  CCC "),
     ]
     for role, text in tests:
         escaped_text = re.escape(text)
         pattern = f'":cite:{role}:".*{escaped_text}'
         assert re.search(pattern, output) is not None
+    # check :cite:empty: generates citation
+    assert "[Ju07] Jo Ju. Testseven. 2007." in output
 
 
 @pytest.mark.sphinx(
@@ -169,6 +174,7 @@ def test_citation_roles_authoryear(app, warning) -> None:
         ("authors",     " de Du, Em, and Fa "),
         ("cauthor",     " De Du *et al.* "),
         ("cauthors",    " De Du, Em, and Fa "),
+        ("empty",       " AAA  AAA "),
         ("p",           " [al Ap, 2001, Be and Ci, 2002] "),
         ("ps",          " [al Ap, 2001, Be and Ci, 2002] "),
         ("t",           " al Ap [2001], Be and Ci [2002] "),
@@ -185,6 +191,7 @@ def test_citation_roles_authoryear(app, warning) -> None:
         ("authors",     " al Ap, Be and Ci "),
         ("cauthor",     " Al Ap, Be and Ci "),
         ("cauthors",    " Al Ap, Be and Ci "),
+        ("empty",       " BBB  BBB "),
         ("p",           " [Ge, 2004, Hu, 2005, Ix, 2006] "),
         ("ps",          " [Ge, 2004, Hu, 2005, Ix, 2006] "),
         ("t",           " Ge [2004], Hu [2005], Ix [2006] "),
@@ -201,11 +208,14 @@ def test_citation_roles_authoryear(app, warning) -> None:
         ("authors",     " Ge, Hu, Ix "),
         ("cauthor",     " Ge, Hu, Ix "),
         ("cauthors",    " Ge, Hu, Ix "),
+        ("empty", " CCC  CCC "),
     ]
     for role, text in tests:
         escaped_text = re.escape(text)
         pattern = f'":cite:{role}:".*{escaped_text}'
         assert re.search(pattern, output) is not None
+    # check :cite:empty: generates citation
+    assert "[Ju07] Jo Ju. Testseven. 2007." in output
 
 
 @pytest.mark.sphinx(
@@ -324,6 +334,8 @@ def test_citation_style_custom(app, warning) -> None:
         escaped_text = re.escape(text)
         pattern = f'":cite:{role}:".*{escaped_text}'
         assert re.search(pattern, output) is not None
+    # check :cite:empty: generates citation
+    assert "[Ju07] Jo Ju. Testseven. 2007." in output
 
 
 @pytest.mark.sphinx('text', testroot='citation_style_round_brackets')
