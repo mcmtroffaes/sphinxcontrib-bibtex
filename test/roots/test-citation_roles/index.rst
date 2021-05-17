@@ -23,6 +23,7 @@ role                   result
 ``:cite:authors:``     :cite:authors:`testthree`
 ``:cite:cauthor:``     :cite:cauthor:`testthree`
 ``:cite:cauthors:``    :cite:cauthors:`testthree`
+``:cite:empty:``       AAA :cite:empty:`testthree` AAA
 ====================== ====================================================
 
 Double Citations
@@ -47,6 +48,7 @@ role                   result
 ``:cite:authors:``     :cite:authors:`testone,testtwo`
 ``:cite:cauthor:``     :cite:cauthor:`testone,testtwo`
 ``:cite:cauthors:``    :cite:cauthors:`testone,testtwo`
+``:cite:empty:``       BBB :cite:empty:`testone,testtwo` BBB
 ====================== ====================================================
 
 Triple Citations
@@ -71,7 +73,10 @@ role                   result
 ``:cite:authors:``     :cite:authors:`testfour,testfive,testsix`
 ``:cite:cauthor:``     :cite:cauthor:`testfour,testfive,testsix`
 ``:cite:cauthors:``    :cite:cauthors:`testfour,testfive,testsix`
+``:cite:empty:``       CCC :cite:empty:`testfour,testfive,testsix` CCC
 ====================== ====================================================
+
+:cite:empty:`testseven`
 
 Bibliography
 ------------

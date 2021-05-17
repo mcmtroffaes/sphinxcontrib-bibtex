@@ -10,6 +10,7 @@ from .basic_label import (
 from .extra_author import ExtraAuthorReferenceStyle
 from .extra_label import ExtraLabelReferenceStyle
 from .extra_year import ExtraYearReferenceStyle
+from .extra_empty import ExtraEmptyReferenceStyle
 
 
 @dataclasses.dataclass
@@ -50,5 +51,6 @@ class LabelReferenceStyle(GroupReferenceStyle):
                 bracket=self.bracket_author, person=self.person),
             ExtraLabelReferenceStyle(bracket=self.bracket_label),
             ExtraYearReferenceStyle(bracket=self.bracket_year),
+            ExtraEmptyReferenceStyle(),
         ])
         super().__post_init__()

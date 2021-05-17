@@ -11,6 +11,7 @@ from .basic_author_year import (
 from .extra_author import ExtraAuthorReferenceStyle
 from .extra_label import ExtraLabelReferenceStyle
 from .extra_year import ExtraYearReferenceStyle
+from .extra_empty import ExtraEmptyReferenceStyle
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText
@@ -59,14 +60,9 @@ class AuthorYearReferenceStyle(GroupReferenceStyle):
                 person=self.person,
             ),
             ExtraAuthorReferenceStyle(
-                bracket=self.bracket_author,
-                person=self.person,
-            ),
-            ExtraLabelReferenceStyle(
-                bracket=self.bracket_label,
-            ),
-            ExtraYearReferenceStyle(
-                bracket=self.bracket_year,
-            )
+                bracket=self.bracket_author, person=self.person),
+            ExtraLabelReferenceStyle(bracket=self.bracket_label),
+            ExtraYearReferenceStyle(bracket=self.bracket_year),
+            ExtraEmptyReferenceStyle(),
         ])
         super().__post_init__()

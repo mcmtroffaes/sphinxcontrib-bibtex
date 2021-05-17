@@ -14,6 +14,9 @@
   Footnote reference styles can be fully customized to your heart's desire,
   similar to regular citation reference styles.
 
+* New ``:cite:empty:`` role which registers a citation without generating
+  a reference, similar to LaTeX's nocite command (see issue #131).
+
 * The separator between the text and the reference of all textual citation
   styles can now be customized.
 
