@@ -17,6 +17,10 @@
 * New ``:cite:empty:`` role which registers a citation without generating
   a reference, similar to LaTeX's nocite command (see issue #131).
 
+* Citation keys can now be listed directly under the bibliography directive
+  (one key per line). Such citations will always be included, regardless of
+  any filter settings (see issue #54).
+
 * The separator between the text and the reference of all textual citation
   styles can now be customized.
 
