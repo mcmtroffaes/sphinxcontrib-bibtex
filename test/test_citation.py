@@ -297,6 +297,7 @@ def test_citation_style_custom(app, warning) -> None:
         ("authors",     " de Du & Em & Fa "),
         ("cauthor",     " De Du et al "),
         ("cauthors",    " De Du & Em & Fa "),
+        ("empty",       " AAA  AAA "),
         ("p",           " (al Ap 2001; Be & Ci 2002) "),
         ("ps",          " (al Ap 2001; Be & Ci 2002) "),
         ("t",           " al Ap (2001); Be & Ci (2002) "),
@@ -313,6 +314,7 @@ def test_citation_style_custom(app, warning) -> None:
         ("authors",     " al Ap; Be & Ci "),
         ("cauthor",     " Al Ap; Be & Ci "),
         ("cauthors",    " Al Ap; Be & Ci "),
+        ("empty",       " BBB  BBB "),
         ("p",           " (Ge 2004; Hu 2005; Ix 2006) "),
         ("ps",          " (Ge 2004; Hu 2005; Ix 2006) "),
         ("t",           " Ge (2004); Hu (2005); Ix (2006) "),
@@ -329,6 +331,7 @@ def test_citation_style_custom(app, warning) -> None:
         ("authors",     " Ge; Hu; Ix "),
         ("cauthor",     " Ge; Hu; Ix "),
         ("cauthors",    " Ge; Hu; Ix "),
+        ("empty",       " CCC  CCC "),
     ]
     for role, text in tests:
         escaped_text = re.escape(text)
