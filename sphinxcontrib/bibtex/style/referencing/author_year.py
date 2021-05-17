@@ -68,7 +68,7 @@ class AuthorYearReferenceStyle(GroupReferenceStyle):
             ),
             ExtraYearReferenceStyle(
                 bracket=self.bracket_year,
-            )
+            ),
             ExtraEmptyReferenceStyle(),
         ])
         super().__post_init__()
