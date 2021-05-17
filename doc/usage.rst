@@ -185,6 +185,13 @@ Roles and Directives
    Use the ``par`` version to include brackets,
    and the ``c`` version to capitalize the first letter.
 
+.. rst:role:: cite:empty
+
+   .. versionadded:: 2.2.2
+
+   Register a citation key as being cited without generating a reference,
+   similar to LaTeX's nocite command.
+
 .. rst:directive:: .. bibliography::
 
    Create bibliography for all cited references.
