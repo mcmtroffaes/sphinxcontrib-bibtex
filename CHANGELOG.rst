@@ -1,4 +1,4 @@
-2.2.2 (in development)
+2.3.0 (in development)
 ----------------------
 
 * Add ``:footcite:p:`` and ``:footcite:t:`` roles.

@@ -187,7 +187,7 @@ Roles and Directives
 
 .. rst:role:: cite:empty
 
-   .. versionadded:: 2.2.2
+   .. versionadded:: 2.3.0
 
    Register a citation key as being cited without generating a reference,
    similar to LaTeX's nocite command.
@@ -269,7 +269,7 @@ Roles and Directives
 
 .. rst:role:: footcite:p
 
-   .. versionadded:: 2.2.2
+   .. versionadded:: 2.3.0
 
    Create a parenthetical footnote reference to a bibliographic entry.
    For example:
@@ -292,7 +292,7 @@ Roles and Directives
 
 .. rst:role:: footcite:t
 
-   .. versionadded:: 2.2.2
+   .. versionadded:: 2.3.0
 
    Create a textual footnote reference to a bibliographic entry. For example:
 
@@ -313,7 +313,7 @@ Roles and Directives
 .. rst:role:: footcite:ct
 .. rst:role:: footcite:cts
 
-   .. versionadded:: 2.2.2
+   .. versionadded:: 2.3.0
 
    All these roles modify :rst:role:`footcite:p` and :rst:role:`footcite:t`.
    The ones starting with ``c`` will capitalize the first letter.
@@ -423,7 +423,7 @@ still want to enumerate the entries continuously.
 Listing Citation Keys
 ~~~~~~~~~~~~~~~~~~~~~
 
-.. versionadded:: 2.2.2
+.. versionadded:: 2.3.0
 
 If you have many citations to include that are not referenced anywhere,
 then instead of using :rst:role:`cite:empty`
