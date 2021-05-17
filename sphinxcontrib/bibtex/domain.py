@@ -500,7 +500,7 @@ class BibtexDomain(Domain):
                     location=(bibliography_key.docname, bibliography.line))
                 # recover by falling back to the default
                 success = bool(cited_docnames)
-            if success or key in bibliography.keys:
+            if success or entry.key in bibliography.keys:
                 yield key, entry
 
     def get_sorted_entries(
