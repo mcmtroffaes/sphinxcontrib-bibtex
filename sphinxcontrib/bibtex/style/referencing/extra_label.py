@@ -19,8 +19,7 @@ class ExtraLabelReferenceStyle(BaseReferenceStyle):
     def role_names(self) -> Iterable[str]:
         return ['label', 'labelpar']
 
-    def outer(
-            self, role_name: str, children: List["BaseText"]) -> "Node":
+    def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
         return self.bracket.outer(
             children,
             brackets='par' in role_name,

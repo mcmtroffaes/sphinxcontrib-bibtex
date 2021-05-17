@@ -11,13 +11,12 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass
 class ExtraEmptyReferenceStyle(BaseReferenceStyle):
-    r"""A style which generates nothing, like LaTeX's ``\nocite``."""
+    """A style which generates nothing, similar to LaTeX's nocite."""
 
     def role_names(self) -> Iterable[str]:
         return ['empty']
 
-    def outer(
-            self, role_name: str, children: List["BaseText"]) -> "Node":
+    def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
         return join
 
     def inner(self, role_name: str) -> "Node":

@@ -20,8 +20,7 @@ class ExtraYearReferenceStyle(BaseReferenceStyle):
     def role_names(self) -> Iterable[str]:
         return ['year', 'yearpar']
 
-    def outer(
-            self, role_name: str, children: List["BaseText"]) -> "Node":
+    def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
         return self.bracket.outer(
             children,
             brackets='par' in role_name,

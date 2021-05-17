@@ -60,15 +60,9 @@ class AuthorYearReferenceStyle(GroupReferenceStyle):
                 person=self.person,
             ),
             ExtraAuthorReferenceStyle(
-                bracket=self.bracket_author,
-                person=self.person,
-            ),
-            ExtraLabelReferenceStyle(
-                bracket=self.bracket_label,
-            ),
-            ExtraYearReferenceStyle(
-                bracket=self.bracket_year,
-            ),
+                bracket=self.bracket_author, person=self.person),
+            ExtraLabelReferenceStyle(bracket=self.bracket_label),
+            ExtraYearReferenceStyle(bracket=self.bracket_year),
             ExtraEmptyReferenceStyle(),
         ])
         super().__post_init__()
