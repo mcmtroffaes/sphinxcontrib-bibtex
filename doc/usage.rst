@@ -423,6 +423,8 @@ still want to enumerate the entries continuously.
 Listing Citation Keys
 ~~~~~~~~~~~~~~~~~~~~~
 
+.. versionadded:: 2.2.2
+
 If you have many citations to include that are not referenced anywhere,
 then instead of using :rst:role:`cite:empty`
 it can be more convenient to simply list the citation keys directly under
@@ -455,7 +457,7 @@ So, if you only want the listed keys to be included, you can use the
       nelson1987
       boole1854
 
- See :ref:`section-filtering` for more information on filtering.
+See :ref:`section-filtering` for more information on filtering.
 
 .. _section-label-prefixing:
 
@@ -724,7 +726,7 @@ https://bitbucket.org/pybtex-devs/pybtex/src/master/pybtex/style/formatting/unsr
 
 The above example only demonstrates a custom formatting style plugin.
 It is also possible to register custom author/editor naming plugins
-(using the ``pybtex.style.names`` group)
+(using the ``pybtex.style.names`` group),
 labelling plugins
 (using the ``pybtex.style.labels`` group),
 and sorting plugins
