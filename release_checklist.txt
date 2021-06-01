@@ -34,7 +34,7 @@
 * activate new version on readthedocs.org
 * prep for next cycle
   - git checkout develop
-  - VERSION: bump to x.x.xa0
+  - sphinxcontrib/bibtex/__init__.py: bump to x.x.xa0
   - CHANGELOG.rst: bump to x.x.x (in development)
-  - git commit -a -m "Version bump. [ci skip]"
+  - git commit -a -m "Version bump. [skip ci]"
   - git push origin develop
