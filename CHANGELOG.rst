@@ -21,6 +21,10 @@
   one key per line; such citations will always be included, regardless of
   any filter settings (see issue #54).
 
+* A plain text preview of the full citation information will be shown when
+  hovering over a citation reference
+  (see issue #198, requested by eric-weiser).
+
 * The separator between the text and the reference of all textual citation
   styles can now be customized.
 
