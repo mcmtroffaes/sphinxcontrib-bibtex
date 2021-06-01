@@ -21,7 +21,7 @@ bibtex_citation_xml = """
     <paragraph>
         <inline ids="id1">
             [
-            <reference internal="True" refid="id3">
+            <reference internal="True" refid="id3" reftitle="The title.">
                 tes
             ]
     <paragraph ids="id2">
@@ -74,14 +74,18 @@ def test_debug_minimal_example(app, warning) -> None:
         '        See ',
         '        <inline ids="id1">',
         '            Nelson [',
-        '            <reference internal="True" refid="id4">',
+        '            <reference internal="True" refid="id4" '
+        'reftitle="Edward Nelson. Radically Elementary Probability Theory. '
+        'Princeton University Press, 1987.">',
         '                Nel87',
         '            ]',
         '         for an introduction to non-standard analysis.',
         '        Non-standard analysis is fun ',
         '        <inline ids="id2">',
         '            [',
-        '            <reference internal="True" refid="id4">',
+        '            <reference internal="True" refid="id4" '
+        'reftitle="Edward Nelson. Radically Elementary Probability Theory. '
+        'Princeton University Press, 1987.">',
         '                Nel87',
         '            ]',
         '        .',

@@ -228,6 +228,7 @@ class SphinxReferenceInfo(NamedTuple):
     fromdocname: str    #: Document name of the citation reference.
     todocname: str      #: Document name of the bibliography.
     citation_id: str    #: Unique id of the citation within the bibliography.
+    title: str          #: Title attribute for reference node.
 
 
 class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
@@ -250,11 +251,13 @@ class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
             children = super().render(backend)
             # make_refnode only takes a single child
             refnode = make_refnode(
-                info.builder,
-                info.fromdocname,
-                info.todocname,
-                info.citation_id,
-                children[0])
+                builder=info.builder,
+                fromdocname=info.fromdocname,
+                todocname=info.todocname,
+                targetid=info.citation_id,
+                child=children[0],
+                title=info.title,
+            )
             refnode.extend(children[1:])  # type: ignore
             return [refnode]
 
@@ -423,12 +426,14 @@ class BibtexDomain(Domain):
             if key not in citations:
                 logger.warning('could not find bibtex key "%s"' % key,
                                location=node)
+        plaintext = pybtex.plugin.find_plugin('pybtex.backends', 'plaintext')()
         references = [
             (citation.entry, citation.formatted_entry, SphinxReferenceInfo(
                 builder=builder,
                 fromdocname=fromdocname,
                 todocname=citation.bibliography_key.docname,
-                citation_id=citation.citation_id))
+                citation_id=citation.citation_id,
+                title=citation.formatted_entry.text.render(plaintext)))
             for citation in citations.values()]
         formatted_references = \
             format_references(
