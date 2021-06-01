@@ -1,5 +1,5 @@
-2.3.0 (in development)
-----------------------
+2.3.0 (1 June 2021)
+-------------------
 
 * Add ``:footcite:p:`` and ``:footcite:t:`` roles.
   For capitalizing the first letter and/or listing the full author list,

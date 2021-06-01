@@ -1,5 +1,5 @@
 * git checkout -b release/x.x.x
-* VERSION: set final version
+* sphinxcontrib/bibtex/__init__.py: set final version
 * CHANGELOG.rst:
   - set release date
   - all important changes are documented
