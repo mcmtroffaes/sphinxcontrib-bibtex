@@ -8,14 +8,16 @@ RE_NUM = r'\d+'
 RE_LABEL = r'[^<]+'
 RE_TEXT = r'.*'
 RE_DOCNAME = r'[^:]+'
+RE_TITLE = r'[^"]*'
 
 
-def html_citation_refs(refid=RE_ID, label=RE_LABEL):
+def html_citation_refs(refid=RE_ID, label=RE_LABEL, title=RE_TITLE):
     return re.compile(
         r'<a class="reference internal" '
-        r'href="(?P<refdoc>[^#]+)?#(?P<refid>{refid})">'
+        r'href="(?P<refdoc>[^#]+)?#(?P<refid>{refid})" '
+        r'title="{title}">'
         r'(?P<label>{label})'
-        r'</a>'.format(refid=refid, label=label))
+        r'</a>'.format(refid=refid, label=label, title=title))
 
 
 def html_citations(id_=RE_ID, label=RE_LABEL, text=RE_TEXT):
