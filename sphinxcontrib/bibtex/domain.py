@@ -286,7 +286,6 @@ class BibtexDomain(Domain):
     initial_data = dict(
         bibfiles={},
         bibliography_header=docutils.nodes.paragraph(),
-        footbibliography_header=docutils.nodes.paragraph(),
         bibliographies={},
         citations=[],
         citation_refs=[],
