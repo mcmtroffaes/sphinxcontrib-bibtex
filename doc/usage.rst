@@ -78,7 +78,7 @@ the ``bibtex_foot_reference_style`` variable in your ``conf.py``.
 Currently available built-in styles are:
 
 * ``foot``: Use footnotes for parenthetical citations, and author with
-  footnote for a textual citations.
+  footnote for textual citations.
   This is the default style (and currently also the only built-in style).
 
 Python packages can make new styles available through
