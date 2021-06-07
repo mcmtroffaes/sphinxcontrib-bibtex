@@ -1,4 +1,10 @@
 """
+    .. autoclass:: FootReferenceInfo
+        :members:
+
+    .. autoclass:: FootReferenceText
+        :members:
+
     .. autoclass:: FootCiteRole
         :show-inheritance:
 
@@ -37,7 +43,7 @@ class FootReferenceInfo(NamedTuple):
 
 class FootReferenceText(BaseReferenceText[FootReferenceInfo]):
     """Pybtex rich text class for footnote references with the docutils
-    backend, for use with :class:`SphinxReferenceInfo`.
+    backend, for use with :class:`FootReferenceInfo`.
     """
 
     def render(self, backend: "BaseBackend"):

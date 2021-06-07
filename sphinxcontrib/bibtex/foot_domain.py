@@ -1,7 +1,7 @@
 """
     Domain for footnote citations.
 
-    .. autoclass:: FootBibtexDomain
+    .. autoclass:: BibtexFootDomain
         :members:
 """
 
@@ -64,10 +64,23 @@ class BibtexFootDomain(Domain):
                 parse_header(header, "foot_bibliography_header")
 
     def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
+        """Merge in data regarding *docnames* from domain data
+        inventory *otherdata*.
+
+        As there is no document specific data for this domain, this function
+        does nothing.
+        """
         pass
 
     def resolve_any_xref(self, env: "BuildEnvironment", fromdocname: str,
                          builder: "Builder", target: str,
                          node: "pending_xref", contnode: docutils.nodes.Element
                          ) -> List[Tuple[str, docutils.nodes.Element]]:
+        """Resolve the pending reference *node* with the given *target*,
+        where the reference comes from an "any" role.
+
+        Since citation references are resolved to regular citations,
+        and not to footnote citations,
+        this implementation simply returns an empty list.
+        """
         return []

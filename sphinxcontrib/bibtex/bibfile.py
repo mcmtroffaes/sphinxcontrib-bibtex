@@ -29,8 +29,8 @@ logger = getLogger(__name__)
 
 class BibFile(NamedTuple):
     """Contains information about a parsed bib file."""
-    mtime: float              #: modification time of bib file when last parsed
-    data: "BibliographyData"  #: parsed data from pybtex
+    mtime: float              #: Modification time of file when last parsed.
+    data: "BibliographyData"  #: Parsed data from pybtex.
 
 
 def normpath_filename(env: "BuildEnvironment", filename: str) -> str:
