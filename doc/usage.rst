@@ -336,6 +336,10 @@ Roles and Directives
    Typically, you have a single footbibliography directive at the bottom of
    each document that has footcite citations.
 
+   Standard numeric footnote labels are used, so the label style is ignored.
+   Footnotes are inserted in the order in which they occur in the document,
+   so the sorting style is also ignored.
+
    If specified multiple times in the same document, footnotes are only
    created for references that do not yet have a footnote earlier in the
    document.
