@@ -38,6 +38,8 @@ You can change the bibliography style,
 using the ``bibtex_default_style`` variable in your ``conf.py``.
 If none is specified, the ``alpha`` style is used.
 Other supported styles are ``plain``, ``unsrt``, and ``unsrtalpha``.
+Note that these four styles are identical except for labelling and sorting.
+
 You can also create your own style (see :ref:`bibtex-custom-formatting`).
 For example:
 
