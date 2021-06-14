@@ -14,11 +14,12 @@ jobs:
       fail-fast: false
       matrix:
         python-version: [3.7, 3.8, 3.9]
+        pip-sphinx: [sphinx]
         include:
           - python-version: 3.9
-            pip-extra: sphinx==2.1
+            pip-sphinx: sphinx==2.1
           - python-version: 3.9
-            pip-extra: --pre sphinx
+            pip-sphinx: --pre sphinx
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -29,7 +30,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install flake8 check-manifest pytest codecov coverage
-        if [[ -n "${{ matrix.pip-extra }}" ]]; then python -m pip install ${{ matrix.pip-extra }}; fi
+        python -m pip install ${{ matrix.pip-sphinx }}
         pip install .
     - name: Check manifest
       run: |
