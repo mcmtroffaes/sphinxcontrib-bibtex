@@ -1,7 +1,7 @@
 sphinxcontrib-bibtex
 ====================
 
-|travis| |codecov| |version| |license|
+|ci| |codecov| |version| |license|
 
 Sphinx extension for BibTeX style citations.
 
@@ -27,9 +27,9 @@ and Weston Nielson's
 
 * Development: https://github.com/mcmtroffaes/sphinxcontrib-bibtex/
 
-.. |travis| image:: https://api.travis-ci.com/mcmtroffaes/sphinxcontrib-bibtex.png?branch=develop
-    :target: https://travis-ci.com/mcmtroffaes/sphinxcontrib-bibtex
-    :alt: travis-ci
+.. |ci| image:: https://github.com/mcmtroffaes/sphinxcontrib-bibtex/actions/workflows/python-package.yml/badge.svg
+    :target: https://github.com/mcmtroffaes/sphinxcontrib-bibtex/actions/workflows/python-package.yml
+    :alt: ci
 
 .. |codecov| image:: https://codecov.io/gh/mcmtroffaes/sphinxcontrib-bibtex/branch/develop/graph/badge.svg
     :target: https://app.codecov.io/gh/mcmtroffaes/sphinxcontrib-bibtex
