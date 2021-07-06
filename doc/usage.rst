@@ -893,3 +893,34 @@ LaTeX output, you can add the following to your LaTeX preamble:
    \usepackage{etoolbox}
    \patchcmd{\thebibliography}{\section*{\refname}}{}{}{}
 
+Import errors after using setup.py install
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Because sphinxcontrib-bibtex uses the standard sphinxcontrib namespace,
+installing the package using
+
+.. code-block::
+
+   python setup.py install
+
+may result in a broken installation. This appears to be an issue with
+setuptools. As pip does not have this problem, it is recommended to install
+the package with pip:
+
+.. code-block::
+
+   pip install .
+
+Import errors when running pytest
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The test suit relies on the entry points being installed, whence,
+sphinxcontrib-bibtex cannot be tested without first installing the package.
+To run the tests, please do as follows (ideally, in a virtual environment):
+
+.. code-block::
+
+   pip install . -e
+   cd test/
+   pytest
+
