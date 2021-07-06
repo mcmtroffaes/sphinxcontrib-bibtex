@@ -38,7 +38,7 @@ copyright = u'2011-2021, Matthias C. M. Troffaes'
 # built documents.
 #
 # The full version, including alpha/beta/rc tags.
-with open("../sphinxcontrib/bibtex/__init__.py", "rt") as version_file:
+with open("../src/sphinxcontrib/bibtex/__init__.py", "rt") as version_file:
     release = re.search("'version': '(.+)'", version_file.read()).group(1)
 # The short X.Y version.
 version = '.'.join(release.split('.')[:2])
