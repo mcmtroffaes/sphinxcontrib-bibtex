@@ -1,4 +1,4 @@
-import common
+from test.common import html_citations, html_citation_refs
 import dataclasses
 import pytest
 import re
@@ -41,9 +41,9 @@ def test_citation_multiple_keys(app, warning) -> None:
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     cits = {match.group('label')
-            for match in common.html_citations().finditer(output)}
+            for match in html_citations().finditer(output)}
     citrefs = {match.group('label')
-               for match in common.html_citation_refs().finditer(output)}
+               for match in html_citation_refs().finditer(output)}
     assert {"App", "Bra"} == cits == citrefs
 
 
@@ -53,9 +53,9 @@ def test_citation_any_role(app, warning) -> None:
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     cits = {match.group('label')
-            for match in common.html_citations().finditer(output)}
+            for match in html_citations().finditer(output)}
     citrefs = {match.group('label')
-               for match in common.html_citation_refs().finditer(output)}
+               for match in html_citation_refs().finditer(output)}
     assert {"App", "Bra"} == cits == citrefs
 
 
@@ -73,8 +73,8 @@ def test_citation_whitespace(app, warning) -> None:
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     # ensure Man09 is cited
-    assert len(common.html_citation_refs(label='Fir').findall(output)) == 1
-    assert len(common.html_citation_refs(label='Sec').findall(output)) == 1
+    assert len(html_citation_refs(label='Fir').findall(output)) == 1
+    assert len(html_citation_refs(label='Sec').findall(output)) == 1
 
 
 # test document not in toctree (issue 228)

@@ -1,18 +1,18 @@
 from typing import Set
 
-import common
+from test.common import html_citations, html_citation_refs
 import pytest
 import re
 
 
 def citation_refs(output) -> Set[str]:
     return {match.group('label')
-            for match in common.html_citation_refs().finditer(output)}
+            for match in html_citation_refs().finditer(output)}
 
 
 def citations(output) -> Set[str]:
     return {match.group('label')
-            for match in common.html_citations().finditer(output)}
+            for match in html_citations().finditer(output)}
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_empty', freshenv=True)
@@ -59,13 +59,13 @@ def test_bibliography_style_label_1(app, warning) -> None:
     output = (app.outdir / "index.html").read_text()
     # the custom style uses keys as labels
     # citations
-    assert len(common.html_citations(
+    assert len(html_citations(
         label='myfancybibtexkey').findall(output)) == 1
-    assert len(common.html_citations(
+    assert len(html_citations(
         label='myotherfancybibtexkey').findall(output)) == 1
-    assert len(common.html_citation_refs(
+    assert len(html_citation_refs(
         label='myfancybibtexkey').findall(output)) == 1
-    assert len(common.html_citation_refs(
+    assert len(html_citation_refs(
         label='myotherfancybibtexkey').findall(output)) == 1
 
 
@@ -74,8 +74,8 @@ def test_bibliography_style_label_2(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
-    assert len(common.html_citation_refs(label='APAa').findall(output)) == 1
-    assert len(common.html_citation_refs(label='APAb').findall(output)) == 1
+    assert len(html_citation_refs(label='APAa').findall(output)) == 1
+    assert len(html_citation_refs(label='APAb').findall(output)) == 1
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_style_nowebref')
@@ -137,8 +137,8 @@ def test_bibliography_label_prefix_2(app, warning) -> None:
     assert sum_refs <= citation_refs(output3)
     assert sum_cites == citations(output3)
     # check citation reference from summary to doc1
-    match1 = common.html_citations(label='AFM12').search(output1)
-    match3 = common.html_citation_refs(label='AFM12').search(output3)
+    match1 = html_citations(label='AFM12').search(output1)
+    match3 = html_citation_refs(label='AFM12').search(output3)
     assert match1
     assert match3
     assert match1.group('id_') == match3.group('refid')

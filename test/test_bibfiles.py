@@ -1,6 +1,6 @@
 from pybtex.exceptions import PybtexError
 
-import common
+from test.common import html_citations
 import pytest
 import re
 import shutil
@@ -28,10 +28,10 @@ def test_bibfiles_out_of_date(make_app, app_params) -> None:
     assert re.search(status_out_of_date, status) is None
     assert re.search(status_parsing, status) is not None
     output = (app.outdir / "index.html").read_text()
-    assert common.html_citations(label='1', text='.*Akkerdju.*').search(output)
-    assert common.html_citations(label='2', text='.*Bro.*').search(output)
-    assert common.html_citations(label='3', text='.*Chap.*').search(output)
-    assert common.html_citations(label='4', text='.*Dude.*').search(output)
+    assert html_citations(label='1', text='.*Akkerdju.*').search(output)
+    assert html_citations(label='2', text='.*Bro.*').search(output)
+    assert html_citations(label='3', text='.*Chap.*').search(output)
+    assert html_citations(label='4', text='.*Dude.*').search(output)
     # wait to ensure different timestamp
     time.sleep(0.1)
     shutil.copyfile((app.srcdir / 'test_new.xxx'), (app.srcdir / 'test.bib'))
@@ -44,10 +44,10 @@ def test_bibfiles_out_of_date(make_app, app_params) -> None:
     assert re.search(status_out_of_date, status) is not None
     assert re.search(status_parsing, status) is not None
     output = (app.outdir / "index.html").read_text()
-    assert common.html_citations(label='1', text='.*Eminence.*').search(output)
-    assert common.html_citations(label='2', text='.*Frater.*').search(output)
-    assert common.html_citations(label='3', text='.*Giggles.*').search(output)
-    assert common.html_citations(label='4', text='.*Handy.*').search(output)
+    assert html_citations(label='1', text='.*Eminence.*').search(output)
+    assert html_citations(label='2', text='.*Frater.*').search(output)
+    assert html_citations(label='3', text='.*Giggles.*').search(output)
+    assert html_citations(label='4', text='.*Handy.*').search(output)
     # wait to ensure different timestamp
     time.sleep(0.1)
     shutil.copyfile((app.srcdir / 'index_new.xxx'), (app.srcdir / 'index.rst'))

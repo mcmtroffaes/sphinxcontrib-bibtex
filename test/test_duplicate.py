@@ -1,6 +1,6 @@
 """Test warnings on duplicate labels/keys."""
 
-import common
+from test.common import html_citations, html_citation_refs
 import pytest
 
 
@@ -12,8 +12,8 @@ def test_duplicate_label(app, warning) -> None:
            in warning.getvalue()
     output = (app.outdir / "doc1.html").read_text()
     output2 = (app.outdir / "doc2.html").read_text()
-    assert common.html_citations(label="1").search(output)
-    assert common.html_citations(label="1").search(output2)
+    assert html_citations(label="1").search(output)
+    assert html_citations(label="1").search(output2)
 
 
 @pytest.mark.sphinx('html', testroot='duplicate_citation')
@@ -26,7 +26,7 @@ def test_duplicate_citation(app, warning) -> None:
     # assure distinct citation ids
     output = (app.outdir / "index.html").read_text()
     ids = [match.group('id_')
-           for match in common.html_citations().finditer(output)]
+           for match in html_citations().finditer(output)]
     assert len(ids) == 2  # just to check ids are found
     assert len(set(ids)) == 2, "citation ids not unique"
 
@@ -36,8 +36,8 @@ def test_duplicate_nearly_identical_entries(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
-    cits = list(common.html_citations().finditer(output))
-    cit_refs = list(common.html_citation_refs().finditer(output))
+    cits = list(html_citations().finditer(output))
+    cit_refs = list(html_citation_refs().finditer(output))
     assert len(cits) == len(cit_refs) == 2
     assert ({cit.group('label') for cit in cits}
             == {cit_ref.group('label') for cit_ref in cit_refs}
@@ -50,17 +50,17 @@ def test_duplicate_nearly_identical_keys(app, warning) -> None:
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     # assure both citations and citation references are present
-    assert common.html_citation_refs(label='Smi').search(output)
-    assert common.html_citation_refs(label='Pop').search(output)
-    assert common.html_citation_refs(label='Ein').search(output)
-    assert common.html_citations(label='Smi').search(output)
-    assert common.html_citations(label='Pop').search(output)
-    assert common.html_citations(label='Ein').search(output)
+    assert html_citation_refs(label='Smi').search(output)
+    assert html_citation_refs(label='Pop').search(output)
+    assert html_citation_refs(label='Ein').search(output)
+    assert html_citations(label='Smi').search(output)
+    assert html_citations(label='Pop').search(output)
+    assert html_citations(label='Ein').search(output)
     # assure distinct ids for citations
     ids = {match.group('id_')
-           for match in common.html_citations().finditer(output)}
+           for match in html_citations().finditer(output)}
     refids = {match.group('refid')
-              for match in common.html_citation_refs().finditer(output)}
+              for match in html_citation_refs().finditer(output)}
     assert None not in ids
     assert len(ids) == 3
     assert ids == refids
@@ -75,9 +75,9 @@ def test_duplicate_citation_id(app, warning) -> None:
     output = (app.outdir / "index.html").read_text()
     user_ids = {'id1', 'id2', 'id3'}
     ids = {match.group('id_')
-           for match in common.html_citations().finditer(output)}
+           for match in html_citations().finditer(output)}
     refids = {match.group('refid')
-              for match in common.html_citation_refs().finditer(output)}
+              for match in html_citation_refs().finditer(output)}
     assert ids == refids
     assert len(ids) == 1
     assert not (user_ids & ids)

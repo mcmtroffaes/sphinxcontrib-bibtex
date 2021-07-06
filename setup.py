@@ -12,7 +12,7 @@ def readfile(filename):
 readme = readfile("README.rst").split("\n")[5:]  # skip title and badges
 requires = readfile("requirements.txt").split("\n")
 version = re.search("'version': '(.+)'",
-                    readfile("sphinxcontrib/bibtex/__init__.py")).group(1)
+                    readfile("src/sphinxcontrib/bibtex/__init__.py")).group(1)
 
 
 # make entry point specifications
@@ -54,7 +54,8 @@ setup(
         'Topic :: Utilities',
     ],
     platforms='any',
-    packages=find_packages(),
+    packages=find_packages('src'),
+    package_dir = {'': 'src'},
     include_package_data=True,
     python_requires='>=3.6',
     install_requires=requires,

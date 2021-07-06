@@ -1,4 +1,4 @@
-import common
+from test.common import html_citations
 import pytest
 import re
 
@@ -8,10 +8,10 @@ def test_list_citation(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
-    assert common.html_citations(label='1', text='.*Akkerdju.*').search(output)
-    assert common.html_citations(label='2', text='.*Bro.*').search(output)
-    assert common.html_citations(label='3', text='.*Chap.*').search(output)
-    assert common.html_citations(label='4', text='.*Dude.*').search(output)
+    assert html_citations(label='1', text='.*Akkerdju.*').search(output)
+    assert html_citations(label='2', text='.*Bro.*').search(output)
+    assert html_citations(label='3', text='.*Chap.*').search(output)
+    assert html_citations(label='4', text='.*Dude.*').search(output)
 
 
 @pytest.mark.sphinx('html', testroot='list_bullet')
