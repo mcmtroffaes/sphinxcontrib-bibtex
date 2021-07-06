@@ -1,5 +1,5 @@
 Install the module with ``pip install sphinxcontrib-bibtex``, or from
-source using ``python setup.py install``. Then add:
+source using ``pip install -e .``. Then add:
 
 .. code-block:: python
 
