@@ -91,18 +91,20 @@ represented by footnotes as follows:
 
 .. code-block:: rest
 
-   Non-standard analysis is lovely. :footcite:`1987:nelson`
+   See :footcite:t:`1987:nelson` for an introduction to non-standard analysis.
+   Non-standard analysis is fun :footcite:p:`1987:nelson`.
 
    .. footbibliography::
 
 which will get rendered as:
 
-Non-standard analysis is lovely. [#Nel87b]_
+See Nelson [#Nel87b]_ for an introduction to non-standard analysis.
+Non-standard analysis is fun [#Nel87b]_.
 
 .. [#Nel87b] Edward Nelson. *Radically Elementary Probability Theory*. Princeton University Press, 1987.
 
 Typically, you have a single ``footbibliography`` directive
-at the bottom of each document that has ``footcite`` citations.
+at the bottom of each document that has footnote citations.
 Advanced use cases with multiple ``footbibliography`` directives
 per document are also supported. Since everything is local,
 there is no concern with duplicate citations when using footnotes.
