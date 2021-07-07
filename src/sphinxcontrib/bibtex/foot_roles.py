@@ -109,7 +109,8 @@ class FootCiteRole(XRefRole):
                     foot_new_refs.add(key)
             else:
                 logger.warning('could not find bibtex key "%s"' % key,
-                               location=(env.docname, self.lineno))
+                               location=(env.docname, self.lineno),
+                               type="bibtex", subtype="key_not_found")
         ref_nodes = format_references(
             foot_domain.reference_style, FootReferenceText, node['reftype'],
             references).render(domain.backend)

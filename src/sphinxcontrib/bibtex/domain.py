@@ -388,7 +388,8 @@ class BibtexDomain(Domain):
                 if bibliography.list_ == 'citation' and key in used_keys:
                     logger.warning(
                         'duplicate citation for key "%s"' % key,
-                        location=(bibliography_key.docname, bibliography.line))
+                        location=(bibliography_key.docname, bibliography.line),
+                        type="bibtex", subtype="duplicate_citation")
                 self.citations.append(Citation(
                     citation_id=bibliography.citation_nodes[key]['ids'][0],
                     bibliography_key=bibliography_key,
@@ -408,7 +409,8 @@ class BibtexDomain(Domain):
                                 formatted_entry.label,
                                 used_labels[formatted_entry.label], key),
                             location=(bibliography_key.docname,
-                                      bibliography.line))
+                                      bibliography.line),
+                            type="bibtex", subtype="duplicate_label")
         return []  # expects list of updated docnames
 
     def resolve_xref(self, env: "BuildEnvironment", fromdocname: str,
@@ -424,7 +426,8 @@ class BibtexDomain(Domain):
         for key in keys:
             if key not in citations:
                 logger.warning('could not find bibtex key "%s"' % key,
-                               location=node)
+                               location=node, type="bibtex",
+                               subtype="key_not_found")
         plaintext = pybtex.plugin.find_plugin('pybtex.backends', 'plaintext')()
         references = [
             (citation.entry, citation.formatted_entry, SphinxReferenceInfo(
@@ -501,7 +504,8 @@ class BibtexDomain(Domain):
             except ValueError as err:
                 logger.warning(
                     "syntax error in :filter: expression; %s" % err,
-                    location=(bibliography_key.docname, bibliography.line))
+                    location=(bibliography_key.docname, bibliography.line),
+                    type="bibtex", subtype="filter_syntax_error")
                 # recover by falling back to the default
                 success = bool(cited_docnames)
             if success or entry.key in bibliography.keys:
@@ -547,7 +551,8 @@ class BibtexDomain(Domain):
             except FieldIsMissing as exc:
                 logger.warning(
                     str(exc),
-                    location=(bibliography_key.docname, bibliography.line))
+                    location=(bibliography_key.docname, bibliography.line),
+                    type="bibtex", subtype="missing_field")
                 yield(
                     entry,
                     FormattedEntry(entry.key, Tag('b', str(exc)),
