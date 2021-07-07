@@ -88,41 +88,6 @@ the ``sphinxcontrib.bibtex.style.referencing``
 `entry point <https://packaging.python.org/guides/creating-and-discovering-plugins/#using-package-metadata>`_ group.
 See sphinxcontrib-bibtex's own ``setup.py`` script for examples.
 
-Suppressing Warnings
-~~~~~~~~~~~~~~~~~~~~
-
-Warnings from ``sphinxcontrib-bibtex`` can be suppressed by configuring your ``conf.py``
-file. To suppress all warnings from ``sphinxcontrib-bibtex`` (which is probably a bad idea!),
-you could have:
-
-.. code-block:: python
-
-   suppress_warnings = ["bibtex"]
-
-The ``suppress_warnings`` list should of course include warnings from other packages if desired.
-A more practical use case is to suppress warnings of duplicate citations, which might be desirable if you have multiple
-pages in a document that cite the same reference. In that case, you would add to ``conf.py`` the line
-
-.. code-block:: python
-
-   suppress_warnings = ["bibtex.duplicate_citation"]
-
-The complete list of warning subtypes that can be suppressed are listed below:
-
-
-.. code-block:: python
-
-    bibtex.filter_overrides_all
-    bibtex.filter_overrides_notcited
-    bibtex.filter_overrides_cited
-    bibtex.filter_syntax_error
-    bibtex.file_not_configured
-    bibtex.key_not_found
-    bibtex.unknown_list_type
-    bibtex.duplicate_citation
-    bibtex.duplicate_label
-    bibtex.missing_field
-
 Roles and Directives
 --------------------
 
@@ -848,6 +813,41 @@ have:
    bibtex_footbibliography_header = bibtex_bibliography_header
 
 This adds a rubric title to every bibliography.
+
+Suppressing Warnings
+~~~~~~~~~~~~~~~~~~~~
+
+Warnings from ``sphinxcontrib-bibtex`` can be suppressed by configuring your ``conf.py``
+file. To suppress all warnings from ``sphinxcontrib-bibtex`` (which is probably a bad idea!),
+you could have:
+
+.. code-block:: python
+
+   suppress_warnings = ["bibtex"]
+
+The ``suppress_warnings`` list should of course include warnings from other packages if desired.
+A more practical use case is to suppress warnings of duplicate citations, which might be desirable if you have multiple
+pages in a document that cite the same reference. In that case, you would add to ``conf.py`` the line
+
+.. code-block:: python
+
+   suppress_warnings = ["bibtex.duplicate_citation"]
+
+The complete list of warning subtypes that can be suppressed are listed below:
+
+
+.. code-block:: python
+
+    bibtex.filter_overrides_all
+    bibtex.filter_overrides_notcited
+    bibtex.filter_overrides_cited
+    bibtex.filter_syntax_error
+    bibtex.file_not_configured
+    bibtex.key_not_found
+    bibtex.unknown_list_type
+    bibtex.duplicate_citation
+    bibtex.duplicate_label
+    bibtex.missing_field
 
 Known Issues and Workarounds
 ----------------------------
