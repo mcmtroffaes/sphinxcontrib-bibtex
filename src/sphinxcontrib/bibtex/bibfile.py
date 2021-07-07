@@ -57,7 +57,8 @@ def process_bibfile(bibfiles: Dict[str, BibFile],
         mtime = os.path.getmtime(bibfilename)
     except OSError:
         logger.warning(
-            "could not open bibtex file {0}.".format(bibfilename))
+            "could not open bibtex file {0}.".format(bibfilename),
+            type="bibtex", subtype="bibfile_error")
         return
     # get cache and check if it is still up to date
     # if it is not up to date, parse the bibtex file

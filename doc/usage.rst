@@ -824,24 +824,22 @@ To suppress *all* warnings from ``sphinxcontrib-bibtex``
 
    suppress_warnings = ["bibtex"]
 
-To suppress only a subset of warnings, such as duplicate citation warnings,
+To suppress only a subset of warnings, such as duplicate label warnings,
 you can use:
 
 .. code-block:: python
 
-   suppress_warnings = ["bibtex.duplicate_citation"]
+   suppress_warnings = ["bibtex.duplicate_label"]
 
 The complete list of warning subtypes that can be suppressed is::
 
-    bibtex.filter_overrides_all
-    bibtex.filter_overrides_notcited
-    bibtex.filter_overrides_cited
-    bibtex.filter_syntax_error
-    bibtex.file_not_configured
-    bibtex.key_not_found
-    bibtex.unknown_list_type
+    bibtex.bibfile_error
     bibtex.duplicate_citation
     bibtex.duplicate_label
+    bibtex.filter_overrides
+    bibtex.filter_syntax_error
+    bibtex.key_not_found
+    bibtex.list_type_error
     bibtex.missing_field
 
 Known Issues and Workarounds

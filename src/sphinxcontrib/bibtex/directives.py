@@ -98,16 +98,16 @@ class BibliographyDirective(Directive):
             if "all" in self.options:
                 logger.warning(":filter: overrides :all:",
                                location=(env.docname, self.lineno),
-                               type="bibtex", subtype="filter_overrides_all")
+                               type="bibtex", subtype="filter_overrides")
             if "notcited" in self.options:
                 logger.warning(":filter: overrides :notcited:",
                                location=(env.docname, self.lineno),
                                type="bibtex",
-                               subtype="filter_overrides_notcited")
+                               subtype="filter_overrides")
             if "cited" in self.options:
                 logger.warning(":filter: overrides :cited:",
                                location=(env.docname, self.lineno),
-                               type="bibtex", subtype="filter_overrides_cited")
+                               type="bibtex", subtype="filter_overrides")
             try:
                 filter_ = ast.parse(self.options["filter"])
             except SyntaxError:
@@ -134,7 +134,7 @@ class BibliographyDirective(Directive):
                         "{0} not found or not configured"
                         " in bibtex_bibfiles".format(bibfile),
                         location=(env.docname, self.lineno),
-                        type="bibtex", subtype="file_not_configured")
+                        type="bibtex", subtype="bibfile_error")
                 else:
                     bibfiles.append(normbibfile)
         else:
@@ -148,7 +148,7 @@ class BibliographyDirective(Directive):
             logger.warning(
                 "unknown bibliography list type '{0}'.".format(list_),
                 location=(env.docname, self.lineno),
-                type="bibtex", subtype="unknown_list_type")
+                type="bibtex", subtype="list_type_error")
             list_ = "citation"
         if list_ in {"bullet", "enumerated"}:
             citation_node_class = docutils.nodes.list_item
