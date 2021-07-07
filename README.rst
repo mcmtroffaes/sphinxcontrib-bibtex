@@ -62,7 +62,7 @@ For `example <https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/t
 
    .. bibliography::
 
-where :file:`refs.bib` would contain an entry::
+where ``refs.bib`` would contain an entry::
 
    @Book{1987:nelson,
      author = {Edward Nelson},
@@ -79,9 +79,9 @@ Non-standard analysis is fun [Nel87a]_.
 .. [Nel87a] Edward Nelson. *Radically Elementary Probability Theory*. Princeton University Press, 1987.
 
 Citations in sphinx are resolved globally across all documents.
-Typically, you have a single :rst:dir:`bibliography` directive across
+Typically, you have a single ``bibliography`` directive across
 your entire project which collects all citations.
-Advanced use cases with multiple :rst:dir:`bibliography` directives
+Advanced use cases with multiple ``bibliography`` directives
 across your project are also supported, but some care
 needs to be taken from your end to avoid duplicate citations.
 
@@ -101,8 +101,8 @@ Non-standard analysis is lovely. [#Nel87b]_
 
 .. [#Nel87b] Edward Nelson. *Radically Elementary Probability Theory*. Princeton University Press, 1987.
 
-Typically, you have a single :rst:dir:`footbibliography` directive
-at the bottom of each document that has :rst:role:`footcite` citations.
-Advanced use cases with multiple :rst:dir:`footbibliography` directives
+Typically, you have a single ``footbibliography`` directive
+at the bottom of each document that has ``footcite`` citations.
+Advanced use cases with multiple ``footbibliography`` directives
 per document are also supported. Since everything is local,
 there is no concern with duplicate citations when using footnotes.
