@@ -817,26 +817,21 @@ This adds a rubric title to every bibliography.
 Suppressing Warnings
 ~~~~~~~~~~~~~~~~~~~~
 
-Warnings from ``sphinxcontrib-bibtex`` can be suppressed by configuring your ``conf.py``
-file. To suppress all warnings from ``sphinxcontrib-bibtex`` (which is probably a bad idea!),
-you could have:
+To suppress *all* warnings from ``sphinxcontrib-bibtex``
+(which is probably a bad idea!), add this to your ``conf.py``:
 
 .. code-block:: python
 
    suppress_warnings = ["bibtex"]
 
-The ``suppress_warnings`` list should of course include warnings from other packages if desired.
-A more practical use case is to suppress warnings of duplicate citations, which might be desirable if you have multiple
-pages in a document that cite the same reference. In that case, you would add to ``conf.py`` the line
+To suppress only a subset of warnings, such as duplicate citation warnings,
+you can use:
 
 .. code-block:: python
 
    suppress_warnings = ["bibtex.duplicate_citation"]
 
-The complete list of warning subtypes that can be suppressed are listed below:
-
-
-.. code-block:: python
+The complete list of warning subtypes that can be suppressed is::
 
     bibtex.filter_overrides_all
     bibtex.filter_overrides_notcited
