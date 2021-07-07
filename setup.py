@@ -9,7 +9,7 @@ def readfile(filename):
         return stream.read()
 
 
-readme = readfile("README.rst").split("\n")[5:]  # skip title and badges
+readme = readfile("README.rst").split("\n")[7:]  # skip title and badges
 requires = readfile("requirements.txt").split("\n")
 version = re.search("'version': '(.+)'",
                     readfile("src/sphinxcontrib/bibtex/__init__.py")).group(1)

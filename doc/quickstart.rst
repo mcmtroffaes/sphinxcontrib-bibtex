@@ -1,13 +1,7 @@
 Getting Started
 ===============
 
-Overview
---------
-
 .. include:: ../README.rst
-   :start-line: 5
-
-Installation
-------------
+   :start-line: 7
 
 .. include:: ../INSTALL.rst
