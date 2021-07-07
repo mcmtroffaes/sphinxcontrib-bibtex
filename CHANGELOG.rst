@@ -1,6 +1,9 @@
 2.3.1 (in development)
 ----------------------
 
+* Allow specific warnings to be suppressed (see issue #255, contributed by
+  stevenrhall).
+
 2.3.0 (1 June 2021)
 -------------------
 

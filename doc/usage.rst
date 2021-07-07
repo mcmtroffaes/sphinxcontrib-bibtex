@@ -817,6 +817,8 @@ This adds a rubric title to every bibliography.
 Suppressing Warnings
 ~~~~~~~~~~~~~~~~~~~~
 
+.. versionadded:: 2.3.1
+
 To suppress *all* warnings from ``sphinxcontrib-bibtex``
 (which is probably a bad idea!), add this to your ``conf.py``:
 
