@@ -29,7 +29,7 @@
 
 * A plain text preview of the full citation information will be shown when
   hovering over a citation reference
-  (see issue #198, requested by eric-weiser).
+  (see issue #198, requested by eric-wieser).
 
 * The separator between the text and the reference of all textual citation
   styles can now be customized.
