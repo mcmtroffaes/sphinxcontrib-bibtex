@@ -4,6 +4,9 @@
 * Allow specific warnings to be suppressed (see issue #255, contributed by
   stevenrhall).
 
+* Fix parsing of LaTeX url commands in bibtex fields (see issue #258, reported
+  by Matthew Giassa).
+
 * Remove space between footnote and author for textual footnote citations in
   the default foot referencing style.
 
