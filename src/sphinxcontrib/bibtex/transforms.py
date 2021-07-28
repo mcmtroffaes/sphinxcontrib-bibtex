@@ -12,7 +12,7 @@
 
 import docutils.nodes
 
-from typing import TYPE_CHECKING, cast
+from typing import TYPE_CHECKING, cast, Callable
 from pybtex.plugin import find_plugin
 from sphinx.transforms.post_transforms import SphinxPostTransform
 from sphinx.util.logging import getLogger
@@ -27,7 +27,10 @@ if TYPE_CHECKING:
 logger = getLogger(__name__)
 
 
-def node_text_transform(node, transform):
+def node_text_transform(
+        node: docutils.nodes.Element,
+        transform: Callable[[docutils.nodes.Text], docutils.nodes.Text]
+        ) -> None:
     """Apply transformation to all Text nodes within node."""
     for child in node.children:
         if isinstance(child, docutils.nodes.Text):
@@ -36,9 +39,10 @@ def node_text_transform(node, transform):
             node_text_transform(child, transform)
 
 
-def transform_url_command(textnode):
+def transform_url_command(
+        textnode: docutils.nodes.Text) -> docutils.nodes.Element:
     """Convert '\\\\url{...}' into a proper docutils hyperlink."""
-    text = textnode.astext()
+    text: str = textnode.astext()
     if '\\url' in text:
         text1, _, text = text.partition('\\url')
         text2, _, text3 = text.partition('}')
