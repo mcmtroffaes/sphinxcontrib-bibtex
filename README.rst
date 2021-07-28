@@ -108,16 +108,20 @@ represented by footnotes as follows:
 .. code-block:: rest
 
    See :footcite:t:`1987:nelson` for an introduction to non-standard analysis.
-   Non-standard analysis is fun :footcite:p:`1987:nelson`.
+   Non-standard analysis is fun\ :footcite:p:`1987:nelson`.
 
    .. footbibliography::
 
 which will get rendered as:
 
-See Nelson [#Nel87b]_ for an introduction to non-standard analysis.
-Non-standard analysis is fun [#Nel87b]_.
+See Nelson\ [#Nel87b]_ for an introduction to non-standard analysis.
+Non-standard analysis is fun\ [#Nel87b]_.
 
 .. [#Nel87b] Edward Nelson. *Radically Elementary Probability Theory*. Princeton University Press, 1987.
+
+Note the use of the
+`backslash escaped space <https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#inline-markup>`_
+to suppress the space that would otherwise precede the footnote.
 
 Typically, you have a single ``footbibliography`` directive
 at the bottom of each document that has footnote citations.

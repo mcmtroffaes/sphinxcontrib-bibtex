@@ -278,19 +278,23 @@ Roles and Directives
 
    .. code-block:: rest
 
-      We will make use of non-standard analysis :footcite:p:`1987:nelson`.
+      We will make use of non-standard analysis\ :footcite:p:`1987:nelson`.
 
    which would be equivalent to the following LaTeX code:
 
    .. code-block:: latex
 
-      We will make use of non-standard analysis \footcite{1987:nelson}.
+      We will make use of non-standard analysis\footcite{1987:nelson}.
+
+   Note the use of the
+   `backslash escaped space <https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#inline-markup>`_
+   to suppress the space that would otherwise precede the footnote.
 
    As with all citation roles, multiple keys can be specified:
 
    .. code-block:: rest
 
-      I love analysis :footcite:p:`1987:nelson,2001:schechter`!
+      I love analysis\ :footcite:p:`1987:nelson,2001:schechter`!
 
 .. rst:role:: footcite:t
 

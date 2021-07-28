@@ -4,6 +4,12 @@
 * Allow specific warnings to be suppressed (see issue #255, contributed by
   stevenrhall).
 
+* Remove space between footnote and author for textual footnote citations in
+  the default foot referencing style.
+
+* Document how to use a backslash escaped space to suppress space before
+  footnotes (see issue #256, reported by hagenw).
+
 2.3.0 (1 June 2021)
 -------------------
 
