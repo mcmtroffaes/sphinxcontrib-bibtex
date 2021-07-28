@@ -4,10 +4,6 @@
 
         .. autoattribute:: default_priority
         .. automethod:: run
-
-    .. autofunction:: node_text_transform
-
-    .. autofunction:: transform_url_command
 """
 
 import docutils.nodes
@@ -27,35 +23,18 @@ if TYPE_CHECKING:
 logger = getLogger(__name__)
 
 
-def node_text_transform(
-        node: docutils.nodes.Element,
-        transform: Callable[[docutils.nodes.Text], docutils.nodes.Text]
-        ) -> None:
-    """Apply transformation to all Text nodes within node."""
-    for child in node.children:
+def node_text_transform(node: docutils.nodes.Element) -> None:
+    """Apply extra text transformations to a node."""
+    for child, next_child in zip(node.children[:], node.children[1:] + [None]):
         if isinstance(child, docutils.nodes.Text):
-            node.replace(child, transform(child))
+            if (child.endswith(r'\url ')
+                    and isinstance(next_child, docutils.nodes.Text)):
+                node.replace(child, docutils.nodes.Text(child[:-5]))
+                ref_node = docutils.nodes.reference(refuri=next_child.astext())
+                ref_node += next_child
+                node.replace(next_child, ref_node)
         else:
-            node_text_transform(child, transform)
-
-
-def transform_url_command(
-        textnode: docutils.nodes.Text) -> docutils.nodes.Element:
-    """Convert '\\\\url{...}' into a proper docutils hyperlink."""
-    text: str = textnode.astext()
-    if '\\url' in text:
-        text1, _, text = text.partition('\\url')
-        text2, _, text3 = text.partition('}')
-        text2 = text2.lstrip(' {')
-        ref = docutils.nodes.reference(refuri=text2)
-        ref += docutils.nodes.Text(text2)
-        node = docutils.nodes.inline()
-        node += transform_url_command(docutils.nodes.Text(text1))
-        node += ref
-        node += transform_url_command(docutils.nodes.Text(text3))
-        return node
-    else:
-        return textnode
+            node_text_transform(child)
 
 
 class BibliographyTransform(SphinxPostTransform):
@@ -118,7 +97,7 @@ class BibliographyTransform(SphinxPostTransform):
                     citation_node += self.backend.paragraph(
                         citation.formatted_entry)
                 citation_node['docname'] = bib_key.docname
-                node_text_transform(citation_node, transform_url_command)
+                node_text_transform(citation_node)
                 nodes.append(citation_node)
                 if bibliography.list_ == "enumerated":
                     env.temp_data['bibtex_enum_count'] += 1

@@ -22,7 +22,7 @@ from sphinx.util.logging import getLogger
 from .bibfile import get_bibliography_entry
 from .richtext import BaseReferenceText
 from .style.referencing import format_references
-from .transforms import node_text_transform, transform_url_command
+from .transforms import node_text_transform
 
 if TYPE_CHECKING:
     from sphinx.environment import BuildEnvironment
@@ -104,7 +104,7 @@ class FootCiteRole(XRefRole):
                 if key not in (foot_old_refs | foot_new_refs):
                     footnote = domain.backend.footnote(
                         formatted_entry, document)
-                    node_text_transform(footnote, transform_url_command)
+                    node_text_transform(footnote)
                     foot_bibliography += footnote
                     foot_new_refs.add(key)
             else:

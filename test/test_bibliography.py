@@ -218,8 +218,7 @@ def test_bibliography_url(app, warning) -> None:
     assert match2 is not None
     assert match3 is not None
     assert match4 is not None
-    # TODO these are not yet supported
-    # assert url('https://github.com/') in match1.group('text')
-    # assert url('https://google.com/') in match2.group('text')
-    # assert url('https://youtube.com/') in match3.group('text')
-    assert url('https://wikipedia.org/') in match4.group('text')
+    assert url('https://github.com/') in match1.group('text')
+    assert 'aaa' + url('https://google.com/') + 'bbb' in match2.group('text')
+    assert url('https://youtube.com/') in match3.group('text')
+    assert 'URL: ' + url('https://wikipedia.org/') in match4.group('text')
