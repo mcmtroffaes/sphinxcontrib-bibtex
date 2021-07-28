@@ -22,7 +22,7 @@ class FootReferenceStyle(GroupReferenceStyle):
     person: PersonStyle = PersonStyle()
 
     #: Separator between text and reference for textual citations.
-    text_reference_sep: Union["BaseText", str] = ' '
+    text_reference_sep: Union["BaseText", str] = ''
 
     def __post_init__(self):
         self.styles.extend([
