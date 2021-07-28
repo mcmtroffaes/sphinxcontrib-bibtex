@@ -199,3 +199,27 @@ def test_bibliography_content(app, warning) -> None:
 def test_bibliography_bad_key(app, warning) -> None:
     app.build()
     assert 'could not find bibtex key "badkey"' in warning.getvalue()
+
+
+def url(link: str) -> str:
+    return f'<a class="reference external" href="{link}">{link}</a>'
+
+
+@pytest.mark.sphinx('html', testroot='bibliography_url')
+def test_bibliography_url(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text(encoding='utf-8')
+    match1 = html_citations(label='Een').search(output)
+    match2 = html_citations(label='Twe').search(output)
+    match3 = html_citations(label='Dri').search(output)
+    match4 = html_citations(label='Vie').search(output)
+    assert match1 is not None
+    assert match2 is not None
+    assert match3 is not None
+    assert match4 is not None
+    # TODO these are not yet supported
+    # assert url('https://github.com/') in match1.group('text')
+    # assert url('https://google.com/') in match2.group('text')
+    # assert url('https://youtube.com/') in match3.group('text')
+    assert url('https://wikipedia.org/') in match4.group('text')
