@@ -9,8 +9,6 @@ import pytest
 import os
 import sys
 
-sys.path.append(os.path.dirname(__file__))  # ensure natbib extension is found
-
 
 @pytest.mark.sphinx('html', testroot='natbib')
 def test_natbib(app, warning) -> None:
@@ -43,7 +41,7 @@ def test_natbib_norefs(app, warning) -> None:
 
 
 def test_natbib_citation_transform_str_repr() -> None:
-    from natbib import CitationTransform, DEFAULT_CONF
+    from test.natbib import CitationTransform, DEFAULT_CONF
     from pybtex.database import Entry
     ref = Entry(type_='misc')
     ref.key = 'somekey'
