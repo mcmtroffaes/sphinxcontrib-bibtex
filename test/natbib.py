@@ -141,7 +141,8 @@ class CitationTransform(object):
         author = author.replace('}', '')
         return author
 
-    def cite(self, cmd, refuri, global_keys):
+    # TODO refactor to reduce complexity, for now ignore C901
+    def cite(self, cmd, refuri, global_keys):  # noqa: C901
         """
         Return a docutils Node consisting of properly formatted citations
         children nodes.
@@ -344,7 +345,8 @@ class CitationReferencesDirective(Directive):
         'path': directives.unchanged,
     }
 
-    def get_reference_node(self, ref):
+    # TODO refactor to reduce complexity, for now ignore C901
+    def get_reference_node(self, ref):  # noqa: C901
         node = nodes.inline('', '', classes=[ref.type, 'reference'])
 
         namestyler = pybtex.style.names.plain.NameStyle()
