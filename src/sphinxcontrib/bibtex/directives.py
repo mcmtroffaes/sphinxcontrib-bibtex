@@ -88,13 +88,9 @@ class BibliographyDirective(Directive):
         'keyprefix': directives.unchanged,
     }
 
-    def run(self):
-        """Process .bib files, set file dependencies, and create a
-        node that is to be transformed to the entries of the
-        bibliography.
-        """
+    def _get_filter(self):
+        """Get parsed filter from options."""
         env = cast("BuildEnvironment", self.state.document.settings.env)
-        domain = cast("BibtexDomain", env.get_domain('cite'))
         if "filter" in self.options:
             if "all" in self.options:
                 logger.warning(":filter: overrides :all:",
@@ -110,7 +106,7 @@ class BibliographyDirective(Directive):
                                location=(env.docname, self.lineno),
                                type="bibtex", subtype="filter_overrides")
             try:
-                filter_ = ast.parse(self.options["filter"])
+                return ast.parse(self.options["filter"])
             except SyntaxError:
                 logger.warning(
                     "syntax error in :filter: expression" +
@@ -118,14 +114,23 @@ class BibliographyDirective(Directive):
                     "the option will be ignored",
                     location=(env.docname, self.lineno),
                     type="bibtex", subtype="filter_syntax_error")
-                filter_ = ast.parse("cited")
+                return ast.parse("cited")
         elif "all" in self.options:
-            filter_ = ast.parse("True")
+            return ast.parse("True")
         elif "notcited" in self.options:
-            filter_ = ast.parse("not cited")
+            return ast.parse("not cited")
         else:
             # the default filter: include only cited entries
-            filter_ = ast.parse("cited")
+            return ast.parse("cited")
+
+    def run(self):
+        """Process .bib files, set file dependencies, and create a
+        node that is to be transformed to the entries of the
+        bibliography.
+        """
+        env = cast("BuildEnvironment", self.state.document.settings.env)
+        domain = cast("BibtexDomain", env.get_domain('cite'))
+        filter_ = self._get_filter()
         if self.arguments:
             bibfiles = []
             for bibfile in self.arguments[0].split():
