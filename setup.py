@@ -56,6 +56,7 @@ setup(
     platforms='any',
     packages=find_packages('src'),
     package_dir={'': 'src'},
+    package_data={'sphinxcontrib.bibtex': ['py.typed']},
     include_package_data=True,
     python_requires='>=3.6',
     install_requires=requires,
