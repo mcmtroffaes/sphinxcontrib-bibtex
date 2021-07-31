@@ -8,7 +8,7 @@
 
 import docutils.nodes
 
-from typing import TYPE_CHECKING, cast, Callable
+from typing import TYPE_CHECKING, cast
 from pybtex.plugin import find_plugin
 from sphinx.transforms.post_transforms import SphinxPostTransform
 from sphinx.util.logging import getLogger
