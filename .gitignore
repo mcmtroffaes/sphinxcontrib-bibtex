@@ -10,3 +10,5 @@ venv/
 htmlcov/
 .idea/
 *.egg-info/
+dist/
+build/
