@@ -6,8 +6,6 @@
 """
 
 import pytest
-import os
-import sys
 
 
 @pytest.mark.sphinx('html', testroot='natbib')
