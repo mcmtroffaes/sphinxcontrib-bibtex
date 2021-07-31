@@ -11,7 +11,8 @@
 """
 
 from typing import TYPE_CHECKING, cast, NamedTuple, List, Dict
-from docutils.parsers.rst import Directive, directives
+from docutils.parsers.rst import Directive
+import docutils.parsers.rst.directives as directives
 
 import ast  # parse(), used for filter
 import docutils.nodes

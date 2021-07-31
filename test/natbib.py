@@ -12,7 +12,7 @@
 from typing import Tuple, List, cast
 
 from docutils import nodes
-from docutils.parsers.rst import directives
+import docutils.parsers.rst.directives as directives
 from docutils.parsers.rst import Directive
 
 from sphinx import addnodes
