@@ -1,13 +1,11 @@
-include VERSION
 include README.rst
-include INSTALL.rst
 include CHANGELOG.rst
 include LICENSE.rst
 include requirements.txt
 include mypy.ini
 include pytest.ini
 include .coveragerc
-recursive-include sphinxcontrib *.py
+recursive-include src *.py
 recursive-include doc *
 recursive-include test *
 global-exclude *.pyc
