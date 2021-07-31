@@ -5,7 +5,7 @@ include requirements.txt
 include mypy.ini
 include pytest.ini
 include .coveragerc
-recursive-include src *.py
+recursive-include src *.py py.typed
 recursive-include doc *
 recursive-include test *
 global-exclude *.pyc
