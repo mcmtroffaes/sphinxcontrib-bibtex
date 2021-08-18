@@ -39,7 +39,7 @@ from sphinx.locale import _
 from sphinx.util.nodes import make_refnode
 
 from .roles import CiteRole
-from .bibfile import BibFile, normpath_filename, process_bibfile, BibData
+from .bibfile import normpath_filename, process_bibfile, BibData
 from .nodes import raw_latex
 from .style.referencing import (
     BaseReferenceText, BaseReferenceStyle, format_references
