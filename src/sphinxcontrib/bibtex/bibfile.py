@@ -76,14 +76,11 @@ def parse_bibfiles(bibfilenames: List[str], encoding: str) -> BibData:
 
 def is_bibdata_outdated(bibdata: BibData,
                         bibfilenames: List[str], encoding: str) -> bool:
-    if bibdata.encoding != encoding:
-        return True
-    if list(bibdata.bibfiles) != bibfilenames:
-        return True
-    if any(bibfile.mtime != get_mtime(filename)
-           for filename, bibfile in bibdata.bibfiles.items()):
-        return True
-    return False
+    return (
+        bibdata.encoding != encoding
+        or list(bibdata.bibfiles) != bibfilenames
+        or any(bibfile.mtime != get_mtime(filename)
+               for filename, bibfile in bibdata.bibfiles.items()))
 
 
 def process_bibfile(bibdata: BibData,
