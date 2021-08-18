@@ -95,7 +95,7 @@ class FootCiteRole(XRefRole):
         references = []
         domain = cast("BibtexDomain", self.env.get_domain('cite'))
         for key in keys:
-            entry = get_bibliography_entry(domain.bibfiles, key)
+            entry = get_bibliography_entry(domain.bibdata, key)
             if entry is not None:
                 formatted_entry = style.format_entry(label='', entry=entry)
                 references.append(

@@ -135,7 +135,7 @@ class BibliographyDirective(Directive):
             bibfiles = []
             for bibfile in self.arguments[0].split():
                 normbibfile = normpath_filename(env, bibfile)
-                if normbibfile not in domain.bibfiles:
+                if normbibfile not in domain.bibdata.bibfiles:
                     logger.warning(
                         "{0} not found or not configured"
                         " in bibtex_bibfiles".format(bibfile),
@@ -144,7 +144,7 @@ class BibliographyDirective(Directive):
                 else:
                     bibfiles.append(normbibfile)
         else:
-            bibfiles = list(domain.bibfiles.keys())
+            bibfiles = list(domain.bibdata.bibfiles.keys())
         for bibfile in bibfiles:
             env.note_dependency(bibfile)
         # generate nodes and ids

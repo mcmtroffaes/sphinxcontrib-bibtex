@@ -39,7 +39,7 @@ from sphinx.locale import _
 from sphinx.util.nodes import make_refnode
 
 from .roles import CiteRole
-from .bibfile import BibFile, normpath_filename, process_bibfile
+from .bibfile import BibFile, normpath_filename, process_bibfile, BibData
 from .nodes import raw_latex
 from .style.referencing import (
     BaseReferenceText, BaseReferenceStyle, format_references
@@ -283,9 +283,12 @@ class BibtexDomain(Domain):
 
     name = 'cite'
     label = 'BibTeX Citations'
-    data_version = 3
+    data_version = 4
     initial_data = dict(
-        bibfiles={},
+        bibdata=BibData(
+            encoding='',
+            bibfiles={},
+            data=pybtex.database.BibliographyData()),
         bibliography_header=docutils.nodes.paragraph(),
         bibliographies={},
         citations=[],
@@ -295,11 +298,9 @@ class BibtexDomain(Domain):
     reference_style: BaseReferenceStyle
 
     @property
-    def bibfiles(self) -> Dict[str, BibFile]:
-        """Map each bib filename to some information about the file (including
-        the parsed data).
-        """
-        return self.data['bibfiles']
+    def bibdata(self) -> BibData:
+        """Information about the bibliography files."""
+        return self.data['bibdata']
 
     @property
     def bibliography_header(self) -> docutils.nodes.Element:
@@ -341,10 +342,11 @@ class BibtexDomain(Domain):
             raise ExtensionError(
                 "You must configure the bibtex_bibfiles setting")
         # update bib file information in the cache
-        for bibfile in env.app.config.bibtex_bibfiles:
-            process_bibfile(
-                self.bibfiles, normpath_filename(env, "/" + bibfile),
-                env.app.config.bibtex_encoding)
+        bibfiles = [
+            normpath_filename(env, "/" + bibfile)
+            for bibfile in env.app.config.bibtex_bibfiles]
+        self.data['bibdata'] = process_bibfile(
+            self.bibdata, bibfiles, env.app.config.bibtex_encoding)
         # parse bibliography header
         header = getattr(env.app.config, "bibtex_bibliography_header")
         if header:
@@ -479,8 +481,8 @@ class BibtexDomain(Domain):
         in order of appearance in the bib files.
         """
         for bibfile in bibfiles:
-            for entry in self.bibfiles[bibfile].data.entries.values():
-                yield entry
+            for key in self.bibdata.bibfiles[bibfile].keys:
+                yield self.bibdata.data.entries[key]
 
     def get_filtered_entries(
             self, bibliography_key: "BibliographyKey"
