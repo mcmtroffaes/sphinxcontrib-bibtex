@@ -34,8 +34,8 @@ logger = getLogger(__name__)
 
 class BibFile(NamedTuple):
     """Contains information about a parsed bib file."""
-    mtime: float    #: Modification time of file when last parsed.
-    keys: Set[str]  #: Set of keys for this bib file.
+    mtime: float           #: Modification time of file when last parsed.
+    keys: Dict[str, None]  #: Set of keys for this bib file as ordered dict.
 
 
 class BibData(NamedTuple):
@@ -61,14 +61,14 @@ def parse_bibdata(bibfilenames: List[str], encoding: str) -> BibData:
     """Parse *bibfilenames* with given *encoding*, and return parsed data."""
     parser = Parser(encoding)
     bibfiles = {}
-    keys: Set[str] = set()
+    keys: Dict[str, None] = {}
     for filename in bibfilenames:
         logger.info("parsing bibtex file {0}... ".format(filename), nonl=True)
         if not os.path.isfile(filename):
             logger.warning(
                 "could not open bibtex file {0}.".format(filename),
                 type="bibtex", subtype="bibfile_error")
-            new_keys = set()
+            new_keys: Dict[str, None] = {}
         else:
             try:
                 parser.parse_file(filename)
@@ -77,9 +77,10 @@ def parse_bibdata(bibfilenames: List[str], encoding: str) -> BibData:
                     "bibliography data error in {0}: {1}".format(
                         filename, exc),
                     type="bibtex", subtype="bibfile_data_error")
-            keys, old_keys = set(parser.data.entries.keys()), keys
-            assert old_keys <= keys
-            new_keys = keys - old_keys
+            keys, old_keys = {key: None
+                              for key in parser.data.entries.keys()}, keys
+            assert all(key in keys for key in old_keys)
+            new_keys = {key: None for key in keys if key not in old_keys}
             logger.info("parsed {0} entries".format(len(new_keys)))
         bibfiles[filename] = BibFile(mtime=get_mtime(filename), keys=new_keys)
     return BibData(encoding=encoding, bibfiles=bibfiles, data=parser.data)
