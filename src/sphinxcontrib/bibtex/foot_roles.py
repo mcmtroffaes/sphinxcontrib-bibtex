@@ -19,7 +19,6 @@ from pybtex.plugin import find_plugin
 from sphinx.roles import XRefRole
 from sphinx.util.logging import getLogger
 
-from .bibfile import get_bibliography_entry
 from .richtext import BaseReferenceText
 from .style.referencing import format_references
 from .transforms import node_text_transform
@@ -95,7 +94,7 @@ class FootCiteRole(XRefRole):
         references = []
         domain = cast("BibtexDomain", self.env.get_domain('cite'))
         for key in keys:
-            entry = get_bibliography_entry(domain.bibdata, key)
+            entry = domain.bibdata.data.entries.get(key)
             if entry is not None:
                 formatted_entry = style.format_entry(label='', entry=entry)
                 references.append(

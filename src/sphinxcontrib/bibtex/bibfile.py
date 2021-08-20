@@ -14,15 +14,13 @@
     .. autofunction:: is_bibdata_outdated
 
     .. autofunction:: process_bibdata
-
-    .. autofunction:: get_bibliography_entry
 """
 import math
 import os.path
-from typing import TYPE_CHECKING, Dict, Optional, NamedTuple, List
+from typing import TYPE_CHECKING, Dict, NamedTuple, List
 
 from pybtex.database.input.bibtex import Parser
-from pybtex.database import BibliographyData, BibliographyDataError, Entry
+from pybtex.database import BibliographyData, BibliographyDataError
 from sphinx.util.logging import getLogger
 
 if TYPE_CHECKING:
@@ -105,11 +103,3 @@ def process_bibdata(bibdata: BibData,
     else:
         logger.info("up to date")
         return bibdata
-
-
-def get_bibliography_entry(bibdata: BibData, key: str) -> Optional[Entry]:
-    """Return bibliography entry from *bibfiles* for the given *key*."""
-    try:
-        return bibdata.data.entries[key]
-    except KeyError:
-        return None
