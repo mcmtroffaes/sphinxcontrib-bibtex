@@ -19,7 +19,7 @@
 """
 import math
 import os.path
-from typing import TYPE_CHECKING, Dict, Optional, NamedTuple, List, Set
+from typing import TYPE_CHECKING, Dict, Optional, NamedTuple, List
 
 from pybtex.database.input.bibtex import Parser
 from pybtex.database import BibliographyData, BibliographyDataError, Entry
