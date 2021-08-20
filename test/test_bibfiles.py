@@ -102,3 +102,11 @@ def test_bibfiles_encoding_invalid(make_app, app_params) -> None:
 def test_bibfiles_subfolder(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
+
+
+@pytest.mark.sphinx('html', testroot='bibfiles_multiple')
+def test_bibfiles_multiple(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
+    assert html_citations(label='1', text=r'.*Rev\. Mod\. Phys\..*').search(output)
