@@ -77,10 +77,10 @@ def parse_bibdata(bibfilenames: List[str], encoding: str) -> BibData:
                     "bibliography data error in {0}: {1}".format(
                         filename, exc),
                     type="bibtex", subtype="bibfile_data_error")
-            keys, old_keys = {key: None
-                              for key in parser.data.entries.keys()}, keys
+            keys, old_keys = dict.fromkeys(parser.data.entries.keys()), keys
             assert all(key in keys for key in old_keys)
-            new_keys = {key: None for key in keys if key not in old_keys}
+            new_keys = dict.fromkeys(
+                key for key in keys if key not in old_keys)
             logger.info("parsed {0} entries".format(len(new_keys)))
         bibfiles[filename] = BibFile(mtime=get_mtime(filename), keys=new_keys)
     return BibData(encoding=encoding, bibfiles=bibfiles, data=parser.data)
