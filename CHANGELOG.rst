@@ -1,4 +1,4 @@
-2.3.1 (in development)
+2.4.0 (in development)
 ----------------------
 
 * Allow specific warnings to be suppressed (see issue #255, contributed by
@@ -12,6 +12,13 @@
 
 * Document how to use a backslash escaped space to suppress space before
   footnotes (see issue #256, reported by hagenw).
+
+* Parse all bib files together, so macros specified in one file can be used in
+  another file (see issue #216, reported by mforbes).
+  As a consequence, duplicate citation keys across bib files will
+  now also result in proper warnings.
+  The ``parse_bibfile`` and ``process_bibfile`` functions have been been
+  replaced by ``parse_bibdata`` and ``process_bibdata`` in the API.
 
 2.3.0 (1 June 2021)
 -------------------
