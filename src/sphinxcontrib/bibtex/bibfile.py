@@ -95,7 +95,7 @@ def is_bibdata_outdated(bibdata: BibData,
 
 
 def process_bibdata(bibdata: BibData,
-                     bibfilenames: List[str], encoding: str) -> BibData:
+                    bibfilenames: List[str], encoding: str) -> BibData:
     """Parse *bibfilenames* and store parsed data in *bibdata*."""
     logger.info("checking bibtex cache... ", nonl=True)
     if is_bibdata_outdated(bibdata, bibfilenames, encoding):
