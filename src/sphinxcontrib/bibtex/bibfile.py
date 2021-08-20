@@ -69,7 +69,8 @@ def parse_bibfiles(bibfilenames: List[str], encoding: str) -> BibData:
                 parser.parse_file(filename)
             except BibliographyDataError as exc:
                 logger.warning(
-                    "bibliography data error in {0}: {1}".format(filename, exc),
+                    "bibliography data error in {0}: {1}".format(
+                        filename, exc),
                     type="bibtex", subtype="bibfile_data_error")
             keys, old_keys = set(parser.data.entries.keys()), keys
             assert old_keys <= keys
