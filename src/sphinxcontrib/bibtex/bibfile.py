@@ -4,11 +4,16 @@
     .. autoclass:: BibFile
         :members:
 
+    .. autoclass:: BibData
+        :members:
+
     .. autofunction:: normpath_filename
 
-    .. autofunction:: parse_bibfile
+    .. autofunction:: parse_bibdata
 
-    .. autofunction:: process_bibfile
+    .. autofunction:: is_bibdata_outdated
+
+    .. autofunction:: process_bibdata
 
     .. autofunction:: get_bibliography_entry
 """
@@ -35,9 +40,9 @@ class BibFile(NamedTuple):
 
 class BibData(NamedTuple):
     """Contains information about a collection of bib files."""
-    encoding: str
-    bibfiles: Dict[str, BibFile]
-    data: BibliographyData
+    encoding: str                 #: Encoding of all bib files.
+    bibfiles: Dict[str, BibFile]  #: Maps bib filename to information about it.
+    data: BibliographyData        #: Data parsed from all bib files.
 
 
 def normpath_filename(env: "BuildEnvironment", filename: str) -> str:
@@ -52,7 +57,7 @@ def get_mtime(bibfilename: str) -> float:
         return -math.inf
 
 
-def parse_bibfiles(bibfilenames: List[str], encoding: str) -> BibData:
+def parse_bibdata(bibfilenames: List[str], encoding: str) -> BibData:
     """Parse *bibfilenames* with given *encoding*, and return parsed data."""
     parser = Parser(encoding)
     bibfiles = {}
@@ -89,13 +94,13 @@ def is_bibdata_outdated(bibdata: BibData,
                for filename, bibfile in bibdata.bibfiles.items()))
 
 
-def process_bibfile(bibdata: BibData,
-                    bibfilenames: List[str], encoding: str) -> BibData:
+def process_bibdata(bibdata: BibData,
+                     bibfilenames: List[str], encoding: str) -> BibData:
     """Parse *bibfilenames* and store parsed data in *bibdata*."""
     logger.info("checking bibtex cache... ", nonl=True)
     if is_bibdata_outdated(bibdata, bibfilenames, encoding):
         logger.info("out of date")
-        return parse_bibfiles(bibfilenames, encoding)
+        return parse_bibdata(bibfilenames, encoding)
     else:
         logger.info("up to date")
         return bibdata

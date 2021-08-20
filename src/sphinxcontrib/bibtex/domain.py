@@ -39,7 +39,7 @@ from sphinx.locale import _
 from sphinx.util.nodes import make_refnode
 
 from .roles import CiteRole
-from .bibfile import normpath_filename, process_bibfile, BibData
+from .bibfile import normpath_filename, process_bibdata, BibData
 from .nodes import raw_latex
 from .style.referencing import (
     BaseReferenceText, BaseReferenceStyle, format_references
@@ -345,7 +345,7 @@ class BibtexDomain(Domain):
         bibfiles = [
             normpath_filename(env, "/" + bibfile)
             for bibfile in env.app.config.bibtex_bibfiles]
-        self.data['bibdata'] = process_bibfile(
+        self.data['bibdata'] = process_bibdata(
             self.bibdata, bibfiles, env.app.config.bibtex_encoding)
         # parse bibliography header
         header = getattr(env.app.config, "bibtex_bibliography_header")
