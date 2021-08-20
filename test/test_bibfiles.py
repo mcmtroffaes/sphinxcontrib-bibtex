@@ -104,9 +104,20 @@ def test_bibfiles_subfolder(app, warning) -> None:
     assert not warning.getvalue()
 
 
-@pytest.mark.sphinx('html', testroot='bibfiles_multiple')
-def test_bibfiles_multiple(app, warning) -> None:
+@pytest.mark.sphinx('html', testroot='bibfiles_multiple_macros')
+def test_bibfiles_multiple_macros(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
-    assert html_citations(label='1', text=r'.*Rev\. Mod\. Phys\..*').search(output)
+    assert html_citations(
+        label='1', text=r'.*Rev\. Mod\. Phys\..*').search(output)
+
+
+@pytest.mark.sphinx('html', testroot='bibfiles_multiple_keys')
+def test_bibfiles_multiple_keys(app, warning) -> None:
+    app.build()
+    assert re.search(
+        "bibliography data error in .*: repeated bibliograhpy entry: test",
+        warning.getvalue()) is not None
+    output = (app.outdir / "index.html").read_text()
+    assert html_citations(label='1', text='.*Test one.*').search(output)

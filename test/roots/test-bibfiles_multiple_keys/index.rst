@@ -1,0 +1,3 @@
+.. bibliography::
+   :style: plain
+   :all:

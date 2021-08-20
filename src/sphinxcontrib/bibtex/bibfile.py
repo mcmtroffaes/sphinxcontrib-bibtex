@@ -17,10 +17,10 @@ import os.path
 from typing import TYPE_CHECKING, Dict, Optional, NamedTuple, List, Set
 
 from pybtex.database.input.bibtex import Parser
+from pybtex.database import BibliographyData, BibliographyDataError, Entry
 from sphinx.util.logging import getLogger
 
 if TYPE_CHECKING:
-    from pybtex.database import BibliographyData, Entry
     from sphinx.environment import BuildEnvironment
 
 
@@ -37,7 +37,7 @@ class BibData(NamedTuple):
     """Contains information about a collection of bib files."""
     encoding: str
     bibfiles: Dict[str, BibFile]
-    data: "BibliographyData"
+    data: BibliographyData
 
 
 def normpath_filename(env: "BuildEnvironment", filename: str) -> str:
@@ -65,7 +65,12 @@ def parse_bibfiles(bibfilenames: List[str], encoding: str) -> BibData:
                 type="bibtex", subtype="bibfile_error")
             new_keys = set()
         else:
-            parser.parse_file(filename)
+            try:
+                parser.parse_file(filename)
+            except BibliographyDataError as exc:
+                logger.warning(
+                    "bibliography data error in {0}: {1}".format(filename, exc),
+                    type="bibtex", subtype="bibfile_data_error")
             keys, old_keys = set(parser.data.entries.keys()), keys
             assert old_keys <= keys
             new_keys = keys - old_keys
@@ -95,7 +100,7 @@ def process_bibfile(bibdata: BibData,
         return bibdata
 
 
-def get_bibliography_entry(bibdata: BibData, key: str) -> Optional["Entry"]:
+def get_bibliography_entry(bibdata: BibData, key: str) -> Optional[Entry]:
     """Return bibliography entry from *bibfiles* for the given *key*."""
     try:
         return bibdata.data.entries[key]
