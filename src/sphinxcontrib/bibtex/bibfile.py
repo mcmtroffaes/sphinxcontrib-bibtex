@@ -60,7 +60,7 @@ def get_mtime(bibfilename: str) -> float:
 def parse_bibdata(bibfilenames: List[str], encoding: str) -> BibData:
     """Parse *bibfilenames* with given *encoding*, and return parsed data."""
     parser = Parser(encoding)
-    bibfiles = {}
+    bibfiles: Dict[str, BibFile] = {}
     keys: Dict[str, None] = {}
     for filename in bibfilenames:
         logger.info("parsing bibtex file {0}... ".format(filename), nonl=True)
