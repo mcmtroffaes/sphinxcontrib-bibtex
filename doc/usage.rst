@@ -839,6 +839,7 @@ you can use:
 
 The complete list of warning subtypes that can be suppressed is::
 
+    bibtex.bibfile_data_error
     bibtex.bibfile_error
     bibtex.duplicate_citation
     bibtex.duplicate_label

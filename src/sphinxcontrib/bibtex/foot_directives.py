@@ -39,6 +39,6 @@ class FootBibliographyDirective(Directive):
                 env.temp_data["bibtex_foot_bibliography"],
                 foot_domain.bibliography_header.deepcopy())
             domain = cast("BibtexDomain", env.get_domain('cite'))
-            for bibfile in domain.bibfiles:
+            for bibfile in domain.bibdata.bibfiles:
                 env.note_dependency(bibfile)
             return [foot_bibliography]

@@ -8,9 +8,8 @@ from sphinx.errors import ExtensionError
 import time
 
 
-status_not_found = "checking for.*in bibtex cache.*not found"
-status_up_to_date = "checking for.*in bibtex cache.*up to date"
-status_out_of_date = "checking for.*in bibtex cache.*out of date"
+status_up_to_date = "checking bibtex cache.*up to date"
+status_out_of_date = "checking bibtex cache.*out of date"
 status_parsing = "parsing bibtex file.*parsed [0-9]+ entries"
 
 
@@ -23,9 +22,8 @@ def test_bibfiles_out_of_date(make_app, app_params) -> None:
     app.build()
     status = app._status.getvalue()
     # not found, parsing
-    assert re.search(status_not_found, status) is not None
     assert re.search(status_up_to_date, status) is None
-    assert re.search(status_out_of_date, status) is None
+    assert re.search(status_out_of_date, status) is not None
     assert re.search(status_parsing, status) is not None
     output = (app.outdir / "index.html").read_text()
     assert html_citations(label='1', text='.*Akkerdju.*').search(output)
@@ -39,7 +37,6 @@ def test_bibfiles_out_of_date(make_app, app_params) -> None:
     app.build()
     status = app._status.getvalue()
     # out of date, parsing
-    assert re.search(status_not_found, status) is None
     assert re.search(status_up_to_date, status) is None
     assert re.search(status_out_of_date, status) is not None
     assert re.search(status_parsing, status) is not None
@@ -55,7 +52,6 @@ def test_bibfiles_out_of_date(make_app, app_params) -> None:
     app.build()
     status = app._status.getvalue()
     # up to date
-    assert re.search(status_not_found, status) is None
     assert re.search(status_up_to_date, status) is not None
     assert re.search(status_out_of_date, status) is None
     assert re.search(status_parsing, status) is None
@@ -106,3 +102,22 @@ def test_bibfiles_encoding_invalid(make_app, app_params) -> None:
 def test_bibfiles_subfolder(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
+
+
+@pytest.mark.sphinx('html', testroot='bibfiles_multiple_macros')
+def test_bibfiles_multiple_macros(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
+    assert html_citations(
+        label='1', text=r'.*Rev\. Mod\. Phys\..*').search(output)
+
+
+@pytest.mark.sphinx('html', testroot='bibfiles_multiple_keys')
+def test_bibfiles_multiple_keys(app, warning) -> None:
+    app.build()
+    assert re.search(
+        "bibliography data error in .*: repeated bibliograhpy entry: test",
+        warning.getvalue()) is not None
+    output = (app.outdir / "index.html").read_text()
+    assert html_citations(label='1', text='.*Test one.*').search(output)
