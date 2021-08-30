@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 from typing import Optional
 
 
-def readfile(filename):
+def readfile(filename: str) -> str:
     with io.open(filename, encoding="utf-8") as stream:
         return stream.read()
 
@@ -18,7 +18,7 @@ version = version_match.group(1)
 
 
 # make entry point specifications
-def plugin(plugin_name: str, mod_name: Optional[str] = None):
+def plugin(plugin_name: str, mod_name: Optional[str] = None) -> str:
     if mod_name is None:
         mod_name = plugin_name
     path = "sphinxcontrib.bibtex.style.referencing"
