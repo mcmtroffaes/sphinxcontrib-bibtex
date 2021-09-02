@@ -10,7 +10,7 @@
         .. automethod:: run
 """
 
-from typing import TYPE_CHECKING, cast, NamedTuple, List, Dict, Set
+from typing import TYPE_CHECKING, cast, NamedTuple, List, Dict
 from docutils.parsers.rst import Directive
 import docutils.parsers.rst.directives as directives
 
@@ -18,7 +18,7 @@ import ast  # parse(), used for filter
 import docutils.nodes
 import sphinx.util
 
-from .bibfile import normpath_filename
+from .bibfile import normpath_filename, _make_ids
 from .nodes import bibliography as bibliography_node
 
 if TYPE_CHECKING:
@@ -48,22 +48,6 @@ class BibliographyValue(NamedTuple):
     filter_: ast.AST     #: Parsed filter expression.
     citation_nodes: Dict[str, docutils.nodes.Element]  #: key -> citation node
     keys: List[str]      #: Keys listed as content of the directive.
-
-
-def _make_ids(docname: str, lineno: int, ids: Set[str], raw_id: str
-              ) -> List[str]:
-    if raw_id:
-        id_ = docutils.nodes.make_id(raw_id)
-        if id_ in ids:
-            logger.warning(f"duplicate citation id {id_}",
-                           location=(docname, lineno),
-                           type="bibtex", subtype="duplicate_id")
-            return []
-        else:
-            ids.add(id_)
-            return [id_]
-    else:
-        return []
 
 
 class BibliographyDirective(Directive):

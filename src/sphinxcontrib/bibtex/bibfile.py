@@ -17,8 +17,9 @@
 """
 import math
 import os.path
-from typing import TYPE_CHECKING, Dict, NamedTuple, List
+from typing import TYPE_CHECKING, Dict, NamedTuple, List, Set
 
+from docutils.nodes import make_id
 from pybtex.database.input.bibtex import Parser
 from pybtex.database import BibliographyData, BibliographyDataError
 from sphinx.util.logging import getLogger
@@ -103,3 +104,21 @@ def process_bibdata(bibdata: BibData,
     else:
         logger.info("up to date")
         return bibdata
+
+
+# function does not really fit in any module, but used by both
+# cite and footcite domains, so for now it's residing here
+def _make_ids(docname: str, lineno: int, ids: Set[str], raw_id: str
+              ) -> List[str]:
+    if raw_id:
+        id_ = make_id(raw_id)
+        if id_ in ids:
+            logger.warning(f"duplicate citation id {id_}",
+                           location=(docname, lineno),
+                           type="bibtex", subtype="duplicate_id")
+            return []
+        else:
+            ids.add(id_)
+            return [id_]
+    else:
+        return []
