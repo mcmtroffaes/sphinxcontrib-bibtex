@@ -799,8 +799,8 @@ Now ``author_year_round`` will be available to you as a formatting style:
 An minimal example is available here:
 https://github.com/mcmtroffaes/sphinxcontrib-bibtex/tree/develop/test/roots/test-citation_style_round_brackets
 
-Custom Html Identifiers
-~~~~~~~~~~~~~~~~~~~~~~~
+Custom Html Anchors
+~~~~~~~~~~~~~~~~~~~
 
 .. versionadded:: 2.4.0
 
