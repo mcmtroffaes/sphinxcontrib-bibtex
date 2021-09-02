@@ -51,10 +51,16 @@ def html_footnotes(id_=RE_ID, text=RE_TEXT):
     return re.compile(
         r'<dt class="label" id="(?P<id_>{id_})">'
         r'<span class="brackets">'
-        r'<a class="fn-backref" href="#(?P<backref>{backref_id})">'
+        r'(?:<a class="fn-backref" href="#(?P<backref>{backref_id})">)?'
         r'(?P<label>{label})'
-        r'</a>'
+        r'(?:</a>)?'
         r'</span>'
+        r'(?:<span class="fn-backref">\('
+        r'<a href="#(?P<backref1>{backref_id})">1</a>'
+        r',<a href="#(?P<backref2>{backref_id}\w+)">2</a>'
+        r'(,<a href="#(?P<backref3>{backref_id}\w+)">3</a>)?'
+        r'(,<a href="#\w+">\d+</a>)*'  # no named group for additional backrefs
+        r'\)</span>)?'
         r'</dt>\n'
         r'<dd><p>(?P<text>{text})</p>\n</dd>'.format(
             id_=id_, backref_id=RE_ID, label=RE_NUM, text=text))

@@ -1,6 +1,6 @@
 from typing import Set
 
-from test.common import html_citations, html_citation_refs
+from test.common import html_citations, html_citation_refs, html_footnotes
 import pytest
 import re
 
@@ -222,3 +222,32 @@ def test_bibliography_url(app, warning) -> None:
     assert 'aaa' + url('https://google.com/') + 'bbb' in match2.group('text')
     assert url('https://youtube.com/') in match3.group('text')
     assert 'URL: ' + url('https://wikipedia.org/') in match4.group('text')
+
+
+@pytest.mark.sphinx('html', testroot='bibliography_custom_ids')
+def test_bibliography_custom_ids(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text(encoding='utf-8')
+    assert '<p id="bibliography-id-1">' in output
+    assert '<p id="bibliography-id-2">' in output
+    #assert '<p id="footbibliography-id-1">' in output
+    #assert '<p id="footbibliography-id-2">' in output
+    match1 = html_citations(text='.*Evensen.*').search(output)
+    match2 = html_citations(text='.*Mandel.*').search(output)
+    match3 = html_citations(text='.*Lorenc.*').search(output)
+    assert match1 is not None
+    assert match2 is not None
+    assert match3 is not None
+    assert match1.group('id_') == 'cite-id-1-2003-evensen'
+    assert match2.group('id_') == 'cite-id-1-2009-mandel'
+    assert match3.group('id_') == 'cite-id-2-1986-lorenc'
+    match1 = html_footnotes(text='.*Evensen.*').search(output)
+    match2 = html_footnotes(text='.*Mandel.*').search(output)
+    match3 = html_footnotes(text='.*Lorenc.*').search(output)
+    assert match1 is not None
+    assert match2 is not None
+    assert match3 is not None
+    #assert match1.group('id_') == 'footcite-id-1-2003-evensen'
+    #assert match2.group('id_') == 'footcite-id-1-2009-mandel'
+    #assert match3.group('id_') == 'footcite-id-2-1986-lorenc'
