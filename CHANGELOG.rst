@@ -20,6 +20,15 @@
   The ``parse_bibfile`` and ``process_bibfile`` functions have been been
   replaced by ``parse_bibdata`` and ``process_bibdata`` in the API.
 
+* New ``bibtex_cite_id``, ``bibtex_footcite_id``,
+  ``bibtex_bibliography_id``, and ``bibtex_footbibliography_id`` settings,
+  which allow custom ids (which can be used as html anchors)
+  to be generated for citations and bibliographies,
+  based on the citation keys rather than some random numbers
+  (see issue #264, reported by kmuehlbauer).
+  Refer to the documentation for detailed usage and examples.
+
+
 2.3.0 (1 June 2021)
 -------------------
 
