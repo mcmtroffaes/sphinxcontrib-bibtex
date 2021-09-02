@@ -814,7 +814,7 @@ However, sometimes it is useful to refer to bibliographic entries from other
 external documents that have not been generated with Sphinx.
 Since the generated identifiers can easily break when updating documents,
 they can be customized through string templates should you need this.
-If you do so, it is the user's responsibility to ensure that no ids will clash,
+If you do so, it is your responsibility to ensure that no ids will clash,
 by setting up the appropriate identifier templates in your ``conf.py`` file,
 for instance as follows:
 
@@ -843,7 +843,7 @@ the key prefix if specified.
 After formatting the template, the resulting string is filtered through
 docutils's ``make_id`` function, which will remove and/or translate
 any illegal characters.
-In particular, colons and underscores will be translated in to dashes.
+In particular, colons and underscores will be translated into dashes.
 
 .. warning::
 
@@ -854,7 +854,7 @@ In particular, colons and underscores will be translated in to dashes.
    *even if there are no duplicate citations*.
    This is because the extension must generate an identifier for every key
    for each :rst:dir:`bibliography` directive
-   time prior to knowing whether or not the citation needs to be included.
+   prior to knowing whether or not the citation needs to be included.
 
 Custom Bibliography Header
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
