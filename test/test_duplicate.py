@@ -44,8 +44,9 @@ def test_duplicate_nearly_identical_entries(app, warning) -> None:
             == {'xyz19a', 'xyz19b'})
 
 
-@pytest.mark.sphinx('html', testroot='duplicate_nearly_identical_keys')
-def test_duplicate_nearly_identical_keys(app, warning) -> None:
+@pytest.mark.sphinx(
+    'html', testroot='duplicate_nearly_identical_keys', freshenv=True)
+def test_duplicate_nearly_identical_keys_1(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
@@ -65,6 +66,33 @@ def test_duplicate_nearly_identical_keys(app, warning) -> None:
     assert len(ids) == 3
     assert ids == refids
 
+
+@pytest.mark.sphinx(
+    'html', testroot='duplicate_nearly_identical_keys', freshenv=True,
+    confoverrides={"bibtex_cite_id": "cite-{bibliography_count}-{key}"})
+def test_duplicate_nearly_identical_keys_2(app, warning) -> None:
+    app.build()
+    warning.seek(0)
+    warnings = list(warning.readlines())
+    assert len(warnings) == 2
+    assert "duplicate citation id cite-1-test" in warnings[0]
+    assert "duplicate citation id cite-1-test" in warnings[1]
+    output = (app.outdir / "index.html").read_text()
+    # assure both citations and citation references are present
+    assert html_citation_refs(label='Smi').search(output)
+    assert html_citation_refs(label='Pop').search(output)
+    assert html_citation_refs(label='Ein').search(output)
+    assert html_citations(label='Smi').search(output)
+    assert html_citations(label='Pop').search(output)
+    assert html_citations(label='Ein').search(output)
+    # assure distinct ids for citations
+    ids = {match.group('id_')
+           for match in html_citations().finditer(output)}
+    refids = {match.group('refid')
+              for match in html_citation_refs().finditer(output)}
+    assert None not in ids
+    assert len(ids) == 3
+    assert ids == refids
 
 # this test "accidentally" includes a user provided id which
 # clashes with a bibtex generated citation id
