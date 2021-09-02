@@ -15,6 +15,7 @@ from typing import TYPE_CHECKING, cast, Tuple, List, NamedTuple
 
 import docutils.nodes
 import pybtex_docutils
+from docutils.nodes import make_id
 from pybtex.plugin import find_plugin
 from sphinx.roles import XRefRole
 from sphinx.util.logging import getLogger
@@ -38,6 +39,7 @@ class FootReferenceInfo(NamedTuple):
     """
     key: str                             #: Citation key.
     document: "docutils.nodes.document"  #: Current docutils document.
+    refname: str                         #: Citation reference name.
 
 
 class FootReferenceText(BaseReferenceText[FootReferenceInfo]):
@@ -50,9 +52,8 @@ class FootReferenceText(BaseReferenceText[FootReferenceInfo]):
                "FootReferenceText only supports the docutils backend"
         info = self.info[0]
         # see docutils.parsers.rst.states.Body.footnote_reference()
-        refname = docutils.nodes.fully_normalize_name(info.key)
         refnode = docutils.nodes.footnote_reference(
-            '[#%s]_' % info.key, refname=refname, auto=1)
+            '[#%s]_' % info.key, refname=info.refname, auto=1)
         info.document.note_autofootnote_ref(refnode)
         info.document.note_footnote_ref(refnode)
         return [refnode]
@@ -93,19 +94,40 @@ class FootCiteRole(XRefRole):
             self.config.bibtex_default_style)()
         references = []
         domain = cast("BibtexDomain", self.env.get_domain('cite'))
+        # count only incremented at directive, see foot_directives run method
+        footbibliography_count = env.temp_data.setdefault(
+            "bibtex_footbibliography_count", 0)
+        footcite_names = env.temp_data.setdefault(
+            "bibtex_footcite_names", {})
         for key in keys:
             entry = domain.bibdata.data.entries.get(key)
             if entry is not None:
                 formatted_entry = style.format_entry(label='', entry=entry)
-                references.append(
-                    (entry, formatted_entry,
-                     FootReferenceInfo(key=entry.key, document=document)))
                 if key not in (foot_old_refs | foot_new_refs):
-                    footnote = domain.backend.footnote(
-                        formatted_entry, document)
+                    footnote = docutils.nodes.footnote(auto=1)
+                    # no automatic ids for footnotes: force non-empty template
+                    template: str = \
+                        env.app.config.bibtex_footcite_id \
+                        if env.app.config.bibtex_footcite_id \
+                        else "footcite-{key}"
+                    raw_id = template.format(
+                            footbibliography_count=footbibliography_count + 1,
+                            key=entry.key)
+                    # format name with make_id for consistency with cite role
+                    name = make_id(raw_id)
+                    footnote['names'] += [name]
+                    footcite_names[entry.key] = name
+                    footnote += domain.backend.paragraph(formatted_entry)
+                    document.note_autofootnote(footnote)
+                    document.note_explicit_target(footnote, footnote)
                     node_text_transform(footnote)
                     foot_bibliography += footnote
                     foot_new_refs.add(key)
+                references.append(
+                    (entry, formatted_entry,
+                     FootReferenceInfo(
+                         key=entry.key, refname=footcite_names[entry.key],
+                         document=document)))
             else:
                 logger.warning('could not find bibtex key "%s"' % key,
                                location=(env.docname, self.lineno),

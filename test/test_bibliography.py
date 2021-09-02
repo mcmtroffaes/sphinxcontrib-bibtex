@@ -1,6 +1,7 @@
 from typing import Set
 
-from test.common import html_citations, html_citation_refs, html_footnotes
+from test.common import \
+    html_citations, html_citation_refs, html_footnotes, html_footnote_refs
 import pytest
 import re
 
@@ -163,15 +164,18 @@ def test_bibliography_multi_foot(app, warning) -> None:
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding='utf-8')
     assert output.count('<p class="rubric"') == 3
-    assert len(re.findall('id="mandel"', output)) == 1
-    assert len(re.findall('id="evensen"', output)) == 1
-    assert len(re.findall('id="lorenc"', output)) == 1
     assert len(re.findall(
-        'class="footnote-reference brackets" href="#mandel"', output)) == 2
+        html_footnotes(id_="footcite-2009-mandel"), output)) == 1
     assert len(re.findall(
-        'class="footnote-reference brackets" href="#evensen"', output)) == 1
+        html_footnotes(id_="footcite-2003-evensen"), output)) == 1
     assert len(re.findall(
-        'class="footnote-reference brackets" href="#lorenc"', output)) == 1
+        html_footnotes(id_="footcite-1986-lorenc"), output)) == 1
+    assert len(re.findall(
+        html_footnote_refs(refid='footcite-2009-mandel'), output)) == 2
+    assert len(re.findall(
+        html_footnote_refs(refid='footcite-2003-evensen'), output)) == 1
+    assert len(re.findall(
+        html_footnote_refs(refid='footcite-1986-lorenc'), output)) == 1
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_missing_field')
@@ -248,6 +252,6 @@ def test_bibliography_custom_ids(app, warning) -> None:
     assert match1 is not None
     assert match2 is not None
     assert match3 is not None
-    #assert match1.group('id_') == 'footcite-id-1-2003-evensen'
-    #assert match2.group('id_') == 'footcite-id-1-2009-mandel'
-    #assert match3.group('id_') == 'footcite-id-2-1986-lorenc'
+    assert match1.group('id_') == 'footcite-id-2003-evensen'
+    assert match2.group('id_') == 'footcite-id-2009-mandel'
+    assert match3.group('id_') == 'footcite-id-1986-lorenc'
