@@ -94,6 +94,7 @@ def test_duplicate_nearly_identical_keys_2(app, warning) -> None:
     assert len(ids) == 3
     assert ids == refids
 
+
 # this test "accidentally" includes a user provided id which
 # clashes with a bibtex generated citation id
 @pytest.mark.sphinx('html', testroot='duplicate_citation_id')
