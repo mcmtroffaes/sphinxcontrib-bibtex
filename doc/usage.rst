@@ -838,8 +838,8 @@ thus giving a unique number for each :rst:dir:`bibliography` directive
 within a document.
 The ``footbibliography_count`` template variable works similarly but for
 :rst:dir:`footbibliography` directives.
-The ``key`` template corresponds to the bibtex citation key, including
-the key prefix if specified.
+The ``key`` template variable corresponds to the bibtex citation key,
+including the key prefix if specified.
 After formatting the template, the resulting string is filtered through
 docutils's ``make_id`` function, which will remove and/or translate
 any illegal characters.
