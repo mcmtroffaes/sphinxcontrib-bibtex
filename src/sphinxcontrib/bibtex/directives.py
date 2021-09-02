@@ -46,7 +46,7 @@ class BibliographyValue(NamedTuple):
     labelprefix: str     #: String prefix for pybtex generated labels.
     keyprefix: str       #: String prefix for citation keys.
     filter_: ast.AST     #: Parsed filter expression.
-    citation_nodes: Dict[str, docutils.nodes.citation]  #: key -> citation node
+    citation_nodes: Dict[str, docutils.nodes.Element]  #: key -> citation node
     keys: List[str]      #: Keys listed as content of the directive.
 
 
@@ -148,8 +148,8 @@ class BibliographyDirective(Directive):
         for bibfile in bibfiles:
             env.note_dependency(bibfile)
         # generate nodes and ids
-        keyprefix = self.options.get("keyprefix", "")
-        list_ = self.options.get("list", "citation")
+        keyprefix: str = self.options.get("keyprefix", "")
+        list_: str = self.options.get("list", "citation")
         if list_ not in {"bullet", "enumerated", "citation"}:
             logger.warning(
                 "unknown bibliography list type '{0}'.".format(list_),
@@ -165,8 +165,9 @@ class BibliographyDirective(Directive):
         # we only know which citations to included at resolve stage
         # but we need to know their ids before resolve stage
         # so for now we generate a node, and thus, an id, for every entry
-        citation_nodes = {keyprefix + entry.key: citation_node_class()
-                          for entry in domain.get_entries(bibfiles)}
+        citation_nodes: Dict[str, docutils.nodes.Element] = {
+            keyprefix + entry.key: citation_node_class()
+            for entry in domain.get_entries(bibfiles)}
         for citation_node in citation_nodes.values():
             self.state.document.note_explicit_target(
                 citation_node, citation_node)
