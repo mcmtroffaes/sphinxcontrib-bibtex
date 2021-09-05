@@ -33,6 +33,10 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_config_value("bibtex_footbibliography_header", "", "html")
     app.add_config_value("bibtex_reference_style", "label", "env")
     app.add_config_value("bibtex_foot_reference_style", "foot", "env")
+    app.add_config_value("bibtex_cite_id", "", "html")
+    app.add_config_value("bibtex_footcite_id", "", "html")
+    app.add_config_value("bibtex_bibliography_id", "", "html")
+    app.add_config_value("bibtex_footbibliography_id", "", "html")
     app.add_domain(BibtexDomain)
     app.add_directive("bibliography", BibliographyDirective)
     app.add_role("cite", CiteRole())
@@ -46,7 +50,7 @@ def setup(app: Sphinx) -> Dict[str, Any]:
 
     return {
         'version': '2.4.0a0',
-        'env_version': 8,
+        'env_version': 9,
         'parallel_read_safe': True,
         'parallel_write_safe': True,
         }

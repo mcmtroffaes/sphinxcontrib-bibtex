@@ -18,7 +18,7 @@ import ast  # parse(), used for filter
 import docutils.nodes
 import sphinx.util
 
-from .bibfile import normpath_filename
+from .bibfile import normpath_filename, _make_ids
 from .nodes import bibliography as bibliography_node
 
 if TYPE_CHECKING:
@@ -160,13 +160,28 @@ class BibliographyDirective(Directive):
             citation_node_class = docutils.nodes.list_item
         else:
             citation_node_class = docutils.nodes.citation
-        node = bibliography_node('', docname=env.docname)
+        bibliography_count = env.temp_data["bibtex_bibliography_count"] = \
+            env.temp_data.get("bibtex_bibliography_count", 0) + 1
+        ids = set(self.state.document.ids.keys())
+        node = bibliography_node(
+            '', docname=env.docname, ids=_make_ids(
+                docname=env.docname, lineno=self.lineno,
+                ids=ids,
+                raw_id=env.app.config.bibtex_bibliography_id.format(
+                    bibliography_count=bibliography_count)))
         self.state.document.note_explicit_target(node, node)
         # we only know which citations to included at resolve stage
         # but we need to know their ids before resolve stage
         # so for now we generate a node, and thus, an id, for every entry
         citation_nodes: Dict[str, docutils.nodes.Element] = {
-            keyprefix + entry.key: citation_node_class()
+            keyprefix + entry.key:
+                citation_node_class(ids=_make_ids(
+                    docname=env.docname,
+                    lineno=self.lineno,
+                    ids=ids,
+                    raw_id=env.app.config.bibtex_cite_id.format(
+                        bibliography_count=bibliography_count,
+                        key=keyprefix + entry.key)))
             for entry in domain.get_entries(bibfiles)}
         for citation_node in citation_nodes.values():
             self.state.document.note_explicit_target(

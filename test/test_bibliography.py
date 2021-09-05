@@ -1,6 +1,7 @@
 from typing import Set
 
-from test.common import html_citations, html_citation_refs
+from test.common import \
+    html_citations, html_citation_refs, html_footnotes, html_footnote_refs
 import pytest
 import re
 
@@ -163,15 +164,18 @@ def test_bibliography_multi_foot(app, warning) -> None:
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding='utf-8')
     assert output.count('<p class="rubric"') == 3
-    assert len(re.findall('id="mandel"', output)) == 1
-    assert len(re.findall('id="evensen"', output)) == 1
-    assert len(re.findall('id="lorenc"', output)) == 1
     assert len(re.findall(
-        'class="footnote-reference brackets" href="#mandel"', output)) == 2
+        html_footnotes(id_="footcite-2009-mandel"), output)) == 1
     assert len(re.findall(
-        'class="footnote-reference brackets" href="#evensen"', output)) == 1
+        html_footnotes(id_="footcite-2003-evensen"), output)) == 1
     assert len(re.findall(
-        'class="footnote-reference brackets" href="#lorenc"', output)) == 1
+        html_footnotes(id_="footcite-1986-lorenc"), output)) == 1
+    assert len(re.findall(
+        html_footnote_refs(refid='footcite-2009-mandel'), output)) == 2
+    assert len(re.findall(
+        html_footnote_refs(refid='footcite-2003-evensen'), output)) == 1
+    assert len(re.findall(
+        html_footnote_refs(refid='footcite-1986-lorenc'), output)) == 1
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_missing_field')
@@ -222,3 +226,32 @@ def test_bibliography_url(app, warning) -> None:
     assert 'aaa' + url('https://google.com/') + 'bbb' in match2.group('text')
     assert url('https://youtube.com/') in match3.group('text')
     assert 'URL: ' + url('https://wikipedia.org/') in match4.group('text')
+
+
+@pytest.mark.sphinx('html', testroot='bibliography_custom_ids')
+def test_bibliography_custom_ids(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text(encoding='utf-8')
+    assert '<p id="bibliography-id-1">' in output
+    assert '<p id="bibliography-id-2">' in output
+    assert '<p id="footbibliography-id-1">' in output
+    assert '<p id="footbibliography-id-2">' in output
+    match1 = html_citations(text='.*Evensen.*').search(output)
+    match2 = html_citations(text='.*Mandel.*').search(output)
+    match3 = html_citations(text='.*Lorenc.*').search(output)
+    assert match1 is not None
+    assert match2 is not None
+    assert match3 is not None
+    assert match1.group('id_') == 'cite-id-1-2003-evensen'
+    assert match2.group('id_') == 'cite-id-1-2009-mandel'
+    assert match3.group('id_') == 'cite-id-2-1986-lorenc'
+    match1 = html_footnotes(text='.*Evensen.*').search(output)
+    match2 = html_footnotes(text='.*Mandel.*').search(output)
+    match3 = html_footnotes(text='.*Lorenc.*').search(output)
+    assert match1 is not None
+    assert match2 is not None
+    assert match3 is not None
+    assert match1.group('id_') == 'footcite-id-2003-evensen'
+    assert match2.group('id_') == 'footcite-id-2009-mandel'
+    assert match3.group('id_') == 'footcite-id-1986-lorenc'
