@@ -750,6 +750,8 @@ are available here:
 Custom Inline Citation References
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. versionadded:: 2.2.0
+
 You can create and register your own referencing styles.
 For instance, say we wish to use the author-year style with round brackets
 instead of the default square brackets.
