@@ -25,7 +25,7 @@ class BaseReferenceStyle(ABC):
     as a :class:`dataclasses.dataclass`,
     and must provide a type annotation and default value for all attributes
     (unless ``init=False`` is used, in which case they can be
-    initialized in :meth:`~dataclasses.dataclass.__post_init__`).).
+    initialized in :meth:`~dataclasses.dataclass.__post_init__`).
     This allows client code to instantiate any reference style
     without needing to specify any arguments through the constructor.
     """
