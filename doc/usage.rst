@@ -861,6 +861,8 @@ In particular, colons and underscores will be translated into dashes.
 Custom Bibliography Header
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. versionadded:: 2.0.0
+
 By default, the :rst:dir:`bibliography`
 and :rst:dir:`footbibliography` directives
 simply insert a paragraph.
@@ -916,9 +918,9 @@ Encoding: Percent Signs
 ~~~~~~~~~~~~~~~~~~~~~~~
 
 Be sure to write
-``\%`` for percent signs at all times (unless your file contains a
-genuine comment), otherwise the parser will ignore the remainder
-of the line.
+``\%`` for percent signs at all times in your bib files
+(unless your file contains a genuine comment),
+otherwise the pybtex parser will ignore the remainder of the line.
 
 Duplicate Labels When Using ``:style: plain``
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
