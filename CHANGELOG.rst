@@ -1,5 +1,5 @@
-2.4.0 (in development)
-----------------------
+2.4.0 (8 September 2021)
+------------------------
 
 * Allow specific warnings to be suppressed (see issue #255, contributed by
   stevenrhall).
@@ -28,6 +28,11 @@
   (see issue #264, reported by kmuehlbauer).
   Refer to the documentation for detailed usage and examples.
 
+* Switch to github actions for regression testing.
+
+* The API is now fully type checked.
+
+* Various minor improvements in documentation and code.
 
 2.3.0 (1 June 2021)
 -------------------
