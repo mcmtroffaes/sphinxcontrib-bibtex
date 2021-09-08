@@ -861,6 +861,8 @@ In particular, colons and underscores will be translated into dashes.
 Custom Bibliography Header
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+.. versionadded:: 2.0.0
+
 By default, the :rst:dir:`bibliography`
 and :rst:dir:`footbibliography` directives
 simply insert a paragraph.
