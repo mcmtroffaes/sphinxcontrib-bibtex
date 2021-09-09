@@ -1,7 +1,6 @@
 import dataclasses
 from typing import TYPE_CHECKING, List, Iterable, Union
 from sphinxcontrib.bibtex.style.template import reference, join, year
-from pybtex.style.template import field
 from . import BaseReferenceStyle, BracketStyle, PersonStyle
 
 if TYPE_CHECKING:

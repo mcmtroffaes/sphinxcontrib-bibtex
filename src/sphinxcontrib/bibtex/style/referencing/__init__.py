@@ -4,7 +4,9 @@ from abc import ABC
 import pybtex.plugin
 from pybtex.richtext import Text, Tag
 from sphinxcontrib.bibtex.richtext import ReferenceInfo, BaseReferenceText
-from sphinxcontrib.bibtex.style.template import names, sentence, join, author_or_editor_or_title
+from sphinxcontrib.bibtex.style.template import (
+    names, sentence, join, author_or_editor_or_title
+)
 from typing import (
     TYPE_CHECKING, Tuple, List, Union, Iterable, Type, Optional, Dict
 )

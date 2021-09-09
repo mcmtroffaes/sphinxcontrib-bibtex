@@ -15,7 +15,9 @@
 """
 
 from pybtex.richtext import Text
-from pybtex.style.template import Node, _format_list, FieldIsMissing, field, first_of, optional, tag
+from pybtex.style.template import (
+    Node, _format_list, FieldIsMissing, field, first_of, optional, tag
+)
 from typing import TYPE_CHECKING, Dict, Any, cast, Type
 
 from sphinxcontrib.bibtex.richtext import BaseReferenceText
