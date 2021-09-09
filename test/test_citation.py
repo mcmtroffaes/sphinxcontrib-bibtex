@@ -75,6 +75,8 @@ def test_citation_no_author_no_key(app, warning) -> None:
     find_label(output, "2009")
     find_label(output, "<em>This citation only has a title</em>, n.d.")
     find_label(output, "n.d.")
+    find_label(output, "Whatever, 2021")
+    find_label(output, "2021")
 
 
 # test cites spanning multiple lines (issue 205)

@@ -4,7 +4,7 @@ from abc import ABC
 import pybtex.plugin
 from pybtex.richtext import Text, Tag
 from sphinxcontrib.bibtex.richtext import ReferenceInfo, BaseReferenceText
-from sphinxcontrib.bibtex.style.template import names, sentence, join, names_or_title
+from sphinxcontrib.bibtex.style.template import names, sentence, join, author_or_editor_or_title
 from typing import (
     TYPE_CHECKING, Tuple, List, Union, Iterable, Type, Optional, Dict
 )
@@ -161,12 +161,11 @@ class PersonStyle:
             other=None if full else self.other,
         )
 
-    def names_or_title(self, role: str, full: bool) -> "Node":
+    def author_or_editor_or_title(self, full: bool) -> "Node":
         """Returns a template formatting the persons with correct separators
         and using the full person list if so requested.
         """
-        return names_or_title(
-            role=role,
+        return author_or_editor_or_title(
             sep=self.sep,
             sep2=self.sep2,
             last_sep=self.last_sep,

@@ -62,7 +62,7 @@ class BasicSuperTextualReferenceStyle(BaseReferenceStyle):
 
     def inner(self, role_name: str) -> "Node":
         return join(sep=self.text_reference_sep)[
-            self.person.names_or_title('author', full='s' in role_name),
+            self.person.author_or_editor_or_title(full='s' in role_name),
             tag('sup')[
                 join[
                     self.bracket.left,

@@ -134,8 +134,9 @@ def year(children, data: Dict[str, Any]) -> "BaseText":
 
 
 @node
-def names_or_title(children, data, role, **kwargs):
+def author_or_editor_or_title(children, data, **kwargs):
     assert not children
     return first_of[
-        optional[names(role, **kwargs)],
+        optional[names('author', **kwargs)],
+        optional[names('editor', **kwargs)],
         tag('em')[field('title')]].format_data(data)

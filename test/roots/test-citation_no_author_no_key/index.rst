@@ -7,4 +7,7 @@
 :cite:p:`onlytitle`
 :cite:t:`onlytitle`
 
+:cite:p:`onlyeditor`
+:cite:t:`onlyeditor`
+
 .. bibliography::
