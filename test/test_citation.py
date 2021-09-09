@@ -59,11 +59,24 @@ def test_citation_any_role(app, warning) -> None:
     assert {"App", "Bra"} == cits == citrefs
 
 
+def find_label(output: str, label: str):
+    assert html_citation_refs(label=label).search(output) is not None
+
+
 # see issue 85
 @pytest.mark.sphinx('html', testroot='citation_no_author_no_key')
 def test_citation_no_author_no_key(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
+    find_label(output, "<em>Software projects built on Mesos</em>, 2015")
+    find_label(output, "2015")
+    find_label(output, "Mandel, 2009")
+    find_label(output, "2009")
+    find_label(output, "<em>This citation only has a title</em>, n.d.")
+    find_label(output, "n.d.")
+    find_label(output, "Whatever, 2021")
+    find_label(output, "2021")
 
 
 # test cites spanning multiple lines (issue 205)

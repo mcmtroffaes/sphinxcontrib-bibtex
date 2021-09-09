@@ -4,7 +4,9 @@ from abc import ABC
 import pybtex.plugin
 from pybtex.richtext import Text, Tag
 from sphinxcontrib.bibtex.richtext import ReferenceInfo, BaseReferenceText
-from sphinxcontrib.bibtex.style.template import names, sentence, join
+from sphinxcontrib.bibtex.style.template import (
+    names, sentence, join, author_or_editor_or_title
+)
 from typing import (
     TYPE_CHECKING, Tuple, List, Union, Iterable, Type, Optional, Dict
 )
@@ -155,6 +157,17 @@ class PersonStyle:
         """
         return names(
             role=role,
+            sep=self.sep,
+            sep2=self.sep2,
+            last_sep=self.last_sep,
+            other=None if full else self.other,
+        )
+
+    def author_or_editor_or_title(self, full: bool) -> "Node":
+        """Returns a template formatting the author, falling back on editor
+        or title if author is not specified.
+        """
+        return author_or_editor_or_title(
             sep=self.sep,
             sep2=self.sep2,
             last_sep=self.last_sep,

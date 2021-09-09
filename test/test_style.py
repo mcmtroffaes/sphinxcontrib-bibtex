@@ -8,6 +8,9 @@ from sphinxcontrib.bibtex.style.names.last import LastNameStyle
 from sphinxcontrib.bibtex.style.referencing import (
     BaseReferenceText, BaseReferenceStyle, format_references
 )
+from sphinxcontrib.bibtex.style.referencing.basic_author_year import (
+    BasicAuthorYearTextualReferenceStyle
+)
 from sphinxcontrib.bibtex.style.template import (
     entry_label, reference, join, names
 )
@@ -30,6 +33,16 @@ def test_style_names_last() -> None:
         'de&nbsp;la Vall<span class="bibtex-protected">é</span>e&nbsp;Poussin')
     name2 = Person(first='First', last='Last', middle='Middle')
     assert last(name2).format().render_as('latex') == "Last"
+
+
+def test_style_names() -> None:
+    auth = Person('First Last')
+    fields = dict(title='The Book', year='2000', publisher='Santa')
+    entry = Entry(type_='book', fields=fields, persons=dict(author=[auth]))
+    style = BasicAuthorYearTextualReferenceStyle()
+    rich_name = style.person.names('author', full=True).format_data(
+        dict(entry=entry, style=style))
+    assert rich_name.render_as('text') == "Last"
 
 
 def test_style_names_no_author() -> None:

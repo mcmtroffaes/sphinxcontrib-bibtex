@@ -37,4 +37,4 @@ class ExtraAuthorReferenceStyle(BaseReferenceStyle):
 
     def inner(self, role_name: str) -> "Node":
         return reference[
-            self.person.names('author', full='s' in role_name)]
+            self.person.author_or_editor_or_title(full='s' in role_name)]
