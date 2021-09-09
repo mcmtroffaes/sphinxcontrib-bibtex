@@ -1,6 +1,9 @@
 2.4.1 (in development)
 ----------------------
 
+* Gracefully handle textual citations when author or year are missing
+  (see issue #267, reported by fbkarsdorp).
+
 2.4.0 (8 September 2021)
 ------------------------
 
