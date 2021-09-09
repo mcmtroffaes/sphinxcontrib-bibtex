@@ -1,6 +1,6 @@
 import dataclasses
 from typing import TYPE_CHECKING, List, Iterable, Union
-from sphinxcontrib.bibtex.style.template import reference, join
+from sphinxcontrib.bibtex.style.template import reference, join, year
 from pybtex.style.template import field
 from . import BaseReferenceStyle, BracketStyle, PersonStyle
 
@@ -34,9 +34,9 @@ class BasicAuthorYearParentheticalReferenceStyle(BaseReferenceStyle):
     def inner(self, role_name: str) -> "Node":
         return reference[
             join(sep=self.author_year_sep)[
-                self.person.names(
+                self.person.names_or_title(
                     'author', full='s' in role_name),
-                field('year')
+                year
             ]
         ]
 
@@ -66,10 +66,10 @@ class BasicAuthorYearTextualReferenceStyle(BaseReferenceStyle):
 
     def inner(self, role_name: str) -> "Node":
         return join(sep=self.text_reference_sep)[
-            self.person.names('author', full='s' in role_name),
+            self.person.names_or_title('author', full='s' in role_name),
             join[
                 self.bracket.left,
-                reference[field('year')],
+                reference[year],
                 self.bracket.right
             ]
         ]

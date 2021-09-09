@@ -15,7 +15,7 @@
 """
 
 from pybtex.richtext import Text
-from pybtex.style.template import Node, _format_list, FieldIsMissing
+from pybtex.style.template import Node, _format_list, FieldIsMissing, field, first_of, optional, tag
 from typing import TYPE_CHECKING, Dict, Any, cast, Type
 
 from sphinxcontrib.bibtex.richtext import BaseReferenceText
@@ -125,3 +125,17 @@ def footnote_reference(children, data: Dict[str, Any]):
     # we need to give the footnote text some fake content
     # otherwise pybtex richtext engine will mess things up
     return reference_text_class(info, '#')
+
+
+@node
+def year(children, data: Dict[str, Any]) -> "BaseText":
+    assert not children
+    return first_of[optional[field('year')], 'n.d.'].format_data(data)
+
+
+@node
+def names_or_title(children, data, role, **kwargs):
+    assert not children
+    return first_of[
+        optional[names(role, **kwargs)],
+        tag('em')[field('title')]].format_data(data)

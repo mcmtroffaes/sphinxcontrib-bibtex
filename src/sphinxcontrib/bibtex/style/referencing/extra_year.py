@@ -1,8 +1,7 @@
 import dataclasses
 
 from typing import TYPE_CHECKING, List, Iterable
-from pybtex.style.template import field
-from sphinxcontrib.bibtex.style.template import reference
+from sphinxcontrib.bibtex.style.template import reference, year
 from . import BaseReferenceStyle, BracketStyle
 
 if TYPE_CHECKING:
@@ -28,4 +27,4 @@ class ExtraYearReferenceStyle(BaseReferenceStyle):
         )
 
     def inner(self, role_name: str) -> "Node":
-        return reference[field('year')]
+        return reference[year]
