@@ -40,7 +40,8 @@ def test_style_names() -> None:
     fields = dict(title='The Book', year='2000', publisher='Santa')
     entry = Entry(type_='book', fields=fields, persons=dict(author=[auth]))
     style = BasicAuthorYearTextualReferenceStyle()
-    rich_name = names('author').format_data(dict(entry=entry, style=style))
+    rich_name = style.person.names('author', full=True).format_data(
+        dict(entry=entry, style=style))
     assert rich_name.render_as('text') == "Last"
 
 
