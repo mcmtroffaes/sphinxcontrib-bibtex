@@ -164,8 +164,8 @@ class PersonStyle:
         )
 
     def author_or_editor_or_title(self, full: bool) -> "Node":
-        """Returns a template formatting the persons with correct separators
-        and using the full person list if so requested.
+        """Returns a template formatting the author, falling back on editor
+        or title if author is not specified.
         """
         return author_or_editor_or_title(
             sep=self.sep,
