@@ -35,7 +35,7 @@ class BibtexFootDomain(Domain):
     label = 'BibTeX Footnote Citations'
     data_version = 0
     initial_data = dict(
-        bibliography_header=docutils.nodes.paragraph(),
+        bibliography_header=docutils.nodes.compound(),
     )
     reference_style: BaseReferenceStyle
 
@@ -60,7 +60,7 @@ class BibtexFootDomain(Domain):
         # parse bibliography header
         header = getattr(env.app.config, "bibtex_footbibliography_header")
         if header:
-            self.data["bibliography_header"] = \
+            self.data["bibliography_header"] += \
                 parse_header(header, "foot_bibliography_header")
 
     def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
