@@ -163,7 +163,7 @@ def test_bibliography_multi_foot(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding='utf-8')
-    assert len(re.findall('<p class="rubric"', output)) == 3
+    assert output.count('<p class="rubric"') == 3
     assert len(re.findall(
         html_footnotes(id_="footcite-2009-mandel"), output)) == 1
     assert len(re.findall(
