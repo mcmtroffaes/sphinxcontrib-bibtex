@@ -1,6 +1,10 @@
 2.4.2 (in development)
 ----------------------
 
+* Use container node instead of paragraph node for containing bibliographies,
+  fixing a violation against the docutils spec
+  (see issue #273, reported by rappdw, with additional input from brechtm).
+
 2.4.1 (10 September 2021)
 -------------------------
 

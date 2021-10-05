@@ -24,7 +24,7 @@ bibtex_citation_xml = """
             <reference internal="True" refid="id3" reftitle="The title.">
                 tes
             ]
-    <paragraph ids="id2">
+    <container ids="id2">
         <citation backrefs="id1" docname="index" ids="id3">
             <label support_smartquotes="False">
                 tes
@@ -89,7 +89,7 @@ def test_debug_minimal_example(app, warning) -> None:
         '                Nel87',
         '            ]',
         '        .',
-        '    <paragraph ids="id3">',
+        '    <container ids="id3">',
         '        <citation backrefs="id1 id2" docname="index" ids="id4">',
         '            <label support_smartquotes="False">',
         '                Nel87',

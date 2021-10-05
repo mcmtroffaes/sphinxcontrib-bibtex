@@ -289,7 +289,7 @@ class BibtexDomain(Domain):
             encoding='',
             bibfiles={},
             data=pybtex.database.BibliographyData()),
-        bibliography_header=docutils.nodes.paragraph(),
+        bibliography_header=docutils.nodes.container(),
         bibliographies={},
         citations=[],
         citation_refs=[],
@@ -350,7 +350,7 @@ class BibtexDomain(Domain):
         # parse bibliography header
         header = getattr(env.app.config, "bibtex_bibliography_header")
         if header:
-            self.data["bibliography_header"] = \
+            self.data["bibliography_header"] += \
                 parse_header(header, "bibliography_header")
 
     def clear_doc(self, docname: str) -> None:

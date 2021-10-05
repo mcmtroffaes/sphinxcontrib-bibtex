@@ -233,10 +233,10 @@ def test_bibliography_custom_ids(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding='utf-8')
-    assert '<p id="bibliography-id-1">' in output
-    assert '<p id="bibliography-id-2">' in output
-    assert '<p id="footbibliography-id-1">' in output
-    assert '<p id="footbibliography-id-2">' in output
+    assert ' id="bibliography-id-1"' in output
+    assert ' id="bibliography-id-2"' in output
+    assert ' id="footbibliography-id-1"' in output
+    assert ' id="footbibliography-id-2"' in output
     match1 = html_citations(text='.*Evensen.*').search(output)
     match2 = html_citations(text='.*Mandel.*').search(output)
     match3 = html_citations(text='.*Lorenc.*').search(output)
