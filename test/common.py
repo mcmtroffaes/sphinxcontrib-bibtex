@@ -22,7 +22,7 @@ def html_citation_refs(refid=RE_ID, label=RE_LABEL, title=RE_TITLE):
 
 def html_citations(id_=RE_ID, label=RE_LABEL, text=RE_TEXT):
     return re.compile(
-        r'<dt class=".*label.*" id="(?P<id_>{id_})">'
+        r'<dt class="label" id="(?P<id_>{id_})">'
         r'<span class="brackets">'
         r'(?:<a class="fn-backref" href="#(?P<backref>{backref_id})">)?'
         r'(?P<label>{label})'
@@ -49,7 +49,7 @@ def html_footnote_refs(refid=RE_ID):
 
 def html_footnotes(id_=RE_ID, text=RE_TEXT):
     return re.compile(
-        r'<dt class=".*label.*" id="(?P<id_>{id_})">'
+        r'<dt class="label" id="(?P<id_>{id_})">'
         r'<span class="brackets">'
         r'(?:<a class="fn-backref" href="#(?P<backref>{backref_id})">)?'
         r'(?P<label>{label})'

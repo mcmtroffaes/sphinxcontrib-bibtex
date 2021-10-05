@@ -289,7 +289,7 @@ class BibtexDomain(Domain):
             encoding='',
             bibfiles={},
             data=pybtex.database.BibliographyData()),
-        bibliography_header=docutils.nodes.compound(),
+        bibliography_header=docutils.nodes.container(),
         bibliographies={},
         citations=[],
         citation_refs=[],

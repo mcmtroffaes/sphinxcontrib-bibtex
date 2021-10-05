@@ -35,7 +35,7 @@ class BibtexFootDomain(Domain):
     label = 'BibTeX Footnote Citations'
     data_version = 0
     initial_data = dict(
-        bibliography_header=docutils.nodes.compound(),
+        bibliography_header=docutils.nodes.container(),
     )
     reference_style: BaseReferenceStyle
 
