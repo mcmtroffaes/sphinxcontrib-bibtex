@@ -11,52 +11,24 @@
         .. automethod:: result_nodes
 """
 
-from typing import TYPE_CHECKING, cast, Tuple, List, NamedTuple
+from typing import TYPE_CHECKING, cast, Tuple, List
 
 import docutils.nodes
-import pybtex_docutils
 from docutils.nodes import make_id
 from pybtex.plugin import find_plugin
 from sphinx.roles import XRefRole
 from sphinx.util.logging import getLogger
 
-from .richtext import BaseReferenceText
 from .style.referencing import format_references
+from .style.template import FootReferenceInfo
 from .transforms import node_text_transform
 
 if TYPE_CHECKING:
     from sphinx.environment import BuildEnvironment
     from .domain import BibtexDomain
     from .foot_domain import BibtexFootDomain
-    from pybtex.backends import BaseBackend
 
 logger = getLogger(__name__)
-
-
-class FootReferenceInfo(NamedTuple):
-    """Tuple containing reference info to enable sphinx to resolve a footnote
-    reference.
-    """
-    key: str                             #: Citation key.
-    document: "docutils.nodes.document"  #: Current docutils document.
-    refname: str                         #: Citation reference name.
-
-
-class FootReferenceText(BaseReferenceText[FootReferenceInfo]):
-    """Pybtex rich text class for footnote references with the docutils
-    backend, for use with :class:`FootReferenceInfo`.
-    """
-
-    def render(self, backend: "BaseBackend"):
-        assert isinstance(backend, pybtex_docutils.Backend), \
-               "FootReferenceText only supports the docutils backend"
-        info = self.info[0]
-        # see docutils.parsers.rst.states.Body.footnote_reference()
-        refnode = docutils.nodes.footnote_reference(
-            '[#%s]_' % info.key, refname=info.refname, auto=1)
-        info.document.note_autofootnote_ref(refnode)
-        info.document.note_footnote_ref(refnode)
-        return [refnode]
 
 
 class FootCiteRole(XRefRole):
@@ -133,6 +105,6 @@ class FootCiteRole(XRefRole):
                                location=(env.docname, self.lineno),
                                type="bibtex", subtype="key_not_found")
         ref_nodes = format_references(
-            foot_domain.reference_style, FootReferenceText, node['reftype'],
-            references).render(domain.backend)
+            foot_domain.reference_style, node['reftype'], references
+        ).render(domain.backend)
         return ref_nodes, []

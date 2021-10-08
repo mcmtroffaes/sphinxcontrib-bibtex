@@ -3,12 +3,11 @@ from abc import ABC
 
 import pybtex.plugin
 from pybtex.richtext import Text, Tag
-from sphinxcontrib.bibtex.richtext import ReferenceInfo, BaseReferenceText
 from sphinxcontrib.bibtex.style.template import (
     names, sentence, join, author_or_editor_or_title
 )
 from typing import (
-    TYPE_CHECKING, Tuple, List, Union, Iterable, Type, Optional, Dict
+    TYPE_CHECKING, Tuple, List, Union, Iterable, Optional, Dict
 )
 
 if TYPE_CHECKING:
@@ -17,6 +16,7 @@ if TYPE_CHECKING:
     from pybtex.style import FormattedEntry
     from pybtex.style.names import BaseNameStyle
     from pybtex.style.template import Node
+    from sphinxcontrib.bibtex.richtext import ReferenceInfo
 
 
 @dataclasses.dataclass
@@ -52,10 +52,9 @@ class BaseReferenceStyle(ABC):
 
 def format_references(
         style: BaseReferenceStyle,
-        reference_text_class: Type[BaseReferenceText[ReferenceInfo]],
         role_name: str,
         references: Iterable[Tuple[
-            "Entry", "FormattedEntry", ReferenceInfo]],
+            "Entry", "FormattedEntry", "ReferenceInfo"]],
         ) -> "BaseText":
     """Format the list of references according to the given role.
 
@@ -70,7 +69,6 @@ def format_references(
                 entry=entry,
                 formatted_entry=formatted_entry,
                 reference_info=info,
-                reference_text_class=reference_text_class,
                 style=style))
         for entry, formatted_entry, info in references]
     return style.outer(role_name, children).format()

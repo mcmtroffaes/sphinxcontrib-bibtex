@@ -14,17 +14,24 @@
 .. autofunction:: sphinxcontrib.bibtex.style.template.reference()
 """
 
+import docutils.nodes
+import pybtex_docutils
 from pybtex.richtext import Text
 from pybtex.style.template import (
     Node, _format_list, FieldIsMissing, field, first_of, optional, tag
 )
-from typing import TYPE_CHECKING, Dict, Any, cast, Type
+from sphinx.util.nodes import make_refnode
 
+from sphinxcontrib.bibtex.nodes import raw_latex
 from sphinxcontrib.bibtex.richtext import BaseReferenceText
 
+from typing import TYPE_CHECKING, Dict, Any, cast, NamedTuple
+
 if TYPE_CHECKING:
+    from pybtex.backends import BaseBackend
     from pybtex.richtext import BaseText
     from pybtex.style import FormattedEntry
+    from sphinx.builders import Builder
 
 
 # extended from pybtex: also copies the docstring into the wrapped object
@@ -97,9 +104,53 @@ def entry_label(children, data) -> "BaseText":
     return Text(entry.label)
 
 
+class SphinxReferenceInfo(NamedTuple):
+    """Tuple containing reference info to enable sphinx to resolve a reference
+    to a citation.
+    """
+    builder: "Builder"  #: The Sphinx builder.
+    fromdocname: str    #: Document name of the citation reference.
+    todocname: str      #: Document name of the bibliography.
+    citation_id: str    #: Unique id of the citation within the bibliography.
+    title: str          #: Title attribute for reference node.
+
+
+class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
+    """Pybtex rich text class generating
+    a docutils reference node to a citation
+    for use with :class:`SphinxReferenceInfo`.
+    """
+
+    def render(self, backend: "BaseBackend"):
+        assert isinstance(backend, pybtex_docutils.Backend), \
+               "SphinxReferenceText only supports the docutils backend"
+        info = self.info[0]
+        if info.builder.name == 'latex':
+            key = f'cite.{info.todocname}:{info.citation_id}'
+            return (
+                [raw_latex(f'\\hyperlink{{{key}}}{{')]
+                + super().render(backend)
+                + [raw_latex('}')]
+            )
+        else:
+            children = super().render(backend)
+            # make_refnode only takes a single child
+            refnode = make_refnode(
+                builder=info.builder,
+                fromdocname=info.fromdocname,
+                todocname=info.todocname,
+                targetid=info.citation_id,
+                child=children[0],
+                title=info.title,
+            )
+            refnode.extend(children[1:])  # type: ignore
+            return [refnode]
+
+
 @node
 def reference(children, data: Dict[str, Any]):
-    """Node for inserting a citation reference. The children of the node
+    """Pybtex node for inserting a docutils reference node to a citation.
+    The children of the node
     comprise the content of the reference, and any referencing information
     is stored in the *reference_info* key of the *data*.
     The data must also contain a *style* key pointing to the corresponding
@@ -107,26 +158,51 @@ def reference(children, data: Dict[str, Any]):
     """
     parts = _format_list(children, data)
     info = data['reference_info']
-    reference_text_class: Type[BaseReferenceText] \
-        = data['reference_text_class']
-    return reference_text_class(info, *parts)
+    assert isinstance(info, SphinxReferenceInfo)
+    return SphinxReferenceText(info, *parts)
+
+
+class FootReferenceInfo(NamedTuple):
+    """Tuple containing reference info to enable sphinx to resolve a footnote
+    reference.
+    """
+    key: str                             #: Citation key.
+    document: "docutils.nodes.document"  #: Current docutils document.
+    refname: str                         #: Citation reference name.
+
+
+class FootReferenceText(BaseReferenceText[FootReferenceInfo]):
+    """Pybtex rich text class generating
+    a docutils footnote_reference node to a citation
+    for use with :class:`FootReferenceInfo`.
+    """
+
+    def render(self, backend: "BaseBackend"):
+        assert isinstance(backend, pybtex_docutils.Backend), \
+               "FootReferenceText only supports the docutils backend"
+        info = self.info[0]
+        # see docutils.parsers.rst.states.Body.footnote_reference()
+        refnode = docutils.nodes.footnote_reference(
+            '[#%s]_' % info.key, refname=info.refname, auto=1)
+        info.document.note_autofootnote_ref(refnode)
+        info.document.note_footnote_ref(refnode)
+        return [refnode]
 
 
 @node
 def footnote_reference(children, data: Dict[str, Any]):
-    """Node for inserting a footnote reference. The children of the node
-    comprise the content of the reference, and any referencing information
+    """Pybtex node for inserting a footnote_reference docutils node.
+    Any referencing information
     is stored in the *reference_info* key of the *data*.
     The data must also contain a *style* key pointing to the corresponding
     :class:`~sphinxcontrib.bibtex.style.referencing.BaseReferenceStyle`.
     """
     assert not children
     info = data['reference_info']
-    reference_text_class: Type[BaseReferenceText] \
-        = data['reference_text_class']
+    assert isinstance(info, FootReferenceInfo)
     # we need to give the footnote text some fake content
     # otherwise pybtex richtext engine will mess things up
-    return reference_text_class(info, '#')
+    return FootReferenceText(info, '#')
 
 
 @node

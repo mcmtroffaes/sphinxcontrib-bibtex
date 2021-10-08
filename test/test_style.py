@@ -2,19 +2,20 @@ import pybtex.plugin
 
 from pybtex.database import Person, Entry
 from pybtex.richtext import HRef
-from pybtex.style.template import Node, FieldIsMissing
+from pybtex.style.template import Node, FieldIsMissing, _format_list
 # direct import of the plugin to ensure we are testing this specific class
+from sphinxcontrib.bibtex.richtext import BaseReferenceText
 from sphinxcontrib.bibtex.style.names.last import LastNameStyle
 from sphinxcontrib.bibtex.style.referencing import (
-    BaseReferenceText, BaseReferenceStyle, format_references
+    BaseReferenceStyle, format_references
 )
 from sphinxcontrib.bibtex.style.referencing.basic_author_year import (
     BasicAuthorYearTextualReferenceStyle
 )
 from sphinxcontrib.bibtex.style.template import (
-    entry_label, reference, join, names
+    entry_label, join, names, node
 )
-from typing import TYPE_CHECKING, List, Iterable
+from typing import TYPE_CHECKING, List, Iterable, Dict, Any
 import pytest
 
 if TYPE_CHECKING:
@@ -51,6 +52,28 @@ def test_style_names_no_author() -> None:
         names('author').format_data(dict(entry=entry))
 
 
+class SimpleReferenceText(BaseReferenceText[str]):
+    """A simple reference text class storing the url as a string in *info*."""
+
+    def render(self, backend):
+        url = self.info[0]
+        return HRef(url, *self.parts).render(backend)
+
+
+@node
+def simple_reference(children, data: Dict[str, Any]):
+    """Pybtex node for inserting a docutils reference node to a citation.
+    The children of the node
+    comprise the content of the reference, and any referencing information
+    is stored in the *reference_info* key of the *data*.
+    The data must also contain a *style* key pointing to the corresponding
+    :class:`~sphinxcontrib.bibtex.style.referencing.BaseReferenceStyle`.
+    """
+    parts = _format_list(children, data)
+    info = data['reference_info']
+    return SimpleReferenceText(info, *parts)
+
+
 class SimpleReferenceStyle(BaseReferenceStyle):
 
     def role_names(self) -> Iterable[str]:
@@ -60,15 +83,7 @@ class SimpleReferenceStyle(BaseReferenceStyle):
         return join['{', join(';')[children], '}']
 
     def inner(self, role_name: str) -> "Node":
-        return reference[entry_label]
-
-
-class SimpleReferenceText(BaseReferenceText[str]):
-    """A simple reference text class storing the url as a string in *info*."""
-
-    def render(self, backend):
-        url = self.info[0]
-        return HRef(url, *self.parts).render(backend)
+        return simple_reference[entry_label]
 
 
 def test_simple_reference_style() -> None:
@@ -90,7 +105,6 @@ def test_simple_reference_style() -> None:
         pybtex.plugin.find_plugin('pybtex.backends', 'html')()
     assert 'p' in ref_style.role_names()
     assert \
-        format_references(ref_style, SimpleReferenceText,
-                          'p', references).render(backend) == \
+        format_references(ref_style, 'p', references).render(backend) == \
         '{<a href="#id1">Las00</a>;<a href="#id2">Zwe00</a>' \
         ';<a href="#id3">Sec00</a>}'

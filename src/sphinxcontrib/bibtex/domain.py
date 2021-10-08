@@ -36,17 +36,13 @@ import re
 from sphinx.domains import Domain, ObjType
 from sphinx.errors import ExtensionError
 from sphinx.locale import _
-from sphinx.util.nodes import make_refnode
 
 from .roles import CiteRole
 from .bibfile import normpath_filename, process_bibdata, BibData
-from .nodes import raw_latex
-from .style.referencing import (
-    BaseReferenceText, BaseReferenceStyle, format_references
-)
+from .style.referencing import BaseReferenceStyle, format_references
+from .style.template import SphinxReferenceInfo
 
 if TYPE_CHECKING:
-    from pybtex.backends import BaseBackend
     from pybtex.database import Entry
     from pybtex.style.formatting import BaseStyle
     from sphinx.addnodes import pending_xref
@@ -218,48 +214,6 @@ class Citation(NamedTuple):
     key: str                             #: Key (with prefix).
     entry: "Entry"                       #: Entry from pybtex.
     formatted_entry: "FormattedEntry"    #: Entry as formatted by pybtex.
-
-
-class SphinxReferenceInfo(NamedTuple):
-    """Tuple containing reference info to enable sphinx to resolve a reference
-    to a citation.
-    """
-    builder: "Builder"  #: The Sphinx builder.
-    fromdocname: str    #: Document name of the citation reference.
-    todocname: str      #: Document name of the bibliography.
-    citation_id: str    #: Unique id of the citation within the bibliography.
-    title: str          #: Title attribute for reference node.
-
-
-class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
-    """Pybtex rich text class for citation references with the docutils
-    backend, for use with :class:`SphinxReferenceInfo`.
-    """
-
-    def render(self, backend: "BaseBackend"):
-        assert isinstance(backend, pybtex_docutils.Backend), \
-               "SphinxReferenceText only supports the docutils backend"
-        info = self.info[0]
-        if info.builder.name == 'latex':
-            key = f'cite.{info.todocname}:{info.citation_id}'
-            return (
-                [raw_latex(f'\\hyperlink{{{key}}}{{')]
-                + super().render(backend)
-                + [raw_latex('}')]
-            )
-        else:
-            children = super().render(backend)
-            # make_refnode only takes a single child
-            refnode = make_refnode(
-                builder=info.builder,
-                fromdocname=info.fromdocname,
-                todocname=info.todocname,
-                targetid=info.citation_id,
-                child=children[0],
-                title=info.title,
-            )
-            refnode.extend(children[1:])  # type: ignore
-            return [refnode]
 
 
 def env_updated(app: "Sphinx", env: "BuildEnvironment") -> Iterable[str]:
@@ -440,9 +394,8 @@ class BibtexDomain(Domain):
                 citation_id=citation.citation_id,
                 title=citation.formatted_entry.text.render(plaintext)))
             for citation in citations.values()]
-        formatted_references = \
-            format_references(
-                self.reference_style, SphinxReferenceText, typ, references)
+        formatted_references = format_references(
+            self.reference_style, typ, references)
         result_node = docutils.nodes.inline(rawsource=target)
         result_node += formatted_references.render(self.backend)
         return result_node
