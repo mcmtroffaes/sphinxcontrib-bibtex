@@ -1,4 +1,4 @@
-Sphinx>=3.1
+Sphinx>=2.1
 docutils>=0.8
 pybtex>=0.24
 pybtex-docutils>=1.0.0
