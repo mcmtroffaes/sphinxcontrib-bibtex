@@ -17,7 +17,7 @@ jobs:
         pip-sphinx: [sphinx]
         include:
           - python-version: 3.9
-            pip-sphinx: sphinx==2.1 docutils<0.18
+            pip-sphinx: sphinx==2.1 docutils==0.16
           - python-version: 3.9
             pip-sphinx: --pre sphinx
     steps:
