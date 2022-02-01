@@ -1,4 +1,5 @@
-from test.common import html_citations, html_citation_refs
+from test.common import html_citations, html_citation_refs, \
+    html_docutils_citation_refs
 import dataclasses
 import pytest
 import re
@@ -367,5 +368,11 @@ def test_citation_style_round_brackets(app, warning) -> None:
 def test_citation_toctree(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output1 = (app.outdir / "index.html").read_text()
-    output2 = (app.outdir / "adoc1.html").read_text()
+    output = (app.outdir / "index.html").read_text()
+    output1 = (app.outdir / "adoc1.html").read_text()
+    output2 = (app.outdir / "adoc2.html").read_text()
+    assert len(html_citations(label='1').findall(output)) == 1
+    assert len(html_citation_refs(label='1').findall(output1)) == 1
+    assert len(html_docutils_citation_refs(
+        label=r'Test2').findall(output2)) == 1
+    assert len(html_citations(label='Test2').findall(output2)) == 1

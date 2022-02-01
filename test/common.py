@@ -20,6 +20,15 @@ def html_citation_refs(refid=RE_ID, label=RE_LABEL, title=RE_TITLE):
         r'</a>'.format(refid=refid, label=label, title=title))
 
 
+def html_docutils_citation_refs(refid=RE_ID, label=RE_LABEL, id_=RE_ID):
+    return re.compile(
+        r'<a class="reference internal" '
+        r'href="(?P<refdoc>[^#]+)?#(?P<refid>{refid})" '
+        r'id="(?P<id_>{id_})">'
+        r'<span>\[(?P<label>{label})]</span>'
+        r'</a>'.format(refid=refid, label=label, id_=id_))
+
+
 def html_citations(id_=RE_ID, label=RE_LABEL, text=RE_TEXT):
     return re.compile(
         r'<dt class="label" id="(?P<id_>{id_})">'
