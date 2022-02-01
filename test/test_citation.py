@@ -361,3 +361,11 @@ def test_citation_style_round_brackets(app, warning) -> None:
     output = (app.outdir / "index.txt").read_text()
     assert "(Evensen, 2003)" in output
     assert "Evensen (2003)" in output
+
+
+@pytest.mark.sphinx('html', testroot='citation_toctree')
+def test_citation_toctree(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output1 = (app.outdir / "index.html").read_text()
+    output2 = (app.outdir / "adoc1.html").read_text()
