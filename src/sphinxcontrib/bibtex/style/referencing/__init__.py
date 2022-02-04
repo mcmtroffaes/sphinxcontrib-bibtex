@@ -178,13 +178,11 @@ class GroupReferenceStyle(BaseReferenceStyle):
     """Composes a group of reference styles into a single consistent style."""
 
     #: List of style types.
-    styles: List[BaseReferenceStyle] \
-        = field(default_factory=list)
+    styles: List[BaseReferenceStyle] = field(default_factory=list)
 
     #: Dictionary from role names to styles.
     #: Automatically initialized from :attr:`styles`.
-    role_style: Dict[str, BaseReferenceStyle] \
-        = field(default_factory=dict)
+    role_style: Dict[str, BaseReferenceStyle] = field(default_factory=dict)
 
     def __post_init__(self):
         super().__post_init__()
