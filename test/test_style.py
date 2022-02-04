@@ -12,6 +12,9 @@ from sphinxcontrib.bibtex.style.referencing import (
 from sphinxcontrib.bibtex.style.referencing.basic_author_year import (
     BasicAuthorYearTextualReferenceStyle
 )
+from sphinxcontrib.bibtex.style.referencing.basic_super import (
+    BasicSuperParentheticalReferenceStyle, BasicSuperTextualReferenceStyle
+)
 from sphinxcontrib.bibtex.style.template import (
     entry_label, join, names, node
 )
@@ -108,3 +111,9 @@ def test_simple_reference_style() -> None:
         format_references(ref_style, 'p', references).render(backend) == \
         '{<a href="#id1">Las00</a>;<a href="#id2">Zwe00</a>' \
         ';<a href="#id3">Sec00</a>}'
+
+
+# need to instantiate these for 100% coverage
+def test_super_coverage() -> None:
+    BasicSuperParentheticalReferenceStyle()
+    BasicSuperTextualReferenceStyle()
