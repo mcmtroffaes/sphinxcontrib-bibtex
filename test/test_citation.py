@@ -1,6 +1,6 @@
 from test.common import html_citations, html_citation_refs, \
     html_docutils_citation_refs
-import dataclasses
+from dataclasses import dataclass, field
 import pytest
 import re
 import sphinxcontrib.bibtex.plugin
@@ -252,33 +252,35 @@ def test_citation_style_invalid(make_app, app_params) -> None:
         make_app(*args, **kwargs)
 
 
-my_bracket = BracketStyle(
-    left='(',
-    right=')',
-    sep='; ',
-    sep2='; ',
-    last_sep='; ',
-)
+def my_bracket() -> BracketStyle:
+    return BracketStyle(
+        left='(',
+        right=')',
+        sep='; ',
+        sep2='; ',
+        last_sep='; ',
+    )
 
 
-my_person = PersonStyle(
-    style='last',
-    abbreviate=False,
-    sep=' & ',
-    sep2=None,
-    last_sep=None,
-    other=' et al',
-)
+def my_person() -> PersonStyle:
+    return PersonStyle(
+        style='last',
+        abbreviate=False,
+        sep=' & ',
+        sep2=None,
+        last_sep=None,
+        other=' et al',
+    )
 
 
-@dataclasses.dataclass
+@dataclass
 class CustomReferenceStyle(AuthorYearReferenceStyle):
-    bracket_textual: BracketStyle = my_bracket
-    bracket_parenthetical: BracketStyle = my_bracket
-    bracket_author: BracketStyle = my_bracket
-    bracket_label: BracketStyle = my_bracket
-    bracket_year: BracketStyle = my_bracket
-    person: PersonStyle = my_person
+    bracket_textual: BracketStyle = field(default_factory=my_bracket)
+    bracket_parenthetical: BracketStyle = field(default_factory=my_bracket)
+    bracket_author: BracketStyle = field(default_factory=my_bracket)
+    bracket_label: BracketStyle = field(default_factory=my_bracket)
+    bracket_year: BracketStyle = field(default_factory=my_bracket)
+    person: PersonStyle = field(default_factory=my_person)
     author_year_sep: str = ' '
 
 

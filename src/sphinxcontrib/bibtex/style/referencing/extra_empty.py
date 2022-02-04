@@ -1,4 +1,4 @@
-import dataclasses
+from dataclasses import dataclass
 
 from typing import TYPE_CHECKING, List, Iterable
 from sphinxcontrib.bibtex.style.template import join
@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-@dataclasses.dataclass
+@dataclass
 class ExtraEmptyReferenceStyle(BaseReferenceStyle):
     """A style which generates nothing, similar to LaTeX's nocite."""
 

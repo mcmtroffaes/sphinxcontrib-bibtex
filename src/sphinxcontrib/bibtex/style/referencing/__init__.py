@@ -1,4 +1,4 @@
-import dataclasses
+from dataclasses import dataclass, field
 from abc import ABC
 
 import pybtex.plugin
@@ -19,15 +19,15 @@ if TYPE_CHECKING:
     from sphinxcontrib.bibtex.richtext import ReferenceInfo
 
 
-@dataclasses.dataclass
+@dataclass
 class BaseReferenceStyle(ABC):
     """Base class for citation reference styles.
 
     For consistency, all subclasses of this class must be decorated
-    as a :class:`dataclasses.dataclass`,
+    as a :class:`dataclass`,
     and must provide a type annotation and default value for all attributes
     (unless ``init=False`` is used, in which case they can be
-    initialized in :meth:`~dataclasses.dataclass.__post_init__`).
+    initialized in :meth:`~dataclass.__post_init__`).
     This allows client code to instantiate any reference style
     without needing to specify any arguments through the constructor.
     """
@@ -74,7 +74,7 @@ def format_references(
     return style.outer(role_name, children).format()
 
 
-@dataclasses.dataclass
+@dataclass
 class BracketStyle:
     """A class which provides brackets, as well as separators
     and a function to facilitate formatting of the outer template.
@@ -116,7 +116,7 @@ class BracketStyle:
         ]
 
 
-@dataclasses.dataclass
+@dataclass
 class PersonStyle:
     """A class providing additional data and helper functions
     to facilitate formatting of person names.
@@ -127,7 +127,7 @@ class PersonStyle:
 
     #: Plugin class instance used for formatting person names.
     #: Automatically initialised from :attr:`style`.
-    style_plugin: "BaseNameStyle" = dataclasses.field(init=False)
+    style_plugin: "BaseNameStyle" = field(init=False)
 
     #: Whether or not to abbreviate first names.
     abbreviate: bool = True
@@ -142,8 +142,8 @@ class PersonStyle:
     last_sep: Optional[Union["BaseText", str]] = ', and '
 
     #: Abbreviation text if three or more persons.
-    other: Optional[Union["BaseText", str]] = \
-        Text(' ', Tag('em', 'et al.'))
+    other: Optional[Union["BaseText", str]] = field(
+        default_factory=lambda: Text(' ', Tag('em', 'et al.')))
 
     def __post_init__(self):
         self.style_plugin = pybtex.plugin.find_plugin(
@@ -173,18 +173,16 @@ class PersonStyle:
         )
 
 
-@dataclasses.dataclass
+@dataclass
 class GroupReferenceStyle(BaseReferenceStyle):
     """Composes a group of reference styles into a single consistent style."""
 
     #: List of style types.
-    styles: List[BaseReferenceStyle] \
-        = dataclasses.field(default_factory=list)
+    styles: List[BaseReferenceStyle] = field(default_factory=list)
 
     #: Dictionary from role names to styles.
     #: Automatically initialized from :attr:`styles`.
-    role_style: Dict[str, BaseReferenceStyle] \
-        = dataclasses.field(default_factory=dict)
+    role_style: Dict[str, BaseReferenceStyle] = field(default_factory=dict)
 
     def __post_init__(self):
         super().__post_init__()

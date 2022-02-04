@@ -1,4 +1,4 @@
-import dataclasses
+from dataclasses import dataclass, field
 
 from sphinxcontrib.bibtex.style.template import reference, entry_label
 from typing import TYPE_CHECKING, List, Iterable
@@ -9,12 +9,12 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-@dataclasses.dataclass
+@dataclass
 class ExtraLabelReferenceStyle(BaseReferenceStyle):
     """Reference just by label."""
 
     #: Bracket style.
-    bracket: BracketStyle = BracketStyle()
+    bracket: BracketStyle = field(default_factory=BracketStyle)
 
     def role_names(self) -> Iterable[str]:
         return ['label', 'labelpar']

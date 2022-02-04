@@ -1,4 +1,4 @@
-import dataclasses
+from dataclasses import dataclass, field
 
 from typing import TYPE_CHECKING, List, Iterable, Union
 from pybtex.style.template import tag
@@ -10,17 +10,18 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-@dataclasses.dataclass
+@dataclass
 class BasicSuperParentheticalReferenceStyle(BaseReferenceStyle):
     """Reference by label superscript if parenthetical,
     and by author and label superscript if textual.
     """
 
     #: Bracket style. Left and right brackets are empty by default.
-    bracket: BracketStyle = BracketStyle(left='', right='', sep=',')
+    bracket: BracketStyle = field(
+        default_factory=lambda: BracketStyle(left='', right='', sep=','))
 
     #: Person style.
-    person: PersonStyle = PersonStyle()
+    person: PersonStyle = field(default_factory=PersonStyle)
 
     def role_names(self) -> Iterable[str]:
         return [f'p{full_author}' for full_author in ['', 's']]
@@ -35,17 +36,18 @@ class BasicSuperParentheticalReferenceStyle(BaseReferenceStyle):
         return reference[entry_label]
 
 
-@dataclasses.dataclass
+@dataclass
 class BasicSuperTextualReferenceStyle(BaseReferenceStyle):
     """Reference by label superscript if parenthetical,
     and by author and label superscript if textual.
     """
 
     #: Bracket style. Left and right brackets are empty by default.
-    bracket: BracketStyle = BracketStyle(left='', right='', sep=', ')
+    bracket: BracketStyle = field(
+        default_factory=lambda: BracketStyle(left='', right='', sep=', '))
 
     #: Person style.
-    person: PersonStyle = PersonStyle()
+    person: PersonStyle = field(default_factory=PersonStyle)
 
     #: Separator between text and reference.
     text_reference_sep: Union["BaseText", str] = ''

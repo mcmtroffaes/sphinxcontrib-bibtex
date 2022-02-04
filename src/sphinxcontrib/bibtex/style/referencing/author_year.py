@@ -1,4 +1,4 @@
-import dataclasses
+from dataclasses import dataclass, field
 from typing import Union, TYPE_CHECKING
 
 from sphinxcontrib.bibtex.style.referencing import (
@@ -17,33 +17,33 @@ if TYPE_CHECKING:
     from pybtex.richtext import BaseText
 
 
-@dataclasses.dataclass
+@dataclass
 class AuthorYearReferenceStyle(GroupReferenceStyle):
     """Textual or parenthetical reference by author-year,
     or just by author, label, or year.
     """
 
     #: Bracket style for textual citations (:cite:t: and variations).
-    bracket_textual: BracketStyle = BracketStyle()
+    bracket_textual: BracketStyle = field(default_factory=BracketStyle)
 
     #: Bracket style for parenthetical citations
     #: (:cite:p: and variations).
-    bracket_parenthetical: BracketStyle = BracketStyle()
+    bracket_parenthetical: BracketStyle = field(default_factory=BracketStyle)
 
     #: Bracket style for author citations
     #: (:cite:author: and variations).
-    bracket_author: BracketStyle = BracketStyle()
+    bracket_author: BracketStyle = field(default_factory=BracketStyle)
 
     #: Bracket style for label citations
     #: (:cite:label: and variations).
-    bracket_label: BracketStyle = BracketStyle()
+    bracket_label: BracketStyle = field(default_factory=BracketStyle)
 
     #: Bracket style for year citations
     #: (:cite:year: and variations).
-    bracket_year: BracketStyle = BracketStyle()
+    bracket_year: BracketStyle = field(default_factory=BracketStyle)
 
     #: Person style (applies to all relevant citation commands).
-    person: PersonStyle = PersonStyle()
+    person: PersonStyle = field(default_factory=PersonStyle)
 
     #: Separator between author and year for parenthetical citations.
     author_year_sep: Union["BaseText", str] = ', '
