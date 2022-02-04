@@ -5,6 +5,9 @@
   fixing a violation against the docutils spec
   (see issue #273, reported by rappdw, with additional input from brechtm).
 
+* Fix mutable dataclass fields for Python 3.11 (see issue #284 and pull
+  request #285; reported and fixed by jamesjer)
+
 2.4.1 (10 September 2021)
 -------------------------
 
