@@ -1,12 +1,21 @@
 2.4.2 (in development)
 ----------------------
 
+* Bump minimum required Sphinx version to 3.1.
+
+* Add support for Python 3.10 and 3.11.
+
 * Use container node instead of paragraph node for containing bibliographies,
   fixing a violation against the docutils spec
   (see issue #273, reported by rappdw, with additional input from brechtm).
 
 * Fix mutable dataclass fields for Python 3.11 (see issue #284 and pull
   request #285; reported and fixed by jamesjer)
+
+* Internal refactor: embed ``reference_text_class`` directly inside the pybtex
+  nodes. This enables different text classes to be used by different styles, so
+  different sorts of docutils nodes can be generated on rendering depending on
+  the pybtex node used. See discussion in issue #275.
 
 2.4.1 (10 September 2021)
 -------------------------
