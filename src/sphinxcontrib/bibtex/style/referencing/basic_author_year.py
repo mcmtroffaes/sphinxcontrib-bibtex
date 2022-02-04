@@ -1,4 +1,4 @@
-import dataclasses
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, List, Iterable, Union
 from sphinxcontrib.bibtex.style.template import reference, join, year
 from . import BaseReferenceStyle, BracketStyle, PersonStyle
@@ -8,15 +8,15 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-@dataclasses.dataclass
+@dataclass
 class BasicAuthorYearParentheticalReferenceStyle(BaseReferenceStyle):
     """Parenthetical reference by author-year."""
 
     #: Bracket style.
-    bracket: BracketStyle = BracketStyle()
+    bracket: BracketStyle = field(default_factory=BracketStyle)
 
     #: Person style.
-    person: PersonStyle = PersonStyle()
+    person: PersonStyle = field(default_factory=PersonStyle)
 
     #: Separator between author and year.
     author_year_sep: Union["BaseText", str] = ', '
@@ -39,15 +39,15 @@ class BasicAuthorYearParentheticalReferenceStyle(BaseReferenceStyle):
         ]
 
 
-@dataclasses.dataclass
+@dataclass
 class BasicAuthorYearTextualReferenceStyle(BaseReferenceStyle):
     """Textual reference by author-year."""
 
     #: Bracket style.
-    bracket: BracketStyle = BracketStyle()
+    bracket: BracketStyle = field(default_factory=BracketStyle)
 
     #: Person style.
-    person: PersonStyle = PersonStyle()
+    person: PersonStyle = field(default_factory=PersonStyle)
 
     #: Separator between text and reference.
     text_reference_sep: Union["BaseText", str] = ' '

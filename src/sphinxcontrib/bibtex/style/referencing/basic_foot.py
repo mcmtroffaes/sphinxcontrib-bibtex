@@ -1,4 +1,4 @@
-import dataclasses
+from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, List, Iterable, Union
 from sphinxcontrib.bibtex.style.template import footnote_reference, join
 from . import BaseReferenceStyle, PersonStyle, BracketStyle
@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-@dataclasses.dataclass
+@dataclass
 class BasicFootParentheticalReferenceStyle(BaseReferenceStyle):
     """Parenthetical footnote reference."""
 
@@ -22,15 +22,15 @@ class BasicFootParentheticalReferenceStyle(BaseReferenceStyle):
         return footnote_reference
 
 
-@dataclasses.dataclass
+@dataclass
 class BasicFootTextualReferenceStyle(BaseReferenceStyle):
     """Textual footnote reference."""
 
     #: Bracket style.
-    bracket: BracketStyle = BracketStyle()
+    bracket: BracketStyle = field(default_factory=BracketStyle)
 
     #: Person style.
-    person: PersonStyle = PersonStyle()
+    person: PersonStyle = field(default_factory=PersonStyle)
 
     #: Separator between text and reference.
     text_reference_sep: Union["BaseText", str] = ' '

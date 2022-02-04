@@ -1,4 +1,4 @@
-import dataclasses
+from dataclasses import dataclass, field
 
 from sphinxcontrib.bibtex.style.template import reference
 from typing import TYPE_CHECKING, List, Iterable
@@ -10,15 +10,15 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-@dataclasses.dataclass
+@dataclass
 class ExtraAuthorReferenceStyle(BaseReferenceStyle):
     """Reference just by author names."""
 
     #: Bracket style.
-    bracket: BracketStyle = BracketStyle()
+    bracket: BracketStyle = field(default_factory=BracketStyle)
 
     #: Person style.
-    person: PersonStyle = PersonStyle()
+    person: PersonStyle = field(default_factory=PersonStyle)
 
     def role_names(self) -> Iterable[str]:
         return [

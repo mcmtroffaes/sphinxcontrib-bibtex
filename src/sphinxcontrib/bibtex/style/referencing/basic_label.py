@@ -1,4 +1,4 @@
-import dataclasses
+from dataclasses import dataclass, field
 
 from typing import TYPE_CHECKING, List, Iterable, Union
 from sphinxcontrib.bibtex.style.template import reference, entry_label, join
@@ -9,17 +9,17 @@ if TYPE_CHECKING:
     from pybtex.style.template import Node
 
 
-@dataclasses.dataclass
+@dataclass
 class BasicLabelParentheticalReferenceStyle(BaseReferenceStyle):
     """Reference by label if parenthetical,
     and by author and label if textual.
     """
 
     #: Bracket style.
-    bracket: BracketStyle = BracketStyle()
+    bracket: BracketStyle = field(default_factory=BracketStyle)
 
     #: Person style.
-    person: PersonStyle = PersonStyle()
+    person: PersonStyle = field(default_factory=PersonStyle)
 
     def role_names(self) -> Iterable[str]:
         return [f'p{full_author}' for full_author in ['', 's']]
@@ -34,17 +34,17 @@ class BasicLabelParentheticalReferenceStyle(BaseReferenceStyle):
         return reference[entry_label]
 
 
-@dataclasses.dataclass
+@dataclass
 class BasicLabelTextualReferenceStyle(BaseReferenceStyle):
     """Reference by label if parenthetical,
     and by author and label if textual.
     """
 
     #: Bracket style.
-    bracket: BracketStyle = BracketStyle()
+    bracket: BracketStyle = field(default_factory=BracketStyle)
 
     #: Person style.
-    person: PersonStyle = PersonStyle()
+    person: PersonStyle = field(default_factory=PersonStyle)
 
     #: Separator between text and reference.
     text_reference_sep: Union["BaseText", str] = ' '

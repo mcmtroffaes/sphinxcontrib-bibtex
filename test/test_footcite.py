@@ -1,4 +1,5 @@
-import dataclasses
+from dataclasses import dataclass, field
+
 import pytest
 import re
 import sphinxcontrib.bibtex.plugin
@@ -38,27 +39,29 @@ def test_footcite_roles(app, warning) -> None:
         assert re.search(pattern, output) is not None
 
 
-my_bracket = BracketStyle(
-    sep='; ',
-    sep2='; ',
-    last_sep='; ',
-)
+def my_bracket() -> BracketStyle:
+    return BracketStyle(
+        sep='; ',
+        sep2='; ',
+        last_sep='; ',
+    )
 
 
-my_person = PersonStyle(
-    style='last',
-    abbreviate=False,
-    sep=' & ',
-    sep2=None,
-    last_sep=None,
-    other=' et al',
-)
+def my_person() -> PersonStyle:
+    return PersonStyle(
+        style='last',
+        abbreviate=False,
+        sep=' & ',
+        sep2=None,
+        last_sep=None,
+        other=' et al',
+    )
 
 
-@dataclasses.dataclass
+@dataclass
 class CustomReferenceStyle(FootReferenceStyle):
-    bracket_textual: BracketStyle = my_bracket
-    person: PersonStyle = my_person
+    bracket_textual: BracketStyle = field(default_factory=my_bracket)
+    person: PersonStyle = field(default_factory=my_person)
 
 
 sphinxcontrib.bibtex.plugin.register_plugin(
