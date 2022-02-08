@@ -998,6 +998,17 @@ LaTeX output, you can add the following to your LaTeX preamble:
    \usepackage{etoolbox}
    \patchcmd{\thebibliography}{\section*{\refname}}{}{}{}
 
+Citation References Not Rendered In TocTree Directives
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+When a document title has a citation reference in it,
+the toctree directive will simply take the target of the reference
+for rendering in the table of contents, rather than the fully rendered
+reference.
+
+This appears to be a limitation of the toctree directive.
+No workaround is currently known.
+
 Import errors after using setup.py install
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
