@@ -959,6 +959,12 @@ your ``conf.py``:
     '''
    }
 
+.. warning::
+
+   The above workaround no longer appears to work. If you know of a
+   solution, please report at
+   https://github.com/mcmtroffaes/sphinxcontrib-bibtex/issues/276
+
 Mismatch Between Output of HTML/Text and LaTeX Backends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
