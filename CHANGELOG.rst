@@ -5,6 +5,14 @@
 
 * Add support for Python 3.10 and 3.11.
 
+* New ``bibtex_tooltips`` option.
+  Set to ``False`` to disable tooltip generation.
+  See issue #286.
+
+* New ``bibtex_tooltips_style`` option to customize tooltip text style.
+  If empty (the default), the bibliography style is used.
+  See issue #286.
+
 * Use container node instead of paragraph node for containing bibliographies,
   fixing a violation against the docutils spec
   (see issue #273, reported by rappdw, with additional input from brechtm).
