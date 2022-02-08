@@ -1030,7 +1030,7 @@ the package with pip:
 Import errors when running pytest
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-The test suit relies on the entry points being installed, whence,
+The test suite relies on the entry points being installed, whence,
 sphinxcontrib-bibtex cannot be tested without first installing the package.
 To run the tests, please do as follows (ideally, in a virtual environment):
 
