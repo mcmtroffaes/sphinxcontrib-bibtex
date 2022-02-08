@@ -213,8 +213,8 @@ class Citation(NamedTuple):
     bibliography_key: "BibliographyKey"  #: Key of its bibliography directive.
     key: str                             #: Key (with prefix).
     entry: "Entry"                       #: Entry from pybtex.
-    formatted_entry: "FormattedEntry"    #: Entry as formatted by pybtex.
-    tooltip_entry: Optional["FormattedEntry"]  #: Tooltip as formatted by pybtex.
+    formatted_entry: "FormattedEntry"    #: Formatted entry for bibliography.
+    tooltip_entry: Optional["FormattedEntry"]  #: Formatted entry for tooltip.
 
 
 def env_updated(app: "Sphinx", env: "BuildEnvironment") -> Iterable[str]:
