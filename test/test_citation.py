@@ -1,3 +1,7 @@
+import pybtex.plugin
+from pybtex.style.formatting.unsrt import Style as UnsrtStyle
+from pybtex.style.template import words
+
 from test.common import html_citations, html_citation_refs, \
     html_docutils_citation_refs
 from dataclasses import dataclass, field
@@ -378,3 +382,45 @@ def test_citation_toctree(app, warning) -> None:
     assert len(html_docutils_citation_refs(
         label=r'Test2').findall(output2)) == 1
     assert len(html_citations(label='Test2').findall(output2)) == 1
+
+
+@pytest.mark.sphinx('html', testroot='debug_bibtex_citation')
+def test_citation_tooltip(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
+    assert len(html_citations(label='tes').findall(output)) == 1
+    assert len(html_citation_refs(
+        label='tes', title=r"The title\.").findall(output)) == 1
+
+
+@pytest.mark.sphinx('html', testroot='debug_bibtex_citation',
+                    confoverrides={'bibtex_tooltips': False})
+def test_citation_tooltip2(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
+    assert len(html_citations(label='tes').findall(output)) == 1
+    assert len(html_citation_refs(
+        label='tes', title=None).findall(output)) == 1
+
+
+class CustomTooltipStyle(UnsrtStyle):
+    def get_misc_template(self, e):
+        return words['whoop whoop']
+
+
+pybtex.plugin.register_plugin(
+    'pybtex.style.formatting', 'xxx_custom_tooltip_xxx', CustomTooltipStyle)
+
+
+@pytest.mark.sphinx('html', testroot='debug_bibtex_citation',
+                    confoverrides={
+                        'bibtex_tooltips_style': 'xxx_custom_tooltip_xxx'})
+def test_citation_tooltip3(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text()
+    assert len(html_citations(label='tes').findall(output)) == 1
+    assert len(html_citation_refs(
+        label='tes', title='whoop whoop').findall(output)) == 1
