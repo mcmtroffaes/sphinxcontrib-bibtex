@@ -291,7 +291,8 @@ class CitationXRefRole(XRefRole):
                 'global_keys': env.domaindata['cite']['keys'],
                 'config': config}
 
-        node += nodes.pending(CitationTransform, data)
+        # TODO bad design here, pending is meant to get the Transform object
+        node += nodes.pending(CitationTransform, data)  # type: ignore
         return [node], []
 
 

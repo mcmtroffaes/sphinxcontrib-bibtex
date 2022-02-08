@@ -5,6 +5,7 @@
         .. autoattribute:: default_priority
         .. automethod:: run
 """
+from itertools import zip_longest
 
 import docutils.nodes
 
@@ -25,7 +26,7 @@ logger = getLogger(__name__)
 
 def node_text_transform(node: docutils.nodes.Element) -> None:
     """Apply extra text transformations to a node."""
-    for child, next_child in zip(node.children[:], node.children[1:] + [None]):
+    for child, next_child in zip_longest(node.children[:], node.children[1:]):
         if isinstance(child, docutils.nodes.Text):
             if (child.endswith(r'\url ')
                     and isinstance(next_child, docutils.nodes.Text)):
@@ -33,7 +34,7 @@ def node_text_transform(node: docutils.nodes.Element) -> None:
                 ref_node = docutils.nodes.reference(refuri=next_child.astext())
                 ref_node += next_child
                 node.replace(next_child, ref_node)
-        else:
+        elif isinstance(child, docutils.nodes.Element):
             node_text_transform(child)
 
 
