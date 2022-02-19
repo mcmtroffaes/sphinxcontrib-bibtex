@@ -88,6 +88,20 @@ the ``sphinxcontrib.bibtex.style.referencing``
 `entry point <https://packaging.python.org/guides/creating-and-discovering-plugins/#using-package-metadata>`_ group.
 See sphinxcontrib-bibtex's own ``setup.py`` script for examples.
 
+Tooltips
+~~~~~~~~
+
+.. versionadded:: 2.4.2
+
+The extension will generate plain text tooltips for citation references,
+via the html *title* attribute, to allow a preview of the citation by hovering
+over the citation reference.
+
+To disable these tooltips, set ``bibtex_tooltips`` to ``False``.
+
+By default, the bibliography style is used to format the tooltips.
+You can set the ``bibtex_tooltips_style`` option to use a different style.
+
 Roles and Directives
 --------------------
 

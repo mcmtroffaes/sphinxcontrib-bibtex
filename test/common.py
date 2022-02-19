@@ -1,6 +1,8 @@
 """Some common helper functions for the test suite."""
 
 import re
+from typing import Optional
+
 import sphinx
 
 RE_ID = r'[a-z][-?a-z0-9]*'
@@ -11,13 +13,16 @@ RE_DOCNAME = r'[^:]+'
 RE_TITLE = r'[^"]*'
 
 
-def html_citation_refs(refid=RE_ID, label=RE_LABEL, title=RE_TITLE):
+def html_citation_refs(
+        refid=RE_ID, label=RE_LABEL, title: Optional[str] = RE_TITLE):
+    title_pattern = rf' title="{title}"' if title is not None else ''
     return re.compile(
-        r'<a class="reference internal" '
-        r'href="(?P<refdoc>[^#]+)?#(?P<refid>{refid})" '
-        r'title="{title}">'
+        r'<a class="reference internal"'
+        r' href="(?P<refdoc>[^#]+)?#(?P<refid>{refid})"'
+        r'{title_pattern}'
+        r'>'
         r'(?P<label>{label})'
-        r'</a>'.format(refid=refid, label=label, title=title))
+        r'</a>'.format(refid=refid, label=label, title_pattern=title_pattern))
 
 
 def html_docutils_citation_refs(refid=RE_ID, label=RE_LABEL, id_=RE_ID):

@@ -17,7 +17,7 @@
 
 import ast
 from typing import TYPE_CHECKING
-from typing import List, Dict, NamedTuple, cast, Iterable, Tuple, Set
+from typing import List, Dict, NamedTuple, cast, Iterable, Tuple, Set, Optional
 
 import docutils.frontend
 import docutils.nodes
@@ -213,7 +213,8 @@ class Citation(NamedTuple):
     bibliography_key: "BibliographyKey"  #: Key of its bibliography directive.
     key: str                             #: Key (with prefix).
     entry: "Entry"                       #: Entry from pybtex.
-    formatted_entry: "FormattedEntry"    #: Entry as formatted by pybtex.
+    formatted_entry: "FormattedEntry"    #: Formatted entry for bibliography.
+    tooltip_entry: Optional["FormattedEntry"]  #: Formatted entry for tooltip.
 
 
 def env_updated(app: "Sphinx", env: "BuildEnvironment") -> Iterable[str]:
@@ -339,8 +340,11 @@ class BibtexDomain(Domain):
         used_keys: Set[str] = set()
         used_labels: Dict[str, str] = {}
         for bibliography_key, bibliography in self.bibliographies.items():
-            for entry, formatted_entry in self.get_formatted_entries(
-                    bibliography_key, docnames):
+            for entry, formatted_entry, tooltip_entry in \
+                    self.get_formatted_entries(
+                        bibliography_key, docnames,
+                        self.env.app.config.bibtex_tooltips,
+                        self.env.app.config.bibtex_tooltips_style):
                 key = bibliography.keyprefix + formatted_entry.key
                 if bibliography.list_ == 'citation' and key in used_keys:
                     logger.warning(
@@ -353,6 +357,7 @@ class BibtexDomain(Domain):
                     key=key,
                     entry=entry,
                     formatted_entry=formatted_entry,
+                    tooltip_entry=tooltip_entry,
                 ))
                 if bibliography.list_ == 'citation':
                     used_keys.add(key)
@@ -392,7 +397,11 @@ class BibtexDomain(Domain):
                 fromdocname=fromdocname,
                 todocname=citation.bibliography_key.docname,
                 citation_id=citation.citation_id,
-                title=citation.formatted_entry.text.render(plaintext)))
+                title=(
+                    citation.tooltip_entry.text.render(plaintext)
+                    if citation.tooltip_entry else None
+                )
+            ))
             for citation in citations.values()]
         formatted_references = format_references(
             self.reference_style, typ, references)
@@ -485,17 +494,23 @@ class BibtexDomain(Domain):
             yield key, entry
 
     def get_formatted_entries(
-            self, bibliography_key: "BibliographyKey", docnames: List[str]
-            ) -> Iterable[Tuple["Entry", "FormattedEntry"]]:
+            self, bibliography_key: "BibliographyKey", docnames: List[str],
+            tooltips: bool, tooltips_style: str
+            ) -> Iterable[Tuple["Entry", "FormattedEntry",
+                                Optional["FormattedEntry"]]]:
         """Get sorted bibliography entries along with their pybtex labels,
         with additional sorting and formatting applied from the pybtex style.
         """
         bibliography = self.bibliographies[bibliography_key]
         entries = dict(
             self.get_sorted_entries(bibliography_key, docnames))
-        style = cast("BaseStyle", pybtex.plugin.find_plugin(
+        style: BaseStyle = cast("BaseStyle", pybtex.plugin.find_plugin(
             'pybtex.style.formatting', bibliography.style)())
-        sorted_entries = style.sort(entries.values())
+        style2: Optional[BaseStyle] = (
+            cast("BaseStyle", pybtex.plugin.find_plugin(
+                'pybtex.style.formatting', tooltips_style)())
+            if tooltips_style else style) if tooltips else None
+        sorted_entries: Iterable[Entry] = style.sort(entries.values())
         labels = style.format_labels(sorted_entries)
         for label, entry in zip(labels, sorted_entries):
             try:
@@ -503,14 +518,16 @@ class BibtexDomain(Domain):
                     entry,
                     style.format_entry(
                         bibliography.labelprefix + label, entry),
+                    style2.format_entry(
+                        bibliography.labelprefix + label, entry)
+                    if style2 else None,
                 )
             except FieldIsMissing as exc:
                 logger.warning(
                     str(exc),
                     location=(bibliography_key.docname, bibliography.line),
                     type="bibtex", subtype="missing_field")
-                yield(
-                    entry,
-                    FormattedEntry(entry.key, Tag('b', str(exc)),
-                                   bibliography.labelprefix + label)
-                )
+                formatted_error_entry = FormattedEntry(
+                    entry.key, Tag('b', str(exc)),
+                    bibliography.labelprefix + label)
+                yield entry, formatted_error_entry, None

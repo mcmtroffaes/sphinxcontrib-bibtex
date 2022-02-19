@@ -27,6 +27,8 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     * connect events to functions
     """
     app.add_config_value("bibtex_default_style", "alpha", "html")
+    app.add_config_value("bibtex_tooltips", True, "html")
+    app.add_config_value("bibtex_tooltips_style", "", "html")
     app.add_config_value("bibtex_bibfiles", None, "html")
     app.add_config_value("bibtex_encoding", "utf-8-sig", "html")
     app.add_config_value("bibtex_bibliography_header", "", "html")
