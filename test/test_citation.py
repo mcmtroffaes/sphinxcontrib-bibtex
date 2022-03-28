@@ -275,6 +275,22 @@ def test_citation_roles_cit_ref(app, warning) -> None:
 
 
 @pytest.mark.sphinx(
+    'html', testroot='citation_roles_2',
+    confoverrides={'bibtex_reference_style': 'cit_ref_label'})
+def test_citation_roles_cit_ref_html(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+
+
+@pytest.mark.sphinx(
+    'latex', testroot='citation_roles_2',
+    confoverrides={'bibtex_reference_style': 'cit_ref_label'})
+def test_citation_roles_cit_ref_latex(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+
+
+@pytest.mark.sphinx(
     'html', testroot='citation_roles',
     confoverrides={'bibtex_default_style': 'plain',
                    'bibtex_reference_style': 'super'})

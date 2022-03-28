@@ -162,7 +162,7 @@ def reference(children, data: Dict[str, Any]):
     return SphinxReferenceText(info, *parts)
 
 
-# copy-pasted from sphinx's make_refnode
+# based on sphinx's make_refnode
 # to create citation_reference instead of reference
 def make_citation_reference_node(
         builder: "Builder", fromdocname: str, todocname: str,
@@ -170,7 +170,9 @@ def make_citation_reference_node(
         child: Union[Node, List[Node]], title: str = None
         ) -> docutils.nodes.citation_reference:
     """Shortcut to create a citation reference node."""
-    node = docutils.nodes.citation_reference('', '', internal=True)
+    # latex builder needs docname and refname
+    node = docutils.nodes.citation_reference(
+        '', '', internal=True, docname=todocname, refname=targetid)
     if fromdocname == todocname and targetid:
         node['refid'] = targetid
     else:

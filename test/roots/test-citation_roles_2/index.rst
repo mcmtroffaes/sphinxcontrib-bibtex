@@ -48,7 +48,11 @@ role                   result
 
 :cite:empty:`testseven`
 
+[EIGHT2008]_
+
 Bibliography
 ------------
 
 .. bibliography::
+
+.. [EIGHT2008] Regular citation.
