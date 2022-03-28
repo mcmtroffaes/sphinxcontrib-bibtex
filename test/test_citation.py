@@ -236,9 +236,12 @@ def test_citation_roles_authoryear(app, warning) -> None:
     assert "[Ju07] Jo Ju. Testseven. 2007." in output
 
 
+# note: disabling tooltips here to cover extra code path
+# not used for text builder anyway
 @pytest.mark.sphinx(
     'text', testroot='citation_roles_2',
-    confoverrides={'bibtex_reference_style': 'cit_ref_label'})
+    confoverrides={'bibtex_reference_style': 'cit_ref_label',
+                   'bibtex_tooltips': False})
 def test_citation_roles_cit_ref(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
