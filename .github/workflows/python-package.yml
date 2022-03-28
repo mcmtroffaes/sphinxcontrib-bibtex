@@ -14,14 +14,14 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10', '3.11-dev']
-        pip-sphinx: ['"sphinx" "https://github.com/brechtm/rinohtype/archive/refs/heads/master.zip"']
+        pip-sphinx: ['sphinx https://github.com/brechtm/rinohtype/archive/refs/heads/master.zip']
         pytest-options: ['']
         include:
           - python-version: 3.9
             pip-sphinx: '"sphinx==2.1" "docutils==0.16" "jinja2<3.1"'
             pytest-options: '-m "not rinohtype"'
           - python-version: 3.9
-            pip-sphinx: --pre sphinx
+            pip-sphinx: '--pre sphinx https://github.com/brechtm/rinohtype/archive/refs/heads/master.zip'
             pytest-options: ''
     steps:
     - uses: actions/checkout@v2
