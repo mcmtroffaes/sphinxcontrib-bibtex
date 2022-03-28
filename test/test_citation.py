@@ -237,6 +237,44 @@ def test_citation_roles_authoryear(app, warning) -> None:
 
 
 @pytest.mark.sphinx(
+    'text', testroot='citation_roles_2',
+    confoverrides={'bibtex_reference_style': 'cit_ref_label'})
+def test_citation_roles_cit_ref(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.txt").read_text()
+    tests = [
+        ("p",           " [dDEF03] "),
+        ("ps",          " [dDEF03] "),
+        ("t",           " de Du *et al.* [dDEF03] "),
+        ("ts",          " de Du, Em, and Fa [dDEF03] "),
+        ("ct",          " De Du *et al.* [dDEF03] "),
+        ("cts",         " De Du, Em, and Fa [dDEF03] "),
+        ("empty",       " AAA  AAA "),
+        ("p",           " [aA01] [BC02] "),
+        ("ps",          " [aA01] [BC02] "),
+        ("t",           " al Ap [aA01], Be and Ci [BC02] "),
+        ("ts",          " al Ap [aA01], Be and Ci [BC02] "),
+        ("ct",          " Al Ap [aA01], Be and Ci [BC02] "),
+        ("cts",         " Al Ap [aA01], Be and Ci [BC02] "),
+        ("empty",       " BBB  BBB "),
+        ("p",           " [Ge04] [Hu05] [Ix06] "),
+        ("ps",          " [Ge04] [Hu05] [Ix06] "),
+        ("t",           " Ge [Ge04], Hu [Hu05], Ix [Ix06] "),
+        ("ts",          " Ge [Ge04], Hu [Hu05], Ix [Ix06] "),
+        ("ct",          " Ge [Ge04], Hu [Hu05], Ix [Ix06] "),
+        ("cts",         " Ge [Ge04], Hu [Hu05], Ix [Ix06] "),
+        ("empty", " CCC  CCC "),
+    ]
+    for role, text in tests:
+        escaped_text = re.escape(text)
+        pattern = f'":cite:{role}:".*{escaped_text}'
+        assert re.search(pattern, output) is not None
+    # check :cite:empty: generates citation
+    assert "[Ju07] Jo Ju. Testseven. 2007." in output
+
+
+@pytest.mark.sphinx(
     'html', testroot='citation_roles',
     confoverrides={'bibtex_default_style': 'plain',
                    'bibtex_reference_style': 'super'})

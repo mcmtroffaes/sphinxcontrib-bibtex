@@ -25,7 +25,7 @@ from sphinx.util.nodes import make_refnode
 from sphinxcontrib.bibtex.nodes import raw_latex
 from sphinxcontrib.bibtex.richtext import BaseReferenceText
 
-from typing import TYPE_CHECKING, Dict, Any, cast, NamedTuple
+from typing import TYPE_CHECKING, Dict, Any, cast, NamedTuple, Union, List
 
 if TYPE_CHECKING:
     from pybtex.backends import BaseBackend
@@ -160,6 +160,69 @@ def reference(children, data: Dict[str, Any]):
     info = data['reference_info']
     assert isinstance(info, SphinxReferenceInfo)
     return SphinxReferenceText(info, *parts)
+
+
+# copy-pasted from sphinx's make_refnode
+# to create citation_reference instead of reference
+def make_citation_reference_node(
+        builder: "Builder", fromdocname: str, todocname: str,
+        targetid: str,
+        child: Union[Node, List[Node]], title: str = None
+        ) -> docutils.nodes.citation_reference:
+    """Shortcut to create a citation reference node."""
+    node = docutils.nodes.citation_reference('', '', internal=True)
+    if fromdocname == todocname and targetid:
+        node['refid'] = targetid
+    else:
+        if targetid:
+            node['refuri'] = (builder.get_relative_uri(fromdocname, todocname) +
+                              '#' + targetid)
+        else:
+            node['refuri'] = builder.get_relative_uri(fromdocname, todocname)
+    if title:
+        node['reftitle'] = title
+    node += child
+    return node
+
+
+class SphinxCitationReferenceText(BaseReferenceText[SphinxReferenceInfo]):
+    """Pybtex rich text class generating
+    a docutils citation_reference node to a citation
+    for use with :class:`SphinxReferenceInfo`.
+    """
+
+    def render(self, backend: "BaseBackend"):
+        assert isinstance(backend, pybtex_docutils.Backend), \
+               "SphinxReferenceText only supports the docutils backend"
+        info = self.info[0]
+        children = super().render(backend)
+        # make_citation_reference_node only takes a single child
+        refnode = make_citation_reference_node(
+            builder=info.builder,
+            fromdocname=info.fromdocname,
+            todocname=info.todocname,
+            targetid=info.citation_id,
+            child=children[0],
+            title=info.title,
+        )
+        refnode.extend(children[1:])
+        return [refnode]
+
+
+@node
+def citation_reference(children, data: Dict[str, Any]):
+    """Pybtex node for inserting a docutils citation_reference node to a
+    citation.
+    The children of the node
+    comprise the content of the reference, and any referencing information
+    is stored in the *reference_info* key of the *data*.
+    The data must also contain a *style* key pointing to the corresponding
+    :class:`~sphinxcontrib.bibtex.style.referencing.BaseReferenceStyle`.
+    """
+    parts = _format_list(children, data)
+    info = data['reference_info']
+    assert isinstance(info, SphinxReferenceInfo)
+    return SphinxCitationReferenceText(info, *parts)
 
 
 class FootReferenceInfo(NamedTuple):

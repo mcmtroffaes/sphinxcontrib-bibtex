@@ -75,6 +75,7 @@ setup(
             plugin('label'),
             plugin('super', 'super_'),
             plugin('foot'),
+            plugin('cit_ref_label'),
         ],
     }
 )
