@@ -18,9 +18,6 @@ class BasicLabelParentheticalReferenceStyle(BaseReferenceStyle):
     #: Bracket style.
     bracket: BracketStyle = field(default_factory=BracketStyle)
 
-    #: Person style.
-    person: PersonStyle = field(default_factory=PersonStyle)
-
     def role_names(self) -> Iterable[str]:
         return [f'p{full_author}' for full_author in ['', 's']]
 

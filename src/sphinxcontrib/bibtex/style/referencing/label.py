@@ -51,7 +51,7 @@ class LabelReferenceStyle(GroupReferenceStyle):
     def __post_init__(self):
         self.styles.extend([
             BasicLabelParentheticalReferenceStyle(
-                bracket=self.bracket_parenthetical, person=self.person),
+                bracket=self.bracket_parenthetical),
             BasicLabelTextualReferenceStyle(
                 bracket=self.bracket_textual,
                 person=self.person,
