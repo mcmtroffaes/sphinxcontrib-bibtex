@@ -15,11 +15,14 @@ jobs:
       matrix:
         python-version: ['3.7', '3.8', '3.9', '3.10', '3.11-dev']
         pip-sphinx: ['"sphinx" "https://github.com/brechtm/rinohtype/archive/refs/heads/master.zip"']
+        pytest-options: ['']
         include:
           - python-version: 3.9
-            pip-sphinx: '"sphinx==2.1" "docutils==0.16" "jinja2<3.1" "rinohtype==0.4.2"'
+            pip-sphinx: '"sphinx==2.1" "docutils==0.16" "jinja2<3.1"'
+            pytest-options: '-m "not rinohtype"'
           - python-version: 3.9
             pip-sphinx: --pre sphinx
+            pytest-options: ''
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
@@ -54,5 +57,5 @@ jobs:
       if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.9'
     - name: Test with pytest
       run: |
-        coverage run -m pytest
+        coverage run -m pytest ${{ matrix.pytest-options }}
         codecov

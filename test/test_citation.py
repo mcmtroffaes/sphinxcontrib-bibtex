@@ -426,6 +426,7 @@ def test_citation_tooltip3(app, warning) -> None:
         label='tes', title='whoop whoop').findall(output)) == 1
 
 
+@pytest.mark.rinohtype
 @pytest.mark.sphinx('rinoh', testroot='citation_rinoh')
 def test_citation_rinoh(app, warning) -> None:
     app.build()
