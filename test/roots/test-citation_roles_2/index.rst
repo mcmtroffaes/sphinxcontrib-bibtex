@@ -1,6 +1,10 @@
 Contents
 ========
 
+.. toctree::
+
+   other
+
 Single Citations
 ----------------
 

@@ -171,16 +171,20 @@ def make_citation_reference_node(
         ) -> docutils.nodes.citation_reference:
     """Shortcut to create a citation reference node."""
     # latex builder needs docname and refname
-    node = docutils.nodes.citation_reference(
-        '', '', internal=True, docname=todocname, refname=targetid)
-    if fromdocname == todocname and targetid:
-        node['refid'] = targetid
+    node = docutils.nodes.citation_reference('', '', internal=True)
+    if builder.name in {'latex', 'rinoh'}:
+        # builders using docname/refname
+        node['docname'] = todocname
+        node['refname'] = targetid
     else:
-        if targetid:
-            node['refuri'] = (builder.get_relative_uri(fromdocname, todocname) +
-                              '#' + targetid)
+        # builders using refid/refuri
+        if fromdocname == todocname:
+            node['refid'] = targetid
         else:
-            node['refuri'] = builder.get_relative_uri(fromdocname, todocname)
+            # note: citation_reference visitor in html builder ignores refuri
+            # attribute; this is a docutils bug
+            node['refuri'] = (builder.get_relative_uri(fromdocname, todocname)
+                              + '#' + targetid)
     if title:
         node['reftitle'] = title
     node += child
