@@ -14,9 +14,13 @@ jobs:
       fail-fast: false
       matrix:
         python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11-dev']
-        pip-sphinx: ['sphinx https://github.com/brechtm/rinohtype/archive/refs/heads/master.zip']
-        pytest-options: ['']
+        pip-sphinx: ['sphinx']
+        pytest-options: ['-m "not rinohtype"']
         include:
+          # rinohtype tests
+          - python-version: '3.10'
+            pip-sphinx: 'sphinx https://github.com/brechtm/rinohtype/archive/refs/heads/master.zip'
+            pytest-options: '-m "rinohtype"'
           # sphinx 2.1 (the oldest supported version, released for Python 3.7)
           - python-version: '3.7'
             pip-sphinx: '"sphinx==2.1" "docutils==0.16" "jinja2<3.1"'
@@ -27,8 +31,8 @@ jobs:
             pytest-options: '-m "not rinohtype"'
           # sphinx pre-release
           - python-version: '3.10'
-            pip-sphinx: '--pre sphinx https://github.com/brechtm/rinohtype/archive/refs/heads/master.zip'
-            pytest-options: ''
+            pip-sphinx: '--pre sphinx'
+            pytest-options: '-m "not rinohtype"'
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
