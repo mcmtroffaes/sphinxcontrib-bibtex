@@ -13,6 +13,9 @@
   If empty (the default), the bibliography style is used.
   See issue #286.
 
+* Support for ``root_doc`` option introduced in Sphinx 4.0
+  (see issue #292, reported by jhmeinke).
+
 * Use container node instead of paragraph node for containing bibliographies,
   fixing a violation against the docutils spec
   (see issue #273, reported by rappdw, with additional input from brechtm).
