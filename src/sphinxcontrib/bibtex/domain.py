@@ -196,7 +196,9 @@ class _FilterVisitor(ast.NodeVisitor):
 def get_docnames(env):
     """Get document names in order."""
     rel = env.collect_relations()
-    docname = env.config.master_doc
+    docname = (
+        env.config.master_doc if sphinx.version_info < (4, 0)
+        else env.config.root_doc)
     docnames = set()
     while docname is not None:
         docnames.add(docname)
