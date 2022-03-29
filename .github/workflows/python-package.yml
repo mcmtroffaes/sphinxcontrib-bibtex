@@ -16,11 +16,11 @@ jobs:
         python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11-dev']
         pip-sphinx: [sphinx]
         include:
-          # oldest version of sphinx supported (2.1)
-          - python-version: '3.10'
+          # sphinx 2.1 (the oldest supported version, released for Python 3.7)
+          - python-version: '3.7'
             pip-sphinx: '"sphinx==2.1" "docutils==0.16" "jinja2<3.1"'
-          # latest of sphinx 3.x series
-          - python-version: '3.10'
+          # latest of sphinx 3.x series (released for Python 3.9)
+          - python-version: '3.9'
             pip-sphinx: '"sphinx<4"'
           # sphinx pre-release
           - python-version: '3.10'
