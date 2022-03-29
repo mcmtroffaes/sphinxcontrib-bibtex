@@ -1,8 +1,6 @@
 2.4.2 (in development)
 ----------------------
 
-* Bump minimum required Sphinx version to 3.1.
-
 * Add support for Python 3.10 and 3.11.
 
 * New ``bibtex_tooltips`` option.
@@ -12,6 +10,9 @@
 * New ``bibtex_tooltips_style`` option to customize tooltip text style.
   If empty (the default), the bibliography style is used.
   See issue #286.
+
+* Support for ``root_doc`` option introduced in Sphinx 4.0
+  (see issue #292, reported by jhmeinke).
 
 * Use container node instead of paragraph node for containing bibliographies,
   fixing a violation against the docutils spec

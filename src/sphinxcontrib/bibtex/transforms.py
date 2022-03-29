@@ -34,7 +34,7 @@ def node_text_transform(node: docutils.nodes.Element) -> None:
                 ref_node = docutils.nodes.reference(refuri=next_child.astext())
                 ref_node += next_child
                 node.replace(next_child, ref_node)
-        elif isinstance(child, docutils.nodes.Element):
+        elif isinstance(child, docutils.nodes.Element):  # pragma: no branch
             node_text_transform(child)
 
 
