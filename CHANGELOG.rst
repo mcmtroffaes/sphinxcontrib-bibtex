@@ -1,8 +1,6 @@
 2.4.2 (in development)
 ----------------------
 
-* Bump minimum required Sphinx version to 3.1.
-
 * Add support for Python 3.10 and 3.11.
 
 * New ``bibtex_tooltips`` option.
