@@ -1,0 +1,9 @@
+[STYLESHEET]
+base = sphinx_base14
+
+[citation]
+location = in-place
+
+[citation marker]
+label_prefix=''
+label_suffix=''

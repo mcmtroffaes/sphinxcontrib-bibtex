@@ -1,6 +1,10 @@
 Main
 ====
 
+.. toctree::
+
+   doc
+
 Section
 -------
 

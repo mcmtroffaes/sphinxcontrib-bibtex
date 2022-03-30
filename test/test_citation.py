@@ -424,14 +424,3 @@ def test_citation_tooltip3(app, warning) -> None:
     assert len(html_citations(label='tes').findall(output)) == 1
     assert len(html_citation_refs(
         label='tes', title='whoop whoop').findall(output)) == 1
-
-
-@pytest.mark.rinohtype
-@pytest.mark.sphinx('rinoh', testroot='citation_rinoh')
-def test_citation_rinoh(app, warning) -> None:
-    app.build()
-    assert not warning.getvalue()
-    # output = (app.outdir / "index.html").read_text()
-    # assert len(html_citations(label='tes').findall(output)) == 1
-    # assert len(html_citation_refs(
-    #     label='tes', title=r"The title\.").findall(output)) == 1
