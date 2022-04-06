@@ -8,7 +8,17 @@
 from test.common import (
     html_citation_refs, html_citations, html_footnote_refs, html_footnotes
 )
+import test.some_module_cite
+import test.some_module_footcite
 import pytest
+
+
+# for coverage
+def test_some_module() -> None:
+    f1 = test.some_module_cite.Foo(0)
+    assert f1.c == 3
+    f2 = test.some_module_footcite.Foo(0)
+    assert f2.c == 3
 
 
 @pytest.mark.sphinx('html', testroot='autodoc')
