@@ -4,6 +4,7 @@ from test.common import (
 import pytest
 
 
+@pytest.mark.numpydoc
 @pytest.mark.sphinx('html', testroot='numpydoc')
 def test_numpydoc(app, warning) -> None:
     app.build()
