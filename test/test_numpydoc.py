@@ -5,10 +5,15 @@ import pytest
 
 
 @pytest.mark.numpydoc
-@pytest.mark.sphinx('html', testroot='numpydoc')
+@pytest.mark.sphinx(
+    'html', testroot='autodoc',
+    confoverrides={
+        'extensions': ['sphinxcontrib.bibtex', 'numpydoc'],
+        'numpydoc_class_members_toctree': False,
+    })
 def test_numpydoc(app, warning) -> None:
     app.build()
-    # assert not warning.getvalue()
+    assert not warning.getvalue()
     output = (app.outdir / "doc_cite.html").read_text()
     labels = ['One', 'Two', 'Thr', 'Fou', 'Fiv', 'Six', 'Sev', 'Eig', 'Nin',
               'Ten', 'Ele']
