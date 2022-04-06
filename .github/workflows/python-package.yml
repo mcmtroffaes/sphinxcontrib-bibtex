@@ -67,5 +67,5 @@ jobs:
       if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.9'
     - name: Test with pytest
       run: |
-        coverage run -m pytest
+        coverage run -m pytest ${{ matrix.pytest-options }}
         codecov
