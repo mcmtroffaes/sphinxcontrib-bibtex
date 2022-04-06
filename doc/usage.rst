@@ -1023,6 +1023,21 @@ reference.
 This appears to be a limitation of the toctree directive.
 No workaround is currently known.
 
+Unknown Target Name When Using Footnote Citations With Numpydoc
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Numpydoc will sometimes duplicate the short description (i.e. the first line
+of the docstring) of some python objects
+such as member functions. If it does that, and you have a footnote citation
+in the short description, Sphinx may not be able to properly resolve
+the footnote target.
+If this happens,
+the workaround is not to have footnote citations in the first line of
+your docstrings. Instead, put them in the long description.
+Alternatively, set ``numpydoc_class_members_toctree`` to ``False``
+in your ``conf.py`` file. This will cause numpydoc not to
+duplicate the short descriptions for class members.
+
 Import errors after using setup.py install
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
