@@ -15,16 +15,24 @@ jobs:
       matrix:
         python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11-dev']
         pip-sphinx: [sphinx]
+        pytest-options: ['-m "not numpydoc"']
         include:
+          # numpydoc tests
+          - python-version: '3.10'
+            pip-sphinx: 'sphinx numpydoc'
+            pytest-options: '-m "numpydoc"'
           # sphinx 2.1 (the oldest supported version, released for Python 3.7)
           - python-version: '3.7'
             pip-sphinx: '"sphinx==2.1" "docutils==0.16" "jinja2<3.1"'
+            pytest-options: '-m "not numpydoc"'
           # latest of sphinx 3.x series (released for Python 3.9)
           - python-version: '3.9'
             pip-sphinx: '"sphinx<4" "jinja2<3.1"'
+            pytest-options: '-m "not numpydoc"'
           # sphinx pre-release
           - python-version: '3.10'
             pip-sphinx: '--pre sphinx'
+            pytest-options: '-m "not numpydoc"'
     steps:
     - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
