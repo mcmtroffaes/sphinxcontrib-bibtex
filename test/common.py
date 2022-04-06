@@ -25,6 +25,24 @@ def html_citation_refs(
         r'</a>'.format(refid=refid, label=label, title_pattern=title_pattern))
 
 
+# match single citation with square brackets
+# also gets the id of the citation itself (which will appear in backref)
+def html_citation_refs_single(
+        id_=RE_ID, refid=RE_ID, label=RE_LABEL,
+        title: Optional[str] = RE_TITLE):
+    title_pattern = rf' title="{title}"' if title is not None else ''
+    return re.compile(
+        r'<span id="(?P<id_>{id_})">\['
+        r'<a class="reference internal"'
+        r' href="(?P<refdoc>[^#]+)?#(?P<refid>{refid})"'
+        r'{title_pattern}'
+        r'>'
+        r'(?P<label>{label})'
+        r'</a>'
+        r']</span>'.format(
+            id_=id_, refid=refid, label=label, title_pattern=title_pattern))
+
+
 def html_docutils_citation_refs(refid=RE_ID, label=RE_LABEL, id_=RE_ID):
     return re.compile(
         r'<a class="reference internal" '
