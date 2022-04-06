@@ -1,30 +1,14 @@
-"""
-    test_autodoc
-    ~~~~~~~~~~~~
-
-    Test with autodoc.
-"""
-
 from test.common import (
     html_citation_refs, html_citations, html_footnote_refs, html_footnotes
 )
-import test.some_module_cite
-import test.some_module_footcite
 import pytest
 
 
-# for coverage
-def test_some_module() -> None:
-    f1 = test.some_module_cite.Foo(0)
-    assert f1.c == 3
-    f2 = test.some_module_footcite.Foo(0)
-    assert f2.c == 3
-
-
-@pytest.mark.sphinx('html', testroot='autodoc')
-def test_autodoc(app, warning) -> None:
+@pytest.mark.numpydoc
+@pytest.mark.sphinx('html', testroot='numpydoc')
+def test_numpydoc(app, warning) -> None:
     app.build()
-    assert not warning.getvalue()
+    # assert not warning.getvalue()
     output = (app.outdir / "doc_cite.html").read_text()
     labels = ['One', 'Two', 'Thr', 'Fou', 'Fiv', 'Six', 'Sev', 'Eig', 'Nin',
               'Ten', 'Ele']
@@ -48,10 +32,3 @@ def test_autodoc(app, warning) -> None:
         assert match
         id_ = match.group('id_')
         assert len(html_footnote_refs(refid=id_).findall(output2)) == 1
-
-
-# test that sphinx [source] links do not generate a warning (issue 17)
-@pytest.mark.sphinx('html', testroot='autodoc_viewcode')
-def test_autodoc_viewcode(app, warning) -> None:
-    app.build()
-    assert not warning.getvalue()
