@@ -12,6 +12,8 @@
 .. autofunction:: sphinxcontrib.bibtex.style.template.entry_label()
 
 .. autofunction:: sphinxcontrib.bibtex.style.template.reference()
+
+.. autofunction:: sphinxcontrib.bibtex.style.template.footnote_reference()
 """
 
 import docutils.nodes
