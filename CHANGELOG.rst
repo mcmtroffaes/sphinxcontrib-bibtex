@@ -1,5 +1,5 @@
-2.4.2 (in development)
-----------------------
+2.4.2 (10 April 2022)
+---------------------
 
 * Add support for Python 3.10 and 3.11.
 
