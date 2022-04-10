@@ -1,5 +1,5 @@
-2.4.2 (in development)
-----------------------
+2.4.2 (10 April 2022)
+---------------------
 
 * Add support for Python 3.10 and 3.11.
 
@@ -25,6 +25,10 @@
   nodes. This enables different text classes to be used by different styles, so
   different sorts of docutils nodes can be generated on rendering depending on
   the pybtex node used. See discussion in issue #275.
+
+* Add numpydoc regression test.
+
+* Bump minimal pybtex requirement to 0.24.
 
 2.4.1 (10 September 2021)
 -------------------------

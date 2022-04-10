@@ -1,10 +1,4 @@
 """
-    .. autoclass:: FootReferenceInfo
-        :members:
-
-    .. autoclass:: FootReferenceText
-        :members:
-
     .. autoclass:: FootCiteRole
         :show-inheritance:
 
