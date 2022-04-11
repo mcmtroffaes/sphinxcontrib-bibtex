@@ -1,0 +1,7 @@
+[TEMPLATE_CONFIGURATION]
+name=btex
+template=article
+stylesheet=ssheet.rts
+
+[VARIABLES]
+paper_size=A5

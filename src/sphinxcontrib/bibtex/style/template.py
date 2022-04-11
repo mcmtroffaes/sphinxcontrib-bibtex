@@ -134,6 +134,13 @@ class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
                 + super().render(backend)
                 + [raw_latex('}')]
             )
+        elif info.builder.name == 'rinoh':
+            children = super().render(backend)
+            refid = f"%{info.todocname}#{info.citation_id}"
+            refnode = docutils.nodes.citation_reference(
+                text=children[0], refid=refid, reftitle=info.title)
+            refnode.extend(children[1:])
+            return [refnode]
         else:
             children = super().render(backend)
             # make_refnode only takes a single child
