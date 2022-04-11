@@ -1,6 +1,8 @@
 2.4.3 (in development)
 ----------------------
 
+* Add support for the rinohtype builder (reported by brechtm, see issue #275).
+
 2.4.2 (10 April 2022)
 ---------------------
 
