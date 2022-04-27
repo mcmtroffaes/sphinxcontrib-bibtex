@@ -1,7 +1,13 @@
-2.4.3 (in development)
+2.5.0 (in development)
 ----------------------
 
 * Add support for the rinohtype builder (reported by brechtm, see issue #275).
+
+* Migrate from ``pkg_resources`` to ``importlib.metadata``. A side effect of
+  this migration is that
+  **plugins registered at runtime are longer exposed as entry points**.
+  This is because ``importlib`` does not allow runtime modification of
+  entry points.
 
 2.4.2 (10 April 2022)
 ---------------------
