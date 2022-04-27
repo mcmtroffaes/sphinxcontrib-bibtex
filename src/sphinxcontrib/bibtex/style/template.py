@@ -27,7 +27,7 @@ from sphinx.util.nodes import make_refnode
 from sphinxcontrib.bibtex.nodes import raw_latex
 from sphinxcontrib.bibtex.richtext import BaseReferenceText
 
-from typing import TYPE_CHECKING, Dict, Any, cast, NamedTuple
+from typing import TYPE_CHECKING, Dict, Any, cast, NamedTuple, List
 
 if TYPE_CHECKING:
     from pybtex.backends import BaseBackend
@@ -123,7 +123,7 @@ class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
     for use with :class:`SphinxReferenceInfo`.
     """
 
-    def render(self, backend: "BaseBackend"):
+    def render(self, backend: "BaseBackend") -> List[docutils.nodes.Element]:
         assert isinstance(backend, pybtex_docutils.Backend), \
                "SphinxReferenceText only supports the docutils backend"
         info = self.info[0]
@@ -144,7 +144,7 @@ class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
         else:
             children = super().render(backend)
             # make_refnode only takes a single child
-            refnode = make_refnode(
+            refnode2 = make_refnode(
                 builder=info.builder,
                 fromdocname=info.fromdocname,
                 todocname=info.todocname,
@@ -152,8 +152,8 @@ class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
                 child=children[0],
                 title=info.title,
             )
-            refnode.extend(children[1:])  # type: ignore
-            return [refnode]
+            refnode2.extend(children[1:])  # type: ignore
+            return [refnode2]
 
 
 @node
