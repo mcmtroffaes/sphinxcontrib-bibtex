@@ -3,4 +3,4 @@ docutils>=0.8
 pybtex>=0.24
 pybtex-docutils>=1.0.0
 dataclasses; python_version < '3.7'
-importlib_metadata; python_version < '3.8'
+importlib_metadata>=3.6; python_version < '3.10'

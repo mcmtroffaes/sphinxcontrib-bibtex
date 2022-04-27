@@ -1,5 +1,5 @@
 import sys
-if sys.version_info >= (3, 8):
+if sys.version_info >= (3, 10):
     from importlib.metadata import entry_points, EntryPoint
 else:
     from importlib_metadata import entry_points, EntryPoint
