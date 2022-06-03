@@ -78,7 +78,7 @@ def html_citations(id_=RE_ID, label=RE_LABEL, text=RE_TEXT):
             r'<span class="label">'
             r'<span class="fn-bracket">\[</span>'
             r'(?:<a role="doc-backlink" href="#(?P<backref>{backref_id})">)?'
-            r'{label}'
+            r'(?P<label>{label})'
             r'(?:</a>)?'
             r'<span class="fn-bracket">]</span>'
             r'</span>\s*'
