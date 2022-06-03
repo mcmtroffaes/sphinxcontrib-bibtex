@@ -9,6 +9,9 @@
   This is because ``importlib`` does not allow runtime modification of
   entry points.
 
+* Remove sphinxcontrib namespace ``__init__.py`` file (no longer needed for
+  Python 3.3+ by PEP420).
+
 2.4.2 (10 April 2022)
 ---------------------
 

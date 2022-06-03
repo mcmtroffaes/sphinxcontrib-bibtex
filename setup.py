@@ -1,6 +1,6 @@
 import io
 import re
-from setuptools import setup, find_packages
+from setuptools import setup, find_namespace_packages
 from typing import Optional
 
 
@@ -58,7 +58,7 @@ setup(
         'Topic :: Utilities',
     ],
     platforms='any',
-    packages=find_packages('src'),
+    packages=find_namespace_packages('src'),
     package_dir={'': 'src'},
     package_data={'sphinxcontrib.bibtex': ['py.typed']},
     include_package_data=True,
