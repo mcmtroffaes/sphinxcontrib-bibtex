@@ -87,7 +87,7 @@ def html_citations(id_=RE_ID, label=RE_LABEL, text=RE_TEXT):
             r',<a {back_role} href="#(?P<backref2>{backref_id}\w+)">2</a>'
             r'(,<a {back_role} href="#(?P<backref3>{backref_id}\w+)">3</a>)?'
             r'(,<a {back_role} href="#\w+">\d+</a>)*'
-            r'\)</span>)?'
+            r'\)</span>\s*)?'
             r'<p>(?P<text>{text})</p>\s*'
             r'</div>'.format(
                 back_role='role="doc-backlink"',
@@ -146,7 +146,7 @@ def html_footnotes(id_=RE_ID, text=RE_TEXT):
             r',<a {back_role} href="#(?P<backref2>{backref_id}\w+)">2</a>'
             r'(,<a {back_role} href="#(?P<backref3>{backref_id}\w+)">3</a>)?'
             r'(,<a {back_role} href="#\w+">\d+</a>)*'
-            r'\)</span>)?'
+            r'\)</span>\s*)?'
             r'<p>(?P<text>{text})</p>\s*'
             r'</aside>'
             .format(
