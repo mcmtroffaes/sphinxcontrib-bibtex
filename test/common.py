@@ -82,8 +82,15 @@ def html_citations(id_=RE_ID, label=RE_LABEL, text=RE_TEXT):
             r'(?:</a>)?'
             r'<span class="fn-bracket">]</span>'
             r'</span>\s*'
+            r'(?:<span class="backrefs">\('
+            r'<a {back_role} href="#(?P<backref1>{backref_id})">1</a>'
+            r',<a {back_role} href="#(?P<backref2>{backref_id}\w+)">2</a>'
+            r'(,<a {back_role} href="#(?P<backref3>{backref_id}\w+)">3</a>)?'
+            r'(,<a {back_role} href="#\w+">\d+</a>)*'
+            r'\)</span>)?'
             r'<p>(?P<text>{text})</p>\s*'
             r'</div>'.format(
+                back_role='role="doc-backlink"',
                 id_=id_, label=label, text=text, backref_id=RE_ID))
 
 
@@ -118,7 +125,7 @@ def html_footnotes(id_=RE_ID, text=RE_TEXT):
             r'<a href="#(?P<backref1>{backref_id})">1</a>'
             r',<a href="#(?P<backref2>{backref_id}\w+)">2</a>'
             r'(,<a href="#(?P<backref3>{backref_id}\w+)">3</a>)?'
-            r'(,<a href="#\w+">\d+</a>)*'  # no named group for additional backrefs
+            r'(,<a href="#\w+">\d+</a>)*'
             r'\)</span>)?'
             r'</dt>\n'
             r'<dd><p>(?P<text>{text})</p>\n</dd>'.format(
@@ -129,14 +136,21 @@ def html_footnotes(id_=RE_ID, text=RE_TEXT):
             r' role="note">\s*'
             r'<span class="label">'
             r'<span class="fn-bracket">\[</span>'
-            r'(?:<a role="doc-backlink" href="#(?P<backref>{backref_id})">)?'
+            r'(?:<a {back_role} href="#(?P<backref>{backref_id})">)?'
             r'{label}'
             r'(?:</a>)?'
             r'<span class="fn-bracket">]</span>'
             r'</span>\s*'
+            r'(?:<span class="backrefs">\('
+            r'<a {back_role} href="#(?P<backref1>{backref_id})">1</a>'
+            r',<a {back_role} href="#(?P<backref2>{backref_id}\w+)">2</a>'
+            r'(,<a {back_role} href="#(?P<backref3>{backref_id}\w+)">3</a>)?'
+            r'(,<a {back_role} href="#\w+">\d+</a>)*'
+            r'\)</span>)?'
             r'<p>(?P<text>{text})</p>\s*'
             r'</aside>'
             .format(
+                back_role='role="doc-backlink"',
                 id_=id_, label=RE_NUM, text=text, backref_id=RE_ID))
 
 
