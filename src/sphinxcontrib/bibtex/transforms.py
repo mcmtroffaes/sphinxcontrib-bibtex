@@ -56,7 +56,9 @@ class BibliographyTransform(SphinxPostTransform):
         """
         env = cast("BuildEnvironment", self.document.settings.env)
         domain = cast("BibtexDomain", env.get_domain('cite'))
-        for bibnode in self.document.traverse(bibliography_node):
+        # Can just use "findall" once docutils 0.18+ is required
+        meth = 'findall' if hasattr(self.document, 'findall') else 'traverse'
+        for bibnode in getattr(self.document, meth)(bibliography_node):
             # reminder: env.docname may be equal to 'index' instead of
             # bibnode['docname'] in post-transform phase (e.g. latex builder)
             bib_key = BibliographyKey(
