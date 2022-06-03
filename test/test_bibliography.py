@@ -153,7 +153,7 @@ def test_bibliography_order_unsorted(app, warning) -> None:
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text()
     assert re.search(
-        '<dd>.*Test 1.*</dd>.*<dd>.*Test 2.*</dd>',
+        r'<p>A\.\sFirst\. Test 1\.</p>.*<p>B\.\sSecond\. Test 2\.</p>',
         output, re.DOTALL)
 
 

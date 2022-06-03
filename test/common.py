@@ -4,6 +4,7 @@ import re
 from typing import Optional
 
 import sphinx
+import docutils
 
 RE_ID = r'[a-z][-?a-z0-9]*'
 RE_NUM = r'\d+'
@@ -53,49 +54,104 @@ def html_docutils_citation_refs(refid=RE_ID, label=RE_LABEL, id_=RE_ID):
 
 
 def html_citations(id_=RE_ID, label=RE_LABEL, text=RE_TEXT):
-    return re.compile(
-        r'<dt class="label" id="(?P<id_>{id_})">'
-        r'<span class="brackets">'
-        r'(?:<a class="fn-backref" href="#(?P<backref>{backref_id})">)?'
-        r'(?P<label>{label})'
-        r'(?:</a>)?'
-        r'</span>'
-        r'(?:<span class="fn-backref">\('
-        r'<a href="#(?P<backref1>{backref_id})">1</a>'
-        r',<a href="#(?P<backref2>{backref_id}\w+)">2</a>'
-        r'(,<a href="#(?P<backref3>{backref_id}\w+)">3</a>)?'
-        r'(,<a href="#\w+">\d+</a>)*'  # no named group for additional backrefs
-        r'\)</span>)?'
-        r'</dt>\n'
-        r'<dd><p>(?P<text>{text})</p>\n</dd>'.format(
-            id_=id_, label=label, text=text, backref_id=RE_ID))
+    if docutils.__version_info__ < (0, 18):
+        return re.compile(
+            r'<dt class="label" id="(?P<id_>{id_})">'
+            r'<span class="brackets">'
+            r'(?:<a class="fn-backref" href="#(?P<backref>{backref_id})">)?'
+            r'(?P<label>{label})'
+            r'(?:</a>)?'
+            r'</span>'
+            r'(?:<span class="fn-backref">\('
+            r'<a href="#(?P<backref1>{backref_id})">1</a>'
+            r',<a href="#(?P<backref2>{backref_id}\w+)">2</a>'
+            r'(,<a href="#(?P<backref3>{backref_id}\w+)">3</a>)?'
+            r'(,<a href="#\w+">\d+</a>)*'  # no named group for extra backrefs
+            r'\)</span>)?'
+            r'</dt>\n'
+            r'<dd><p>(?P<text>{text})</p>\n</dd>'.format(
+                id_=id_, label=label, text=text, backref_id=RE_ID))
+    else:
+        return re.compile(
+            r'<div class="citation" id="(?P<id_>{id_})"'
+            r' role="doc-biblioentry">\s*'
+            r'<span class="label">'
+            r'<span class="fn-bracket">\[</span>'
+            r'(?:<a role="doc-backlink" href="#(?P<backref>{backref_id})">)?'
+            r'(?P<label>{label})'
+            r'(?:</a>)?'
+            r'<span class="fn-bracket">]</span>'
+            r'</span>\s*'
+            r'(?:<span class="backrefs">\('
+            r'<a {back_role} href="#(?P<backref1>{backref_id})">1</a>'
+            r',<a {back_role} href="#(?P<backref2>{backref_id}\w+)">2</a>'
+            r'(,<a {back_role} href="#(?P<backref3>{backref_id}\w+)">3</a>)?'
+            r'(,<a {back_role} href="#\w+">\d+</a>)*'
+            r'\)</span>\s*)?'
+            r'<p>(?P<text>{text})</p>\s*'
+            r'</div>'.format(
+                back_role='role="doc-backlink"',
+                id_=id_, label=label, text=text, backref_id=RE_ID))
 
 
 def html_footnote_refs(refid=RE_ID):
-    return re.compile(
-        r'<a class="footnote-reference brackets"'
-        r' href="#(?P<refid>{refid})" id="(?P<id_>{id_})">'
-        r'(?P<label>{label})'
-        r'</a>'.format(refid=refid, id_=RE_ID, label=RE_NUM))
+    if docutils.__version_info__ < (0, 18):
+        return re.compile(
+            r'<a class="footnote-reference brackets"'
+            r' href="#(?P<refid>{refid})" id="(?P<id_>{id_})">'
+            r'(?P<label>{label})'
+            r'</a>'.format(refid=refid, id_=RE_ID, label=RE_NUM))
+    else:
+        return re.compile(
+            r'<a class="footnote-reference brackets" '
+            r'href="#(?P<refid>{refid})" id="(?P<id_>{id_})" '
+            r'role="doc-noteref">'
+            r'<span class="fn-bracket">\[</span>'
+            r'(?P<label>{label})'
+            r'<span class="fn-bracket">]</span>'
+            r'</a>'.format(refid=refid, id_=RE_ID, label=RE_NUM))
 
 
 def html_footnotes(id_=RE_ID, text=RE_TEXT):
-    return re.compile(
-        r'<dt class="label" id="(?P<id_>{id_})">'
-        r'<span class="brackets">'
-        r'(?:<a class="fn-backref" href="#(?P<backref>{backref_id})">)?'
-        r'(?P<label>{label})'
-        r'(?:</a>)?'
-        r'</span>'
-        r'(?:<span class="fn-backref">\('
-        r'<a href="#(?P<backref1>{backref_id})">1</a>'
-        r',<a href="#(?P<backref2>{backref_id}\w+)">2</a>'
-        r'(,<a href="#(?P<backref3>{backref_id}\w+)">3</a>)?'
-        r'(,<a href="#\w+">\d+</a>)*'  # no named group for additional backrefs
-        r'\)</span>)?'
-        r'</dt>\n'
-        r'<dd><p>(?P<text>{text})</p>\n</dd>'.format(
-            id_=id_, backref_id=RE_ID, label=RE_NUM, text=text))
+    if docutils.__version_info__ < (0, 18):
+        return re.compile(
+            r'<dt class="label" id="(?P<id_>{id_})">'
+            r'<span class="brackets">'
+            r'(?:<a class="fn-backref" href="#(?P<backref>{backref_id})">)?'
+            r'(?P<label>{label})'
+            r'(?:</a>)?'
+            r'</span>'
+            r'(?:<span class="fn-backref">\('
+            r'<a href="#(?P<backref1>{backref_id})">1</a>'
+            r',<a href="#(?P<backref2>{backref_id}\w+)">2</a>'
+            r'(,<a href="#(?P<backref3>{backref_id}\w+)">3</a>)?'
+            r'(,<a href="#\w+">\d+</a>)*'
+            r'\)</span>)?'
+            r'</dt>\n'
+            r'<dd><p>(?P<text>{text})</p>\n</dd>'.format(
+                id_=id_, backref_id=RE_ID, label=RE_NUM, text=text))
+    else:
+        return re.compile(
+            r'<aside class="footnote brackets" id="(?P<id_>{id_})"'
+            r' role="note">\s*'
+            r'<span class="label">'
+            r'<span class="fn-bracket">\[</span>'
+            r'(?:<a {back_role} href="#(?P<backref>{backref_id})">)?'
+            r'{label}'
+            r'(?:</a>)?'
+            r'<span class="fn-bracket">]</span>'
+            r'</span>\s*'
+            r'(?:<span class="backrefs">\('
+            r'<a {back_role} href="#(?P<backref1>{backref_id})">1</a>'
+            r',<a {back_role} href="#(?P<backref2>{backref_id}\w+)">2</a>'
+            r'(,<a {back_role} href="#(?P<backref3>{backref_id}\w+)">3</a>)?'
+            r'(,<a {back_role} href="#\w+">\d+</a>)*'
+            r'\)</span>\s*)?'
+            r'<p>(?P<text>{text})</p>\s*'
+            r'</aside>'
+            .format(
+                back_role='role="doc-backlink"',
+                id_=id_, label=RE_NUM, text=text, backref_id=RE_ID))
 
 
 def latex_citations(docname=RE_DOCNAME, id_=RE_ID,
