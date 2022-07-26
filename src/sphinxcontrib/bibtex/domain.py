@@ -394,7 +394,8 @@ class BibtexDomain(Domain):
                 todocname=citation.bibliography_key.docname,
                 citation_id=citation.citation_id,
                 title=(
-                    citation.tooltip_entry.text.render(plaintext)
+                    citation.tooltip_entry.text.render(plaintext).replace(
+                        "\\url ", "")
                     if citation.tooltip_entry else None
                 )
             ))
