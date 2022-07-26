@@ -226,6 +226,19 @@ def test_bibliography_url(app, warning) -> None:
     assert 'aaa' + url('https://google.com/') + 'bbb' in match2.group('text')
     assert url('https://youtube.com/') in match3.group('text')
     assert 'URL: ' + url('https://wikipedia.org/') in match4.group('text')
+    # check tooltips do not contain \url command
+    match4 = html_citation_refs(label='Een').search(output)
+    match5 = html_citation_refs(label='Twe').search(output)
+    match6 = html_citation_refs(label='Dri').search(output)
+    match7 = html_citation_refs(label='Vie').search(output)
+    assert match4 is not None
+    assert match5 is not None
+    assert match6 is not None
+    assert match7 is not None
+    assert "\\url " not in match4.group('title')
+    assert "\\url " not in match5.group('title')
+    assert "\\url " not in match6.group('title')
+    assert "\\url " not in match7.group('title')
 
 
 @pytest.mark.sphinx('html', testroot='bibliography_custom_ids')
