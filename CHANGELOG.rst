@@ -14,6 +14,9 @@
 
 * Add support for docutils 0.18.
 
+* Suppress LaTeX url commands in tooltips (see issue #305, reported by
+  1kastner).
+
 2.4.2 (10 April 2022)
 ---------------------
 
