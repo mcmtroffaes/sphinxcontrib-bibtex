@@ -16,7 +16,8 @@ RE_TITLE = r'[^"]*'
 
 def html_citation_refs(
         refid=RE_ID, label=RE_LABEL, title: Optional[str] = RE_TITLE):
-    title_pattern = rf' title="(?P<title>{title})"' if title is not None else ''
+    title_pattern = (
+        rf' title="(?P<title>{title})"' if title is not None else '')
     return re.compile(
         r'<a class="reference internal"'
         r' href="(?P<refdoc>[^#]+)?#(?P<refid>{refid})"'
