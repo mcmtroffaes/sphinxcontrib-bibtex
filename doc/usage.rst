@@ -582,8 +582,7 @@ expression.
 .. note::
 
    The expression is parsed using :func:`ast.parse`
-   and then evaluated using an :class:`ast.NodeVisitor`,
-   so it should be reasonably safe against malicious code.
+   and then evaluated using an :class:`ast.NodeVisitor`.
 
 The filter expression supports:
 
