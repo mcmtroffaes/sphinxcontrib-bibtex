@@ -370,7 +370,7 @@ Markdown Syntax Using Myst
 If you use myst, all roles and directives are also available in Markdown
 syntax. For example:
 
-.. code:: markdown
+.. code-block:: markdown
 
    See {cite:p}`1987:nelson` for an introduction to non-standard analysis.
 
