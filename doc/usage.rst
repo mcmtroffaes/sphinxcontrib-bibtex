@@ -364,11 +364,11 @@ Roles and Directives
    created for references that do not yet have a footnote earlier in the
    document.
 
-Markdown Syntax Using Myst
+Markdown Syntax Using MyST
 ~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-If you use myst, all roles and directives are also available in Markdown
-syntax. For example:
+If you use the MyST parser, all roles and directives are also available in
+Markdown syntax. For example:
 
 .. code-block:: markdown
 
