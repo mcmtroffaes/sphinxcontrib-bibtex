@@ -17,6 +17,8 @@
 * Suppress LaTeX url commands in tooltips (see issue #305, reported by
   1kastner).
 
+* Document Markdown syntax for MyST (suggested by jacopok, see issue #310).
+
 2.4.2 (10 April 2022)
 ---------------------
 

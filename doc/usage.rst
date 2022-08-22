@@ -364,6 +364,21 @@ Roles and Directives
    created for references that do not yet have a footnote earlier in the
    document.
 
+Markdown Syntax Using MyST
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you use the MyST parser, all roles and directives are also available in
+Markdown syntax. For example:
+
+.. code-block:: markdown
+
+   See {cite:p}`1987:nelson` for an introduction to non-standard analysis.
+
+   ```{bibliography} references.bib
+   ```
+
+.. seealso:: https://myst-parser.readthedocs.io/en/latest/syntax/roles-and-directives.html
+
 Advanced Features
 -----------------
 
