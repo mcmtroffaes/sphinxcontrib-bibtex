@@ -1,4 +1,4 @@
-2.5.0 (in development)
+2.5.0 (22 August 2022)
 ----------------------
 
 * Add support for the rinohtype builder (reported by brechtm, see issue #275).
