@@ -1,6 +1,12 @@
 2.5.1 (in development)
 ----------------------
 
+* Add test for running the extension on Cython modules (see issue #308).
+
+* Running pytest without arguments will now by default skip all marked tests
+  that require additional dependencies (currently numpydoc, rinohtype, and
+  cython).
+
 2.5.0 (22 August 2022)
 ----------------------
 
