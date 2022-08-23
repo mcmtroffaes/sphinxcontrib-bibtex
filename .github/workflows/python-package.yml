@@ -27,7 +27,7 @@ jobs:
             pytest-options: '-m "rinohtype"'
           # cython tests
           - python-version: '3.10'
-            pip-sphinx: 'cython test/some_cython_module'
+            pip-sphinx: 'sphinx test/some_cython_module'
             pytest-options: '-m "cython"'
           # sphinx 2.1 (the oldest supported version, released for Python 3.7)
           - python-version: '3.7'
