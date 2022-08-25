@@ -239,7 +239,7 @@ def test_citation_roles_authoryear(app, warning) -> None:
 @pytest.mark.sphinx(
     'text', testroot='citation_roles_pre_post',
     confoverrides={'bibtex_reference_style': 'author_year'})
-def test_citation_roles_authoryear(app, warning) -> None:
+def test_citation_roles_authoryear_pre_post(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.txt").read_text()
