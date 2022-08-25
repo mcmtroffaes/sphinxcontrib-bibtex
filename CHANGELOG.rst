@@ -1,6 +1,12 @@
 2.5.1 (in development)
 ----------------------
 
+* Pre- and post-text in citations are now supported for the
+  author_year, label, and super referencing styles. The syntax is
+  ``:cite:p:`{pre-text}key{post-text}``` (requested by RobertoBagnara,
+  see issue #288 and pull request #316).
+  Refer to the documentation for more details.
+
 * Add test for running the extension on Cython modules (see issue #308).
 
 * Running pytest without arguments will now by default skip all marked tests
