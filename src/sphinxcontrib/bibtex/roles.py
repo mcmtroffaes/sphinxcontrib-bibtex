@@ -9,6 +9,7 @@
 """
 
 import docutils.nodes
+from .citation_target import CitationTarget, parse_citation_targets
 
 from typing import TYPE_CHECKING, cast, NamedTuple, List
 from pybtex.plugin import find_plugin
@@ -20,10 +21,10 @@ if TYPE_CHECKING:
 
 class CitationRef(NamedTuple):
     """Information about a citation reference."""
-    citation_ref_id: str  #: Unique id of this citation reference.
-    docname: str          #: Document name.
-    line: int             #: Line number.
-    keys: List[str]       #: Citation keys (including key prefix).
+    citation_ref_id: str           #: Unique id of this citation reference.
+    docname: str                   #: Document name.
+    line: int                      #: Line number.
+    targets: List[CitationTarget]  #: Citation targets (key, pre, post).
 
 
 class CiteRole(XRefRole):
@@ -46,6 +47,6 @@ class CiteRole(XRefRole):
             citation_ref_id=node['ids'][0],
             docname=env.docname,
             line=document.line,
-            keys=[key.strip() for key in self.target.split(',')],
+            targets=list(parse_citation_targets(self.target)),
         ))
         return [node], []

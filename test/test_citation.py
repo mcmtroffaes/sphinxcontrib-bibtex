@@ -33,7 +33,7 @@ def test_citation_mixed(app, warning) -> None:
     domain = cast(BibtexDomain, app.env.get_domain('cite'))
     assert len(domain.citation_refs) == 1
     citation_ref = domain.citation_refs.pop()
-    assert citation_ref.keys == ['Test']
+    assert citation_ref.targets == [('Test', '', '')]
     assert citation_ref.docname == 'adoc1'
     assert len(domain.citations) == 1
     citation = domain.citations.pop()

@@ -431,8 +431,8 @@ class BibtexDomain(Domain):
         """
         for citation_ref in sorted(
                 self.citation_refs, key=lambda c: docnames.index(c.docname)):
-            for key in citation_ref.keys:
-                yield key
+            for target in citation_ref.targets:
+                yield target.key
 
     def get_entries(
             self, bibfiles: List[str]) -> Iterable["Entry"]:
@@ -455,7 +455,7 @@ class BibtexDomain(Domain):
             cited_docnames = {
                 citation_ref.docname
                 for citation_ref in self.citation_refs
-                if key in citation_ref.keys
+                if key in {target.key for target in citation_ref.targets}
             }
             visitor = _FilterVisitor(
                 entry=entry,
