@@ -382,6 +382,21 @@ Markdown syntax. For example:
 Advanced Features
 -----------------
 
+Adding pre-text and post-text to citations
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+.. versionadded:: 2.5.1
+
+You can add pre-text and post-text to any citation reference using thefollowing syntax:
+
+.. code-block:: rest
+
+   The axioms were introduced by :cite:t:`{see}1977:nelson`.
+   The axioms were introduced by :cite:t:`1977:nelson{p. 1166}`.
+   The axioms were introduced by :cite:t:`{see}1977:nelson{p. 1166}`.
+
+Pre-text and post-text is not supported for footnote citations.
+
 Splitting Bibliographies Per Bib File
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
