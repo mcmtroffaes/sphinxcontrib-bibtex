@@ -63,6 +63,18 @@ def join(children, data, sep='', sep2=None, last_sep=None, other=None):
         return Text(parts[0], other)
 
 
+@node
+def join2(children, data, sep1='', sep2=''):
+    """Join text fragments together."""
+    if not children:
+        return Text()
+    else:
+        return join(sep=sep1)[
+            children[0],
+            join(sep=sep2)[children[1:]]
+        ].format_data(data)
+
+
 # copied from pybtex names but using the new join
 @node
 def sentence(children, data, capfirst=False, capitalize=False, add_period=True,
@@ -115,6 +127,8 @@ class SphinxReferenceInfo(NamedTuple):
     todocname: str      #: Document name of the bibliography.
     citation_id: str    #: Unique id of the citation within the bibliography.
     title: str          #: Title attribute for reference node.
+    pre_text: str       #: Text to come before citation.
+    post_text: str      #: Text to come after citation.
 
 
 class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
@@ -169,6 +183,22 @@ def reference(children, data: Dict[str, Any]):
     info = data['reference_info']
     assert isinstance(info, SphinxReferenceInfo)
     return SphinxReferenceText(info, *parts)
+
+
+@node
+def pre_text(children, data: Dict[str, Any]):
+    assert not children
+    info = data['reference_info']
+    assert isinstance(info, SphinxReferenceInfo)
+    return Text(info.pre_text)
+
+
+@node
+def post_text(children, data: Dict[str, Any]):
+    assert not children
+    info = data['reference_info']
+    assert isinstance(info, SphinxReferenceInfo)
+    return Text(info.post_text)
 
 
 class FootReferenceInfo(NamedTuple):

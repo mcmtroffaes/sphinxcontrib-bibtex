@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, List, Iterable, Union
-from sphinxcontrib.bibtex.style.template import reference, join, year
+from sphinxcontrib.bibtex.style.template import reference, join, year, pre_text, \
+    post_text, join2
 from . import BaseReferenceStyle, BracketStyle, PersonStyle
 
 if TYPE_CHECKING:
@@ -21,6 +22,12 @@ class BasicAuthorYearParentheticalReferenceStyle(BaseReferenceStyle):
     #: Separator between author and year.
     author_year_sep: Union["BaseText", str] = ', '
 
+    #: Separator between pre-text and citation.
+    pre_text_sep: Union["BaseText", str] = ' '
+
+    #: Separator between citation and post-text.
+    post_text_sep: Union["BaseText", str] = ', '
+
     def role_names(self) -> Iterable[str]:
         return [f'p{full_author}' for full_author in ['', 's']]
 
@@ -32,9 +39,14 @@ class BasicAuthorYearParentheticalReferenceStyle(BaseReferenceStyle):
 
     def inner(self, role_name: str) -> "Node":
         return reference[
-            join(sep=self.author_year_sep)[
-                self.person.author_or_editor_or_title(full='s' in role_name),
-                year
+            join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
+                pre_text,
+                join(sep=self.author_year_sep)[
+                    self.person.author_or_editor_or_title(
+                        full='s' in role_name),
+                    year,
+                ],
+                post_text,
             ]
         ]
 
@@ -52,6 +64,12 @@ class BasicAuthorYearTextualReferenceStyle(BaseReferenceStyle):
     #: Separator between text and reference.
     text_reference_sep: Union["BaseText", str] = ' '
 
+    #: Separator between pre-text and citation.
+    pre_text_sep: Union["BaseText", str] = ' '
+
+    #: Separator between citation and post-text.
+    post_text_sep: Union["BaseText", str] = ', '
+
     def role_names(self) -> Iterable[str]:
         return [f'{capfirst}t{full_author}'
                 for capfirst in ['', 'c'] for full_author in ['', 's']]
@@ -67,7 +85,13 @@ class BasicAuthorYearTextualReferenceStyle(BaseReferenceStyle):
             self.person.author_or_editor_or_title(full='s' in role_name),
             join[
                 self.bracket.left,
-                reference[year],
+                reference[
+                    join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
+                        pre_text,
+                        year,
+                        post_text,
+                    ]
+                ],
                 self.bracket.right
             ]
         ]

@@ -31,6 +31,7 @@ from sphinx.domains import Domain, ObjType
 from sphinx.errors import ExtensionError
 from sphinx.locale import _
 
+from .citation_target import parse_citation_targets, CitationTarget
 from .roles import CiteRole
 from .bibfile import normpath_filename, process_bibdata, BibData
 from .style.referencing import BaseReferenceStyle, format_references
@@ -376,7 +377,9 @@ class BibtexDomain(Domain):
                      node: "pending_xref", contnode: docutils.nodes.Element
                      ) -> docutils.nodes.Element:
         """Replace node by list of citation references (one for each key)."""
-        keys = [key.strip() for key in target.split(',')]
+        targets = parse_citation_targets(target)
+        keys: Dict[str, CitationTarget] = {
+            target.key: target for target in targets}
         citations: Dict[str, Citation] = {
             cit.key: cit for cit in self.citations
             if cit.key in keys
@@ -397,7 +400,9 @@ class BibtexDomain(Domain):
                     citation.tooltip_entry.text.render(plaintext).replace(
                         "\\url ", "")
                     if citation.tooltip_entry else None
-                )
+                ),
+                pre_text=keys[citation.key].pre,
+                post_text=keys[citation.key].post,
             ))
             for citation in citations.values()]
         formatted_references = format_references(
