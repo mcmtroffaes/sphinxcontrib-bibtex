@@ -1,9 +1,7 @@
 import pytest
 
 
-from sphinxcontrib.bibtex.citation_target import (
-    parse_citation_targets, CitationTarget
-)
+from sphinxcontrib.bibtex.citation_target import parse_citation_targets
 
 
 @pytest.mark.parametrize(
