@@ -50,14 +50,26 @@ class SuperReferenceStyle(GroupReferenceStyle):
     #: Separator between text and reference for textual citations.
     text_reference_sep: Union["BaseText", str] = ''
 
+    #: Separator between pre-text and citation.
+    pre_text_sep: Union["BaseText", str] = ' '
+
+    #: Separator between citation and post-text.
+    post_text_sep: Union["BaseText", str] = ', '
+
     def __post_init__(self):
         self.styles.extend([
             BasicSuperParentheticalReferenceStyle(
-                bracket=self.bracket_parenthetical, person=self.person),
+                bracket=self.bracket_parenthetical,
+                person=self.person,
+                pre_text_sep=self.pre_text_sep,
+                post_text_sep=self.post_text_sep,
+            ),
             BasicSuperTextualReferenceStyle(
                 bracket=self.bracket_textual,
                 person=self.person,
                 text_reference_sep=self.text_reference_sep,
+                pre_text_sep=self.pre_text_sep,
+                post_text_sep=self.post_text_sep,
             ),
             ExtraAuthorReferenceStyle(
                 bracket=self.bracket_author, person=self.person),

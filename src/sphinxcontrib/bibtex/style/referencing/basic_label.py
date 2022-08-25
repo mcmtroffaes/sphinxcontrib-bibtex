@@ -18,6 +18,12 @@ class BasicLabelParentheticalReferenceStyle(BaseReferenceStyle):
     #: Bracket style.
     bracket: BracketStyle = field(default_factory=BracketStyle)
 
+    #: Separator between pre-text and citation.
+    pre_text_sep: Union["BaseText", str] = ' '
+
+    #: Separator between citation and post-text.
+    post_text_sep: Union["BaseText", str] = ', '
+
     def role_names(self) -> Iterable[str]:
         return [f'p{full_author}' for full_author in ['', 's']]
 
@@ -45,6 +51,12 @@ class BasicLabelTextualReferenceStyle(BaseReferenceStyle):
 
     #: Separator between text and reference.
     text_reference_sep: Union["BaseText", str] = ' '
+
+    #: Separator between pre-text and citation.
+    pre_text_sep: Union["BaseText", str] = ' '
+
+    #: Separator between citation and post-text.
+    post_text_sep: Union["BaseText", str] = ', '
 
     def role_names(self) -> Iterable[str]:
         return [f'{capfirst}t{full_author}'

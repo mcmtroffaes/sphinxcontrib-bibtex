@@ -23,6 +23,12 @@ class BasicSuperParentheticalReferenceStyle(BaseReferenceStyle):
     #: Person style.
     person: PersonStyle = field(default_factory=PersonStyle)
 
+    #: Separator between pre-text and citation.
+    pre_text_sep: Union["BaseText", str] = ' '
+
+    #: Separator between citation and post-text.
+    post_text_sep: Union["BaseText", str] = ', '
+
     def role_names(self) -> Iterable[str]:
         return [f'p{full_author}' for full_author in ['', 's']]
 
@@ -51,6 +57,12 @@ class BasicSuperTextualReferenceStyle(BaseReferenceStyle):
 
     #: Separator between text and reference.
     text_reference_sep: Union["BaseText", str] = ''
+
+    #: Separator between pre-text and citation.
+    pre_text_sep: Union["BaseText", str] = ' '
+
+    #: Separator between citation and post-text.
+    post_text_sep: Union["BaseText", str] = ', '
 
     def role_names(self) -> Iterable[str]:
         return [f'{capfirst}t{full_author}'
