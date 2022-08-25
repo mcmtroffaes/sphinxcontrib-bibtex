@@ -237,6 +237,50 @@ def test_citation_roles_authoryear(app, warning) -> None:
 
 
 @pytest.mark.sphinx(
+    'text', testroot='citation_roles_pre_post',
+    confoverrides={'bibtex_reference_style': 'author_year'})
+def test_citation_roles_authoryear(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.txt").read_text()
+    ref1 = "de Du *et al.*"
+    ref2 = "al Ap"
+    ref3 = "Be and Ci"
+    tests = [
+        ("p", f" A [see {ref1}, 2003] "),
+        ("p", f" B [{ref1}, 2003, p. 1] "),
+        ("p", f" C [see {ref1}, 2003, p. 1] "),
+        ("t", f" A {ref1} [see 2003] "),
+        ("t", f" B {ref1} [2003, p. 1] "),
+        ("t", f" C {ref1} [see 2003, p. 1] "),
+        ("p", f" A [see {ref2}, 2001, {ref3}, 2002] "),
+        ("p", f" B [{ref2}, 2001, p. 1, {ref3}, 2002] "),
+        ("p", f" C [see {ref2}, 2001, p. 1, {ref3}, 2002] "),
+        ("p", f" D [{ref2}, 2001, see {ref3}, 2002] "),
+        ("p", f" E [{ref2}, 2001, {ref3}, 2002, p. 2] "),
+        ("p", f" F [{ref2}, 2001, see {ref3}, 2002, p. 2] "),
+        ("p", f" G [see {ref2}, 2001, see {ref3}, 2002] "),
+        ("p", f" H [{ref2}, 2001, p. 1, {ref3}, 2002, p. 2] "),
+        ("p", f" I [see {ref2}, 2001, {ref3}, 2002, p. 2] "),
+        ("p", f" J [see {ref2}, 2001, p. 1, see {ref3}, 2002, p. 2] "),
+        ("t", f" A {ref2} [see 2001], {ref3} [2002] "),
+        ("t", f" B {ref2} [2001, p. 1], {ref3} [2002] "),
+        ("t", f" C {ref2} [see 2001, p. 1], {ref3} [2002] "),
+        ("t", f" D {ref2} [2001], {ref3} [see 2002] "),
+        ("t", f" E {ref2} [2001], {ref3} [2002, p. 2] "),
+        ("t", f" F {ref2} [2001], {ref3} [see 2002, p. 2] "),
+        ("t", f" G {ref2} [see 2001], {ref3} [see 2002] "),
+        ("t", f" H {ref2} [2001, p. 1], {ref3} [2002, p. 2] "),
+        ("t", f" I {ref2} [see 2001], {ref3} [2002, p. 2] "),
+        ("t", f" J {ref2} [see 2001, p. 1], {ref3} [see 2002, p. 2] "),
+    ]
+    for role, text in tests:
+        escaped_text = re.escape(text)
+        pattern = f'":cite:{role}:".*{escaped_text}'
+        assert re.search(pattern, output) is not None, text
+
+
+@pytest.mark.sphinx(
     'html', testroot='citation_roles',
     confoverrides={'bibtex_default_style': 'plain',
                    'bibtex_reference_style': 'super'})
