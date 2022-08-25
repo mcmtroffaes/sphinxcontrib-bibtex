@@ -237,6 +237,52 @@ def test_citation_roles_authoryear(app, warning) -> None:
 
 
 @pytest.mark.sphinx(
+    'text', testroot='citation_roles_pre_post')
+def test_citation_roles_label_pre_post(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.txt").read_text()
+    lab1 = "dDEF03"
+    lab2 = "aA01"
+    lab3 = "BC02"
+    ref1 = "de Du *et al.*"
+    ref2 = "al Ap"
+    ref3 = "Be and Ci"
+    tests = [
+        ("p", f" A [see {lab1}] "),
+        ("p", f" B [{lab1}, p. 1] "),
+        ("p", f" C [see {lab1}, p. 1] "),
+        ("t", f" A {ref1} [see {lab1}] "),
+        ("t", f" B {ref1} [{lab1}, p. 1] "),
+        ("t", f" C {ref1} [see {lab1}, p. 1] "),
+        ("p", f" A [see {lab2}, {lab3}] "),
+        ("p", f" B [{lab2}, p. 1, {lab3}] "),
+        ("p", f" C [see {lab2}, p. 1, {lab3}] "),
+        ("p", f" D [{lab2}, see {lab3}] "),
+        ("p", f" E [{lab2}, {lab3}, p. 2] "),
+        ("p", f" F [{lab2}, see {lab3}, p. 2] "),
+        ("p", f" G [see {lab2}, see {lab3}] "),
+        ("p", f" H [{lab2}, p. 1, {lab3}, p. 2] "),
+        ("p", f" I [see {lab2}, {lab3}, p. 2] "),
+        ("p", f" J [see {lab2}, p. 1, see {lab3}, p. 2] "),
+        ("t", f" A {ref2} [see {lab2}], {ref3} [{lab3}] "),
+        ("t", f" B {ref2} [{lab2}, p. 1], {ref3} [{lab3}] "),
+        ("t", f" C {ref2} [see {lab2}, p. 1], {ref3} [{lab3}] "),
+        ("t", f" D {ref2} [{lab2}], {ref3} [see {lab3}] "),
+        ("t", f" E {ref2} [{lab2}], {ref3} [{lab3}, p. 2] "),
+        ("t", f" F {ref2} [{lab2}], {ref3} [see {lab3}, p. 2] "),
+        ("t", f" G {ref2} [see {lab2}], {ref3} [see {lab3}] "),
+        ("t", f" H {ref2} [{lab2}, p. 1], {ref3} [{lab3}, p. 2] "),
+        ("t", f" I {ref2} [see {lab2}], {ref3} [{lab3}, p. 2] "),
+        ("t", f" J {ref2} [see {lab2}, p. 1], {ref3} [see {lab3}, p. 2] "),
+    ]
+    for role, text in tests:
+        escaped_text = re.escape(text)
+        pattern = f'":cite:{role}:".*{escaped_text}'
+        assert re.search(pattern, output) is not None, text
+
+
+@pytest.mark.sphinx(
     'text', testroot='citation_roles_pre_post',
     confoverrides={'bibtex_reference_style': 'author_year'})
 def test_citation_roles_authoryear_pre_post(app, warning) -> None:
