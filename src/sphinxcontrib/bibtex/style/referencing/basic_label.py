@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 
 from typing import TYPE_CHECKING, List, Iterable, Union
-from sphinxcontrib.bibtex.style.template import reference, entry_label, join
+from sphinxcontrib.bibtex.style.template import reference, entry_label, join, \
+    pre_text, post_text, join2
 from . import BracketStyle, PersonStyle, BaseReferenceStyle
 
 if TYPE_CHECKING:
@@ -34,7 +35,13 @@ class BasicLabelParentheticalReferenceStyle(BaseReferenceStyle):
             capfirst=False)
 
     def inner(self, role_name: str) -> "Node":
-        return reference[entry_label]
+        return reference[
+            join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
+                pre_text,
+                entry_label,
+                post_text,
+            ]
+        ]
 
 
 @dataclass
@@ -73,7 +80,13 @@ class BasicLabelTextualReferenceStyle(BaseReferenceStyle):
             self.person.author_or_editor_or_title(full='s' in role_name),
             join[
                 self.bracket.left,
-                reference[entry_label],
+                reference[
+                    join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
+                        pre_text,
+                        entry_label,
+                        post_text,
+                    ]
+                ],
                 self.bracket.right
             ]
         ]
