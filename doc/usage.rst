@@ -1087,7 +1087,7 @@ To run the tests, please do as follows (ideally, in a virtual environment):
 
 .. code-block::
 
-   pip install . -e
+   pip install -e .
    cd test/
    pytest
 
