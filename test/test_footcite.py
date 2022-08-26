@@ -106,7 +106,6 @@ def test_footcite_style_custom(app, warning) -> None:
     'text', testroot='footcite_roles_pre_post')
 def test_footcite_pre_post(app, warning) -> None:
     app.build()
-    warnings = warning.getvalue().split("\n")
     bad_keys = ["{see}testthree", "testthree{p. 1}", "{see}testthree{p. 1}"]
-    for i, bad_key in enumerate(bad_keys):
-        assert re.search(f'could not find bibtex key "{bad_key}"', warnings[i])
+    for bad_key in bad_keys:
+        assert f'could not find bibtex key "{bad_key}"' in warning.getvalue()
