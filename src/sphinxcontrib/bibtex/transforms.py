@@ -8,6 +8,7 @@
 from itertools import zip_longest
 
 import docutils.nodes
+import sphinx.addnodes
 
 from typing import TYPE_CHECKING, cast
 from pybtex.plugin import find_plugin
@@ -110,3 +111,47 @@ class BibliographyTransform(SphinxPostTransform):
                 bibnode.replace_self(final_node)
             else:
                 bibnode.replace_self(docutils.nodes.target())
+
+
+class PybibtexNodeFormatter(SphinxPostTransform):
+    """This is a postprocessor that modifies citation nodes in the document graph to
+    fix LaTeX formatting from BibTeX entries that were not correctly processed by pybibtex.
+    """
+
+    default_priority = 6
+    """This priority places it after sphinxcontrib-bibtex.bibtex.transforms.BibliographyTransform which has priority 5."""
+
+    def run(self, **kwargs):
+        # Set a type hint to improve autocompletion
+        self.document: sphinx.addnodes.document
+
+        # Walk the document graph to find citation nodes
+        for citation in self.document.findall(
+            lambda n: isinstance(n, docutils.nodes.citation)
+        ):
+            for paragraph in citation.findall(
+                lambda n: isinstance(n, docutils.nodes.paragraph)
+            ):
+                # A BibTeX entry with
+                #   title = {Review on \textit{E. coli} fermentation}
+                # becomes a paragraph of with a sequence of nodes nodes, some of which
+                # are the journal title, DOI and so on.
+                # The interesting ones are the nodes with the title content:
+                # - Text("Review on \textit ")
+                # - Text("E. coli ")
+                # - Text("fermentation")
+                # The code below iterates them and when a node ending on `\textit ` is encountered,
+                # the following node is wrapped in an emphasis node.
+                newchilds = []
+                next_wrap = None
+                for ch in paragraph.children:
+                    if isinstance(ch, docutils.nodes.Text) and ch.endswith("\\textit "):
+                        next_wrap = docutils.nodes.emphasis
+                        ch = docutils.nodes.Text(ch.replace("\\textit ", ""))
+                    elif next_wrap is not None:
+                        ch = next_wrap("", ch)
+                        next_wrap = None
+                    newchilds.append(ch)
+                # Finally we replace the paragraph with the possibly modified children.
+                paragraph.children = newchilds
+        return
