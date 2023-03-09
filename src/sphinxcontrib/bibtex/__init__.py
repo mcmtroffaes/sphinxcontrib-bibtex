@@ -2,9 +2,10 @@
     .. autofunction:: setup
 """
 
+import docutils
 from typing import Any, Dict
-
 from sphinx.application import Sphinx
+from sphinx.util import logging
 
 from .domain import BibtexDomain
 from .foot_domain import BibtexFootDomain
@@ -14,6 +15,9 @@ from .directives import BibliographyDirective
 from .transforms import BibliographyTransform
 from .foot_roles import FootCiteRole
 from .foot_directives import FootBibliographyDirective
+
+
+logger = logging.getLogger(__name__)
 
 
 def setup(app: Sphinx) -> Dict[str, Any]:
@@ -49,6 +53,17 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_domain(BibtexFootDomain)
     app.add_directive("footbibliography", FootBibliographyDirective)
     app.add_role("footcite", FootCiteRole())
+
+    # Catch bug in newer docutils
+    if ((0, 18) <= docutils.__version_info__ < (0, 20)) and app.builder.name == "html":
+        error = RuntimeError(
+            (
+                "Beware that docutils versions 0.18 and 0.19 (you are running {}) are known to generate invalid html "
+                "for citations. If this issue affects you, please use docutils<=0.17 (or >=0.20 once released) instead."
+                " For more details, see https://sourceforge.net/p/docutils/patches/195/"
+            ).format(docutils.__version__)
+        )
+        logger.warn(error.args[0])
 
     return {
         'version': '2.5.1a0',
