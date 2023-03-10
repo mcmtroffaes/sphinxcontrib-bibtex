@@ -56,14 +56,10 @@ def setup(app: Sphinx) -> Dict[str, Any]:
 
     # Catch bug in newer docutils
     if ((0, 18) <= docutils.__version_info__ < (0, 20)) and app.builder.name == "html":
-        error = RuntimeError(
-            (
+        logger.warn(
                 "Beware that docutils versions 0.18 and 0.19 (you are running {}) are known to generate invalid html "
                 "for citations. If this issue affects you, please use docutils<=0.17 (or >=0.20 once released) instead."
-                " For more details, see https://sourceforge.net/p/docutils/patches/195/"
-            ).format(docutils.__version__)
-        )
-        logger.warn(error.args[0])
+                " For more details, see https://sourceforge.net/p/docutils/patches/195/".format(docutils.__version__))
 
     return {
         'version': '2.5.1a0',
