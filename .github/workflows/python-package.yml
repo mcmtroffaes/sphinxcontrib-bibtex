@@ -17,9 +17,9 @@ jobs:
         pip-sphinx: ['sphinx']
         pytest-options: ['']
         include:
-          # python 3.7 (needs older sphinx and jinja2)
+          # python 3.7 (needs older docutils)
           - python-version: '3.7'
-            pip-sphinx: '"sphinx<5" "jinja2<3.1"'
+            pip-sphinx: '"docutils<0.18"'
             pytest-options: ''
           # numpydoc tests
           - python-version: '3.11'
