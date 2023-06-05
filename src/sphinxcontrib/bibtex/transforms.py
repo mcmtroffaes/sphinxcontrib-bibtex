@@ -79,9 +79,7 @@ class BibliographyTransform(SphinxPostTransform):
             elif bibliography.list_ == "bullet":
                 nodes = docutils.nodes.bullet_list()
             else:  # "citation"
-                # Add dummy node to circumvent docutils bug:
-                # https://sourceforge.net/p/docutils/bugs/472/
-                nodes = [docutils.nodes.Text("")]
+                nodes = []
             for citation in citations:
                 citation_node = bibliography.citation_nodes[citation.key]
                 if bibliography.list_ in {"enumerated", "bullet"}:
