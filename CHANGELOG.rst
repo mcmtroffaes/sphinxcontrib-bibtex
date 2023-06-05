@@ -1,8 +1,8 @@
-2.5.1 (in development)
+2.6.0 (in development)
 ----------------------
 
-* Require docutils 0.20 to fix generation of a spurious div tag in the html
-  builder (see issues #330, #329, #323, #322, #309).
+* Exclude docutils 0.18 and 0.19 to fix generation of a spurious div tag in the
+  html builder (see issues #330, #329, #323, #322, #309).
 
 * Add test for running the extension on Cython modules (see issue #308).
 
