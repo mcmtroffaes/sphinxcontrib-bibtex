@@ -387,7 +387,7 @@ Adding pre-text and post-text to citations
 
 .. versionadded:: 2.5.1
 
-You can add pre-text and post-text to any citation reference using thefollowing syntax:
+You can add pre-text and post-text to any citation reference using the following syntax:
 
 .. code-block:: rest
 
