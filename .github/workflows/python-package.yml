@@ -13,26 +13,26 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11-dev']
+        python-version: ['3.8', '3.9', '3.10', '3.11']
         pip-sphinx: ['sphinx']
         pytest-options: ['']
         include:
+          # python 3.7 (needs older docutils and jinja2)
+          - python-version: '3.7'
+            pip-sphinx: '"docutils<0.18" "jinja2<3.1"'
+            pytest-options: ''
           # numpydoc tests
-          - python-version: '3.10'
+          - python-version: '3.11'
             pip-sphinx: 'sphinx numpydoc'
             pytest-options: '-m "numpydoc"'
           # rinohtype tests
-          - python-version: '3.10'
+          - python-version: '3.11'
             pip-sphinx: 'sphinx https://github.com/brechtm/rinohtype/archive/refs/heads/master.zip'
             pytest-options: '-m "rinohtype"'
           # cython tests
-          - python-version: '3.10'
+          - python-version: '3.11'
             pip-sphinx: 'sphinx test/some_cython_module'
             pytest-options: '-m "cython"'
-          # sphinx 2.1 (the oldest supported version, released for Python 3.7)
-          - python-version: '3.7'
-            pip-sphinx: '"sphinx==2.1" "docutils==0.16" "jinja2<3.1"'
-            pytest-options: ''
           # latest of sphinx 3.x series (released for Python 3.9)
           - python-version: '3.9'
             pip-sphinx: '"sphinx<4" "jinja2<3.1"'
@@ -42,7 +42,7 @@ jobs:
             pip-sphinx: '"sphinx<5"'
             pytest-options: ''
           # sphinx pre-release
-          - python-version: '3.10'
+          - python-version: '3.11'
             pip-sphinx: '--pre sphinx'
             pytest-options: ''
     steps:
@@ -55,8 +55,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install pytest codecov coverage
-        python -m pip install ${{ matrix.pip-sphinx }}
-        pip install .
+        python -m pip install . ${{ matrix.pip-sphinx }}
     - name: Install extra dependencies
       run: |
         python -m pip install flake8 check-manifest mypy types-setuptools types-docutils

@@ -1,11 +1,18 @@
-2.5.1 (in development)
+2.6.0 (in development)
 ----------------------
+
+* Exclude docutils 0.18 and 0.19 to fix generation of a spurious div tag in the
+  html builder (see issues #330, #329, #323, #322, #309).
 
 * Add test for running the extension on Cython modules (see issue #308).
 
 * Running pytest without arguments will now by default skip all marked tests
   that require additional dependencies (currently numpydoc, rinohtype, and
   cython).
+
+* Python 3.6 is EOL and is therefore no longer officially supported.
+
+* Sphinx versions 2.x (and lower) are no longer supported.
 
 2.5.0 (22 August 2022)
 ----------------------
