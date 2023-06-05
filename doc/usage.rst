@@ -385,7 +385,7 @@ Advanced Features
 Adding pre-text and post-text to citations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-.. versionadded:: 2.5.1
+.. versionadded:: 2.6.0
 
 You can add pre-text and post-text to any citation reference using the following syntax:
 
