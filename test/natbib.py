@@ -83,7 +83,7 @@ def parse_keys(rawtext) -> Tuple[List[str], str, str]:
     return keys, pre, post
 
 
-class Citations(object):
+class Citations:
     def __init__(self, env):
         self.conf = DEFAULT_CONF.copy()
         self.conf.update(env.app.config.natbib)
@@ -101,7 +101,7 @@ class Citations(object):
         return self.data.entries.get(key)
 
 
-class CitationTransform(object):
+class CitationTransform:
     """
     This class is meant to be applied to a ``docutils.nodes.pending`` node when
     a ``cite`` role is encountered.  Later (during the resolve_xref stage) this

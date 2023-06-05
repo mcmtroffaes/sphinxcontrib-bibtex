@@ -959,6 +959,14 @@ The complete list of warning subtypes that can be suppressed is::
 Known Issues and Workarounds
 ----------------------------
 
+LaTeX Formatting Inside Bibtex Entries
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Beyond simple unicode/LaTeX symbol conversions,
+LaTeX formatting in bib files is not supported by pybtex.
+Since sphinxcontrib-bibtex uses pybtex to parse and format bibtex entries,
+that limitation is carried over to sphinxcontrib-bibtex.
+
 Encoding: Percent Signs
 ~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1094,7 +1102,7 @@ To run the tests, please do as follows (ideally, in a virtual environment):
 
 .. code-block::
 
-   pip install . -e
+   pip install -e .
    cd test/
    pytest
 
