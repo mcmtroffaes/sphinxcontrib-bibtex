@@ -59,9 +59,9 @@ def format_references(
     """Format the list of references according to the given role.
 
     First formats each reference using the style's
-    :meth:`~BaseReferenceStyle.get_inner` method,
+    :meth:`~BaseReferenceStyle.inner` method,
     then joins all these formatted references together using
-    the style's :meth:`~BaseReferenceStyle.get_outer` method.
+    the style's :meth:`~BaseReferenceStyle.outer` method.
     """
     children = [
         style.inner(role_name).format_data(
