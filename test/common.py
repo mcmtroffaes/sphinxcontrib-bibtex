@@ -132,7 +132,7 @@ def html_footnotes(id_=RE_ID, text=RE_TEXT):
             r'<dd><p>(?P<text>{text})</p>\n</dd>'.format(
                 id_=id_, backref_id=RE_ID, label=RE_NUM, text=text))
     else:
-        foot_role = 'role='"note"'' if docutils.__version_info__ < (0, 20) \
+        foot_role = 'role="note"' if docutils.__version_info__ < (0, 20) \
             else 'role="doc-footnote"'
         return re.compile(
             r'<aside class="footnote brackets" id="(?P<id_>{id_})"'
