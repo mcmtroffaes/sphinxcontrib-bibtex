@@ -3,7 +3,6 @@
 import re
 from typing import Optional
 
-import sphinx
 import docutils
 
 RE_ID = r'[a-z][-?a-z0-9]*'
