@@ -159,19 +159,12 @@ def html_footnotes(id_=RE_ID, text=RE_TEXT):
 
 def latex_citations(docname=RE_DOCNAME, id_=RE_ID,
                     label=RE_LABEL, text=RE_TEXT):
-    if sphinx.version_info < (3, 5):
-        return re.compile(
-            r'\\bibitem\[(?P<label>{label})]'
-            r'{{(?P<docname>{docname}):(?P<id_>{id_})}}\n'
-            r'(?P<text>{text})\n'.format(
-                docname=docname, label=label, id_=id_, text=text))
-    else:
-        return re.compile(
-            r'\\bibitem\[(?P<label>{label})]'
-            r'{{(?P<docname>{docname}):(?P<id_>{id_})}}\n'
-            r'\\sphinxAtStartPar\n'
-            r'(?P<text>{text})\n'.format(
-                docname=docname, label=label, id_=id_, text=text))
+    return re.compile(
+        r'\\bibitem\[(?P<label>{label})]'
+        r'{{(?P<docname>{docname}):(?P<id_>{id_})}}\n'
+        r'\\sphinxAtStartPar\n'
+        r'(?P<text>{text})\n'.format(
+            docname=docname, label=label, id_=id_, text=text))
 
 
 def latex_citation_refs(docname=RE_DOCNAME, refid=RE_ID):
