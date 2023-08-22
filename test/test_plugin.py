@@ -11,18 +11,16 @@ def test_plugin_bad_group() -> None:
 
 
 def test_plugin_register_not_forced() -> None:
-
     class Plugin:
         pass
 
     assert not register_plugin(
-        "sphinxcontrib.bibtex.style.referencing", "label", Plugin)
-    assert find_plugin(
-        "sphinxcontrib.bibtex.style.referencing", "label") is not Plugin
+        "sphinxcontrib.bibtex.style.referencing", "label", Plugin
+    )
+    assert find_plugin("sphinxcontrib.bibtex.style.referencing", "label") is not Plugin
 
 
 def test_plugin_register_forced() -> None:
-
     class PluginOld:
         pass
 
@@ -31,19 +29,35 @@ def test_plugin_register_forced() -> None:
 
     assert register_plugin(
         "sphinxcontrib.bibtex.style.referencing",
-        "xxx_test_plugin_register_forced", PluginOld)
-    assert find_plugin(
-        "sphinxcontrib.bibtex.style.referencing",
-        "xxx_test_plugin_register_forced") is PluginOld
+        "xxx_test_plugin_register_forced",
+        PluginOld,
+    )
+    assert (
+        find_plugin(
+            "sphinxcontrib.bibtex.style.referencing", "xxx_test_plugin_register_forced"
+        )
+        is PluginOld
+    )
     assert not register_plugin(
         "sphinxcontrib.bibtex.style.referencing",
-        "xxx_test_plugin_register_forced", PluginNew)
-    assert find_plugin(
-        "sphinxcontrib.bibtex.style.referencing",
-        "xxx_test_plugin_register_forced") is PluginOld
+        "xxx_test_plugin_register_forced",
+        PluginNew,
+    )
+    assert (
+        find_plugin(
+            "sphinxcontrib.bibtex.style.referencing", "xxx_test_plugin_register_forced"
+        )
+        is PluginOld
+    )
     assert register_plugin(
         "sphinxcontrib.bibtex.style.referencing",
-        "xxx_test_plugin_register_forced", PluginNew, force=True)
-    assert find_plugin(
-        "sphinxcontrib.bibtex.style.referencing",
-        "xxx_test_plugin_register_forced") is PluginNew
+        "xxx_test_plugin_register_forced",
+        PluginNew,
+        force=True,
+    )
+    assert (
+        find_plugin(
+            "sphinxcontrib.bibtex.style.referencing", "xxx_test_plugin_register_forced"
+        )
+        is PluginNew
+    )

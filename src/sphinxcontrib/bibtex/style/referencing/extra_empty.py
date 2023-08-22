@@ -14,7 +14,7 @@ class ExtraEmptyReferenceStyle(BaseReferenceStyle):
     """A style which generates nothing, similar to LaTeX's nocite."""
 
     def role_names(self) -> Iterable[str]:
-        return ['empty']
+        return ["empty"]
 
     def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
         return join

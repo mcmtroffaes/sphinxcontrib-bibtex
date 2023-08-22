@@ -14,13 +14,15 @@ class bibliography(nodes.General, nodes.Element):
     citations by
     :class:`~sphinxcontrib.bibtex.transforms.BibliographyTransform`.
     """
+
     pass
 
 
 class raw_latex(
-        nodes.Special, nodes.Inline, nodes.PreBibliographic,
-        nodes.FixedTextElement):
+    nodes.Special, nodes.Inline, nodes.PreBibliographic, nodes.FixedTextElement
+):
     """Node for representing raw latex data."""
+
     pass
 
 

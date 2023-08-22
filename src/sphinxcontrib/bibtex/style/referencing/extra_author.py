@@ -22,19 +22,18 @@ class ExtraAuthorReferenceStyle(BaseReferenceStyle):
 
     def role_names(self) -> Iterable[str]:
         return [
-            f'{capfirst}author{parenthetical}{full_author}'
-            for parenthetical in ['par', '']
-            for capfirst in (['', 'c'] if parenthetical == '' else [''])
-            for full_author in ['', 's']
+            f"{capfirst}author{parenthetical}{full_author}"
+            for parenthetical in ["par", ""]
+            for capfirst in (["", "c"] if parenthetical == "" else [""])
+            for full_author in ["", "s"]
         ]
 
     def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
         return self.bracket.outer(
             children,
-            brackets='par' in role_name,
-            capfirst='c' in role_name,
+            brackets="par" in role_name,
+            capfirst="c" in role_name,
         )
 
     def inner(self, role_name: str) -> "Node":
-        return reference[
-            self.person.author_or_editor_or_title(full='s' in role_name)]
+        return reference[self.person.author_or_editor_or_title(full="s" in role_name)]

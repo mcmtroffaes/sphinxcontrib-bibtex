@@ -43,16 +43,15 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_directive("bibliography", BibliographyDirective)
     app.add_role("cite", CiteRole())
     app.add_node(bibliography, override=True)
-    app.add_node(raw_latex, latex=(visit_raw_latex, depart_raw_latex),
-                 override=True)
+    app.add_node(raw_latex, latex=(visit_raw_latex, depart_raw_latex), override=True)
     app.add_post_transform(BibliographyTransform)
     app.add_domain(BibtexFootDomain)
     app.add_directive("footbibliography", FootBibliographyDirective)
     app.add_role("footcite", FootCiteRole())
 
     return {
-        'version': '2.6.0a0',
-        'env_version': 9,
-        'parallel_read_safe': True,
-        'parallel_write_safe': True,
-        }
+        "version": "2.6.0a0",
+        "env_version": 9,
+        "parallel_read_safe": True,
+        "parallel_write_safe": True,
+    }
