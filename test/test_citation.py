@@ -235,7 +235,7 @@ def test_citation_roles_authoryear(app, warning) -> None:
 def test_citation_roles_label_pre_post(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.txt").read_text()
+    output = (app.outdir / "index.txt").read_text(encoding="utf-8-sig")
     lab1 = "dDEF03"
     lab2 = "aA01"
     lab3 = "BC02"
@@ -284,7 +284,7 @@ def test_citation_roles_label_pre_post(app, warning) -> None:
 def test_citation_roles_authoryear_pre_post(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.txt").read_text()
+    output = (app.outdir / "index.txt").read_text(encoding="utf-8-sig")
     ref1 = "de Du *et al.*"
     ref2 = "al Ap"
     ref3 = "Be and Ci"
