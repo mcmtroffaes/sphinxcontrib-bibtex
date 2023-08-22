@@ -2,6 +2,8 @@
 to help understand what docutils/sphinx are doing.
 """
 
+import shutil
+
 import pytest
 
 
@@ -58,7 +60,7 @@ def test_rebuild_empty_outdir(make_app, app_params):
     app0 = make_app(freshenv=True, *args, **kwargs)
     app0.build()
     assert not app0._warning.getvalue()
-    app0.outdir.rmtree()
+    shutil.rmtree(app0.outdir)
     app1 = make_app(freshenv=False, *args, **kwargs)
     app1.build()
     assert 'could not find bibtex key' not in app1._warning.getvalue()

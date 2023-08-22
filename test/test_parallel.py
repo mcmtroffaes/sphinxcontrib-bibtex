@@ -1,5 +1,7 @@
 """Test for parallel build."""
 
+import os
+
 from sphinx.util.parallel import parallel_available
 import pytest
 
@@ -21,7 +23,7 @@ def test_parallel(make_app, app_params) -> None:
         rstname = app0.env.doc2path(docname)
         htmlname = app0.builder.get_outfilename(docname)
         mtime = (app0.builder.outdir / htmlname).stat().st_mtime
-        (app0.srcdir / rstname).utime((mtime + 5, mtime + 5))
+        os.utime(app0.srcdir / rstname, (mtime + 5, mtime + 5))
     updated = set(app0.builder.get_outdated_docs())
     assert updated == docnames
     app1 = make_app(*args, **kwargs)
