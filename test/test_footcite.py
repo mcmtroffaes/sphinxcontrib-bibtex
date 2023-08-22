@@ -12,7 +12,7 @@ from sphinxcontrib.bibtex.style.referencing.foot import FootReferenceStyle
 def test_footcite_roles(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.txt").read_text()
+    output = (app.outdir / "index.txt").read_text(encoding="utf-8-sig")
     tests = [
         ("p",           " [1] "),
         ("ps",          " [1] "),
@@ -75,7 +75,7 @@ sphinxcontrib.bibtex.plugin.register_plugin(
 def test_footcite_style_custom(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.txt").read_text()
+    output = (app.outdir / "index.txt").read_text(encoding="utf-8-sig")
     tests = [
         ("p",           " [1] "),
         ("ps",          " [1] "),
