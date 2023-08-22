@@ -156,8 +156,6 @@ Roles and Directives
    Here too, multiple keys can be specified at once.
 
 .. rst:role:: cite:ps
-.. rst:role:: cite:alp
-.. rst:role:: cite:alps
 .. rst:role:: cite:ts
 .. rst:role:: cite:ct
 .. rst:role:: cite:cts
@@ -165,9 +163,21 @@ Roles and Directives
    .. versionadded:: 2.2.0
 
    All these roles modify :rst:role:`cite:p` and :rst:role:`cite:t`.
-   The ones starting with ``al`` will suppress brackets.
    The ones starting with ``c`` will capitalize the first letter.
    The ones ending with ``s`` will give the full author list.
+
+.. rst:role:: cite:alp
+.. rst:role:: cite:alps
+
+   .. versionadded:: 2.6.0
+
+   These are identical to :rst:role:`cite:p` and :rst:role:`cite:ps`
+   but suppress brackets.
+   This is useful for instance when needing to add formatted pre-text or post-text.
+
+   .. seealso::
+
+      :ref:`section-pre-post-text`
 
 .. rst:role:: cite
 
@@ -385,12 +395,15 @@ Markdown syntax. For example:
 Advanced Features
 -----------------
 
+.. _section-pre-post-text:
+
 Adding pre-text and post-text to citations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. versionadded:: 2.6.0
 
-You can add pre-text and post-text to any citation reference using the following syntax:
+You can add unformatted pre-text and post-text to any citation reference using the
+following syntax:
 
 .. code-block:: rest
 
@@ -398,7 +411,17 @@ You can add pre-text and post-text to any citation reference using the following
    The axioms were introduced by :cite:t:`1977:nelson{p. 1166}`.
    The axioms were introduced by :cite:t:`{see}1977:nelson{p. 1166}`.
 
-Pre-text and post-text is not supported for footnote citations.
+Pre- and post-text is not supported for footnote citations.
+
+For formatted pre- and post-text in parenthetical citations,
+you can use the :rst:role:`cite:alp` and :rst:role:`cite:alps` roles.
+These roles suppress the brackets, leaving it to you to add them in the right
+format and place:
+
+.. code-block:: rest
+
+   The three new axioms [the *IST axioms*, :cite:alp:`1977:nelson`] are discussed next.
+
 
 Splitting Bibliographies Per Bib File
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
