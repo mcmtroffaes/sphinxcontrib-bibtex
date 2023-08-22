@@ -41,14 +41,22 @@ jobs:
           - python-version: '3.10'
             pip-sphinx: '"sphinx<5"'
             pytest-options: ''
+          # latest of sphinx 5.x series
+          - python-version: '3.11'
+            pip-sphinx: '"sphinx<6"'
+            pytest-options: ''
+          # latest of sphinx 6.x series
+          - python-version: '3.11'
+            pip-sphinx: '"sphinx<7"'
+            pytest-options: ''
           # sphinx pre-release
           - python-version: '3.11'
             pip-sphinx: '--pre sphinx'
             pytest-options: ''
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
@@ -59,23 +67,23 @@ jobs:
     - name: Install extra dependencies
       run: |
         python -m pip install flake8 check-manifest mypy types-setuptools types-docutils
-      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.9'
+      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.11'
     - name: Check manifest
       run: |
         check-manifest
-      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.9'
+      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.11'
     - name: Lint with flake8
       run: |
         flake8 . --count --select=E9,F63,F7,F82 --show-source
         flake8 . --count --max-complexity=10
-      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.9'
+      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.11'
     - name: Type checking with mypy
       run: mypy
-      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.9'
+      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.11'
     - name: Documentation
       run: |
         pushd doc && make html && popd
-      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.9'
+      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.11'
     - name: Test with pytest
       run: |
         coverage run -m pytest ${{ matrix.pytest-options }}

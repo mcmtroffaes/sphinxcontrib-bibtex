@@ -44,7 +44,7 @@ def test_citation_mixed(app, warning) -> None:
 def test_citation_multiple_keys(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.html").read_text()
+    output = (app.outdir / "index.html").read_text(encoding="utf-8-sig")
     cits = {match.group('label')
             for match in html_citations().finditer(output)}
     citrefs = {match.group('label')
@@ -56,7 +56,7 @@ def test_citation_multiple_keys(app, warning) -> None:
 def test_citation_any_role(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.html").read_text()
+    output = (app.outdir / "index.html").read_text(encoding="utf-8-sig")
     cits = {match.group('label')
             for match in html_citations().finditer(output)}
     citrefs = {match.group('label')
@@ -73,7 +73,7 @@ def find_label(output: str, label: str):
 def test_citation_no_author_no_key(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.html").read_text()
+    output = (app.outdir / "index.html").read_text(encoding="utf-8-sig")
     find_label(output, "<em>Software projects built on Mesos</em>, 2015")
     find_label(output, "2015")
     find_label(output, "Mandel, 2009")
@@ -89,7 +89,7 @@ def test_citation_no_author_no_key(app, warning) -> None:
 def test_citation_whitespace(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.html").read_text()
+    output = (app.outdir / "index.html").read_text(encoding="utf-8-sig")
     # ensure Man09 is cited
     assert len(html_citation_refs(label='Fir').findall(output)) == 1
     assert len(html_citation_refs(label='Sec').findall(output)) == 1
@@ -106,7 +106,7 @@ def test_citation_from_orphan(app, warning) -> None:
 def test_citation_roles_label(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.txt").read_text()
+    output = (app.outdir / "index.txt").read_text(encoding="utf-8-sig")
     tests = [
         ("p",           " [dDEF03] "),
         ("ps",          " [dDEF03] "),
@@ -174,7 +174,7 @@ def test_citation_roles_label(app, warning) -> None:
 def test_citation_roles_authoryear(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.txt").read_text()
+    output = (app.outdir / "index.txt").read_text(encoding="utf-8-sig")
     tests = [
         ("p",           " [de Du *et al.*, 2003] "),
         ("ps",          " [de Du, Em, and Fa, 2003] "),
@@ -333,7 +333,7 @@ def test_citation_roles_authoryear_pre_post(app, warning) -> None:
 def test_citation_roles_super(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.html").read_text()
+    output = (app.outdir / "index.html").read_text(encoding="utf-8-sig")
     # just a cursory check that superscript references are present
     assert '<sup><a class="reference internal" href="#' in output
 
@@ -389,7 +389,7 @@ sphinxcontrib.bibtex.plugin.register_plugin(
 def test_citation_style_custom(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.txt").read_text()
+    output = (app.outdir / "index.txt").read_text(encoding="utf-8-sig")
     tests = [
         ("p",           " (de Du et al 2003) "),
         ("ps",          " (de Du & Em & Fa 2003) "),
@@ -455,7 +455,7 @@ def test_citation_style_custom(app, warning) -> None:
 def test_citation_style_round_brackets(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.txt").read_text()
+    output = (app.outdir / "index.txt").read_text(encoding="utf-8-sig")
     assert "(Evensen, 2003)" in output
     assert "Evensen (2003)" in output
 
@@ -464,9 +464,9 @@ def test_citation_style_round_brackets(app, warning) -> None:
 def test_citation_toctree(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.html").read_text()
-    output1 = (app.outdir / "adoc1.html").read_text()
-    output2 = (app.outdir / "adoc2.html").read_text()
+    output = (app.outdir / "index.html").read_text(encoding="utf-8-sig")
+    output1 = (app.outdir / "adoc1.html").read_text(encoding="utf-8-sig")
+    output2 = (app.outdir / "adoc2.html").read_text(encoding="utf-8-sig")
     assert len(html_citations(label='1').findall(output)) == 1
     assert len(html_citation_refs(label='1').findall(output1)) == 1
     assert len(html_docutils_citation_refs(
@@ -478,7 +478,7 @@ def test_citation_toctree(app, warning) -> None:
 def test_citation_tooltip(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.html").read_text()
+    output = (app.outdir / "index.html").read_text(encoding="utf-8-sig")
     assert len(html_citations(label='tes').findall(output)) == 1
     assert len(html_citation_refs(
         label='tes', title=r"The title\.").findall(output)) == 1
@@ -489,7 +489,7 @@ def test_citation_tooltip(app, warning) -> None:
 def test_citation_tooltip2(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.html").read_text()
+    output = (app.outdir / "index.html").read_text(encoding="utf-8-sig")
     assert len(html_citations(label='tes').findall(output)) == 1
     assert len(html_citation_refs(
         label='tes', title=None).findall(output)) == 1
@@ -510,7 +510,7 @@ pybtex.plugin.register_plugin(
 def test_citation_tooltip3(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.html").read_text()
+    output = (app.outdir / "index.html").read_text(encoding="utf-8-sig")
     assert len(html_citations(label='tes').findall(output)) == 1
     assert len(html_citation_refs(
         label='tes', title='whoop whoop').findall(output)) == 1

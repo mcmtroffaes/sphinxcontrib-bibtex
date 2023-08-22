@@ -6,7 +6,7 @@ import pytest
 def test_latex_refs(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "test.tex").read_text()
+    output = (app.outdir / "test.tex").read_text(encoding="utf-8-sig")
     assert len(latex_citations().findall(output)) == 1
     assert len(latex_citation_refs().findall(output)) == 1
     match = latex_citations().search(output)
@@ -22,7 +22,7 @@ def test_latex_refs(app, warning) -> None:
 def test_latex_multidoc(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "test.tex").read_text()
+    output = (app.outdir / "test.tex").read_text(encoding="utf-8-sig")
     assert len(latex_citations().findall(output)) == 1
     assert len(latex_citation_refs().findall(output)) == 1
     match = latex_citations().search(output)

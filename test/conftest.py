@@ -1,16 +1,17 @@
 import pytest
-from sphinx.testing.path import path
+import sphinx
 
+if sphinx.version_info >= (7, 2):
+    from pathlib import Path
+    _rootdir = Path(__file__).parent.resolve() / 'roots'
+else:
+    from sphinx.testing.path import path as Path  # type: ignore
+    _rootdir = Path(__file__).parent.abspath() / 'roots'  # type: ignore
 
 pytest_plugins = 'sphinx.testing.fixtures'
 collect_ignore = ['roots']
 
 
 @pytest.fixture(scope='session')
-def rootdir() -> path:
-    return path(__file__).parent.abspath() / 'roots'
-
-
-# monkey patch for path class on old sphinx versions
-if not hasattr(path, "read_text"):
-    path.read_text = path.text  # type: ignore
+def rootdir() -> Path:
+    return _rootdir

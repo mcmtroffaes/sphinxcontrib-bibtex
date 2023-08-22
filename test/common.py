@@ -3,7 +3,6 @@
 import re
 from typing import Optional
 
-import sphinx
 import docutils
 
 RE_ID = r'[a-z][-?a-z0-9]*'
@@ -132,7 +131,7 @@ def html_footnotes(id_=RE_ID, text=RE_TEXT):
             r'<dd><p>(?P<text>{text})</p>\n</dd>'.format(
                 id_=id_, backref_id=RE_ID, label=RE_NUM, text=text))
     else:
-        foot_role = 'role='"note"'' if docutils.__version_info__ < (0, 20) \
+        foot_role = 'role="note"' if docutils.__version_info__ < (0, 20) \
             else 'role="doc-footnote"'
         return re.compile(
             r'<aside class="footnote brackets" id="(?P<id_>{id_})"'
@@ -159,19 +158,12 @@ def html_footnotes(id_=RE_ID, text=RE_TEXT):
 
 def latex_citations(docname=RE_DOCNAME, id_=RE_ID,
                     label=RE_LABEL, text=RE_TEXT):
-    if sphinx.version_info < (3, 5):
-        return re.compile(
-            r'\\bibitem\[(?P<label>{label})]'
-            r'{{(?P<docname>{docname}):(?P<id_>{id_})}}\n'
-            r'(?P<text>{text})\n'.format(
-                docname=docname, label=label, id_=id_, text=text))
-    else:
-        return re.compile(
-            r'\\bibitem\[(?P<label>{label})]'
-            r'{{(?P<docname>{docname}):(?P<id_>{id_})}}\n'
-            r'\\sphinxAtStartPar\n'
-            r'(?P<text>{text})\n'.format(
-                docname=docname, label=label, id_=id_, text=text))
+    return re.compile(
+        r'\\bibitem\[(?P<label>{label})]'
+        r'{{(?P<docname>{docname}):(?P<id_>{id_})}}\n'
+        r'\\sphinxAtStartPar\n'
+        r'(?P<text>{text})\n'.format(
+            docname=docname, label=label, id_=id_, text=text))
 
 
 def latex_citation_refs(docname=RE_DOCNAME, refid=RE_ID):

@@ -127,14 +127,14 @@ def test_bibliography_label_prefix_2(app, warning) -> None:
     sum_cites = {'CMcMahonKM10', 'CRMM11', 'CRM09', 'CMM03', 'CHdJMD13'}
     app.build()
     assert not warning.getvalue()
-    output1 = (app.outdir / "doc1.html").read_text()
+    output1 = (app.outdir / "doc1.html").read_text(encoding="utf-8-sig")
     # use <= instead of == as there are some extra reference nodes
     assert doc1_refs <= citation_refs(output1)
     assert doc1_cites == citations(output1)
-    output2 = (app.outdir / "doc2.html").read_text()
+    output2 = (app.outdir / "doc2.html").read_text(encoding="utf-8-sig")
     assert doc2_refs <= citation_refs(output2)
     assert doc2_cites == citations(output2)
-    output3 = (app.outdir / "summary.html").read_text()
+    output3 = (app.outdir / "summary.html").read_text(encoding="utf-8-sig")
     assert sum_refs <= citation_refs(output3)
     assert sum_cites == citations(output3)
     # check citation reference from summary to doc1
@@ -151,7 +151,7 @@ def test_bibliography_label_prefix_2(app, warning) -> None:
 def test_bibliography_order_unsorted(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.html").read_text()
+    output = (app.outdir / "index.html").read_text(encoding="utf-8-sig")
     assert re.search(
         r'<p>A\.\sFirst\. Test 1\.</p>.*<p>B\.\sSecond\. Test 2\.</p>',
         output, re.DOTALL)

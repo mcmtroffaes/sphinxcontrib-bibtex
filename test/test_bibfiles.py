@@ -78,7 +78,7 @@ def test_bibfiles_missing_conf(make_app, app_params) -> None:
 def test_bibfiles_encoding(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
-    output = (app.outdir / "index.html").read_text()
+    output = (app.outdir / "index.html").read_text(encoding='utf-8-sig')
     assert u"Äpplé" in output
 
 

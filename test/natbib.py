@@ -408,7 +408,7 @@ class CitationReferencesDirective(Directive):
             if howpub is not None and howpub.startswith('\\url{'):
                 url = howpub[5:-1]
                 refnode = nodes.reference('', '', internal=False, refuri=url)
-                refnode += nodes.Text(url, url)
+                refnode += nodes.Text(url)
                 node += refnode
                 if vol or pages or year:
                     node += nodes.inline(', ', ', ')
