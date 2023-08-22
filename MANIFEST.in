@@ -5,11 +5,11 @@ include requirements.txt
 include mypy.ini
 include pytest.ini
 include .coveragerc
+include .flake8
 recursive-include src *.py py.typed
 recursive-include doc *
 recursive-include test *
 global-exclude *.pyc
 exclude .gitignore
-exclude .travis.yml
 exclude release_checklist.txt
 prune doc/_build
