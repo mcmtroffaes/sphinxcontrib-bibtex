@@ -44,12 +44,10 @@ class BasicSuperParentheticalReferenceStyle(BaseReferenceStyle):
         return tag("sup")[self.bracket.outer(children, brackets=True, capfirst=False)]
 
     def inner(self, role_name: str) -> "Node":
-        return reference[
-            join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
+        return join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
                 pre_text,
-                entry_label,
+                reference[entry_label],
                 post_text,
-            ]
         ]
 
 
@@ -92,12 +90,10 @@ class BasicSuperTextualReferenceStyle(BaseReferenceStyle):
             tag("sup")[
                 join[
                     self.bracket.left,
-                    reference[
-                        join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
-                            pre_text,
-                            entry_label,
-                            post_text,
-                        ]
+                    join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
+                        pre_text,
+                        reference[entry_label],
+                        post_text,
                     ],
                     self.bracket.right,
                 ]

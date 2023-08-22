@@ -41,15 +41,15 @@ class BasicAuthorYearParentheticalReferenceStyle(BaseReferenceStyle):
         return self.bracket.outer(children, brackets=True, capfirst=False)
 
     def inner(self, role_name: str) -> "Node":
-        return reference[
-            join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
-                pre_text,
+        return join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
+            pre_text,
+            reference[
                 join(sep=self.author_year_sep)[
                     self.person.author_or_editor_or_title(full="s" in role_name),
                     year,
-                ],
-                post_text,
-            ]
+                ]
+            ],
+            post_text,
         ]
 
 
@@ -87,12 +87,10 @@ class BasicAuthorYearTextualReferenceStyle(BaseReferenceStyle):
             self.person.author_or_editor_or_title(full="s" in role_name),
             join[
                 self.bracket.left,
-                reference[
-                    join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
-                        pre_text,
-                        year,
-                        post_text,
-                    ]
+                join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
+                    pre_text,
+                    reference[year],
+                    post_text,
                 ],
                 self.bracket.right,
             ],
