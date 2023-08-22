@@ -1,4 +1,5 @@
 """Test for parallel build."""
+
 import os
 
 from sphinx.util.parallel import parallel_available
