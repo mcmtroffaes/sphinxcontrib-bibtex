@@ -43,7 +43,9 @@ class BasicSuperParentheticalReferenceStyle(BaseReferenceStyle):
         ]
 
     def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
-        return tag("sup")[self.bracket.outer(children, brackets=True, capfirst=False)]
+        return tag("sup")[
+            self.bracket.outer(children, brackets="al" not in role_name, capfirst=False)
+        ]
 
     def inner(self, role_name: str) -> "Node":
         return join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[

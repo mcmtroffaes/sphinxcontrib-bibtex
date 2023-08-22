@@ -40,7 +40,9 @@ class BasicAuthorYearParentheticalReferenceStyle(BaseReferenceStyle):
         ]
 
     def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
-        return self.bracket.outer(children, brackets=True, capfirst=False)
+        return self.bracket.outer(
+            children, brackets="al" not in role_name, capfirst=False
+        )
 
     def inner(self, role_name: str) -> "Node":
         return join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
