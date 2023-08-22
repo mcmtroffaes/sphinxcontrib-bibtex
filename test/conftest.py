@@ -1,7 +1,7 @@
 import pytest
 import sphinx
 
-if sphinx.version_info < (7,):
+if sphinx.version_info < (7, 2):
     from sphinx.testing.path import path as Path
     _rootdir = Path(__file__).parent.abspath() / 'roots'
 else:
