@@ -32,7 +32,9 @@ class BasicLabelParentheticalReferenceStyle(BaseReferenceStyle):
     post_text_sep: Union["BaseText", str] = ", "
 
     def role_names(self) -> Iterable[str]:
-        return [f"p{full_author}" for full_author in ["", "s"]]
+        return [
+            f"{alt}p{full_author}" for alt in ["", "al"] for full_author in ["", "s"]
+        ]
 
     def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
         return self.bracket.outer(children, brackets=True, capfirst=False)
