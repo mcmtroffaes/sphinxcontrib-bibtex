@@ -33,15 +33,17 @@ logger = getLogger(__name__)
 
 class BibFile(NamedTuple):
     """Contains information about a parsed bib file."""
-    mtime: float           #: Modification time of file when last parsed.
+
+    mtime: float  #: Modification time of file when last parsed.
     keys: Dict[str, None]  #: Set of keys for this bib file as ordered dict.
 
 
 class BibData(NamedTuple):
     """Contains information about a collection of bib files."""
-    encoding: str                 #: Encoding of all bib files.
+
+    encoding: str  #: Encoding of all bib files.
     bibfiles: Dict[str, BibFile]  #: Maps bib filename to information about it.
-    data: BibliographyData        #: Data parsed from all bib files.
+    data: BibliographyData  #: Data parsed from all bib files.
 
 
 def normpath_filename(env: "BuildEnvironment", filename: str) -> str:
@@ -66,36 +68,43 @@ def parse_bibdata(bibfilenames: List[str], encoding: str) -> BibData:
         if not os.path.isfile(filename):
             logger.warning(
                 "could not open bibtex file {0}.".format(filename),
-                type="bibtex", subtype="bibfile_error")
+                type="bibtex",
+                subtype="bibfile_error",
+            )
             new_keys: Dict[str, None] = {}
         else:
             try:
                 parser.parse_file(filename)
             except BibliographyDataError as exc:
                 logger.warning(
-                    "bibliography data error in {0}: {1}".format(
-                        filename, exc),
-                    type="bibtex", subtype="bibfile_data_error")
+                    "bibliography data error in {0}: {1}".format(filename, exc),
+                    type="bibtex",
+                    subtype="bibfile_data_error",
+                )
             keys, old_keys = dict.fromkeys(parser.data.entries.keys()), keys
             assert all(key in keys for key in old_keys)
-            new_keys = dict.fromkeys(
-                key for key in keys if key not in old_keys)
+            new_keys = dict.fromkeys(key for key in keys if key not in old_keys)
             logger.info("parsed {0} entries".format(len(new_keys)))
         bibfiles[filename] = BibFile(mtime=get_mtime(filename), keys=new_keys)
     return BibData(encoding=encoding, bibfiles=bibfiles, data=parser.data)
 
 
-def is_bibdata_outdated(bibdata: BibData,
-                        bibfilenames: List[str], encoding: str) -> bool:
+def is_bibdata_outdated(
+    bibdata: BibData, bibfilenames: List[str], encoding: str
+) -> bool:
     return (
         bibdata.encoding != encoding
         or list(bibdata.bibfiles) != bibfilenames
-        or any(bibfile.mtime != get_mtime(filename)
-               for filename, bibfile in bibdata.bibfiles.items()))
+        or any(
+            bibfile.mtime != get_mtime(filename)
+            for filename, bibfile in bibdata.bibfiles.items()
+        )
+    )
 
 
-def process_bibdata(bibdata: BibData,
-                    bibfilenames: List[str], encoding: str) -> BibData:
+def process_bibdata(
+    bibdata: BibData, bibfilenames: List[str], encoding: str
+) -> BibData:
     """Parse *bibfilenames* and store parsed data in *bibdata*."""
     logger.info("checking bibtex cache... ", nonl=True)
     if is_bibdata_outdated(bibdata, bibfilenames, encoding):
@@ -108,14 +117,16 @@ def process_bibdata(bibdata: BibData,
 
 # function does not really fit in any module, but used by both
 # cite and footcite domains, so for now it's residing here
-def _make_ids(docname: str, lineno: int, ids: Set[str], raw_id: str
-              ) -> List[str]:
+def _make_ids(docname: str, lineno: int, ids: Set[str], raw_id: str) -> List[str]:
     if raw_id:
         id_ = make_id(raw_id)
         if id_ in ids:
-            logger.warning(f"duplicate citation id {id_}",
-                           location=(docname, lineno),
-                           type="bibtex", subtype="duplicate_id")
+            logger.warning(
+                f"duplicate citation id {id_}",
+                location=(docname, lineno),
+                type="bibtex",
+                subtype="duplicate_id",
+            )
             return []
         else:
             ids.add(id_)

@@ -1,2 +1,2 @@
-extensions = ['sphinxcontrib.bibtex']
-exclude_patterns = ['_build']
+extensions = ["sphinxcontrib.bibtex"]
+exclude_patterns = ["_build"]

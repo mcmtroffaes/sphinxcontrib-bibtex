@@ -35,26 +35,26 @@ bibtex_citation_xml = """
 """
 
 
-@pytest.mark.sphinx('pseudoxml', testroot='debug_docutils_citation')
+@pytest.mark.sphinx("pseudoxml", testroot="debug_docutils_citation")
 def test_debug_docutils_citation(app, warning):
     """A simple test with a single standard docutils citation."""
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.pseudoxml").read_text()
-    assert output.split('\n')[1:] == docutils_citation_xml.split('\n')[1:]
+    assert output.split("\n")[1:] == docutils_citation_xml.split("\n")[1:]
 
 
-@pytest.mark.sphinx('pseudoxml', testroot='debug_bibtex_citation')
+@pytest.mark.sphinx("pseudoxml", testroot="debug_bibtex_citation")
 def test_debug_bibtex_citation(app, warning):
     """A simple test with a single standard docutils citation."""
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.pseudoxml").read_text()
-    assert output.split('\n')[1:] == bibtex_citation_xml.split('\n')[1:]
+    assert output.split("\n")[1:] == bibtex_citation_xml.split("\n")[1:]
 
 
 # see issue 226
-@pytest.mark.sphinx('pseudoxml', testroot='debug_bibtex_citation')
+@pytest.mark.sphinx("pseudoxml", testroot="debug_bibtex_citation")
 def test_rebuild_empty_outdir(make_app, app_params):
     args, kwargs = app_params
     app0 = make_app(freshenv=True, *args, **kwargs)
@@ -63,44 +63,45 @@ def test_rebuild_empty_outdir(make_app, app_params):
     shutil.rmtree(app0.outdir)
     app1 = make_app(freshenv=False, *args, **kwargs)
     app1.build()
-    assert 'could not find bibtex key' not in app1._warning.getvalue()
+    assert "could not find bibtex key" not in app1._warning.getvalue()
 
 
-@pytest.mark.sphinx('pseudoxml', testroot='debug_minimal_example')
+@pytest.mark.sphinx("pseudoxml", testroot="debug_minimal_example")
 def test_debug_minimal_example(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.pseudoxml").read_text()
-    assert [line for line in output.split('\n')][1:] == [
-        '    <paragraph>',
-        '        See ',
+    assert [line for line in output.split("\n")][1:] == [
+        "    <paragraph>",
+        "        See ",
         '        <inline ids="id1">',
-        '            Nelson [',
+        "            Nelson [",
         '            <reference internal="True" refid="id4" '
         'reftitle="Edward Nelson. Radically Elementary Probability Theory. '
         'Princeton University Press, 1987.">',
-        '                Nel87',
-        '            ]',
-        '         for an introduction to non-standard analysis.',
-        '        Non-standard analysis is fun ',
+        "                Nel87",
+        "            ]",
+        "         for an introduction to non-standard analysis.",
+        "        Non-standard analysis is fun ",
         '        <inline ids="id2">',
-        '            [',
+        "            [",
         '            <reference internal="True" refid="id4" '
         'reftitle="Edward Nelson. Radically Elementary Probability Theory. '
         'Princeton University Press, 1987.">',
-        '                Nel87',
-        '            ]',
-        '        .',
+        "                Nel87",
+        "            ]",
+        "        .",
         '    <container ids="id3">',
         '        <citation backrefs="id1 id2" docname="index" ids="id4">',
         '            <label support_smartquotes="False">',
-        '                Nel87',
-        '            <paragraph>',
-        '                Edward Nelson.',
-        '                 ',
-        '                <emphasis>',
-        '                    Radically Elementary Probability Theory',
-        '                .',
-        '                 ',
-        '                Princeton University Press, 1987.',
-        '']
+        "                Nel87",
+        "            <paragraph>",
+        "                Edward Nelson.",
+        "                 ",
+        "                <emphasis>",
+        "                    Radically Elementary Probability Theory",
+        "                .",
+        "                 ",
+        "                Princeton University Press, 1987.",
+        "",
+    ]

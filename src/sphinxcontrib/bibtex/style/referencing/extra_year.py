@@ -17,12 +17,12 @@ class ExtraYearReferenceStyle(BaseReferenceStyle):
     bracket: BracketStyle = field(default_factory=BracketStyle)
 
     def role_names(self) -> Iterable[str]:
-        return ['year', 'yearpar']
+        return ["year", "yearpar"]
 
     def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
         return self.bracket.outer(
             children,
-            brackets='par' in role_name,
+            brackets="par" in role_name,
             capfirst=False,
         )
 

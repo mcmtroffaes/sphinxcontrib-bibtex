@@ -13,7 +13,7 @@ class BasicFootParentheticalReferenceStyle(BaseReferenceStyle):
     """Parenthetical footnote reference."""
 
     def role_names(self) -> Iterable[str]:
-        return ['p', 'ps']
+        return ["p", "ps"]
 
     def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
         return join[children]
@@ -33,20 +33,20 @@ class BasicFootTextualReferenceStyle(BaseReferenceStyle):
     person: PersonStyle = field(default_factory=PersonStyle)
 
     #: Separator between text and reference.
-    text_reference_sep: Union["BaseText", str] = ' '
+    text_reference_sep: Union["BaseText", str] = " "
 
     def role_names(self) -> Iterable[str]:
-        return [f'{capfirst}t{full_author}'
-                for capfirst in ['', 'c'] for full_author in ['', 's']]
+        return [
+            f"{capfirst}t{full_author}"
+            for capfirst in ["", "c"]
+            for full_author in ["", "s"]
+        ]
 
     def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
-        return self.bracket.outer(
-            children,
-            brackets=False,
-            capfirst='c' in role_name)
+        return self.bracket.outer(children, brackets=False, capfirst="c" in role_name)
 
     def inner(self, role_name: str) -> "Node":
         return join(sep=self.text_reference_sep)[
-            self.person.author_or_editor_or_title(full='s' in role_name),
+            self.person.author_or_editor_or_title(full="s" in role_name),
             footnote_reference,
         ]

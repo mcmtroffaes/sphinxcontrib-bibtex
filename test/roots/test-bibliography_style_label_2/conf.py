@@ -3,9 +3,9 @@ from pybtex.style.labels.alpha import LabelStyle as AlphaLabelStyle
 from pybtex.plugin import register_plugin
 
 
-extensions = ['sphinxcontrib.bibtex']
-exclude_patterns = ['_build']
-bibtex_bibfiles = ['test.bib']
+extensions = ["sphinxcontrib.bibtex"]
+exclude_patterns = ["_build"]
+bibtex_bibfiles = ["test.bib"]
 
 
 class ApaLabelStyle(AlphaLabelStyle):
@@ -14,8 +14,8 @@ class ApaLabelStyle(AlphaLabelStyle):
 
 
 class ApaStyle(UnsrtStyle):
-    default_label_style = 'apa'
+    default_label_style = "apa"
 
 
-register_plugin('pybtex.style.labels', 'apa', ApaLabelStyle)
-register_plugin('pybtex.style.formatting', 'apastyle', ApaStyle)
+register_plugin("pybtex.style.labels", "apa", ApaLabelStyle)
+register_plugin("pybtex.style.formatting", "apastyle", ApaStyle)

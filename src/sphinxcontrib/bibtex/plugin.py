@@ -1,4 +1,5 @@
 import sys
+
 if sys.version_info >= (3, 10):
     from importlib.metadata import entry_points, EntryPoint
 else:
@@ -6,7 +7,8 @@ else:
 from typing import Type, Any, Dict, List
 
 _runtime_plugins: Dict[str, Dict[str, Type]] = {
-    'sphinxcontrib.bibtex.style.referencing': {}}
+    "sphinxcontrib.bibtex.style.referencing": {}
+}
 
 
 # wrapper to work around missing type annotations for entry_points function
@@ -29,8 +31,9 @@ def find_plugin(group: str, name: str) -> Type[Any]:
     raise ImportError(f"plugin {group}.{name} not found")
 
 
-def register_plugin(group: str, name: str, klass: Type[Any],
-                    force: bool = False) -> bool:
+def register_plugin(
+    group: str, name: str, klass: Type[Any], force: bool = False
+) -> bool:
     """Register a sphinxcontrib-bibtex plugin into the runtime store."""
     global _runtime_plugins
     if group not in _runtime_plugins:

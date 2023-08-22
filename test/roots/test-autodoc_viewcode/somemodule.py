@@ -3,4 +3,5 @@
 
 class someclass:
     """Some class."""
+
     pass

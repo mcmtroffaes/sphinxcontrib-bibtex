@@ -8,19 +8,19 @@
 import pytest
 
 
-@pytest.mark.sphinx('html', testroot='natbib')
+@pytest.mark.sphinx("html", testroot="natbib")
 def test_natbib(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
 
 
-@pytest.mark.sphinx('latex', testroot='natbib')
+@pytest.mark.sphinx("latex", testroot="natbib")
 def test_natbib_latex(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
 
 
-@pytest.mark.sphinx('html', testroot='natbib_keynotfound')
+@pytest.mark.sphinx("html", testroot="natbib_keynotfound")
 def test_natbib_keynotfound(app, warning) -> None:
     app.build()
     warning.seek(0)
@@ -29,7 +29,7 @@ def test_natbib_keynotfound(app, warning) -> None:
     assert "WARNING: cite-key `XXX` not found in bibtex file" in warnings[0]
 
 
-@pytest.mark.sphinx('html', testroot='natbib_norefs')
+@pytest.mark.sphinx("html", testroot="natbib_norefs")
 def test_natbib_norefs(app, warning) -> None:
     app.build()
     warning.seek(0)
@@ -41,16 +41,22 @@ def test_natbib_norefs(app, warning) -> None:
 def test_natbib_citation_transform_str_repr() -> None:
     from test.natbib import CitationTransform, DEFAULT_CONF
     from pybtex.database import Entry
-    ref = Entry(type_='misc')
-    ref.key = 'somekey'
+
+    ref = Entry(type_="misc")
+    ref.key = "somekey"
     node = CitationTransform(
-        pre="", post="", typ="cite:p", global_keys={},
-        config=DEFAULT_CONF.copy(), refs=[ref])
+        pre="",
+        post="",
+        typ="cite:p",
+        global_keys={},
+        config=DEFAULT_CONF.copy(),
+        refs=[ref],
+    )
     assert str(node) == "somekey"
     assert repr(node) == "<somekey>"
 
 
-@pytest.mark.sphinx('text', testroot='natbib_conf')
+@pytest.mark.sphinx("text", testroot="natbib_conf")
 def test_natbib_conf(app, warning) -> None:
     app.build()
     assert not warning.getvalue()

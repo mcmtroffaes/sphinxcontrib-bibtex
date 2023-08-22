@@ -2,7 +2,9 @@ from dataclasses import dataclass, field
 from typing import Union, TYPE_CHECKING
 
 from sphinxcontrib.bibtex.style.referencing import (
-    BracketStyle, PersonStyle, GroupReferenceStyle
+    BracketStyle,
+    PersonStyle,
+    GroupReferenceStyle,
 )
 from .basic_super import (
     BasicSuperParentheticalReferenceStyle,
@@ -25,12 +27,14 @@ class SuperReferenceStyle(GroupReferenceStyle):
 
     #: Bracket style for textual citations (:cite:t: and variations).
     bracket_textual: BracketStyle = field(
-        default_factory=lambda: BracketStyle(left='', right='', sep=', '))
+        default_factory=lambda: BracketStyle(left="", right="", sep=", ")
+    )
 
     #: Bracket style for parenthetical citations
     #: (:cite:p: and variations).
     bracket_parenthetical: BracketStyle = field(
-        default_factory=lambda: BracketStyle(left='', right='', sep=','))
+        default_factory=lambda: BracketStyle(left="", right="", sep=",")
+    )
 
     #: Bracket style for author citations
     #: (:cite:author: and variations).
@@ -48,21 +52,25 @@ class SuperReferenceStyle(GroupReferenceStyle):
     person: PersonStyle = field(default_factory=PersonStyle)
 
     #: Separator between text and reference for textual citations.
-    text_reference_sep: Union["BaseText", str] = ''
+    text_reference_sep: Union["BaseText", str] = ""
 
     def __post_init__(self):
-        self.styles.extend([
-            BasicSuperParentheticalReferenceStyle(
-                bracket=self.bracket_parenthetical, person=self.person),
-            BasicSuperTextualReferenceStyle(
-                bracket=self.bracket_textual,
-                person=self.person,
-                text_reference_sep=self.text_reference_sep,
-            ),
-            ExtraAuthorReferenceStyle(
-                bracket=self.bracket_author, person=self.person),
-            ExtraLabelReferenceStyle(bracket=self.bracket_label),
-            ExtraYearReferenceStyle(bracket=self.bracket_year),
-            ExtraEmptyReferenceStyle(),
-        ])
+        self.styles.extend(
+            [
+                BasicSuperParentheticalReferenceStyle(
+                    bracket=self.bracket_parenthetical, person=self.person
+                ),
+                BasicSuperTextualReferenceStyle(
+                    bracket=self.bracket_textual,
+                    person=self.person,
+                    text_reference_sep=self.text_reference_sep,
+                ),
+                ExtraAuthorReferenceStyle(
+                    bracket=self.bracket_author, person=self.person
+                ),
+                ExtraLabelReferenceStyle(bracket=self.bracket_label),
+                ExtraYearReferenceStyle(bracket=self.bracket_year),
+                ExtraEmptyReferenceStyle(),
+            ]
+        )
         super().__post_init__()

@@ -3,7 +3,7 @@ from typing import TypeVar, Generic
 from pybtex.richtext import BaseMultipartText, BaseText
 
 
-ReferenceInfo = TypeVar('ReferenceInfo')
+ReferenceInfo = TypeVar("ReferenceInfo")
 """Generic type parameter for types that store reference information.
 To be implemented by clients. See for instance
 :class:`~sphinxcontrib.bibtex.domain.SphinxReferenceInfo`.

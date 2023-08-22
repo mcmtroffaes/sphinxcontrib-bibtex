@@ -20,7 +20,13 @@ import docutils.nodes
 import pybtex_docutils
 from pybtex.richtext import Text
 from pybtex.style.template import (
-    Node, _format_list, FieldIsMissing, field, first_of, optional, tag
+    Node,
+    _format_list,
+    FieldIsMissing,
+    field,
+    first_of,
+    optional,
+    tag,
 )
 from sphinx.util.nodes import make_refnode
 
@@ -45,7 +51,7 @@ def node(f):
 
 # copied from pybtex join but extended to allow "et al" formatting
 @node
-def join(children, data, sep='', sep2=None, last_sep=None, other=None):
+def join(children, data, sep="", sep2=None, last_sep=None, other=None):
     """Join text fragments together."""
 
     if sep2 is None:
@@ -65,8 +71,17 @@ def join(children, data, sep='', sep2=None, last_sep=None, other=None):
 
 # copied from pybtex names but using the new join
 @node
-def sentence(children, data, capfirst=False, capitalize=False, add_period=True,
-             sep=', ', sep2=None, last_sep=None, other=None):
+def sentence(
+    children,
+    data,
+    capfirst=False,
+    capitalize=False,
+    add_period=True,
+    sep=", ",
+    sep2=None,
+    last_sep=None,
+    other=None,
+):
     """Join text fragments, capitalize the first letter,
     and add a period to the end.
     """
@@ -88,13 +103,14 @@ def names(children, data, role, **kwargs):
     """Return formatted names."""
     assert not children
     try:
-        persons = data['entry'].persons[role]
+        persons = data["entry"].persons[role]
     except KeyError:
-        raise FieldIsMissing(role, data['entry'])
-    style = data['style']
+        raise FieldIsMissing(role, data["entry"])
+    style = data["style"]
     formatted_names = [
         style.person.style_plugin.format(person, style.person.abbreviate)
-        for person in persons]
+        for person in persons
+    ]
     return join(**kwargs)[formatted_names].format_data(data)
 
 
@@ -102,7 +118,7 @@ def names(children, data, role, **kwargs):
 def entry_label(children, data) -> "BaseText":
     """Node for inserting the label of a formatted entry."""
     assert not children
-    entry = cast("FormattedEntry", data['formatted_entry'])
+    entry = cast("FormattedEntry", data["formatted_entry"])
     return Text(entry.label)
 
 
@@ -110,11 +126,12 @@ class SphinxReferenceInfo(NamedTuple):
     """Tuple containing reference info to enable sphinx to resolve a reference
     to a citation.
     """
+
     builder: "Builder"  #: The Sphinx builder.
-    fromdocname: str    #: Document name of the citation reference.
-    todocname: str      #: Document name of the bibliography.
-    citation_id: str    #: Unique id of the citation within the bibliography.
-    title: str          #: Title attribute for reference node.
+    fromdocname: str  #: Document name of the citation reference.
+    todocname: str  #: Document name of the bibliography.
+    citation_id: str  #: Unique id of the citation within the bibliography.
+    title: str  #: Title attribute for reference node.
 
 
 class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
@@ -124,21 +141,23 @@ class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
     """
 
     def render(self, backend: "BaseBackend") -> List[docutils.nodes.Element]:
-        assert isinstance(backend, pybtex_docutils.Backend), \
-               "SphinxReferenceText only supports the docutils backend"
+        assert isinstance(
+            backend, pybtex_docutils.Backend
+        ), "SphinxReferenceText only supports the docutils backend"
         info = self.info[0]
-        if info.builder.name == 'latex':
-            key = f'cite.{info.todocname}:{info.citation_id}'
+        if info.builder.name == "latex":
+            key = f"cite.{info.todocname}:{info.citation_id}"
             return (
-                [raw_latex(f'\\hyperlink{{{key}}}{{')]
+                [raw_latex(f"\\hyperlink{{{key}}}{{")]
                 + super().render(backend)
-                + [raw_latex('}')]
+                + [raw_latex("}")]
             )
-        elif info.builder.name == 'rinoh':
+        elif info.builder.name == "rinoh":
             children = super().render(backend)
             refid = f"%{info.todocname}#{info.citation_id}"
             refnode = docutils.nodes.citation_reference(
-                text=children[0], refid=refid, reftitle=info.title)
+                text=children[0], refid=refid, reftitle=info.title
+            )
             refnode.extend(children[1:])
             return [refnode]
         else:
@@ -166,7 +185,7 @@ def reference(children, data: Dict[str, Any]):
     :class:`~sphinxcontrib.bibtex.style.referencing.BaseReferenceStyle`.
     """
     parts = _format_list(children, data)
-    info = data['reference_info']
+    info = data["reference_info"]
     assert isinstance(info, SphinxReferenceInfo)
     return SphinxReferenceText(info, *parts)
 
@@ -175,9 +194,10 @@ class FootReferenceInfo(NamedTuple):
     """Tuple containing reference info to enable sphinx to resolve a footnote
     reference.
     """
-    key: str                             #: Citation key.
+
+    key: str  #: Citation key.
     document: "docutils.nodes.document"  #: Current docutils document.
-    refname: str                         #: Citation reference name.
+    refname: str  #: Citation reference name.
 
 
 class FootReferenceText(BaseReferenceText[FootReferenceInfo]):
@@ -187,12 +207,14 @@ class FootReferenceText(BaseReferenceText[FootReferenceInfo]):
     """
 
     def render(self, backend: "BaseBackend"):
-        assert isinstance(backend, pybtex_docutils.Backend), \
-               "FootReferenceText only supports the docutils backend"
+        assert isinstance(
+            backend, pybtex_docutils.Backend
+        ), "FootReferenceText only supports the docutils backend"
         info = self.info[0]
         # see docutils.parsers.rst.states.Body.footnote_reference()
         refnode = docutils.nodes.footnote_reference(
-            '[#%s]_' % info.key, refname=info.refname, auto=1)
+            "[#%s]_" % info.key, refname=info.refname, auto=1
+        )
         info.document.note_autofootnote_ref(refnode)
         info.document.note_footnote_ref(refnode)
         return [refnode]
@@ -207,23 +229,24 @@ def footnote_reference(children, data: Dict[str, Any]):
     :class:`~sphinxcontrib.bibtex.style.referencing.BaseReferenceStyle`.
     """
     assert not children
-    info = data['reference_info']
+    info = data["reference_info"]
     assert isinstance(info, FootReferenceInfo)
     # we need to give the footnote text some fake content
     # otherwise pybtex richtext engine will mess things up
-    return FootReferenceText(info, '#')
+    return FootReferenceText(info, "#")
 
 
 @node
 def year(children, data: Dict[str, Any]) -> "BaseText":
     assert not children
-    return first_of[optional[field('year')], 'n.d.'].format_data(data)
+    return first_of[optional[field("year")], "n.d."].format_data(data)
 
 
 @node
 def author_or_editor_or_title(children, data, **kwargs):
     assert not children
     return first_of[
-        optional[names('author', **kwargs)],
-        optional[names('editor', **kwargs)],
-        tag('em')[field('title')]].format_data(data)
+        optional[names("author", **kwargs)],
+        optional[names("editor", **kwargs)],
+        tag("em")[field("title")],
+    ].format_data(data)

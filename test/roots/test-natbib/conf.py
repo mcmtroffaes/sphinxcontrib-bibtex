@@ -1,5 +1,5 @@
-extensions = ['test.natbib']
-exclude_patterns = ['_build']
+extensions = ["test.natbib"]
+exclude_patterns = ["_build"]
 natbib = {
-    'file': 'test.bib',
+    "file": "test.bib",
 }
