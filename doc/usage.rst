@@ -156,6 +156,8 @@ Roles and Directives
    Here too, multiple keys can be specified at once.
 
 .. rst:role:: cite:ps
+.. rst:role:: cite:alp
+.. rst:role:: cite:alps
 .. rst:role:: cite:ts
 .. rst:role:: cite:ct
 .. rst:role:: cite:cts
@@ -163,6 +165,7 @@ Roles and Directives
    .. versionadded:: 2.2.0
 
    All these roles modify :rst:role:`cite:p` and :rst:role:`cite:t`.
+   The ones starting with ``al`` will suppress brackets.
    The ones starting with ``c`` will capitalize the first letter.
    The ones ending with ``s`` will give the full author list.
 
