@@ -13,6 +13,7 @@
 * Python 3.6 is EOL and is therefore no longer officially supported.
 
 * Sphinx versions 2.x (and lower) are no longer supported.
+  New minimum required version of Sphinx is 3.5.
 
 2.5.0 (22 August 2022)
 ----------------------
