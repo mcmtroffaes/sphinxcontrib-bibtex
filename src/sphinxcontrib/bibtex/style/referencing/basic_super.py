@@ -45,9 +45,9 @@ class BasicSuperParentheticalReferenceStyle(BaseReferenceStyle):
 
     def inner(self, role_name: str) -> "Node":
         return join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
-                pre_text,
-                reference[entry_label],
-                post_text,
+            pre_text,
+            reference[entry_label],
+            post_text,
         ]
 
 
