@@ -12,7 +12,7 @@ def readfile(filename: str) -> str:
 readme = readfile("README.rst").split("\n")[5:]  # skip title and badges
 requires = readfile("requirements.txt").split("\n")
 version_match = re.search(
-    "'version': '(.+)'", readfile("src/sphinxcontrib/bibtex/__init__.py")
+    '"version": "(.+)"', readfile("src/sphinxcontrib/bibtex/__init__.py")
 )
 assert version_match is not None, "version not found"
 version = version_match.group(1)

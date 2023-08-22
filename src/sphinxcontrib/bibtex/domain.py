@@ -397,7 +397,7 @@ class BibtexDomain(Domain):
     ) -> docutils.nodes.Element:
         """Replace node by list of citation references (one for each key)."""
         targets = parse_citation_targets(target)
-        keys: Dict[str, CitationTarget] = {target.key: target for target in targets}
+        keys: Dict[str, CitationTarget] = {target2.key: target2 for target2 in targets}
         citations: Dict[str, Citation] = {
             cit.key: cit
             for cit in self.citations
