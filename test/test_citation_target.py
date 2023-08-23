@@ -1,6 +1,5 @@
 import pytest
 
-
 from sphinxcontrib.bibtex.citation_target import parse_citation_targets
 
 

@@ -5,14 +5,15 @@
     Test with autodoc.
 """
 
+import test.some_module_cite
+import test.some_module_footcite
 from test.common import (
     html_citation_refs_single,
     html_citations,
     html_footnote_refs,
     html_footnotes,
 )
-import test.some_module_cite
-import test.some_module_footcite
+
 import pytest
 
 

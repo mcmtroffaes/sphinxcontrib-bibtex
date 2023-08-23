@@ -1,13 +1,13 @@
+import re
+from test.common import (
+    html_citation_refs,
+    html_citations,
+    html_footnote_refs,
+    html_footnotes,
+)
 from typing import Set
 
-from test.common import (
-    html_citations,
-    html_citation_refs,
-    html_footnotes,
-    html_footnote_refs,
-)
 import pytest
-import re
 
 
 def citation_refs(output) -> Set[str]:

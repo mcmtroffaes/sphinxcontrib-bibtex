@@ -1,6 +1,6 @@
 from dataclasses import dataclass, field
-import sphinxcontrib.bibtex.plugin
 
+import sphinxcontrib.bibtex.plugin
 from sphinxcontrib.bibtex.style.referencing import BracketStyle
 from sphinxcontrib.bibtex.style.referencing.author_year import AuthorYearReferenceStyle
 

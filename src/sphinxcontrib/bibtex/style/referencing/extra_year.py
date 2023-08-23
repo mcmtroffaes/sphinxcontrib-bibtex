@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Iterable, List
 
-from typing import TYPE_CHECKING, List, Iterable
 from sphinxcontrib.bibtex.style.template import reference, year
+
 from . import BaseReferenceStyle, BracketStyle
 
 if TYPE_CHECKING:

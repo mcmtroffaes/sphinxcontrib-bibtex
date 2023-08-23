@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
-from typing import Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
-from . import PersonStyle, GroupReferenceStyle, BracketStyle
+from . import BracketStyle, GroupReferenceStyle, PersonStyle
 from .basic_foot import (
     BasicFootParentheticalReferenceStyle,
     BasicFootTextualReferenceStyle,

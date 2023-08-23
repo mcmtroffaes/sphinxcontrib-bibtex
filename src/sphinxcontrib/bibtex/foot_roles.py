@@ -5,7 +5,7 @@
         .. automethod:: result_nodes
 """
 
-from typing import TYPE_CHECKING, cast, Tuple, List
+from typing import TYPE_CHECKING, List, Tuple, cast
 
 import docutils.nodes
 from docutils.nodes import make_id
@@ -19,6 +19,7 @@ from .transforms import node_text_transform
 
 if TYPE_CHECKING:
     from sphinx.environment import BuildEnvironment
+
     from .domain import BibtexDomain
     from .foot_domain import BibtexFootDomain
 

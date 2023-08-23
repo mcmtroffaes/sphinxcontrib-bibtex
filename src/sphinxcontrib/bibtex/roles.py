@@ -8,12 +8,13 @@
         .. automethod:: result_nodes
 """
 
-import docutils.nodes
-from .citation_target import CitationTarget, parse_citation_targets
+from typing import TYPE_CHECKING, List, NamedTuple, cast
 
-from typing import TYPE_CHECKING, cast, NamedTuple, List
+import docutils.nodes
 from pybtex.plugin import find_plugin
 from sphinx.roles import XRefRole
+
+from .citation_target import CitationTarget, parse_citation_targets
 
 if TYPE_CHECKING:
     from .domain import BibtexDomain

@@ -1,7 +1,8 @@
 from dataclasses import dataclass
+from typing import TYPE_CHECKING, Iterable, List
 
-from typing import TYPE_CHECKING, List, Iterable
 from sphinxcontrib.bibtex.style.template import join
+
 from . import BaseReferenceStyle
 
 if TYPE_CHECKING:

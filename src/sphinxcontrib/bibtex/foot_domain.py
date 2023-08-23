@@ -5,25 +5,24 @@
         :members:
 """
 
-from typing import TYPE_CHECKING, List, Dict, Tuple
+from typing import TYPE_CHECKING, Dict, List, Tuple
 
 import docutils.nodes
 import docutils.utils
-
-import sphinxcontrib.bibtex.plugin
 import sphinx.util
-
 from sphinx.domains import Domain, ObjType
 from sphinx.locale import _
 
-from .foot_roles import FootCiteRole
+import sphinxcontrib.bibtex.plugin
+
 from .domain import parse_header
+from .foot_roles import FootCiteRole
 from .style.referencing import BaseReferenceStyle
 
 if TYPE_CHECKING:
-    from sphinx.environment import BuildEnvironment
     from sphinx.addnodes import pending_xref
     from sphinx.builders import Builder
+    from sphinx.environment import BuildEnvironment
 
 logger = sphinx.util.logging.getLogger(__name__)
 

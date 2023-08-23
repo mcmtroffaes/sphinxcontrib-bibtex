@@ -6,14 +6,14 @@ from typing import Any, Dict
 
 from sphinx.application import Sphinx
 
-from .domain import BibtexDomain
-from .foot_domain import BibtexFootDomain
-from .nodes import bibliography, raw_latex, visit_raw_latex, depart_raw_latex
-from .roles import CiteRole
 from .directives import BibliographyDirective
-from .transforms import BibliographyTransform
-from .foot_roles import FootCiteRole
+from .domain import BibtexDomain
 from .foot_directives import FootBibliographyDirective
+from .foot_domain import BibtexFootDomain
+from .foot_roles import FootCiteRole
+from .nodes import bibliography, depart_raw_latex, raw_latex, visit_raw_latex
+from .roles import CiteRole
+from .transforms import BibliographyTransform
 
 
 def setup(app: Sphinx) -> Dict[str, Any]:

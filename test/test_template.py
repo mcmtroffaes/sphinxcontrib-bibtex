@@ -1,4 +1,4 @@
-from sphinxcontrib.bibtex.style.template import join, sentence, join2
+from sphinxcontrib.bibtex.style.template import join, join2, sentence
 
 
 def test_join() -> None:

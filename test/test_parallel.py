@@ -2,8 +2,8 @@
 
 import os
 
-from sphinx.util.parallel import parallel_available
 import pytest
+from sphinx.util.parallel import parallel_available
 
 
 @pytest.mark.skipif(

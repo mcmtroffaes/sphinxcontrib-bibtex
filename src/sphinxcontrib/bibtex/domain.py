@@ -10,30 +10,38 @@
 """
 
 import ast
-from typing import TYPE_CHECKING
-from typing import List, Dict, NamedTuple, cast, Iterable, Tuple, Set, Optional
+import re
+from typing import (
+    TYPE_CHECKING,
+    Dict,
+    Iterable,
+    List,
+    NamedTuple,
+    Optional,
+    Set,
+    Tuple,
+    cast,
+)
 
 import docutils.frontend
 import docutils.nodes
 import docutils.parsers.rst
 import docutils.utils
-import pybtex_docutils
 import pybtex.plugin
-from pybtex.richtext import Tag
-from pybtex.style.template import FieldIsMissing
-from pybtex.style import FormattedEntry
-
-import sphinxcontrib.bibtex.plugin
+import pybtex_docutils
 import sphinx.util
-import re
-
+from pybtex.richtext import Tag
+from pybtex.style import FormattedEntry
+from pybtex.style.template import FieldIsMissing
 from sphinx.domains import Domain, ObjType
 from sphinx.errors import ExtensionError
 from sphinx.locale import _
 
-from .citation_target import parse_citation_targets, CitationTarget
+import sphinxcontrib.bibtex.plugin
+
+from .bibfile import BibData, normpath_filename, process_bibdata
+from .citation_target import CitationTarget, parse_citation_targets
 from .roles import CiteRole
-from .bibfile import normpath_filename, process_bibdata, BibData
 from .style.referencing import BaseReferenceStyle, format_references
 from .style.template import SphinxReferenceInfo
 
@@ -44,6 +52,7 @@ if TYPE_CHECKING:
     from sphinx.application import Sphinx
     from sphinx.builders import Builder
     from sphinx.environment import BuildEnvironment
+
     from .directives import BibliographyKey, BibliographyValue
     from .roles import CitationRef
 

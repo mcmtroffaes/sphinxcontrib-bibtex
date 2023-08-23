@@ -9,24 +9,21 @@
 #   * use XRefRole.result_nodes instead of XRefRole.__call__
 #   * use dictionary as ordered set (assuming Python 3.6+)
 
-from typing import Tuple, List, cast
+from typing import List, Tuple, cast
 
-from docutils import nodes
 import docutils.parsers.rst.directives as directives
+import pybtex.backends.plaintext
+import pybtex.style.names.lastfirst
+import pybtex.style.names.plain
+from docutils import nodes
 from docutils.parsers.rst import Directive
-
+from pybtex.database.input import bibtex
 from sphinx import addnodes
 from sphinx.domains import Domain, ObjType
 from sphinx.environment import BuildEnvironment
 from sphinx.locale import _
 from sphinx.roles import XRefRole
 from sphinx.util import logging
-
-from pybtex.database.input import bibtex
-import pybtex.style.names.plain
-import pybtex.style.names.lastfirst
-import pybtex.backends.plaintext
-
 
 logger = logging.getLogger(__name__)
 

@@ -6,10 +6,9 @@
         .. automethod:: run
 """
 from itertools import zip_longest
+from typing import TYPE_CHECKING, cast
 
 import docutils.nodes
-
-from typing import TYPE_CHECKING, cast
 from pybtex.plugin import find_plugin
 from sphinx.transforms.post_transforms import SphinxPostTransform
 from sphinx.util.logging import getLogger
@@ -19,6 +18,7 @@ from .nodes import bibliography as bibliography_node
 
 if TYPE_CHECKING:
     from sphinx.environment import BuildEnvironment
+
     from .domain import BibtexDomain
 
 logger = getLogger(__name__)

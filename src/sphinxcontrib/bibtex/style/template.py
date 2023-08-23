@@ -16,13 +16,15 @@
 .. autofunction:: sphinxcontrib.bibtex.style.template.footnote_reference()
 """
 
+from typing import TYPE_CHECKING, Any, Dict, List, NamedTuple, cast
+
 import docutils.nodes
 import pybtex_docutils
 from pybtex.richtext import Text
 from pybtex.style.template import (
+    FieldIsMissing,
     Node,
     _format_list,
-    FieldIsMissing,
     field,
     first_of,
     optional,
@@ -32,8 +34,6 @@ from sphinx.util.nodes import make_refnode
 
 from sphinxcontrib.bibtex.nodes import raw_latex
 from sphinxcontrib.bibtex.richtext import BaseReferenceText
-
-from typing import TYPE_CHECKING, Dict, Any, cast, NamedTuple, List
 
 if TYPE_CHECKING:
     from pybtex.backends import BaseBackend

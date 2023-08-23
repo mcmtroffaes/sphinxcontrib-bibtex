@@ -1,8 +1,10 @@
-import pybtex.plugin
+from typing import TYPE_CHECKING, Any, Dict, Iterable, List
 
-from pybtex.database import Person, Entry
+import pybtex.plugin
+import pytest
+from pybtex.database import Entry, Person
 from pybtex.richtext import HRef
-from pybtex.style.template import Node, FieldIsMissing, _format_list
+from pybtex.style.template import FieldIsMissing, Node, _format_list
 
 # direct import of the plugin to ensure we are testing this specific class
 from sphinxcontrib.bibtex.richtext import BaseReferenceText
@@ -16,8 +18,6 @@ from sphinxcontrib.bibtex.style.referencing.basic_super import (
     BasicSuperTextualReferenceStyle,
 )
 from sphinxcontrib.bibtex.style.template import entry_label, join, names, node
-from typing import TYPE_CHECKING, List, Iterable, Dict, Any
-import pytest
 
 if TYPE_CHECKING:
     from pybtex.backends import BaseBackend

@@ -10,19 +10,20 @@
         .. automethod:: run
 """
 
-from typing import TYPE_CHECKING, cast, NamedTuple, List, Dict
-from docutils.parsers.rst import Directive
-import docutils.parsers.rst.directives as directives
-
 import ast  # parse(), used for filter
-import docutils.nodes
-import sphinx.util
+from typing import TYPE_CHECKING, Dict, List, NamedTuple, cast
 
-from .bibfile import normpath_filename, _make_ids
+import docutils.nodes
+import docutils.parsers.rst.directives as directives
+import sphinx.util
+from docutils.parsers.rst import Directive
+
+from .bibfile import _make_ids, normpath_filename
 from .nodes import bibliography as bibliography_node
 
 if TYPE_CHECKING:
     from sphinx.environment import BuildEnvironment
+
     from .domain import BibtexDomain
 
 

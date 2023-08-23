@@ -1,6 +1,5 @@
-from setuptools import setup, find_packages
 from Cython.Build import cythonize
-
+from setuptools import find_packages, setup
 
 setup(
     name="some-cython-module",

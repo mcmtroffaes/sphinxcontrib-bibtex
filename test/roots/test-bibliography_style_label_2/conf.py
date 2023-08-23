@@ -1,7 +1,6 @@
+from pybtex.plugin import register_plugin
 from pybtex.style.formatting.unsrt import Style as UnsrtStyle
 from pybtex.style.labels.alpha import LabelStyle as AlphaLabelStyle
-from pybtex.plugin import register_plugin
-
 
 extensions = ["sphinxcontrib.bibtex"]
 exclude_patterns = ["_build"]

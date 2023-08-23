@@ -4,6 +4,7 @@ from test.common import (
     html_footnote_refs,
     html_footnotes,
 )
+
 import pytest
 
 

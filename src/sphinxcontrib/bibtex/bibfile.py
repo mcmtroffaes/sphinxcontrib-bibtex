@@ -17,11 +17,11 @@
 """
 import math
 import os.path
-from typing import TYPE_CHECKING, Dict, NamedTuple, List, Set
+from typing import TYPE_CHECKING, Dict, List, NamedTuple, Set
 
 from docutils.nodes import make_id
-from pybtex.database.input.bibtex import Parser
 from pybtex.database import BibliographyData, BibliographyDataError
+from pybtex.database.input.bibtex import Parser
 from sphinx.util.logging import getLogger
 
 if TYPE_CHECKING:

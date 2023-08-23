@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Iterable, List
 
 from sphinxcontrib.bibtex.style.template import reference
-from typing import TYPE_CHECKING, List, Iterable
-from . import BracketStyle, PersonStyle, BaseReferenceStyle
 
+from . import BaseReferenceStyle, BracketStyle, PersonStyle
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText

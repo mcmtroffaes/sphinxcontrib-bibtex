@@ -1,6 +1,7 @@
 """Test warnings on duplicate labels/keys."""
 
-from test.common import html_citations, html_citation_refs
+from test.common import html_citation_refs, html_citations
+
 import pytest
 
 

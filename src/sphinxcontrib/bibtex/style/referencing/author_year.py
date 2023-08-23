@@ -1,19 +1,20 @@
 from dataclasses import dataclass, field
-from typing import Union, TYPE_CHECKING
+from typing import TYPE_CHECKING, Union
 
 from sphinxcontrib.bibtex.style.referencing import (
     BracketStyle,
-    PersonStyle,
     GroupReferenceStyle,
+    PersonStyle,
 )
+
 from .basic_author_year import (
     BasicAuthorYearParentheticalReferenceStyle,
     BasicAuthorYearTextualReferenceStyle,
 )
 from .extra_author import ExtraAuthorReferenceStyle
+from .extra_empty import ExtraEmptyReferenceStyle
 from .extra_label import ExtraLabelReferenceStyle
 from .extra_year import ExtraYearReferenceStyle
-from .extra_empty import ExtraEmptyReferenceStyle
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText

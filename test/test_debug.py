@@ -6,7 +6,6 @@ import shutil
 
 import pytest
 
-
 docutils_citation_xml = """
     <paragraph>
         <reference ids="id1" internal="True" refid="label">

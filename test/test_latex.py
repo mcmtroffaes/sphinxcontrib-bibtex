@@ -1,4 +1,5 @@
-from test.common import latex_citations, latex_citation_refs
+from test.common import latex_citation_refs, latex_citations
+
 import pytest
 
 

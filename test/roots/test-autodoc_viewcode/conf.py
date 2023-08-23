@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 # viewcode extension specifically needed for this test
 extensions = ["sphinxcontrib.bibtex", "sphinx.ext.viewcode", "sphinx.ext.autodoc"]

@@ -1,6 +1,5 @@
 import re
 
-
 needs_sphinx = "2.1"
 extensions = [
     "sphinx.ext.autodoc",

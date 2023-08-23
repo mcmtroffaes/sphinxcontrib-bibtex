@@ -1,6 +1,7 @@
 """Test back references."""
 
 from test.common import html_citations
+
 import pytest
 
 

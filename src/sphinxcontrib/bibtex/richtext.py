@@ -1,7 +1,7 @@
 from abc import ABC
-from typing import TypeVar, Generic
-from pybtex.richtext import BaseMultipartText, BaseText
+from typing import Generic, TypeVar
 
+from pybtex.richtext import BaseMultipartText, BaseText
 
 ReferenceInfo = TypeVar("ReferenceInfo")
 """Generic type parameter for types that store reference information.

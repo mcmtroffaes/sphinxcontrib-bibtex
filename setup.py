@@ -1,7 +1,8 @@
 import io
 import re
-from setuptools import setup, find_namespace_packages
 from typing import Optional
+
+from setuptools import find_namespace_packages, setup
 
 
 def readfile(filename: str) -> str:

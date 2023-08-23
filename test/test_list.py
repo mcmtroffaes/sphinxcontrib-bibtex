@@ -1,6 +1,7 @@
-from test.common import html_citations
-import pytest
 import re
+from test.common import html_citations
+
+import pytest
 
 
 @pytest.mark.sphinx("html", testroot="list_citation")

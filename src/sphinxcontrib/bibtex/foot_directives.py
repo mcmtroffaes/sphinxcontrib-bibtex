@@ -5,12 +5,14 @@
 """
 
 from typing import TYPE_CHECKING, cast
+
 from docutils.parsers.rst import Directive
 
 from .bibfile import _make_ids
 
 if TYPE_CHECKING:
     from sphinx.environment import BuildEnvironment
+
     from .domain import BibtexDomain
     from .foot_domain import BibtexFootDomain
 

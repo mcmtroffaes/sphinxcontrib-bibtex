@@ -1,8 +1,7 @@
 """Citation keys."""
 
 import re
-
-from typing import NamedTuple, Iterable
+from typing import Iterable, NamedTuple
 
 
 class CitationTarget(NamedTuple):

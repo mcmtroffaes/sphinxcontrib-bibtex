@@ -1,12 +1,11 @@
-from pybtex.exceptions import PybtexError
-
-from test.common import html_citations
-import pytest
 import re
 import shutil
-from sphinx.errors import ExtensionError
 import time
+from test.common import html_citations
 
+import pytest
+from pybtex.exceptions import PybtexError
+from sphinx.errors import ExtensionError
 
 status_up_to_date = "checking bibtex cache.*up to date"
 status_out_of_date = "checking bibtex cache.*out of date"

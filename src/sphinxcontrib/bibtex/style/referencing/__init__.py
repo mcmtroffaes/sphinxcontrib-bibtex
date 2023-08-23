@@ -1,15 +1,16 @@
-from dataclasses import dataclass, field
 from abc import ABC
+from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Tuple, Union
 
 import pybtex.plugin
-from pybtex.richtext import Text, Tag
+from pybtex.richtext import Tag, Text
+
 from sphinxcontrib.bibtex.style.template import (
+    author_or_editor_or_title,
+    join,
     names,
     sentence,
-    join,
-    author_or_editor_or_title,
 )
-from typing import TYPE_CHECKING, Tuple, List, Union, Iterable, Optional, Dict
 
 if TYPE_CHECKING:
     from pybtex.database import Entry
@@ -17,6 +18,7 @@ if TYPE_CHECKING:
     from pybtex.style import FormattedEntry
     from pybtex.style.names import BaseNameStyle
     from pybtex.style.template import Node
+
     from sphinxcontrib.bibtex.richtext import ReferenceInfo
 
 

@@ -1,7 +1,9 @@
 from dataclasses import dataclass, field
-from typing import TYPE_CHECKING, List, Iterable, Union
+from typing import TYPE_CHECKING, Iterable, List, Union
+
 from sphinxcontrib.bibtex.style.template import footnote_reference, join
-from . import BaseReferenceStyle, PersonStyle, BracketStyle
+
+from . import BaseReferenceStyle, BracketStyle, PersonStyle
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText

@@ -1,9 +1,9 @@
+import re
 from dataclasses import dataclass, field
 
 import pytest
-import re
-import sphinxcontrib.bibtex.plugin
 
+import sphinxcontrib.bibtex.plugin
 from sphinxcontrib.bibtex.style.referencing import BracketStyle, PersonStyle
 from sphinxcontrib.bibtex.style.referencing.foot import FootReferenceStyle
 

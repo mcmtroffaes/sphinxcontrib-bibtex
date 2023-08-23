@@ -1,10 +1,11 @@
 import sys
 
 if sys.version_info >= (3, 10):
-    from importlib.metadata import entry_points, EntryPoint
+    from importlib.metadata import EntryPoint, entry_points
 else:
     from importlib_metadata import entry_points, EntryPoint
-from typing import Type, Any, Dict, List
+
+from typing import Any, Dict, List, Type
 
 _runtime_plugins: Dict[str, Dict[str, Type]] = {
     "sphinxcontrib.bibtex.style.referencing": {}

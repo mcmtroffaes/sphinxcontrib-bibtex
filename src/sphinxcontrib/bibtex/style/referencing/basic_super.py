@@ -1,16 +1,18 @@
 from dataclasses import dataclass, field
+from typing import TYPE_CHECKING, Iterable, List, Union
 
-from typing import TYPE_CHECKING, List, Iterable, Union
 from pybtex.style.template import tag
+
 from sphinxcontrib.bibtex.style.template import (
-    reference,
     entry_label,
     join,
-    pre_text,
-    post_text,
     join2,
+    post_text,
+    pre_text,
+    reference,
 )
-from . import BracketStyle, PersonStyle, BaseReferenceStyle
+
+from . import BaseReferenceStyle, BracketStyle, PersonStyle
 
 if TYPE_CHECKING:
     from pybtex.richtext import BaseText

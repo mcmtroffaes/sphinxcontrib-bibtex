@@ -1,16 +1,15 @@
+import re
+from dataclasses import dataclass, field
+from test.common import html_citation_refs, html_citations, html_docutils_citation_refs
+from typing import cast
+
 import pybtex.plugin
+import pytest
 from pybtex.style.formatting.unsrt import Style as UnsrtStyle
 from pybtex.style.template import words
 
-from test.common import html_citations, html_citation_refs, html_docutils_citation_refs
-from dataclasses import dataclass, field
-import pytest
-import re
 import sphinxcontrib.bibtex.plugin
-
 from sphinxcontrib.bibtex.domain import BibtexDomain
-from typing import cast
-
 from sphinxcontrib.bibtex.style.referencing import BracketStyle, PersonStyle
 from sphinxcontrib.bibtex.style.referencing.author_year import AuthorYearReferenceStyle
 
