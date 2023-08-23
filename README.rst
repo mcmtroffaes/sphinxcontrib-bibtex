@@ -30,8 +30,8 @@ and Weston Nielson's
 
 * Development: https://github.com/mcmtroffaes/sphinxcontrib-bibtex/
 
-.. |ci| image:: https://github.com/mcmtroffaes/sphinxcontrib-bibtex/actions/workflows/python-package.yml/badge.svg
-    :target: https://github.com/mcmtroffaes/sphinxcontrib-bibtex/actions/workflows/python-package.yml
+.. |ci| image:: https://github.com/mcmtroffaes/sphinxcontrib-bibtex/actions/workflows/build.yml/badge.svg
+    :target: https://github.com/mcmtroffaes/sphinxcontrib-bibtex/actions/workflows/build.yml
     :alt: ci
 
 .. |codecov| image:: https://codecov.io/gh/mcmtroffaes/sphinxcontrib-bibtex/branch/develop/graph/badge.svg
