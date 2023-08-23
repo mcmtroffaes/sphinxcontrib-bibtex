@@ -30,7 +30,7 @@ def test_citation_mixed(app, warning) -> None:
     domain = cast(BibtexDomain, app.env.get_domain("cite"))
     assert len(domain.citation_refs) == 1
     citation_ref = domain.citation_refs.pop()
-    assert citation_ref.keys == ["Test"]
+    assert citation_ref.targets == [("Test", "", "")]
     assert citation_ref.docname == "adoc1"
     assert len(domain.citations) == 1
     citation = domain.citations.pop()
@@ -173,6 +173,8 @@ def test_citation_roles_authoryear(app, warning) -> None:
     tests = [
         ("p", " [de Du *et al.*, 2003] "),
         ("ps", " [de Du, Em, and Fa, 2003] "),
+        ("alp", " de Du *et al.*, 2003 "),
+        ("alps", " de Du, Em, and Fa, 2003 "),
         ("t", " de Du *et al.* [2003] "),
         ("ts", " de Du, Em, and Fa [2003] "),
         ("ct", " De Du *et al.* [2003] "),
@@ -190,6 +192,8 @@ def test_citation_roles_authoryear(app, warning) -> None:
         ("empty", " AAA  AAA "),
         ("p", " [al Ap, 2001, Be and Ci, 2002] "),
         ("ps", " [al Ap, 2001, Be and Ci, 2002] "),
+        ("alp", " al Ap, 2001, Be and Ci, 2002 "),
+        ("alps", " al Ap, 2001, Be and Ci, 2002 "),
         ("t", " al Ap [2001], Be and Ci [2002] "),
         ("ts", " al Ap [2001], Be and Ci [2002] "),
         ("ct", " Al Ap [2001], Be and Ci [2002] "),
@@ -207,6 +211,8 @@ def test_citation_roles_authoryear(app, warning) -> None:
         ("empty", " BBB  BBB "),
         ("p", " [Ge, 2004, Hu, 2005, Ix, 2006] "),
         ("ps", " [Ge, 2004, Hu, 2005, Ix, 2006] "),
+        ("alp", " Ge, 2004, Hu, 2005, Ix, 2006 "),
+        ("alps", " Ge, 2004, Hu, 2005, Ix, 2006 "),
         ("t", " Ge [2004], Hu [2005], Ix [2006] "),
         ("ts", " Ge [2004], Hu [2005], Ix [2006] "),
         ("ct", " Ge [2004], Hu [2005], Ix [2006] "),
@@ -229,6 +235,97 @@ def test_citation_roles_authoryear(app, warning) -> None:
         assert re.search(pattern, output) is not None
     # check :cite:empty: generates citation
     assert "[Ju07] Jo Ju. Testseven. 2007." in output
+
+
+@pytest.mark.sphinx("text", testroot="citation_roles_pre_post")
+def test_citation_roles_label_pre_post(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.txt").read_text(encoding="utf-8-sig")
+    lab1 = "dDEF03"
+    lab2 = "aA01"
+    lab3 = "BC02"
+    ref1 = "de Du *et al.*"
+    ref2 = "al Ap"
+    ref3 = "Be and Ci"
+    tests = [
+        ("p", f" A [see {lab1}] "),
+        ("p", f" B [{lab1}, p. 1] "),
+        ("p", f" C [see {lab1}, p. 1] "),
+        ("t", f" A {ref1} [see {lab1}] "),
+        ("t", f" B {ref1} [{lab1}, p. 1] "),
+        ("t", f" C {ref1} [see {lab1}, p. 1] "),
+        ("p", f" A [see {lab2}, {lab3}] "),
+        ("p", f" B [{lab2}, p. 1, {lab3}] "),
+        ("p", f" C [see {lab2}, p. 1, {lab3}] "),
+        ("p", f" D [{lab2}, see {lab3}] "),
+        ("p", f" E [{lab2}, {lab3}, p. 2] "),
+        ("p", f" F [{lab2}, see {lab3}, p. 2] "),
+        ("p", f" G [see {lab2}, see {lab3}] "),
+        ("p", f" H [{lab2}, p. 1, {lab3}, p. 2] "),
+        ("p", f" I [see {lab2}, {lab3}, p. 2] "),
+        ("p", f" J [see {lab2}, p. 1, see {lab3}, p. 2] "),
+        ("t", f" A {ref2} [see {lab2}], {ref3} [{lab3}] "),
+        ("t", f" B {ref2} [{lab2}, p. 1], {ref3} [{lab3}] "),
+        ("t", f" C {ref2} [see {lab2}, p. 1], {ref3} [{lab3}] "),
+        ("t", f" D {ref2} [{lab2}], {ref3} [see {lab3}] "),
+        ("t", f" E {ref2} [{lab2}], {ref3} [{lab3}, p. 2] "),
+        ("t", f" F {ref2} [{lab2}], {ref3} [see {lab3}, p. 2] "),
+        ("t", f" G {ref2} [see {lab2}], {ref3} [see {lab3}] "),
+        ("t", f" H {ref2} [{lab2}, p. 1], {ref3} [{lab3}, p. 2] "),
+        ("t", f" I {ref2} [see {lab2}], {ref3} [{lab3}, p. 2] "),
+        ("t", f" J {ref2} [see {lab2}, p. 1], {ref3} [see {lab3}, p. 2] "),
+    ]
+    for role, text in tests:
+        escaped_text = re.escape(text)
+        pattern = f'":cite:{role}:".*{escaped_text}'
+        assert re.search(pattern, output) is not None, text
+
+
+@pytest.mark.sphinx(
+    "text",
+    testroot="citation_roles_pre_post",
+    confoverrides={"bibtex_reference_style": "author_year"},
+)
+def test_citation_roles_authoryear_pre_post(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.txt").read_text(encoding="utf-8-sig")
+    ref1 = "de Du *et al.*"
+    ref2 = "al Ap"
+    ref3 = "Be and Ci"
+    tests = [
+        ("p", f" A [see {ref1}, 2003] "),
+        ("p", f" B [{ref1}, 2003, p. 1] "),
+        ("p", f" C [see {ref1}, 2003, p. 1] "),
+        ("t", f" A {ref1} [see 2003] "),
+        ("t", f" B {ref1} [2003, p. 1] "),
+        ("t", f" C {ref1} [see 2003, p. 1] "),
+        ("p", f" A [see {ref2}, 2001, {ref3}, 2002] "),
+        ("p", f" B [{ref2}, 2001, p. 1, {ref3}, 2002] "),
+        ("p", f" C [see {ref2}, 2001, p. 1, {ref3}, 2002] "),
+        ("p", f" D [{ref2}, 2001, see {ref3}, 2002] "),
+        ("p", f" E [{ref2}, 2001, {ref3}, 2002, p. 2] "),
+        ("p", f" F [{ref2}, 2001, see {ref3}, 2002, p. 2] "),
+        ("p", f" G [see {ref2}, 2001, see {ref3}, 2002] "),
+        ("p", f" H [{ref2}, 2001, p. 1, {ref3}, 2002, p. 2] "),
+        ("p", f" I [see {ref2}, 2001, {ref3}, 2002, p. 2] "),
+        ("p", f" J [see {ref2}, 2001, p. 1, see {ref3}, 2002, p. 2] "),
+        ("t", f" A {ref2} [see 2001], {ref3} [2002] "),
+        ("t", f" B {ref2} [2001, p. 1], {ref3} [2002] "),
+        ("t", f" C {ref2} [see 2001, p. 1], {ref3} [2002] "),
+        ("t", f" D {ref2} [2001], {ref3} [see 2002] "),
+        ("t", f" E {ref2} [2001], {ref3} [2002, p. 2] "),
+        ("t", f" F {ref2} [2001], {ref3} [see 2002, p. 2] "),
+        ("t", f" G {ref2} [see 2001], {ref3} [see 2002] "),
+        ("t", f" H {ref2} [2001, p. 1], {ref3} [2002, p. 2] "),
+        ("t", f" I {ref2} [see 2001], {ref3} [2002, p. 2] "),
+        ("t", f" J {ref2} [see 2001, p. 1], {ref3} [see 2002, p. 2] "),
+    ]
+    for role, text in tests:
+        escaped_text = re.escape(text)
+        pattern = f'":cite:{role}:".*{escaped_text}'
+        assert re.search(pattern, output) is not None, text
 
 
 @pytest.mark.sphinx(

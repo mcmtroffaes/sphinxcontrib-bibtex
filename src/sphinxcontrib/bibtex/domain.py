@@ -31,6 +31,7 @@ from sphinx.domains import Domain, ObjType
 from sphinx.errors import ExtensionError
 from sphinx.locale import _
 
+from .citation_target import parse_citation_targets, CitationTarget
 from .roles import CiteRole
 from .bibfile import normpath_filename, process_bibdata, BibData
 from .style.referencing import BaseReferenceStyle, format_references
@@ -395,7 +396,8 @@ class BibtexDomain(Domain):
         contnode: docutils.nodes.Element,
     ) -> docutils.nodes.Element:
         """Replace node by list of citation references (one for each key)."""
-        keys = [key.strip() for key in target.split(",")]
+        targets = parse_citation_targets(target)
+        keys: Dict[str, CitationTarget] = {target2.key: target2 for target2 in targets}
         citations: Dict[str, Citation] = {
             cit.key: cit
             for cit in self.citations
@@ -427,6 +429,8 @@ class BibtexDomain(Domain):
                         if citation.tooltip_entry
                         else None
                     ),
+                    pre_text=keys[citation.key].pre,
+                    post_text=keys[citation.key].post,
                 ),
             )
             for citation in citations.values()
@@ -470,8 +474,8 @@ class BibtexDomain(Domain):
         for citation_ref in sorted(
             self.citation_refs, key=lambda c: docnames.index(c.docname)
         ):
-            for key in citation_ref.keys:
-                yield key
+            for target in citation_ref.targets:
+                yield target.key
 
     def get_entries(self, bibfiles: List[str]) -> Iterable["Entry"]:
         """Return all bibliography entries from the bib files, unsorted (i.e.
@@ -493,7 +497,7 @@ class BibtexDomain(Domain):
             cited_docnames = {
                 citation_ref.docname
                 for citation_ref in self.citation_refs
-                if key in citation_ref.keys
+                if key in {target.key for target in citation_ref.targets}
             }
             visitor = _FilterVisitor(
                 entry=entry,

@@ -1,6 +1,19 @@
 2.6.0 (in development)
 ----------------------
 
+* Pre- and post-text in citations are now supported for the
+  author_year, label, and super referencing styles. The syntax is
+  ``:cite:p:`{pre-text}key{post-text}``` (requested by RobertoBagnara,
+  see issue #288 and pull request #316).
+  Refer to the documentation for more details.
+
+* New alternative style citations are now supported for the
+  author_year, label, and super parenthetical referencing styles,
+  which are identical to parenthetical citations but without the brackets.
+  The syntax is
+  ``:cite:alp:`key``` (requested by davidorme, see pull request #316).
+  Refer to the documentation for more details.
+
 * Exclude docutils 0.18 and 0.19 to fix generation of a spurious div tag in the
   html builder (see issues #330, #329, #323, #322, #309).
 

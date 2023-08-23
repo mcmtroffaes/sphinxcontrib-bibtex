@@ -1,4 +1,4 @@
-from sphinxcontrib.bibtex.style.referencing import join, sentence
+from sphinxcontrib.bibtex.style.template import join, sentence, join2
 
 
 def test_join() -> None:
@@ -11,6 +11,14 @@ def test_join() -> None:
     )
     join_other = join(other=" et al.")
     assert str(join_other["Billy", "Willy", "Dilly"].format()) == "Billy et al."
+
+
+def test_join2() -> None:
+    assert str(join2.format()) == ""
+    assert str(join2["a", "b", "c", "d", "e"].format()) == "abcde"
+    join_sep = join2(sep1=";", sep2=",")
+    assert str(join_sep["Tom", "Jerry"].format()) == "Tom;Jerry"
+    assert str(join_sep["Billy", "Willy", "Dilly"].format()) == "Billy;Willy,Dilly"
 
 
 def test_sentence() -> None:

@@ -90,7 +90,8 @@ class BibliographyTransform(SphinxPostTransform):
                         citation_ref.citation_ref_id
                         for citation_ref in domain.citation_refs
                         if bib_key.docname == citation_ref.docname
-                        and citation.key in citation_ref.keys
+                        and citation.key
+                        in {target.key for target in citation_ref.targets}
                     ]
                     if backrefs:
                         citation_node["backrefs"] = backrefs

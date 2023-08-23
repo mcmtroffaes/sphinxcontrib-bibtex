@@ -104,3 +104,11 @@ def test_footcite_style_custom(app, warning) -> None:
         escaped_text = re.escape(text)
         pattern = f'":footcite:{role}:".*{escaped_text}'
         assert re.search(pattern, output) is not None
+
+
+@pytest.mark.sphinx("text", testroot="footcite_roles_pre_post")
+def test_footcite_pre_post(app, warning) -> None:
+    app.build()
+    bad_keys = ["{see}testthree", "testthree{p. 1}", "{see}testthree{p. 1}"]
+    for bad_key in bad_keys:
+        assert f'could not find bibtex key "{bad_key}"' in warning.getvalue()

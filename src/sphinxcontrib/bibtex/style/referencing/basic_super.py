@@ -2,7 +2,14 @@ from dataclasses import dataclass, field
 
 from typing import TYPE_CHECKING, List, Iterable, Union
 from pybtex.style.template import tag
-from sphinxcontrib.bibtex.style.template import reference, entry_label, join
+from sphinxcontrib.bibtex.style.template import (
+    reference,
+    entry_label,
+    join,
+    pre_text,
+    post_text,
+    join2,
+)
 from . import BracketStyle, PersonStyle, BaseReferenceStyle
 
 if TYPE_CHECKING:
@@ -24,14 +31,28 @@ class BasicSuperParentheticalReferenceStyle(BaseReferenceStyle):
     #: Person style.
     person: PersonStyle = field(default_factory=PersonStyle)
 
+    #: Separator between pre-text and citation.
+    pre_text_sep: Union["BaseText", str] = " "
+
+    #: Separator between citation and post-text.
+    post_text_sep: Union["BaseText", str] = ", "
+
     def role_names(self) -> Iterable[str]:
-        return [f"p{full_author}" for full_author in ["", "s"]]
+        return [
+            f"{alt}p{full_author}" for alt in ["", "al"] for full_author in ["", "s"]
+        ]
 
     def outer(self, role_name: str, children: List["BaseText"]) -> "Node":
-        return tag("sup")[self.bracket.outer(children, brackets=True, capfirst=False)]
+        return tag("sup")[
+            self.bracket.outer(children, brackets="al" not in role_name, capfirst=False)
+        ]
 
     def inner(self, role_name: str) -> "Node":
-        return reference[entry_label]
+        return join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
+            pre_text,
+            reference[entry_label],
+            post_text,
+        ]
 
 
 @dataclass
@@ -51,6 +72,12 @@ class BasicSuperTextualReferenceStyle(BaseReferenceStyle):
     #: Separator between text and reference.
     text_reference_sep: Union["BaseText", str] = ""
 
+    #: Separator between pre-text and citation.
+    pre_text_sep: Union["BaseText", str] = " "
+
+    #: Separator between citation and post-text.
+    post_text_sep: Union["BaseText", str] = ", "
+
     def role_names(self) -> Iterable[str]:
         return [
             f"{capfirst}t{full_author}"
@@ -65,6 +92,14 @@ class BasicSuperTextualReferenceStyle(BaseReferenceStyle):
         return join(sep=self.text_reference_sep)[
             self.person.author_or_editor_or_title(full="s" in role_name),
             tag("sup")[
-                join[self.bracket.left, reference[entry_label], self.bracket.right]
+                join[
+                    self.bracket.left,
+                    join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
+                        pre_text,
+                        reference[entry_label],
+                        post_text,
+                    ],
+                    self.bracket.right,
+                ]
             ],
         ]
