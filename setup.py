@@ -37,6 +37,7 @@ setup(
     author_email="matthias.troffaes@gmail.com",
     description=readme[0],
     long_description="\n".join(readme[2:]),
+    long_description_content_type="text/x-rst",
     zip_safe=False,
     classifiers=[
         "Development Status :: 5 - Production/Stable",
