@@ -1,6 +1,8 @@
 name: release
 on:
   push:
+    branches:
+      - develop
 jobs:
   release:
     if: github.repository == 'mcmtroffaes/sphinxcontrib-bibtex'
