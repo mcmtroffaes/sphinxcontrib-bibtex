@@ -19,3 +19,4 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
     "sphinx": ("http://www.sphinx-doc.org/en/master/", None),
 }
+html_theme = "alabaster"
