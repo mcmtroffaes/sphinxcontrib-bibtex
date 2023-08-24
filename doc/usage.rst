@@ -1075,6 +1075,13 @@ LaTeX output, you can add the following to your LaTeX preamble:
    \usepackage{etoolbox}
    \patchcmd{\thebibliography}{\section*{\refname}}{}{}{}
 
+.. seealso::
+
+   This issue is being tracked on the Sphinx bug tracker here,
+   where you might find other workarounds if the above ones do not work
+   for your use case:
+   https://github.com/sphinx-doc/sphinx/issues/4775
+
 Citation References Not Rendered In TocTree Directives
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
