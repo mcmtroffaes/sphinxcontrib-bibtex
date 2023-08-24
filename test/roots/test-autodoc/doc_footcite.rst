@@ -1,7 +1,7 @@
 footcite
 ========
 
-.. automodule:: test.some_module_footcite
+.. automodule:: test.some_module.footcite
    :members:
 
 .. footbibliography::

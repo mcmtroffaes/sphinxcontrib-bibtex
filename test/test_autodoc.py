@@ -5,8 +5,8 @@
     Test with autodoc.
 """
 
-import test.some_module_cite
-import test.some_module_footcite
+import test.some_module.cite
+import test.some_module.footcite
 from test.common import (
     html_citation_refs_single,
     html_citations,
@@ -19,9 +19,9 @@ import pytest
 
 # for coverage
 def test_some_module() -> None:
-    f1 = test.some_module_cite.Foo(0)
+    f1 = test.some_module.cite.Foo(0)
     assert f1.c == 3
-    f2 = test.some_module_footcite.Foo(0)
+    f2 = test.some_module.footcite.Foo(0)
     assert f2.c == 3
 
 
