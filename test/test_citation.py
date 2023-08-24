@@ -525,3 +525,14 @@ def test_citation_tooltip3(app, warning) -> None:
     assert (
         len(html_citation_refs(label="tes", title="whoop whoop").findall(output)) == 1
     )
+
+
+# https://bitbucket.org/pybtex-devs/pybtex/issues/442/author-names-with-special-latex-characters
+@pytest.mark.xfail(reason="upstream bug")
+@pytest.mark.sphinx("html", testroot="citation_label_special_chars")
+def test_citation_label_special_chars(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text(encoding="utf-8-sig")
+    assert len(html_citations(label="MRS08").findall(output)) == 1
+    assert len(html_citations(label="SBV09").findall(output)) == 1
