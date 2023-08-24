@@ -48,10 +48,6 @@ jobs:
           - python-version: '3.11'
             pip-sphinx: '"sphinx<7"'
             pytest-options: ''
-          # sphinx pre-release
-          - python-version: '3.11'
-            pip-sphinx: '--pre sphinx'
-            pytest-options: ''
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
