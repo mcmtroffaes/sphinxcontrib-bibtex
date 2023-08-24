@@ -1,4 +1,4 @@
-2.6.0 (in development)
+2.6.0 (24 August 2023)
 ----------------------
 
 * Pre- and post-text in citations are now supported for the
@@ -19,14 +19,18 @@
 
 * Add test for running the extension on Cython modules (see issue #308).
 
+* Add test for running the extension with autoapi (see issue #319).
+
+* Sphinx versions 2.x (and lower) are no longer supported.
+  New minimum required version of Sphinx is 3.5.
+
 * Running pytest without arguments will now by default skip all marked tests
   that require additional dependencies (currently numpydoc, rinohtype, and
   cython).
 
-* Python 3.6 is EOL and is therefore no longer officially supported.
+* Fix encoding issues when running tests on Windows.
 
-* Sphinx versions 2.x (and lower) are no longer supported.
-  New minimum required version of Sphinx is 3.5.
+* Python 3.6 is EOL and is therefore no longer officially supported.
 
 2.5.0 (22 August 2022)
 ----------------------
