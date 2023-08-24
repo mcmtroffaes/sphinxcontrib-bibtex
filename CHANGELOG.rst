@@ -1,4 +1,4 @@
-2.6.0 (in development)
+2.6.0 (24 August 2023)
 ----------------------
 
 * Pre- and post-text in citations are now supported for the
