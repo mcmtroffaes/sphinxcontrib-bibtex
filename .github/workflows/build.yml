@@ -48,10 +48,6 @@ jobs:
           - python-version: '3.11'
             pip-sphinx: '"sphinx<7"'
             pytest-options: ''
-          # sphinx pre-release
-          - python-version: '3.11'
-            pip-sphinx: '--pre sphinx'
-            pytest-options: ''
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
@@ -62,7 +58,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         python -m pip install pytest codecov coverage
-        python -m pip install . ${{ matrix.pip-sphinx }}
+        python -m pip install . sphinx-autoapi ${{ matrix.pip-sphinx }}
     - name: Install extra dependencies
       run: |
         python -m pip install flake8 check-manifest mypy types-setuptools types-docutils
