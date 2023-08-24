@@ -131,3 +131,11 @@ def test_bibfiles_multiple_keys(app, warning) -> None:
     )
     output = (app.outdir / "index.html").read_text()
     assert html_citations(label="1", text=".*Test one.*").search(output)
+
+
+# https://bitbucket.org/pybtex-devs/pybtex/issues/441/author-editor-fields-not-resolved-via
+@pytest.mark.xfail(reason="pybtex bug")
+@pytest.mark.sphinx("html", testroot="bibfiles_crossref")
+def test_bibfiles_crossref(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
