@@ -18,7 +18,8 @@ import pytest
 @pytest.mark.sphinx("html", testroot="autoapi")
 def test_autoapi(app, warning) -> None:
     app.build()
-    # assert not warning.getvalue()
+    assert not warning.getvalue()
+    root = (app.outdir / "index.html").read_text()
     output = (app.outdir / "autoapi/some_module/cite/index.html").read_text()
     labels = [
         "One",
@@ -48,14 +49,15 @@ def test_autoapi(app, warning) -> None:
     ]
     for label, title in zip(labels, titles):
         assert len(html_citation_refs_single(label=label).findall(output)) == 1
-        assert len(html_citations(label=label).findall(output)) == 1
+        assert len(html_citations(label=label).findall(root)) == 1
         match_ref = html_citation_refs_single(label=label).search(output)
-        match = html_citations(label=label).search(output)
+        match = html_citations(label=label).search(root)
         assert match_ref
         assert match
         assert match_ref.group("refid") == match.group("id_")
         assert title in match.group("text")
-        assert match_ref.group("id_") == match.group("backref")
+        # no backrefs as citations are in other document
+        # assert match_ref.group("id_") == match.group("backref")
     output2 = (app.outdir / "autoapi/some_module/footcite/index.html").read_text()
     assert len(html_footnote_refs().findall(output2)) == 11
     for title in titles:
