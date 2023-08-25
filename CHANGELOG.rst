@@ -1,6 +1,10 @@
 2.6.1 (in development)
 ----------------------
 
+* The ``:cite:alp:`` role in the super style now also suppresses the sup tag
+  in addition to the brackets, to make it easier to apply the necessary formatting
+  around the citation.
+
 2.6.0 (24 August 2023)
 ----------------------
 
