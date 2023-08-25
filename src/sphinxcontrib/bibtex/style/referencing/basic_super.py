@@ -50,7 +50,7 @@ class BasicSuperParentheticalReferenceStyle(BaseReferenceStyle):
                 self.bracket.outer(children, brackets=True, capfirst=False)
             ]
         else:
-            self.bracket.outer(children, brackets=False, capfirst=False)
+            return self.bracket.outer(children, brackets=False, capfirst=False)
 
     def inner(self, role_name: str) -> "Node":
         return join2(sep1=self.pre_text_sep, sep2=self.post_text_sep)[
