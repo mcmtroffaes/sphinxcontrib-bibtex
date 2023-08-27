@@ -1,4 +1,7 @@
-:cite:`testkey`
+Index
+=====
+
+See :cite:`testkey`.
 
 .. toctree::
    sources
