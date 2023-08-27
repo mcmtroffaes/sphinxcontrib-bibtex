@@ -1,4 +1,4 @@
-2.6.1 (in development)
+2.6.1 (27 August 2023)
 ----------------------
 
 * The ``:cite:alp:`` role in the super style now also suppresses the sup tag
