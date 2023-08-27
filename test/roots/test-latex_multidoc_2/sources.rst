@@ -10,8 +10,7 @@ Here are the references.
     \def\chapter#1#2{}
     \begin{thebibliography}{1234}
 
-.. bibliography:: sources.bib
-   :all:
+.. bibliography::
 
 .. raw:: latex
 

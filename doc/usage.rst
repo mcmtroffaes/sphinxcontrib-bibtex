@@ -1053,32 +1053,45 @@ This issue will occur also if you use regular citations in Sphinx:
 it has nothing to do with sphinxcontrib-bibtex per se.
 
 To get a closer match between the two outputs,
-you can tell Sphinx to generate a rubric title only for html or
-text outputs:
+first tell Sphinx to suppress its custom bibliography transform by adding the
+following code to your ``conf.py``:
+
+.. code-block:: python
+
+    import sphinx.builders.latex.transforms
+
+    class DummyTransform(sphinx.builders.latex.transforms.BibliographyTransform):
+        def run(self, **kwargs):
+            pass
+
+    sphinx.builders.latex.transforms.BibliographyTransform = DummyTransform
+
+Then create a :file:`references.rst` file that
+you include at the end of your toctree, containing the following code:
 
 .. code-block:: rest
 
-   .. only:: html or text
+    References
+    ==========
 
-      .. rubric:: References
+    .. raw:: latex
 
-   .. bibliography::
+        \begingroup
+        \def\section#1#2{}
+        \def\chapter#1#2{}
+        \begin{thebibliography}{1234}
 
-This code could be placed in a :file:`references.rst` file that
-you include at the end of your toctree.
+    .. bibliography::
 
-Alternatively, to remove the bibliography section title from the
-LaTeX output, you can add the following to your LaTeX preamble:
+    .. raw:: latex
 
-.. code-block:: latex
-
-   \usepackage{etoolbox}
-   \patchcmd{\thebibliography}{\section*{\refname}}{}{}{}
+        \end{thebibliography}
+        \endgroup
 
 .. seealso::
 
    This issue is being tracked on the Sphinx bug tracker here,
-   where you might find other workarounds if the above ones do not work
+   where you might find other workarounds if the above one does not work
    for your use case:
    https://github.com/sphinx-doc/sphinx/issues/4775
 
