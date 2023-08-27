@@ -22,7 +22,7 @@ jobs:
             pytest-options: ''
           # numpydoc tests
           - python-version: '3.11'
-            pip-sphinx: 'sphinx numpydoc'
+            pip-sphinx: 'sphinx https://github.com/numpy/numpydoc/archive/refs/heads/master.zip'
             pytest-options: '-m "numpydoc"'
           # rinohtype tests
           - python-version: '3.11'
