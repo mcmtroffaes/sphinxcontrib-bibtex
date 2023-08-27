@@ -410,6 +410,9 @@ following syntax:
    The axioms were introduced by :cite:t:`{see}1977:nelson`.
    The axioms were introduced by :cite:t:`1977:nelson{p. 1166}`.
    The axioms were introduced by :cite:t:`{see}1977:nelson{p. 1166}`.
+   Axioms were introduced :cite:p:`{see}1977:nelson`.
+   Axioms were introduced :cite:p:`1977:nelson{p. 1166}`.
+   Axioms were introduced :cite:p:`{see}1977:nelson{p. 1166}`.
 
 Pre- and post-text is not supported for footnote citations.
 
