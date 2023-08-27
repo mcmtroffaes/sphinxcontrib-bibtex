@@ -1,5 +1,5 @@
 from test.common import (
-    html_citation_refs,
+    html_citation_refs_single,
     html_citations,
     html_footnote_refs,
     html_footnotes,
@@ -48,14 +48,15 @@ def test_numpydoc(app, warning) -> None:
         "Elf",
     ]
     for label, title in zip(labels, titles):
-        assert len(html_citation_refs(label=label).findall(output)) == 1
+        assert len(html_citation_refs_single(label=label).findall(output)) == 1
         assert len(html_citations(label=label).findall(output)) == 1
-        match_ref = html_citation_refs(label=label).search(output)
+        match_ref = html_citation_refs_single(label=label).search(output)
         match = html_citations(label=label).search(output)
         assert match_ref
         assert match
         assert match_ref.group("refid") == match.group("id_")
         assert title in match.group("text")
+        assert match_ref.group("id_") == match.group("backref")
     output2 = (app.outdir / "doc_footcite.html").read_text()
     assert len(html_footnote_refs().findall(output2)) == 11
     for title in titles:
