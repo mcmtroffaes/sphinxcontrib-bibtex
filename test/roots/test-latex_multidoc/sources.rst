@@ -1,5 +1,6 @@
-Bibliography
-============
+References
+==========
 
-.. bibliography:: sources.bib
-   :all:
+Here are the references.
+
+.. bibliography::
