@@ -1,6 +1,9 @@
 2.6.2 (in development)
 ----------------------
 
+* Fix bibliography header repetition when recompiling documents
+  (reported by ragonneau, see issue #342 and pull request #343).
+
 2.6.1 (27 August 2023)
 ----------------------
 

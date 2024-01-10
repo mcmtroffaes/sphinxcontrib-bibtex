@@ -311,6 +311,7 @@ class BibtexDomain(Domain):
         # parse bibliography header
         header = getattr(env.app.config, "bibtex_bibliography_header")
         if header:
+            self.data["bibliography_header"] = docutils.nodes.container()
             self.data["bibliography_header"] += parse_header(
                 header, "bibliography_header"
             )
