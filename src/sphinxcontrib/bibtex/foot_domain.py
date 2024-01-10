@@ -60,6 +60,7 @@ class BibtexFootDomain(Domain):
         # parse bibliography header
         header = getattr(env.app.config, "bibtex_footbibliography_header")
         if header:
+            self.data["bibliography_header"] = docutils.nodes.container()
             self.data["bibliography_header"] += parse_header(
                 header, "foot_bibliography_header"
             )
