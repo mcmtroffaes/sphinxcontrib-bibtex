@@ -19,7 +19,7 @@ import pytest
 
 @pytest.mark.skipif(
     sphinx.version_info < (7, 0),
-    reason="autoapi appears broken on sphinx 7.0 and lower",
+    reason="autoapi appears broken on sphinx < 7.0",
 )
 @pytest.mark.sphinx("html", testroot="autoapi")
 def test_autoapi(app, warning) -> None:
