@@ -5,8 +5,6 @@
     Test with autodoc.
 """
 
-import sphinx
-
 from test.common import (
     html_citation_refs_single,
     html_citations,
@@ -15,6 +13,7 @@ from test.common import (
 )
 
 import pytest
+import sphinx
 
 
 @pytest.mark.skipif(
