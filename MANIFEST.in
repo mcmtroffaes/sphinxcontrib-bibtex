@@ -6,6 +6,7 @@ include mypy.ini
 include pytest.ini
 include .coveragerc
 include .flake8
+include .isort.cfg
 recursive-include src *.py py.typed
 recursive-include doc *
 recursive-include test *
