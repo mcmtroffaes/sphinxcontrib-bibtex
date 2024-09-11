@@ -1,7 +1,7 @@
 [project]
 name = "sphinxcontrib-bibtex"
 version = "2.6.3a1"
-license = "BSD-2-Clause"
+license = { text = "BSD-2-Clause" }
 description = "Sphinx extension for BibTeX style citations."
 readme = "README.rst"
 requires-python = ">=3.7"
@@ -39,7 +39,6 @@ dependencies = [
 
 [project.optional-dependencies]
 test = ["pytest", "pytest-cov"]
-doc = ["sphinx"]
 
 [project.urls]
 homepage = "https://github.com/mcmtroffaes/sphinxcontrib-bibtex"

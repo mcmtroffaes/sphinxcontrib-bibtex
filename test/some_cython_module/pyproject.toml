@@ -4,7 +4,7 @@ requires = ["setuptools", "wheel", "Cython"]
 [project]
 name = "some-cython-module"
 version = "0.0.1"
-license = "BSD-2-Clause"
+license = { text = "BSD-2-Clause" }
 authors = [
     {email = "matthias.troffaes@gmail.com"},
     {name = "Matthias C. M. Troffaes"},
