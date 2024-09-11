@@ -4,11 +4,11 @@ setup(
     ext_modules=[
         Extension(
             name="some_cython_module.cite",
-            source=["src/some_cython_module/cite.pyx"],
+            sources=["src/some_cython_module/cite.pyx"],
         ),
         Extension(
             name="some_cython_module.footcite",
-            source=["src/some_cython_module/footcite.pyx"],
+            sources=["src/some_cython_module/footcite.pyx"],
         ),
     ]
 )
