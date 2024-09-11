@@ -35,6 +35,7 @@ dependencies = [
     "pybtex>=0.24",
     "pybtex-docutils>=1.0.0",
     "importlib_metadata>=3.6; python_version < '3.10'",
+    "setuptools; python_version >= '3.12'"  # for pybtex...
 ]
 
 [project.optional-dependencies]
