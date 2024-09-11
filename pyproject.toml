@@ -1,0 +1,54 @@
+[project]
+name = "sphinxcontrib-bibtex"
+version = "2.6.3a1"
+license = { text = "BSD-2-Clause" }
+description = "Sphinx extension for BibTeX style citations."
+readme = "README.rst"
+requires-python = ">=3.7"
+authors = [
+    {email = "matthias.troffaes@gmail.com"},
+    {name = "Matthias C. M. Troffaes"},
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Environment :: Web Environment",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: BSD License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Programming Language :: Python :: Implementation :: PyPy",
+    "Topic :: Documentation",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "Sphinx>=3.5",
+    "docutils>=0.8,!=0.18.*,!=0.19.*",
+    "pybtex>=0.24",
+    "pybtex-docutils>=1.0.0",
+    "importlib_metadata>=3.6; python_version < '3.10'",
+    "setuptools; python_version >= '3.12'"  # for pybtex...
+]
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-cov"]
+
+[project.urls]
+homepage = "https://github.com/mcmtroffaes/sphinxcontrib-bibtex"
+
+[project.entry-points."pybtex.style.names"]
+last = "sphinxcontrib.bibtex.style.names.last:LastNameStyle"
+
+[project.entry-points."sphinxcontrib.bibtex.style.referencing"]
+author_year = "sphinxcontrib.bibtex.style.referencing.author_year:AuthorYearReferenceStyle"
+foot = "sphinxcontrib.bibtex.style.referencing.foot:FootReferenceStyle"
+label = "sphinxcontrib.bibtex.style.referencing.label:LabelReferenceStyle"
+super = "sphinxcontrib.bibtex.style.referencing.super_:SuperReferenceStyle"

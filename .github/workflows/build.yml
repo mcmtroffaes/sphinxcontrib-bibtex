@@ -12,7 +12,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ['3.8', '3.9', '3.10', '3.11']
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
         pip-sphinx: ['sphinx']
         pytest-options: ['']
         include:
@@ -21,15 +21,15 @@ jobs:
             pip-sphinx: '"docutils<0.18" "jinja2<3.1"'
             pytest-options: ''
           # numpydoc tests
-          - python-version: '3.11'
+          - python-version: '3.12'
             pip-sphinx: 'sphinx https://github.com/numpy/numpydoc/archive/refs/heads/master.zip'
             pytest-options: '-m "numpydoc"'
           # rinohtype tests
-          - python-version: '3.11'
+          - python-version: '3.12'
             pip-sphinx: 'sphinx https://github.com/brechtm/rinohtype/archive/refs/heads/master.zip'
             pytest-options: '-m "rinohtype"'
           # cython tests
-          - python-version: '3.11'
+          - python-version: '3.12'
             pip-sphinx: 'sphinx test/some_cython_module'
             pytest-options: '-m "cython"'
           # latest of sphinx 3.x series (released for Python 3.9)
@@ -41,11 +41,11 @@ jobs:
             pip-sphinx: '"sphinx<5" "sphinxcontrib-applehelp<1.0.8" "sphinxcontrib-devhelp<1.0.5" "sphinxcontrib-htmlhelp<2.0.4" "sphinxcontrib-serializinghtml<1.1.10" "sphinxcontrib-qthelp<1.0.7"'
             pytest-options: ''
           # latest of sphinx 5.x series
-          - python-version: '3.11'
+          - python-version: '3.12'
             pip-sphinx: '"sphinx<6"'
             pytest-options: ''
           # latest of sphinx 6.x series
-          - python-version: '3.11'
+          - python-version: '3.12'
             pip-sphinx: '"sphinx<7"'
             pytest-options: ''
     steps:
@@ -61,24 +61,20 @@ jobs:
         python -m pip install . sphinx-autoapi ${{ matrix.pip-sphinx }}
     - name: Install extra dependencies
       run: |
-        python -m pip install flake8 check-manifest mypy types-setuptools types-docutils
-      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.11'
-    - name: Check manifest
-      run: |
-        check-manifest
-      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.11'
+        python -m pip install flake8 mypy types-docutils
+      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.12'
     - name: Lint with flake8
       run: |
         flake8 . --count --select=E9,F63,F7,F82 --show-source
         flake8 . --count --max-complexity=10
-      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.11'
+      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.12'
     - name: Type checking with mypy
       run: mypy
-      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.11'
+      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.12'
     - name: Documentation
       run: |
         pushd doc && make html && popd
-      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.11'
+      if: matrix.pip-sphinx == 'sphinx' && matrix.python-version == '3.12'
     - name: Test with pytest
       run: |
         coverage run -m pytest ${{ matrix.pytest-options }}

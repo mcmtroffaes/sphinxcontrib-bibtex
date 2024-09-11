@@ -1124,24 +1124,6 @@ Alternatively, set ``numpydoc_class_members_toctree`` to ``False``
 in your ``conf.py`` file. This will cause numpydoc not to
 duplicate the short descriptions for class members.
 
-Import errors after using setup.py install
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-Because sphinxcontrib-bibtex uses the standard sphinxcontrib namespace,
-installing the package using
-
-.. code-block::
-
-   python setup.py install
-
-may result in a broken installation. This appears to be an issue with
-setuptools. As pip does not have this problem, it is recommended to install
-the package with pip:
-
-.. code-block::
-
-   pip install .
-
 Import errors when running pytest
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
