@@ -1,6 +1,0 @@
-Sphinx>=3.5
-docutils>=0.8,!=0.18.*,!=0.19.*
-pybtex>=0.24
-pybtex-docutils>=1.0.0
-dataclasses; python_version < '3.7'
-importlib_metadata>=3.6; python_version < '3.10'

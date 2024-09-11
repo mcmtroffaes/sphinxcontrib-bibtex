@@ -1,8 +1,13 @@
 """
     .. autofunction:: setup
 """
-
+import sys
 from typing import Any, Dict
+
+if sys.version_info >= (3, 10):
+    from importlib.metadata import version
+else:
+    from importlib_metadata import version
 
 from sphinx.application import Sphinx
 
@@ -50,7 +55,7 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_role("footcite", FootCiteRole())
 
     return {
-        "version": "2.6.3a1",
+        "version": version("sphinxcontrib-bibtex"),
         "env_version": 9,
         "parallel_read_safe": True,
         "parallel_write_safe": True,
