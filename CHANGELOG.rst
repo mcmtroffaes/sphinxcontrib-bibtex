@@ -1,5 +1,5 @@
-2.6.3 (in development)
-----------------------
+2.6.3 (12 September 2024)
+-------------------------
 
 * Add setuptools as a runtime dependency on Python 3.12. This works around
   an issue with the latest release of pybtex not working on Python 3.12
