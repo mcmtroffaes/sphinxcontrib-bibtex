@@ -14,7 +14,7 @@ extensions = [
 ]
 master_doc = "index"
 project = "sphinxcontrib-bibtex"
-copyright = "2011-2023, Matthias C. M. Troffaes"
+copyright = "2011-2024, Matthias C. M. Troffaes"
 release = version("sphinxcontrib-bibtex")
 version = ".".join(release.split(".")[:2])
 exclude_patterns = ["_build"]

@@ -1,5 +1,5 @@
 | sphinxcontrib-bibtex is a Sphinx extension for BibTeX style citations
-| Copyright (c) 2011-2021 by Matthias C. M. Troffaes
+| Copyright (c) 2011-2024 by Matthias C. M. Troffaes
 | All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
