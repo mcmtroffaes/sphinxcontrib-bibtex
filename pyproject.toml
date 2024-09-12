@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sphinxcontrib-bibtex"
-version = "2.6.3"
+version = "2.6.4a0"
 license = { text = "BSD-2-Clause" }
 description = "Sphinx extension for BibTeX style citations."
 readme = "README.rst"
