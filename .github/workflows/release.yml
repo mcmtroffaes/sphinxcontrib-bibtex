@@ -9,9 +9,9 @@ jobs:
   release:
     if: github.repository == 'mcmtroffaes/sphinxcontrib-bibtex'
     runs-on: ubuntu-latest
-      environment: release
-      permissions:
-        id-token: write
+    environment: release
+    permissions:
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - name: Set up Python
