@@ -86,7 +86,7 @@ Currently available built-in styles are:
 Python packages can make new styles available through
 the ``sphinxcontrib.bibtex.style.referencing``
 `entry point <https://packaging.python.org/guides/creating-and-discovering-plugins/#using-package-metadata>`_ group.
-See sphinxcontrib-bibtex's own ``setup.py`` script for examples.
+See sphinxcontrib-bibtex's own ``pyproject.toml`` configuration for examples.
 
 Tooltips
 ~~~~~~~~

@@ -59,9 +59,6 @@ source using ``pip install -e .``. Then add:
 
 to your project's Sphinx configuration file ``conf.py``.
 
-Installation with ``python setup.py install`` is discouraged due to potential
-issues with the sphinxcontrib namespace.
-
 Minimal Example
 ---------------
 
