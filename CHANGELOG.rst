@@ -1,6 +1,13 @@
 2.6.3 (in development)
 ----------------------
 
+* Add setuptools as a runtime dependency on Python 3.12. This works around
+  an issue with the latest release of pybtex not working on Python 3.12
+  otherwise. See issue #345.
+
+* Migrate setup.py to pyproject.toml. This fixes a ``namespace_packages``
+  warning on setuptools. See issue #350.
+
 2.6.2 (10 January 2023)
 -----------------------
 
