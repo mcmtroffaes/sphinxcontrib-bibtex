@@ -142,7 +142,7 @@ class SphinxReferenceInfo(NamedTuple):
     fromdocname: str  #: Document name of the citation reference.
     todocname: str  #: Document name of the bibliography.
     citation_id: str  #: Unique id of the citation within the bibliography.
-    title: str  #: Title attribute for reference node.
+    title: str | None  #: Title attribute for reference node.
     pre_text: str  #: Text to come before citation.
     post_text: str  #: Text to come after citation.
 
