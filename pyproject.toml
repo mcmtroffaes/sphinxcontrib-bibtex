@@ -8,7 +8,7 @@ version = "2.6.4a0"
 license = { text = "BSD-2-Clause" }
 description = "Sphinx extension for BibTeX style citations."
 readme = "README.rst"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 authors = [
     {email = "matthias.troffaes@gmail.com"},
     {name = "Matthias C. M. Troffaes"},
@@ -22,12 +22,12 @@ classifiers = [
     "Operating System :: OS Independent",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: Implementation :: CPython",
     "Programming Language :: Python :: Implementation :: PyPy",
     "Topic :: Documentation",
@@ -39,7 +39,7 @@ dependencies = [
     "pybtex>=0.24",
     "pybtex-docutils>=1.0.0",
     "importlib_metadata>=3.6; python_version < '3.10'",
-    "setuptools; python_version >= '3.12'"  # for pybtex...
+    "setuptools"  # for pybtex...
 ]
 
 [project.optional-dependencies]

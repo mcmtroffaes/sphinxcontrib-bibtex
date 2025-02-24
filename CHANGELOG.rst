@@ -1,6 +1,15 @@
 2.6.4 (in development)
 ----------------------
 
+* Add Python 3.13 support.
+
+* Add setuptools as dependency on all Python versions.
+  This fixes an issue with an undeclared setuptools dependency
+  in the latest release of pybtex.
+  See discussion in issue #345.
+
+* Python 3.7 is EOL and is therefore no longer officially supported.
+
 2.6.3 (12 September 2024)
 -------------------------
 
