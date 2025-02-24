@@ -11,8 +11,7 @@
 """
 
 import ast  # parse(), used for filter
-from collections.abc import Sequence
-from typing import TYPE_CHECKING, Dict, List, NamedTuple, cast
+from typing import TYPE_CHECKING, Dict, List, NamedTuple, Sequence, cast
 
 import docutils.nodes
 import docutils.parsers.rst.directives as directives
