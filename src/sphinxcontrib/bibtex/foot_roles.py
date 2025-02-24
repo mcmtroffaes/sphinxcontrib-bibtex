@@ -72,7 +72,9 @@ class FootCiteRole(XRefRole):
         footbibliography_count: int = env.temp_data.setdefault(  # type: ignore
             "bibtex_footbibliography_count", 0
         )
-        footcite_names: dict[str, str] = env.temp_data.setdefault("bibtex_footcite_names", {})  # type: ignore
+        footcite_names: dict[str, str] = env.temp_data.setdefault(  # type: ignore
+            "bibtex_footcite_names", {}
+        )
         for key in keys:
             entry = domain.bibdata.data.entries.get(key)
             if entry is not None:
