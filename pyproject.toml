@@ -43,7 +43,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-test = ["pytest", "pytest-cov"]
+test = ["pytest", "pytest-cov", "sphinx-autoapi"]
 
 [project.urls]
 homepage = "https://github.com/mcmtroffaes/sphinxcontrib-bibtex"
