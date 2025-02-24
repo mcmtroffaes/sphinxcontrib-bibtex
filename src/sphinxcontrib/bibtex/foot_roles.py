@@ -75,7 +75,7 @@ class FootCiteRole(SphinxRole):
                     template: str = (
                         self.env.app.config.bibtex_footcite_id
                         if self.env.app.config.bibtex_footcite_id
-                        else f"footcite-{key}"
+                        else "footcite-{key}"
                     )
                     raw_id = template.format(
                         footbibliography_count=footbibliography_count + 1, key=entry.key
