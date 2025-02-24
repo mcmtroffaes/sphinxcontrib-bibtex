@@ -133,7 +133,7 @@ class PersonStyle:
     #: Automatically initialised from :attr:`style`.
     style_plugin: "BaseNameStyle" = field(init=False)
 
-    #: Whether or not to abbreviate first names.
+    #: Whether to abbreviate first names.
     abbreviate: bool = True
 
     #: Separator between persons.
