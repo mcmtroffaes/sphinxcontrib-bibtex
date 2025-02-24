@@ -495,7 +495,7 @@ class BibtexDomain(Domain):
 
     def get_entries(self, bibfiles: List[str]) -> Iterable["Entry"]:
         """Return all bibliography entries from the bib files, unsorted (i.e.
-        in order of appearance in the bib files.
+        in order of appearance in the bib files).
         """
         for bibfile in bibfiles:
             for key in self.bibdata.bibfiles[bibfile].keys:
