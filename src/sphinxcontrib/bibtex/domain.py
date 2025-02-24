@@ -1,18 +1,19 @@
 """
-    Classes and methods to maintain any bibtex information that is stored
-    outside the doctree.
+Classes and methods to maintain any bibtex information that is stored
+outside the doctree.
 
-    .. autoclass:: Citation
-        :members:
+.. autoclass:: Citation
+    :members:
 
-    .. autoclass:: BibtexDomain
-        :members:
+.. autoclass:: BibtexDomain
+    :members:
 """
 
 import ast
 import re
 from typing import (
     TYPE_CHECKING,
+    AbstractSet,
     Dict,
     Iterable,
     List,
@@ -67,7 +68,6 @@ def _raise_invalid_node(node):
 
 
 class _FilterVisitor(ast.NodeVisitor):
-
     """Visit the abstract syntax tree of a parsed filter expression."""
 
     entry = None
@@ -329,7 +329,7 @@ class BibtexDomain(Domain):
             if bib_key.docname == docname:
                 del self.bibliographies[bib_key]
 
-    def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
+    def merge_domaindata(self, docnames: AbstractSet[str], otherdata: Dict) -> None:
         for bib_key, bib_value in otherdata["bibliographies"].items():
             if bib_key.docname in docnames:
                 self.bibliographies[bib_key] = bib_value
@@ -395,7 +395,7 @@ class BibtexDomain(Domain):
                         )
         return []  # expects list of updated docnames
 
-    def resolve_xref(
+    def resolve_xref(  # type: ignore
         self,
         env: "BuildEnvironment",
         fromdocname: str,
@@ -405,6 +405,9 @@ class BibtexDomain(Domain):
         node: "pending_xref",
         contnode: docutils.nodes.Element,
     ) -> docutils.nodes.Element:
+        # TODO: sphinx>7 has docutils.nodes.reference | None return type...
+        # TODO: for now we ignore this type error, seems to work 🤞
+        # TODO: create pending_xref for each citation target instead, in CiteRole?
         """Replace node by list of citation references (one for each key)."""
         targets = parse_citation_targets(target)
         keys: Dict[str, CitationTarget] = {target2.key: target2 for target2 in targets}
@@ -450,7 +453,7 @@ class BibtexDomain(Domain):
         result_node += formatted_references.render(self.backend)
         return result_node
 
-    def resolve_any_xref(
+    def resolve_any_xref(  # type: ignore
         self,
         env: "BuildEnvironment",
         fromdocname: str,
@@ -459,6 +462,9 @@ class BibtexDomain(Domain):
         node: "pending_xref",
         contnode: docutils.nodes.Element,
     ) -> List[Tuple[str, docutils.nodes.Element]]:
+        # TODO: sphinx>7 has List[Tuple[str, docutils.nodes.reference]] return type...
+        # TODO: for now we ignore this type error, seems to work 🤞
+        # TODO: create pending_xref for each citation target instead, in CiteRole?
         """Replace node by list of citation references (one for each key),
         provided that the target has citation keys.
         """
@@ -581,9 +587,11 @@ class BibtexDomain(Domain):
                 yield (
                     entry,
                     style.format_entry(bibliography.labelprefix + label, entry),
-                    style2.format_entry(bibliography.labelprefix + label, entry)
-                    if style2
-                    else None,
+                    (
+                        style2.format_entry(bibliography.labelprefix + label, entry)
+                        if style2
+                        else None
+                    ),
                 )
             except FieldIsMissing as exc:
                 logger.warning(

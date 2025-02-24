@@ -1,8 +1,8 @@
 """
-    test_natbib
-    ~~~~~~~~~~~
+test_natbib
+~~~~~~~~~~~
 
-    Test the natbib extension, which serves as an example for comparison.
+Test the natbib extension, which serves as an example for comparison.
 """
 
 import pytest

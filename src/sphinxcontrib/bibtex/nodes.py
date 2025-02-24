@@ -1,8 +1,8 @@
 """
-    .. autoclass:: bibliography
-    .. autoclass:: raw_latex
-    .. autofunction:: visit_raw_latex
-    .. autofunction:: depart_raw_latex
+.. autoclass:: bibliography
+.. autoclass:: raw_latex
+.. autofunction:: visit_raw_latex
+.. autofunction:: depart_raw_latex
 """
 
 from docutils import nodes

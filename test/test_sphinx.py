@@ -1,8 +1,8 @@
 """
-    test_sphinx
-    ~~~~~~~~~~~
+test_sphinx
+~~~~~~~~~~~
 
-    General Sphinx test and check output.
+General Sphinx test and check output.
 """
 
 import pytest

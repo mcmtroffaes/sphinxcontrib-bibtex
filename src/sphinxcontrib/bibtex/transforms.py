@@ -1,10 +1,11 @@
 """
-    .. autoclass:: BibliographyTransform
-        :show-inheritance:
+.. autoclass:: BibliographyTransform
+    :show-inheritance:
 
-        .. autoattribute:: default_priority
-        .. automethod:: run
+    .. autoattribute:: default_priority
+    .. automethod:: run
 """
+
 from itertools import zip_longest
 from typing import TYPE_CHECKING, cast
 

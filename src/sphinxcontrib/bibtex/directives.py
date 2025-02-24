@@ -1,17 +1,17 @@
 """
-    .. autoclass:: BibliographyKey
-        :members:
+.. autoclass:: BibliographyKey
+    :members:
 
-    .. autoclass:: BibliographyValue
-        :members:
+.. autoclass:: BibliographyValue
+    :members:
 
-    .. autoclass:: BibliographyDirective
+.. autoclass:: BibliographyDirective
 
-        .. automethod:: run
+    .. automethod:: run
 """
 
 import ast  # parse(), used for filter
-from typing import TYPE_CHECKING, Dict, List, NamedTuple, cast
+from typing import TYPE_CHECKING, Dict, List, NamedTuple, Sequence, cast
 
 import docutils.nodes
 import docutils.parsers.rst.directives as directives
@@ -54,7 +54,6 @@ class BibliographyValue(NamedTuple):
 
 
 class BibliographyDirective(Directive):
-
     """Class for processing the :rst:dir:`bibliography` directive.
 
     Produces a
@@ -91,7 +90,7 @@ class BibliographyDirective(Directive):
         "keyprefix": directives.unchanged,
     }
 
-    def _get_filter(self):
+    def _get_filter(self) -> ast.AST:
         """Get parsed filter from options."""
         env = cast("BuildEnvironment", self.state.document.settings.env)
         if "filter" in self.options:
@@ -138,7 +137,7 @@ class BibliographyDirective(Directive):
             # the default filter: include only cited entries
             return ast.parse("cited")
 
-    def run(self):
+    def run(self) -> Sequence[docutils.nodes.Node]:
         """Process .bib files, set file dependencies, and create a
         node that is to be transformed to the entries of the
         bibliography.
@@ -175,13 +174,15 @@ class BibliographyDirective(Directive):
                 subtype="list_type_error",
             )
             list_ = "citation"
+        citation_node_class: type[docutils.nodes.Element]
         if list_ in {"bullet", "enumerated"}:
             citation_node_class = docutils.nodes.list_item
         else:
             citation_node_class = docutils.nodes.citation
-        bibliography_count = env.temp_data["bibtex_bibliography_count"] = (
-            env.temp_data.get("bibtex_bibliography_count", 0) + 1
+        env.temp_data["bibtex_bibliography_count"] = (
+            env.temp_data.get("bibtex_bibliography_count", 0) + 1  # type: ignore
         )
+        bibliography_count: int = env.temp_data["bibtex_bibliography_count"]
         ids = set(self.state.document.ids.keys())
         node = bibliography_node(
             "",
