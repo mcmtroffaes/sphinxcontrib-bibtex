@@ -1,6 +1,7 @@
 """
-    .. autofunction:: setup
+.. autofunction:: setup
 """
+
 import sys
 from typing import Any, Dict
 

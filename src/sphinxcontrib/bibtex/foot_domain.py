@@ -1,11 +1,11 @@
 """
-    Domain for footnote citations.
+Domain for footnote citations.
 
-    .. autoclass:: BibtexFootDomain
-        :members:
+.. autoclass:: BibtexFootDomain
+    :members:
 """
 
-from typing import TYPE_CHECKING, Dict, List, Tuple, AbstractSet
+from typing import TYPE_CHECKING, AbstractSet, Dict, List, Tuple
 
 import docutils.nodes
 import docutils.utils

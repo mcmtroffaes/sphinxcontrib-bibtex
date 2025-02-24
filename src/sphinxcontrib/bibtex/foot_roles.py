@@ -1,8 +1,8 @@
 """
-    .. autoclass:: FootCiteRole
-        :show-inheritance:
+.. autoclass:: FootCiteRole
+    :show-inheritance:
 
-        .. automethod:: result_nodes
+    .. automethod:: result_nodes
 """
 
 from typing import TYPE_CHECKING, List, Tuple, cast
@@ -54,11 +54,15 @@ class FootCiteRole(XRefRole):
         try:
             foot_bibliography = env.temp_data["bibtex_foot_bibliography"]
         except KeyError:
-            env.temp_data[
-                "bibtex_foot_bibliography"
-            ] = foot_bibliography = foot_domain.bibliography_header.deepcopy()
-        foot_old_refs: set[str] = env.temp_data.setdefault("bibtex_foot_old_refs", set())
-        foot_new_refs: set[str] = env.temp_data.setdefault("bibtex_foot_new_refs", set())
+            env.temp_data["bibtex_foot_bibliography"] = foot_bibliography = (
+                foot_domain.bibliography_header.deepcopy()
+            )
+        foot_old_refs: set[str] = env.temp_data.setdefault(
+            "bibtex_foot_old_refs", set()
+        )
+        foot_new_refs: set[str] = env.temp_data.setdefault(
+            "bibtex_foot_new_refs", set()
+        )
         style = find_plugin(
             "pybtex.style.formatting", self.config.bibtex_default_style
         )()

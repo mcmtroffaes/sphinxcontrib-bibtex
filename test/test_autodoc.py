@@ -1,8 +1,8 @@
 """
-    test_autodoc
-    ~~~~~~~~~~~~
+test_autodoc
+~~~~~~~~~~~~
 
-    Test with autodoc.
+Test with autodoc.
 """
 
 import test.some_module.cite

@@ -1,11 +1,11 @@
 """
-    .. autoclass:: CitationRef
-        :members:
+.. autoclass:: CitationRef
+    :members:
 
-    .. autoclass:: CiteRole
-        :show-inheritance:
+.. autoclass:: CiteRole
+    :show-inheritance:
 
-        .. automethod:: result_nodes
+    .. automethod:: result_nodes
 """
 
 from typing import TYPE_CHECKING, List, NamedTuple, cast
@@ -30,7 +30,6 @@ class CitationRef(NamedTuple):
 
 
 class CiteRole(XRefRole):
-
     """Class for processing the :rst:role:`cite` role."""
 
     backend = find_plugin("pybtex.backends", "docutils")()

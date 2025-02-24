@@ -1,18 +1,19 @@
 """
-    Classes and methods to maintain any bibtex information that is stored
-    outside the doctree.
+Classes and methods to maintain any bibtex information that is stored
+outside the doctree.
 
-    .. autoclass:: Citation
-        :members:
+.. autoclass:: Citation
+    :members:
 
-    .. autoclass:: BibtexDomain
-        :members:
+.. autoclass:: BibtexDomain
+    :members:
 """
 
 import ast
 import re
 from typing import (
     TYPE_CHECKING,
+    AbstractSet,
     Dict,
     Iterable,
     List,
@@ -21,7 +22,6 @@ from typing import (
     Set,
     Tuple,
     cast,
-    AbstractSet,
 )
 
 import docutils.frontend
@@ -68,7 +68,6 @@ def _raise_invalid_node(node):
 
 
 class _FilterVisitor(ast.NodeVisitor):
-
     """Visit the abstract syntax tree of a parsed filter expression."""
 
     entry = None
@@ -582,9 +581,11 @@ class BibtexDomain(Domain):
                 yield (
                     entry,
                     style.format_entry(bibliography.labelprefix + label, entry),
-                    style2.format_entry(bibliography.labelprefix + label, entry)
-                    if style2
-                    else None,
+                    (
+                        style2.format_entry(bibliography.labelprefix + label, entry)
+                        if style2
+                        else None
+                    ),
                 )
             except FieldIsMissing as exc:
                 logger.warning(

@@ -1,7 +1,7 @@
 """
-    .. autoclass:: FootBibliographyDirective
+.. autoclass:: FootBibliographyDirective
 
-        .. automethod:: run
+    .. automethod:: run
 """
 
 from typing import TYPE_CHECKING, cast
@@ -18,7 +18,6 @@ if TYPE_CHECKING:
 
 
 class FootBibliographyDirective(Directive):
-
     """Class for processing the :rst:dir:`footbibliography` directive."""
 
     required_arguments = 0

@@ -1,20 +1,21 @@
 """
-    Classes and methods to work with bib files.
+Classes and methods to work with bib files.
 
-    .. autoclass:: BibFile
-        :members:
+.. autoclass:: BibFile
+    :members:
 
-    .. autoclass:: BibData
-        :members:
+.. autoclass:: BibData
+    :members:
 
-    .. autofunction:: normpath_filename
+.. autofunction:: normpath_filename
 
-    .. autofunction:: parse_bibdata
+.. autofunction:: parse_bibdata
 
-    .. autofunction:: is_bibdata_outdated
+.. autofunction:: is_bibdata_outdated
 
-    .. autofunction:: process_bibdata
+.. autofunction:: process_bibdata
 """
+
 import math
 import os.path
 from typing import TYPE_CHECKING, Dict, List, NamedTuple, Set

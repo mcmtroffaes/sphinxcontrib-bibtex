@@ -1,13 +1,13 @@
 """
-    .. autoclass:: BibliographyKey
-        :members:
+.. autoclass:: BibliographyKey
+    :members:
 
-    .. autoclass:: BibliographyValue
-        :members:
+.. autoclass:: BibliographyValue
+    :members:
 
-    .. autoclass:: BibliographyDirective
+.. autoclass:: BibliographyDirective
 
-        .. automethod:: run
+    .. automethod:: run
 """
 
 import ast  # parse(), used for filter
@@ -54,7 +54,6 @@ class BibliographyValue(NamedTuple):
 
 
 class BibliographyDirective(Directive):
-
     """Class for processing the :rst:dir:`bibliography` directive.
 
     Produces a
