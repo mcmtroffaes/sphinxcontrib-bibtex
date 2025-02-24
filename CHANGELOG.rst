@@ -10,6 +10,9 @@
 
 * Python 3.7 is EOL and is therefore no longer officially supported.
 
+* FootCiteRole now derives from SphinxRole instead of XRefRole,
+  simplifying the implementation.
+
 2.6.3 (12 September 2024)
 -------------------------
 
