@@ -21,6 +21,7 @@ from typing import (
     Set,
     Tuple,
     cast,
+    AbstractSet,
 )
 
 import docutils.frontend
@@ -329,7 +330,7 @@ class BibtexDomain(Domain):
             if bib_key.docname == docname:
                 del self.bibliographies[bib_key]
 
-    def merge_domaindata(self, docnames: List[str], otherdata: Dict) -> None:
+    def merge_domaindata(self, docnames: AbstractSet[str], otherdata: Dict) -> None:
         for bib_key, bib_value in otherdata["bibliographies"].items():
             if bib_key.docname in docnames:
                 self.bibliographies[bib_key] = bib_value

@@ -57,15 +57,15 @@ class FootCiteRole(XRefRole):
             env.temp_data[
                 "bibtex_foot_bibliography"
             ] = foot_bibliography = foot_domain.bibliography_header.deepcopy()
-        foot_old_refs = env.temp_data.setdefault("bibtex_foot_old_refs", set())
-        foot_new_refs = env.temp_data.setdefault("bibtex_foot_new_refs", set())
+        foot_old_refs: set[str] = env.temp_data.setdefault("bibtex_foot_old_refs", set())
+        foot_new_refs: set[str] = env.temp_data.setdefault("bibtex_foot_new_refs", set())
         style = find_plugin(
             "pybtex.style.formatting", self.config.bibtex_default_style
         )()
         references = []
         domain = cast("BibtexDomain", self.env.get_domain("cite"))
         # count only incremented at directive, see foot_directives run method
-        footbibliography_count = env.temp_data.setdefault(
+        footbibliography_count: int = env.temp_data.setdefault(
             "bibtex_footbibliography_count", 0
         )
         footcite_names = env.temp_data.setdefault("bibtex_footcite_names", {})
