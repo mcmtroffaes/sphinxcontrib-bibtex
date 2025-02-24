@@ -5,11 +5,13 @@
     .. automethod:: result_nodes
 """
 
-from typing import TYPE_CHECKING, List, Tuple, cast
+from typing import TYPE_CHECKING, List, Optional, Tuple, cast
 
 import docutils.nodes
 from docutils.nodes import make_id
+from pybtex.database import Entry
 from pybtex.plugin import find_plugin
+from pybtex.style import FormattedEntry
 from sphinx.util.docutils import SphinxRole
 from sphinx.util.logging import getLogger
 
@@ -56,7 +58,7 @@ class FootCiteRole(SphinxRole):
         style = find_plugin(
             "pybtex.style.formatting", self.config.bibtex_default_style
         )()
-        references = []
+        references: List[Tuple[Entry, FormattedEntry, FootReferenceInfo]] = []
         domain = cast("BibtexDomain", self.env.get_domain("cite"))
         # count only incremented at directive, see foot_directives run method
         footbibliography_count: int = self.env.temp_data.setdefault(  # type: ignore
@@ -66,9 +68,11 @@ class FootCiteRole(SphinxRole):
             "bibtex_footcite_names", {}
         )
         for key in keys:
-            entry = domain.bibdata.data.entries.get(key)
+            entry: Optional[Entry] = domain.bibdata.data.entries.get(key)
             if entry is not None:
-                formatted_entry = style.format_entry(label="", entry=entry)
+                formatted_entry: FormattedEntry = style.format_entry(
+                    label="", entry=entry
+                )
                 if key not in (foot_old_refs | foot_new_refs):
                     footnote = docutils.nodes.footnote(auto=1)
                     # no automatic ids for footnotes: force non-empty template
