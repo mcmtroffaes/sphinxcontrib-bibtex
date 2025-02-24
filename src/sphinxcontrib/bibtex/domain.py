@@ -395,7 +395,7 @@ class BibtexDomain(Domain):
                         )
         return []  # expects list of updated docnames
 
-    def resolve_xref(
+    def resolve_xref(  # type: ignore
         self,
         env: "BuildEnvironment",
         fromdocname: str,
@@ -405,6 +405,9 @@ class BibtexDomain(Domain):
         node: "pending_xref",
         contnode: docutils.nodes.Element,
     ) -> docutils.nodes.Element:
+        # TODO: sphinx>7 has docutils.nodes.reference | None return type...
+        # TODO: for now we ignore this type error, seems to work 🤞
+        # TODO: create pending_xref for each citation target instead, in CiteRole?
         """Replace node by list of citation references (one for each key)."""
         targets = parse_citation_targets(target)
         keys: Dict[str, CitationTarget] = {target2.key: target2 for target2 in targets}
@@ -450,7 +453,7 @@ class BibtexDomain(Domain):
         result_node += formatted_references.render(self.backend)
         return result_node
 
-    def resolve_any_xref(
+    def resolve_any_xref(  # type: ignore
         self,
         env: "BuildEnvironment",
         fromdocname: str,
@@ -459,6 +462,9 @@ class BibtexDomain(Domain):
         node: "pending_xref",
         contnode: docutils.nodes.Element,
     ) -> List[Tuple[str, docutils.nodes.Element]]:
+        # TODO: sphinx>7 has List[Tuple[str, docutils.nodes.reference]] return type...
+        # TODO: for now we ignore this type error, seems to work 🤞
+        # TODO: create pending_xref for each citation target instead, in CiteRole?
         """Replace node by list of citation references (one for each key),
         provided that the target has citation keys.
         """
