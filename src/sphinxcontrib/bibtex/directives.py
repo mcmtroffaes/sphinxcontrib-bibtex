@@ -179,9 +179,10 @@ class BibliographyDirective(Directive):
             citation_node_class = docutils.nodes.list_item
         else:
             citation_node_class = docutils.nodes.citation
-        bibliography_count = env.temp_data["bibtex_bibliography_count"] = (
-            env.temp_data.get("bibtex_bibliography_count", 0) + 1
+        env.temp_data["bibtex_bibliography_count"] = (
+            env.temp_data.get("bibtex_bibliography_count", 0) + 1  # type: ignore
         )
+        bibliography_count: int = env.temp_data["bibtex_bibliography_count"]
         ids = set(self.state.document.ids.keys())
         node = bibliography_node(
             "",

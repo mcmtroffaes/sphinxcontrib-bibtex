@@ -57,10 +57,10 @@ class FootCiteRole(XRefRole):
             env.temp_data["bibtex_foot_bibliography"] = foot_bibliography = (
                 foot_domain.bibliography_header.deepcopy()
             )
-        foot_old_refs: set[str] = env.temp_data.setdefault(
+        foot_old_refs: set[str] = env.temp_data.setdefault(  # type: ignore
             "bibtex_foot_old_refs", set()
         )
-        foot_new_refs: set[str] = env.temp_data.setdefault(
+        foot_new_refs: set[str] = env.temp_data.setdefault(  # type: ignore
             "bibtex_foot_new_refs", set()
         )
         style = find_plugin(
@@ -69,10 +69,10 @@ class FootCiteRole(XRefRole):
         references = []
         domain = cast("BibtexDomain", self.env.get_domain("cite"))
         # count only incremented at directive, see foot_directives run method
-        footbibliography_count: int = env.temp_data.setdefault(
+        footbibliography_count: int = env.temp_data.setdefault(  # type: ignore
             "bibtex_footbibliography_count", 0
         )
-        footcite_names = env.temp_data.setdefault("bibtex_footcite_names", {})
+        footcite_names: dict[str, str] = env.temp_data.setdefault("bibtex_footcite_names", {})  # type: ignore
         for key in keys:
             entry = domain.bibdata.data.entries.get(key)
             if entry is not None:
