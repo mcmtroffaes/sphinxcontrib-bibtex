@@ -13,6 +13,9 @@
 * FootCiteRole now derives from SphinxRole instead of XRefRole,
   simplifying the implementation.
 
+* Bib files in conf.py are now resolved relative to confdir instead of srcdir
+  (reported and fixed by rgambord, see issue #357 and pull request #358).
+
 2.6.3 (12 September 2024)
 -------------------------
 
