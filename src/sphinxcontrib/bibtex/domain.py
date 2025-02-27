@@ -11,6 +11,7 @@ outside the doctree.
 
 import ast
 import re
+from pathlib import Path
 from typing import (
     TYPE_CHECKING,
     AbstractSet,
@@ -300,11 +301,14 @@ class BibtexDomain(Domain):
         # check config
         if env.app.config.bibtex_bibfiles is None:
             raise ExtensionError("You must configure the bibtex_bibfiles setting")
-        # update bib file information in the cache
+        
+        # canonicalize bibfile paths relative to confdir
         bibfiles = [
-            normpath_filename(env, "/" + bibfile)
+            str((Path(env.app.confdir) / bibfile).resolve())
             for bibfile in env.app.config.bibtex_bibfiles
         ]
+
+        # update bib file information in the cache
         self.data["bibdata"] = process_bibdata(
             self.bibdata, bibfiles, env.app.config.bibtex_encoding
         )

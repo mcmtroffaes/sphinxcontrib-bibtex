@@ -11,6 +11,7 @@
 """
 
 import ast  # parse(), used for filter
+from pathlib import Path
 from typing import TYPE_CHECKING, Dict, List, NamedTuple, Sequence, cast
 
 import docutils.nodes
@@ -148,7 +149,7 @@ class BibliographyDirective(Directive):
         if self.arguments:
             bibfiles = []
             for bibfile in self.arguments[0].split():
-                normbibfile = normpath_filename(env, bibfile)
+                normbibfile = str(Path(normpath_filename(env, bibfile)).resolve())
                 if normbibfile not in domain.bibdata.bibfiles:
                     logger.warning(
                         "{0} not found or not configured"
