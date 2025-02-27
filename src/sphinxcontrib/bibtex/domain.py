@@ -41,7 +41,7 @@ from sphinx.locale import _
 
 import sphinxcontrib.bibtex.plugin
 
-from .bibfile import BibData, normpath_filename, process_bibdata
+from .bibfile import BibData, process_bibdata
 from .citation_target import CitationTarget, parse_citation_targets
 from .roles import CiteRole
 from .style.referencing import BaseReferenceStyle, format_references
@@ -301,13 +301,11 @@ class BibtexDomain(Domain):
         # check config
         if env.app.config.bibtex_bibfiles is None:
             raise ExtensionError("You must configure the bibtex_bibfiles setting")
-        
         # canonicalize bibfile paths relative to confdir
         bibfiles = [
             str((Path(env.app.confdir) / bibfile).resolve())
             for bibfile in env.app.config.bibtex_bibfiles
         ]
-
         # update bib file information in the cache
         self.data["bibdata"] = process_bibdata(
             self.bibdata, bibfiles, env.app.config.bibtex_encoding
