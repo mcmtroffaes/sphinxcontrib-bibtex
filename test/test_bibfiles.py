@@ -1,6 +1,7 @@
 import re
 import shutil
 import time
+from pathlib import Path
 from test.common import html_citations
 
 import pytest
@@ -139,3 +140,23 @@ def test_bibfiles_multiple_keys(app, warning) -> None:
 def test_bibfiles_crossref(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
+
+
+@pytest.mark.sphinx(
+    "html",
+    testroot="bibfiles_absolute_path",
+    confoverrides={
+        "bibtex_bibfiles": [
+            Path(__file__).parent / "roots" / "test-debug_minimal_example" / "refs.bib"
+        ],
+    },
+)
+def test_bibfiles_absolute_path(app, warning) -> None:
+    app.build()
+    assert not warning.getvalue()
+    assert re.search(
+        "parsing bibtex file .*test-debug_minimal_example.* parsed 1 entries",
+        app._status.getvalue(),
+    )
+    output = (app.outdir / "index.html").read_text()
+    assert len(html_citations().findall(output)) == 1

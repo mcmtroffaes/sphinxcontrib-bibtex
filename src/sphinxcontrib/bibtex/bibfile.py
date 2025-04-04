@@ -25,7 +25,6 @@ from pybtex.database import BibliographyData, BibliographyDataError
 from pybtex.database.input.bibtex import Parser
 from sphinx.util.logging import getLogger
 
-
 logger = getLogger(__name__)
 
 
