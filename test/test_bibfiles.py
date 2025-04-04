@@ -2,9 +2,6 @@ import re
 import shutil
 import time
 from pathlib import Path
-
-from sphinx.testing.util import SphinxTestApp
-
 from test.common import html_citations
 
 import pytest
@@ -159,7 +156,7 @@ def test_bibfiles_absolute_path(app, warning) -> None:
     assert not warning.getvalue()
     assert re.search(
         "parsing bibtex file .*test-debug_minimal_example.* parsed 1 entries",
-        app._status.getvalue()
+        app._status.getvalue(),
     )
     output = (app.outdir / "index.html").read_text()
     assert len(html_citations().findall(output)) == 1
