@@ -503,8 +503,8 @@ still want to enumerate the entries continuously.
 
 .. _section-listing-citation-keys:
 
-Listing Citation Keys
-~~~~~~~~~~~~~~~~~~~~~
+Manually Managing Citation Keys
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. versionadded:: 2.3.0
 
