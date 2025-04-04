@@ -8,7 +8,7 @@
   in the latest release of pybtex.
   See discussion in issue #345.
 
-* Python 3.7 is EOL and is therefore no longer officially supported.
+* Python 3.7 and 3.8 are EOL and are therefore no longer officially supported.
 
 * FootCiteRole now derives from SphinxRole instead of XRefRole,
   simplifying the implementation.
