@@ -303,7 +303,7 @@ class BibtexDomain(Domain):
             raise ExtensionError("You must configure the bibtex_bibfiles setting")
         # canonicalize bibfile paths relative to confdir
         bibfiles = [
-            str((Path(env.app.confdir) / bibfile).resolve())
+            (Path(env.app.confdir) / bibfile).resolve()
             for bibfile in env.app.config.bibtex_bibfiles
         ]
         # update bib file information in the cache
@@ -495,7 +495,7 @@ class BibtexDomain(Domain):
             for target in citation_ref.targets:
                 yield target.key
 
-    def get_entries(self, bibfiles: List[str]) -> Iterable["Entry"]:
+    def get_entries(self, bibfiles: List[Path]) -> Iterable["Entry"]:
         """Return all bibliography entries from the bib files, unsorted (i.e.
         in order of appearance in the bib files).
         """

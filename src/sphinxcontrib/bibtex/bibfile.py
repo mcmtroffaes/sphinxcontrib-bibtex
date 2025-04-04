@@ -17,16 +17,13 @@ Classes and methods to work with bib files.
 """
 
 import math
-import os.path
-from typing import TYPE_CHECKING, Dict, List, NamedTuple, Set
+from pathlib import Path
+from typing import Dict, List, NamedTuple, Set
 
 from docutils.nodes import make_id
 from pybtex.database import BibliographyData, BibliographyDataError
 from pybtex.database.input.bibtex import Parser
 from sphinx.util.logging import getLogger
-
-if TYPE_CHECKING:
-    from sphinx.environment import BuildEnvironment
 
 
 logger = getLogger(__name__)
@@ -43,30 +40,25 @@ class BibData(NamedTuple):
     """Contains information about a collection of bib files."""
 
     encoding: str  #: Encoding of all bib files.
-    bibfiles: Dict[str, BibFile]  #: Maps bib filename to information about it.
+    bibfiles: Dict[Path, BibFile]  #: Maps bib filename to information about it.
     data: BibliographyData  #: Data parsed from all bib files.
 
 
-def normpath_filename(env: "BuildEnvironment", filename: str) -> str:
-    """Return normalised path to *filename* for the given environment *env*."""
-    return os.path.normpath(env.relfn2path(filename.strip())[1])
-
-
-def get_mtime(bibfilename: str) -> float:
+def get_mtime(bibfilename: Path) -> float:
     try:
-        return os.path.getmtime(bibfilename)
+        return bibfilename.lstat().st_mtime
     except OSError:
         return -math.inf
 
 
-def parse_bibdata(bibfilenames: List[str], encoding: str) -> BibData:
+def parse_bibdata(bibfilenames: List[Path], encoding: str) -> BibData:
     """Parse *bibfilenames* with given *encoding*, and return parsed data."""
     parser = Parser(encoding)
-    bibfiles: Dict[str, BibFile] = {}
+    bibfiles: Dict[Path, BibFile] = {}
     keys: Dict[str, None] = {}
     for filename in bibfilenames:
         logger.info("parsing bibtex file {0}... ".format(filename), nonl=True)
-        if not os.path.isfile(filename):
+        if not filename.is_file():
             logger.warning(
                 "could not open bibtex file {0}.".format(filename),
                 type="bibtex",
@@ -91,7 +83,7 @@ def parse_bibdata(bibfilenames: List[str], encoding: str) -> BibData:
 
 
 def is_bibdata_outdated(
-    bibdata: BibData, bibfilenames: List[str], encoding: str
+    bibdata: BibData, bibfilenames: List[Path], encoding: str
 ) -> bool:
     return (
         bibdata.encoding != encoding
@@ -104,7 +96,7 @@ def is_bibdata_outdated(
 
 
 def process_bibdata(
-    bibdata: BibData, bibfilenames: List[str], encoding: str
+    bibdata: BibData, bibfilenames: List[Path], encoding: str
 ) -> BibData:
     """Parse *bibfilenames* and store parsed data in *bibdata*."""
     logger.info("checking bibtex cache... ", nonl=True)

@@ -19,7 +19,7 @@ import docutils.parsers.rst.directives as directives
 import sphinx.util
 from docutils.parsers.rst import Directive
 
-from .bibfile import _make_ids, normpath_filename
+from .bibfile import _make_ids
 from .nodes import bibliography as bibliography_node
 
 if TYPE_CHECKING:
@@ -42,7 +42,7 @@ class BibliographyValue(NamedTuple):
     """Contains information about a bibliography directive."""
 
     line: int  #: Line number of the directive in the document.
-    bibfiles: List[str]  #: List of bib files for this directive.
+    bibfiles: List[Path]  #: List of bib files for this directive.
     style: str  #: The pybtex style.
     list_: str  #: The list type.
     enumtype: str  #: The sequence type (for enumerated lists).
@@ -147,23 +147,23 @@ class BibliographyDirective(Directive):
         domain = cast("BibtexDomain", env.get_domain("cite"))
         filter_ = self._get_filter()
         if self.arguments:
-            bibfiles = []
-            for bibfile in self.arguments[0].split():
-                normbibfile = str(Path(normpath_filename(env, bibfile)).resolve())
-                if normbibfile not in domain.bibdata.bibfiles:
+            bibfiles: list[Path] = []
+            for bibfile_str in self.arguments[0].split():
+                bibfile = Path(env.relfn2path(bibfile_str)[1]).resolve()
+                if bibfile not in domain.bibdata.bibfiles:
                     logger.warning(
                         "{0} not found or not configured"
-                        " in bibtex_bibfiles".format(bibfile),
+                        " in bibtex_bibfiles".format(bibfile_str),
                         location=(env.docname, self.lineno),
                         type="bibtex",
                         subtype="bibfile_error",
                     )
                 else:
-                    bibfiles.append(normbibfile)
+                    bibfiles.append(bibfile)
         else:
             bibfiles = list(domain.bibdata.bibfiles.keys())
         for bibfile in bibfiles:
-            env.note_dependency(bibfile)
+            env.note_dependency(str(bibfile))
         # generate nodes and ids
         keyprefix: str = self.options.get("keyprefix", "")
         list_: str = self.options.get("list", "citation")
