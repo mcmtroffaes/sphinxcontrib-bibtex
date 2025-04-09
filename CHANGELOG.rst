@@ -16,6 +16,11 @@
 * Bib files in conf.py are now resolved relative to confdir instead of srcdir
   (reported and fixed by rgambord, see issue #357 and pull request #358).
 
+* Duplicate label warnings are no longer issued if the non-prefixed keys
+  are identical. This allows having duplicate citations,
+  as long as the keys are differently prefixed, which is a common use case.
+  See issue #365 reported by ego-thales.
+
 2.6.3 (12 September 2024)
 -------------------------
 
