@@ -16,6 +16,17 @@ def test_duplicate_label(app, warning) -> None:
     assert html_citations(label="1").search(output2)
 
 
+@pytest.mark.sphinx("html", testroot="duplicate_label_2")
+def test_duplicate_label_2(app, warning) -> None:
+    # see github issue #365
+    app.build()
+    assert not warning.getvalue()
+    output = (app.outdir / "doc1.html").read_text()
+    output2 = (app.outdir / "doc2.html").read_text()
+    assert html_citations(label="Tes").search(output)
+    assert html_citations(label="Tes").search(output2)
+
+
 @pytest.mark.sphinx("html", testroot="duplicate_citation")
 def test_duplicate_citation(app, warning) -> None:
     app.build()

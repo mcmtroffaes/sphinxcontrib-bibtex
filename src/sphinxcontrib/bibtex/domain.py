@@ -380,8 +380,8 @@ class BibtexDomain(Domain):
                 if bibliography.list_ == "citation":
                     used_keys.add(key)
                     if formatted_entry.label not in used_labels:
-                        used_labels[formatted_entry.label] = key
-                    elif used_labels[formatted_entry.label] != key:
+                        used_labels[formatted_entry.label] = formatted_entry.key
+                    elif used_labels[formatted_entry.label] != formatted_entry.key:
                         # if used_label[label] == key then already
                         # duplicate key warning
                         logger.warning(
@@ -389,7 +389,7 @@ class BibtexDomain(Domain):
                             % (
                                 formatted_entry.label,
                                 used_labels[formatted_entry.label],
-                                key,
+                                formatted_entry.key,
                             ),
                             location=(bibliography_key.docname, bibliography.line),
                             type="bibtex",
