@@ -613,6 +613,30 @@ For example:
 
    :ref:`section-local-bibliographies`
 
+.. _section-removing-backrefs:
+
+Removing Back References
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+By default, for every citation,
+Sphinx will generate back references, or "backrefs",
+to where the citation was cited from,
+at least if they are in the same document.
+If you do not want these back references,
+you can remove them using a css style sheet, as follows.
+First, add this to your ``conf.py``:
+
+.. code:: python
+    html_static_path = ["_static"]
+    html_css_files = ["custom.css"]
+
+Then, use this code for your ``_static/custom.css`` style sheet:
+
+.. code:: css
+    .backrefs {
+        display: none;
+    }
+
 .. _section-filtering:
 
 Filtering
