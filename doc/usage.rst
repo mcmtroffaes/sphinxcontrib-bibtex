@@ -585,7 +585,6 @@ showing in both of the documents. In one document you could have:
    See :cite:`a-boole1854`
 
    .. bibliography::
-      :labelprefix: A
       :keyprefix: a-
 
 whilst in the other document you could have:
@@ -595,7 +594,6 @@ whilst in the other document you could have:
    See :cite:`b-boole1854`
 
    .. bibliography::
-      :labelprefix: B
       :keyprefix: b-
 
 The bibliographies will then both generate an entry for ``boole1854``,
@@ -607,7 +605,6 @@ For example:
 .. code-block:: rest
 
    .. bibliography::
-      :labelprefix: B
       :keyprefix: b-
 
       nelson1987
