@@ -17,7 +17,7 @@ def test_duplicate_label(app, warning) -> None:
 
 
 @pytest.mark.sphinx("html", testroot="duplicate_label_2")
-def test_duplicate_label(app, warning) -> None:
+def test_duplicate_label_2(app, warning) -> None:
     # see github issue #365
     app.build()
     assert not warning.getvalue()
