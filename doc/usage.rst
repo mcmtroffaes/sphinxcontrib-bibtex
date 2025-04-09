@@ -627,12 +627,14 @@ you can remove them using a css style sheet, as follows.
 First, add this to your ``conf.py``:
 
 .. code-block:: python
+
     html_static_path = ["_static"]
     html_css_files = ["custom.css"]
 
 Then, use this code for your ``_static/custom.css`` style sheet:
 
 .. code-block:: css
+
     .backrefs {
         display: none;
     }

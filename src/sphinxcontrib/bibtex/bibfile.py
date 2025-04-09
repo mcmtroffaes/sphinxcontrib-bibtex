@@ -7,8 +7,6 @@ Classes and methods to work with bib files.
 .. autoclass:: BibData
     :members:
 
-.. autofunction:: normpath_filename
-
 .. autofunction:: parse_bibdata
 
 .. autofunction:: is_bibdata_outdated

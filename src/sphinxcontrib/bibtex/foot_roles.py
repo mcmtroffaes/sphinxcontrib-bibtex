@@ -2,7 +2,7 @@
 .. autoclass:: FootCiteRole
     :show-inheritance:
 
-    .. automethod:: result_nodes
+    .. automethod:: run
 """
 
 from typing import TYPE_CHECKING, List, Optional, Tuple, cast
