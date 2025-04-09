@@ -26,7 +26,7 @@ class FootBibliographyDirective(Directive):
 
     def run(self):
         """Set file dependencies, and insert the footnotes that were created
-        earlier by :meth:`.foot_roles.FootCiteRole.result_nodes`.
+        earlier by :meth:`.foot_roles.FootCiteRole.run`.
         """
         env = cast("BuildEnvironment", self.state.document.settings.env)
         foot_old_refs = env.temp_data.setdefault("bibtex_foot_old_refs", set())
