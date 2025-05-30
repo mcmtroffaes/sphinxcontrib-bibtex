@@ -636,8 +636,15 @@ Then, use this code for your ``_static/custom.css`` style sheet:
 .. code-block:: css
 
     .backrefs {
-        display: none;
+        font-size: 0;
     }
+    .backrefs:after {
+        font-size: initial;
+        content: "\00a0";
+    }
+
+Note that links are still rendered but invisible. This means that, for
+example, they will appear if the citation block is copy/pasted.
 
 .. _section-filtering:
 
