@@ -1,5 +1,5 @@
-2.6.5 (in development)
-----------------------
+2.6.5 (27 June 2025)
+--------------------
 
 * Require pybtex 0.25 and remove setuptools dependency hack.
 
