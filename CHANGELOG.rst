@@ -1,7 +1,8 @@
 2.6.5 (27 June 2025)
 --------------------
 
-* Require pybtex 0.25 and remove setuptools dependency hack.
+* Require pybtex 0.25 and remove setuptools dependency hack
+  (fixed by flying-sheep, see pull request #372).
 
 2.6.4 (17 June 2025)
 --------------------
