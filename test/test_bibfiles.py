@@ -125,7 +125,7 @@ def test_bibfiles_multiple_keys(app, warning) -> None:
     app.build()
     assert (
         re.search(
-            "bibliography data error in .*: repeated bibliograhpy entry: test",
+            "bibliography data error in .*: repeated bibliography entry: test",
             warning.getvalue(),
         )
         is not None
