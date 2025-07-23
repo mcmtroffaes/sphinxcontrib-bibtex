@@ -52,7 +52,7 @@ class FootBibliographyDirective(Directive):
                 docname=env.docname,
                 lineno=self.lineno,
                 ids=set(self.state.document.ids.keys()),
-                raw_id=env.app.config.bibtex_footbibliography_id.format(
+                raw_id=env.config.bibtex_footbibliography_id.format(
                     footbibliography_count=footbibliography_count
                 ),
             )

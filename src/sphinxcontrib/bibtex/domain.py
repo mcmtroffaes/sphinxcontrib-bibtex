@@ -356,8 +356,8 @@ class BibtexDomain(Domain):
             for entry, formatted_entry, tooltip_entry in self.get_formatted_entries(
                 bibliography_key,
                 docnames,
-                self.env.app.config.bibtex_tooltips,
-                self.env.app.config.bibtex_tooltips_style,
+                self.env.config.bibtex_tooltips,
+                self.env.config.bibtex_tooltips_style,
             ):
                 key = bibliography.keyprefix + formatted_entry.key
                 if bibliography.list_ == "citation" and key in used_keys:

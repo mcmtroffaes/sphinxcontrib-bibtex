@@ -192,7 +192,7 @@ class BibliographyDirective(Directive):
                 docname=env.docname,
                 lineno=self.lineno,
                 ids=ids,
-                raw_id=env.app.config.bibtex_bibliography_id.format(
+                raw_id=env.config.bibtex_bibliography_id.format(
                     bibliography_count=bibliography_count
                 ),
             ),
@@ -208,7 +208,7 @@ class BibliographyDirective(Directive):
                     docname=env.docname,
                     lineno=self.lineno,
                     ids=ids,
-                    raw_id=env.app.config.bibtex_cite_id.format(
+                    raw_id=env.config.bibtex_cite_id.format(
                         bibliography_count=bibliography_count, key=keyprefix + entry.key
                     ),
                 )
@@ -235,7 +235,7 @@ class BibliographyDirective(Directive):
             list_=list_,
             enumtype=self.options.get("enumtype", "arabic"),
             start=self.options.get("start", 1),
-            style=self.options.get("style", env.app.config.bibtex_default_style),
+            style=self.options.get("style", env.config.bibtex_default_style),
             filter_=filter_,
             labelprefix=self.options.get("labelprefix", ""),
             keyprefix=keyprefix,

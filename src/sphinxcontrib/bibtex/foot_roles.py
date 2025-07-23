@@ -77,8 +77,8 @@ class FootCiteRole(SphinxRole):
                     footnote = docutils.nodes.footnote(auto=1)
                     # no automatic ids for footnotes: force non-empty template
                     template: str = (
-                        self.env.app.config.bibtex_footcite_id
-                        if self.env.app.config.bibtex_footcite_id
+                        self.env.config.bibtex_footcite_id
+                        if self.env.config.bibtex_footcite_id
                         else "footcite-{key}"
                     )
                     raw_id = template.format(
