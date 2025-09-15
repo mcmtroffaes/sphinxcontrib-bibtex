@@ -4,15 +4,16 @@ to help understand what docutils/sphinx are doing.
 
 import shutil
 
+import docutils
 import pytest
 
 docutils_citation_xml = """
     <paragraph>
-        <reference ids="id1" internal="True" refid="label">
+        <reference ids="id1" internal="1" refid="label">
             <inline>
                 [Label]
     <citation backrefs="id1" docname="index" ids="label" names="label">
-        <label support_smartquotes="False">
+        <label support_smartquotes="0">
             Label
         <paragraph>
             The title.
@@ -22,16 +23,22 @@ bibtex_citation_xml = """
     <paragraph>
         <inline ids="id1">
             [
-            <reference internal="True" refid="id3" reftitle="The title.">
+            <reference internal="1" refid="id3" reftitle="The title.">
                 tes
             ]
     <container ids="id2">
         <citation backrefs="id1" docname="index" ids="id3">
-            <label support_smartquotes="False">
+            <label support_smartquotes="0">
                 tes
             <paragraph>
                 The title.
 """
+
+if docutils.__version_info__ < (0, 22):
+    docutils_citation_xml = docutils_citation_xml.replace('="1"', '="True"')
+    docutils_citation_xml = docutils_citation_xml.replace('="0"', '="False"')
+    bibtex_citation_xml = bibtex_citation_xml.replace('="1"', '="True"')
+    bibtex_citation_xml = bibtex_citation_xml.replace('="0"', '="False"')
 
 
 @pytest.mark.sphinx("pseudoxml", testroot="debug_docutils_citation")
@@ -70,12 +77,13 @@ def test_debug_minimal_example(app, warning) -> None:
     app.build()
     assert not warning.getvalue()
     output = (app.outdir / "index.pseudoxml").read_text()
+    docutils_0_22 = docutils.__version_info__ >= (0, 22)
     assert [line for line in output.split("\n")][1:] == [
         "    <paragraph>",
         "        See ",
         '        <inline ids="id1">',
         "            Nelson [",
-        '            <reference internal="True" refid="id4" '
+        f'            <reference internal="{1 if docutils_0_22 else True}" refid="id4" '
         'reftitle="Edward Nelson. Radically Elementary Probability Theory. '
         'Princeton University Press, 1987.">',
         "                Nel87",
@@ -84,7 +92,7 @@ def test_debug_minimal_example(app, warning) -> None:
         "        Non-standard analysis is fun ",
         '        <inline ids="id2">',
         "            [",
-        '            <reference internal="True" refid="id4" '
+        f'            <reference internal="{1 if docutils_0_22 else True}" refid="id4" '
         'reftitle="Edward Nelson. Radically Elementary Probability Theory. '
         'Princeton University Press, 1987.">',
         "                Nel87",
@@ -92,7 +100,7 @@ def test_debug_minimal_example(app, warning) -> None:
         "        .",
         '    <container ids="id3">',
         '        <citation backrefs="id1 id2" docname="index" ids="id4">',
-        '            <label support_smartquotes="False">',
+        f'            <label support_smartquotes="{0 if docutils_0_22 else False}">',
         "                Nel87",
         "            <paragraph>",
         "                Edward Nelson.",
