@@ -1,6 +1,12 @@
 2.6.6 (in development)
 ----------------------
 
+* Increase required pybtex-docutils version to 1.0.2
+  (reported by ego-thales).
+
+* Fix test suite for docutils 0.22
+  (fixed by mitya57, see pull request #377).
+
 2.6.5 (27 June 2025)
 --------------------
 
