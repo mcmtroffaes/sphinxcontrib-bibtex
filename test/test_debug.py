@@ -21,7 +21,7 @@ docutils_citation_xml = """
 
 bibtex_citation_xml = """
     <paragraph>
-        <inline ids="id1">
+        <inline classes="bibtex-citation" ids="id1">
             [
             <reference internal="1" refid="id3" reftitle="The title.">
                 tes
@@ -81,7 +81,7 @@ def test_debug_minimal_example(app, warning) -> None:
     assert [line for line in output.split("\n")][1:] == [
         "    <paragraph>",
         "        See ",
-        '        <inline ids="id1">',
+        '        <inline classes="bibtex-citation" ids="id1">',
         "            Nelson [",
         f'            <reference internal="{1 if docutils_0_22 else True}" refid="id4" '
         'reftitle="Edward Nelson. Radically Elementary Probability Theory. '
@@ -90,7 +90,7 @@ def test_debug_minimal_example(app, warning) -> None:
         "            ]",
         "         for an introduction to non-standard analysis.",
         "        Non-standard analysis is fun ",
-        '        <inline ids="id2">',
+        '        <inline classes="bibtex-citation" ids="id2">',
         "            [",
         f'            <reference internal="{1 if docutils_0_22 else True}" refid="id4" '
         'reftitle="Edward Nelson. Radically Elementary Probability Theory. '

@@ -452,6 +452,7 @@ class BibtexDomain(Domain):
         ]
         formatted_references = format_references(self.reference_style, typ, references)
         result_node = docutils.nodes.inline(rawsource=target)
+        result_node['classes'].append('bibtex-citation')
         result_node += formatted_references.render(self.backend)
         return result_node
 
