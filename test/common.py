@@ -32,7 +32,7 @@ def html_citation_refs_single(
 ):
     title_pattern = rf' title="{title}"' if title is not None else ""
     return re.compile(
-        r'<span id="(?P<id_>{id_})">\['
+        r'<span class="bibtex-citation" id="(?P<id_>{id_})">\['
         r'<a class="reference internal"'
         r' href="(?P<refdoc>[^#]+)?#(?P<refid>{refid})"'
         r"{title_pattern}"
