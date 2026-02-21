@@ -16,7 +16,6 @@ from sphinx.locale import _
 import sphinxcontrib.bibtex.plugin
 
 from .domain import parse_header
-from .foot_roles import FootCiteRole
 from .style.referencing import BaseReferenceStyle
 
 if TYPE_CHECKING:

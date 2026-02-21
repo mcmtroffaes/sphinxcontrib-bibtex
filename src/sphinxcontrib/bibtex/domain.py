@@ -43,7 +43,6 @@ import sphinxcontrib.bibtex.plugin
 
 from .bibfile import BibData, process_bibdata
 from .citation_target import CitationTarget, parse_citation_targets
-from .roles import CiteRole
 from .style.referencing import BaseReferenceStyle, format_references
 from .style.template import SphinxReferenceInfo
 
