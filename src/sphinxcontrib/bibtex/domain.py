@@ -314,11 +314,6 @@ class BibtexDomain(Domain):
             env.app.config.bibtex_reference_style,
         )
         self.reference_style = style()
-        # set up object types and roles for referencing style
-        role_names = self.reference_style.role_names()
-        self.add_object_type(
-            "citation", ObjType(_("citation"), *role_names, searchprio=-1)
-        )
         # connect env-updated
         env.app.connect("env-updated", env_updated)
         # check config

@@ -62,11 +62,6 @@ class BibtexFootDomain(Domain):
             env.app.config.bibtex_foot_reference_style,
         )
         self.reference_style = style()
-        # set up object types and roles for referencing style
-        role_names = self.reference_style.role_names()
-        self.add_object_type(
-            "citation", ObjType(_("citation"), *role_names, searchprio=-1)
-        )
         # parse bibliography header
         header = getattr(env.app.config, "bibtex_footbibliography_header")
         if header:
