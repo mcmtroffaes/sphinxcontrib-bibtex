@@ -3,7 +3,7 @@
 """
 
 import sys
-from typing import Any, Dict, Sequence
+from typing import Any, Dict
 
 if sys.version_info >= (3, 10):
     from importlib.metadata import version
