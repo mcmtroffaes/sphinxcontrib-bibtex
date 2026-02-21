@@ -294,7 +294,6 @@ class BibtexDomain(Domain):
         self.add_object_type(
             "citation", ObjType(_("citation"), *role_names, searchprio=-1)
         )
-        self.roles = dict((name, CiteRole()) for name in role_names)
         # initialize the domain
         super().__init__(env)
         # connect env-updated
