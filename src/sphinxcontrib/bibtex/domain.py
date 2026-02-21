@@ -281,6 +281,7 @@ class BibtexDomain(Domain):
         return self.data["citation_refs"]
 
     def __init__(self, env: "BuildEnvironment"):
+        # initialize the domain
         super().__init__(env)
         # set up referencing style
         style = sphinxcontrib.bibtex.plugin.find_plugin(
@@ -293,8 +294,6 @@ class BibtexDomain(Domain):
         self.add_object_type(
             "citation", ObjType(_("citation"), *role_names, searchprio=-1)
         )
-        # initialize the domain
-        super().__init__(env)
         # connect env-updated
         env.app.connect("env-updated", env_updated)
         # check config

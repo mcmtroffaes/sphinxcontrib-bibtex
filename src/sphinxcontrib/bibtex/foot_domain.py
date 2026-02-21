@@ -42,6 +42,7 @@ class BibtexFootDomain(Domain):
         return self.data["bibliography_header"]
 
     def __init__(self, env: "BuildEnvironment"):
+        # initialize the domain
         super().__init__(env)
         # set up referencing style
         style = sphinxcontrib.bibtex.plugin.find_plugin(
@@ -54,8 +55,6 @@ class BibtexFootDomain(Domain):
         self.add_object_type(
             "citation", ObjType(_("citation"), *role_names, searchprio=-1)
         )
-        # initialize the domain
-        super().__init__(env)
         # parse bibliography header
         header = getattr(env.app.config, "bibtex_footbibliography_header")
         if header:
