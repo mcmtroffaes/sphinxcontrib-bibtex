@@ -5,6 +5,7 @@ Domain for footnote citations.
     :members:
 """
 
+from collections.abc import Sequence
 from typing import TYPE_CHECKING, AbstractSet, Dict, List, Tuple
 
 import docutils.nodes
@@ -16,6 +17,7 @@ from sphinx.locale import _
 import sphinxcontrib.bibtex.plugin
 
 from .domain import parse_header
+from .foot_roles import FootCiteRole
 from .style.referencing import BaseReferenceStyle
 
 if TYPE_CHECKING:
@@ -36,6 +38,16 @@ class BibtexFootDomain(Domain):
         bibliography_header=docutils.nodes.container(),
     )
     reference_style: BaseReferenceStyle
+    _role_names: Sequence[str] = [
+        "p",
+        "ps",
+        "t",
+        "ts",
+        "ct",
+        "cts",
+    ]
+    object_types = {"citation": ObjType(_("citation"), *_role_names, searchprio=-1)}
+    roles = {role_name: FootCiteRole() for role_name in _role_names}
 
     @property
     def bibliography_header(self) -> docutils.nodes.Element:

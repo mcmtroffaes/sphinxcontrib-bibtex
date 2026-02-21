@@ -11,6 +11,7 @@ outside the doctree.
 
 import ast
 import re
+from collections.abc import Sequence
 from pathlib import Path
 from typing import (
     TYPE_CHECKING,
@@ -43,6 +44,7 @@ import sphinxcontrib.bibtex.plugin
 
 from .bibfile import BibData, process_bibdata
 from .citation_target import CitationTarget, parse_citation_targets
+from .roles import CiteRole
 from .style.referencing import BaseReferenceStyle, format_references
 from .style.template import SphinxReferenceInfo
 
@@ -255,6 +257,29 @@ class BibtexDomain(Domain):
     )
     backend = pybtex_docutils.Backend()
     reference_style: BaseReferenceStyle
+    _role_names: Sequence[str] = [
+        "p",
+        "ps",
+        "t",
+        "ts",
+        "ct",
+        "cts",
+        "empty",
+        "alp",
+        "alps",
+        "label",
+        "labelpar",
+        "year",
+        "yearpar",
+        "author",
+        "authors",
+        "authorpar",
+        "authorpars",
+        "cauthor",
+        "cauthors",
+    ]
+    object_types = {"citation": ObjType(_("citation"), *_role_names, searchprio=-1)}
+    roles = {role_name: CiteRole() for role_name in _role_names}
 
     @property
     def bibdata(self) -> BibData:
