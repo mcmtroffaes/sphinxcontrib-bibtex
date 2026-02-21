@@ -43,6 +43,7 @@ class BibtexFootDomain(Domain):
         return self.data["bibliography_header"]
 
     def __init__(self, env: "BuildEnvironment"):
+        super().__init__(env)
         # set up referencing style
         style = sphinxcontrib.bibtex.plugin.find_plugin(
             "sphinxcontrib.bibtex.style.referencing",
@@ -51,8 +52,8 @@ class BibtexFootDomain(Domain):
         self.reference_style = style()
         # set up object types and roles for referencing style
         role_names = self.reference_style.role_names()
-        self.object_types = dict(
-            citation=ObjType(_("citation"), *role_names, searchprio=-1),
+        self.add_object_type(
+            "citation", ObjType(_("citation"), *role_names, searchprio=-1)
         )
         self.roles = dict((name, FootCiteRole()) for name in role_names)
         # initialize the domain
