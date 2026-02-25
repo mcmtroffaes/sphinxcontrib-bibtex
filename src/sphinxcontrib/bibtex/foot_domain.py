@@ -6,7 +6,7 @@ Domain for footnote citations.
 """
 
 from collections.abc import Sequence
-from typing import TYPE_CHECKING, AbstractSet, Dict, List, Tuple
+from typing import TYPE_CHECKING, AbstractSet, Any, Dict, List, Tuple
 
 import docutils.nodes
 import docutils.utils
@@ -70,7 +70,7 @@ class BibtexFootDomain(Domain):
                 header, "foot_bibliography_header"
             )
 
-    def merge_domaindata(self, docnames: AbstractSet[str], otherdata: Dict) -> None:
+    def merge_domaindata(self, docnames: List[str], otherdata: Dict[str, Any]) -> None:
         """Merge in data regarding *docnames* from domain data
         inventory *otherdata*.
 
@@ -87,7 +87,7 @@ class BibtexFootDomain(Domain):
         target: str,
         node: "pending_xref",
         contnode: docutils.nodes.Element,
-    ) -> List[Tuple[str, docutils.nodes.reference]]:
+    ) -> List[Tuple[str, docutils.nodes.Element]]:
         """Resolve the pending reference *node* with the given *target*,
         where the reference comes from an "any" role.
 

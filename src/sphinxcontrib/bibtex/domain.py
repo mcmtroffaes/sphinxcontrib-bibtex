@@ -16,6 +16,7 @@ from pathlib import Path
 from typing import (
     TYPE_CHECKING,
     AbstractSet,
+    Any,
     Dict,
     Iterable,
     List,
@@ -349,7 +350,7 @@ class BibtexDomain(Domain):
             if bib_key.docname == docname:
                 del self.bibliographies[bib_key]
 
-    def merge_domaindata(self, docnames: AbstractSet[str], otherdata: Dict) -> None:
+    def merge_domaindata(self, docnames: List[str], otherdata: Dict[str, Any]) -> None:
         for bib_key, bib_value in otherdata["bibliographies"].items():
             if bib_key.docname in docnames:
                 self.bibliographies[bib_key] = bib_value
