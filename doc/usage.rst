@@ -1,6 +1,70 @@
 Usage
 =====
 
+General Considerations
+----------------------
+
+There are many ways to use ``sphinxcontrib-bibtex``,
+and different users have different requirements.
+The plugin tries its best to cater to the most common
+use cases. Before starting, it might be useful
+to ask yourself the following questions,
+to avoid frustration later.
+
+How Many Bibliographies Do You Need?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Do you need a single bibliography for your entire project,
+a single bibliography per page,
+or potentially multiple bibliographies per page?
+
+- Single bibliography. This is the simplest case, easiest to use, and well supported for both HTML and LaTeX builders:
+
+  1. Have a single :rst:dir:`bibliography` directive in one of your documents.
+     Use :rst:role:`cite:p`, :rst:role:`cite:t`, etc.
+
+  2. If all citations are localized to one document, alternatively,
+     use a single :rst:dir:`footbibliography` directive at the end of this document. Use :rst:role:`footcite:p`, :rst:role:`footcite:t`, etc.
+     Note this will insert the citations as footnotes.
+
+- Single bibliography per document. In this case, you have basically two options:
+
+  1. Use a single :rst:dir:`footbibliography` directive at the end of each document. Use :rst:role:`footcite:p`, :rst:role:`footcite:t`, etc. This is recommended if you need LaTeX.
+
+  2. Use a single :rst:dir:`bibliography` directive in each document that has citations with ``:filter: docname in docnames`` (see :ref:`section-local-bibliographies`).
+     Use :rst:role:`cite:p`, :rst:role:`cite:t`, etc.
+     Suppress the ``bibtex.duplicate_citation`` warning in your ``conf.py``
+     Suppressing this warning basically flags that you are happy to have the same citation happen
+     in different documents. You will still get warnings about duplicate local citations if, by accident, you have multiple :rst:dir:`bibliography` directives in some document.
+
+- Potentially multiple bibliographies within each document.
+
+  1. Use :rst:dir:`footbibliography` directives at any point in any of your documents to insert citations as footnotes for everything you have cited in this document so far. Use :rst:role:`footcite:p`, :rst:role:`footcite:t`, etc. This is the recommended and by far easiest solution,
+   and also recommended if you need LaTeX.
+
+  2. Use :rst:dir:`bibliography` directives at any point in any of your documents, using key prefixing (see :ref:`section-key-prefixing`) and/or filtering (see :ref:`section-filtering`) to carefully control citations and ensure that you have no duplicate citations anywhere.
+    Optionally, suppress the ``bibtex.duplicate_citation`` warning in your ``conf.py`` if you are ok with having duplicate citations across documents.
+
+Do You Need LaTeX?
+~~~~~~~~~~~~~~~~~~
+
+Sphinx's LaTeX writer currently collects all citations together,
+and puts them on a separate page,
+whereas the html and text writers puts citations
+at the location where they are defined. Consequently:
+
+.. warning::
+   If you plan to use the LaTeX writer, you may not get the
+   expected results if you use multiple :rst:dir:`bibliography` directives.
+
+So in this case, you only have two viable options:
+
+1. Use a single :rst:dir:`bibliography` directive (as explained above).
+2. Use :rst:dir:`footbiliography` directives (as explained above).
+
+Be sure to also check out :ref:`section-latex-backend-figure-captions`
+and :ref:`section-latex-backend-mismatch`.
+
 Configuration
 -------------
 
@@ -1071,6 +1135,8 @@ There are a few ways to work around this problem:
 * Use a style that has non-numeric labelling,
   such as ``:style: alpha``.
 
+.. _section-latex-backend-figure-captions:
+
 LaTeX Backend Fails with Citations In Figure Captions
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -1094,6 +1160,8 @@ your ``conf.py``:
    The above workaround no longer appears to work. If you know of a
    solution, please report at
    https://github.com/mcmtroffaes/sphinxcontrib-bibtex/issues/276
+
+.. _section-latex-backend-mismatch:
 
 Mismatch Between Output of HTML/Text and LaTeX Backends
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1174,7 +1242,7 @@ Alternatively, set ``numpydoc_class_members_toctree`` to ``False``
 in your ``conf.py`` file. This will cause numpydoc not to
 duplicate the short descriptions for class members.
 
-Import errors when running pytest
+Import Errors When Running Pytest
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 The test suite relies on the entry points being installed, whence,
