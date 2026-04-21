@@ -54,7 +54,6 @@ if TYPE_CHECKING:
     from pybtex.database import Entry
     from pybtex.style.formatting import BaseStyle
     from sphinx.addnodes import pending_xref
-    from sphinx.application import Sphinx
     from sphinx.builders import Builder
     from sphinx.environment import BuildEnvironment
 
