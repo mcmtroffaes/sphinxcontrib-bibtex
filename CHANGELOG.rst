@@ -14,6 +14,10 @@
   resolve locally first
   (reported by drbenvincent, see issue #385).
 
+* Citation reference wrapper nodes now have a ``bibtex-citation`` CSS class,
+  to enable Sphinx themes to style citation elements separately from other content
+  (contributed by mmcky, see pull request #383).
+
 * Increase required pybtex-docutils version to 1.0.2
   (reported by ego-thales).
 
