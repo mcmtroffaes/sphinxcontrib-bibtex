@@ -11,6 +11,8 @@
   resolve locally first
   (reported by drbenvincent, see issue #385).
 
+* Dropped Python 3.9 support (EOL), added Python 3.14 support.
+
 2.6.5 (27 June 2025)
 --------------------
 
