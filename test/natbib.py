@@ -93,15 +93,15 @@ def parse_keys(rawtext) -> Tuple[List[str], str, str]:
 
 
 class Citations:
-    def __init__(self, env):
+    def __init__(self, app: Sphinx):
         self.conf = DEFAULT_CONF.copy()
-        self.conf.update(env.app.config.natbib)
+        self.conf.update(app.config.natbib)
 
         self.file_name = None
         self.parser = None
         self.data = None
         self.ref_map = {}
-        self.file_name = env.relfn2path(self.conf["file"], env.app.config.master_doc)[1]
+        self.file_name = app.env.relfn2path(self.conf["file"], app.config.master_doc)[1]
         self.parser = bibtex.Parser()
         self.data = self.parser.parse_file(self.file_name)
 
@@ -508,11 +508,6 @@ class CitationDomain(Domain):
         "refdoc": None,
     }
 
-    def __init__(self, env):
-        super().__init__(env)
-        # TODO: warn if citations can't parse bibtex file
-        self.citations = Citations(env)
-
     def resolve_xref(self, env, fromdocname, builder, typ, target, node, contnode):
         refdoc = self.data["refdoc"]
         if not refdoc:
@@ -541,7 +536,9 @@ class CitationDomain(Domain):
 
 
 def builder_inited(app: Sphinx) -> None:
-    app.env.domaindata["cite"]["conf"].update(app.config.natbib)
+    domain = cast(CitationDomain, app.env.get_domain("cite"))
+    domain.data["conf"].update(app.config.natbib)
+    domain.citations = Citations(app)
 
 
 def setup(app):
