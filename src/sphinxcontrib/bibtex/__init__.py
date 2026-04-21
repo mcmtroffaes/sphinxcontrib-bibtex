@@ -7,14 +7,13 @@ from importlib.metadata import version
 from pathlib import Path
 from typing import Any, Dict, cast
 
-import docutils.nodes
 from sphinx.application import Sphinx
 from sphinx.environment import BuildEnvironment
 from sphinx.errors import ExtensionError
 
 from .bibfile import process_bibdata
 from .directives import BibliographyDirective
-from .domain import BibtexDomain, parse_header
+from .domain import BibtexDomain
 from .foot_directives import FootBibliographyDirective
 from .foot_domain import BibtexFootDomain
 from .foot_roles import FootCiteRole
@@ -58,13 +57,6 @@ def builder_inited_footcite(app: Sphinx) -> None:
         app.config.bibtex_foot_reference_style,
     )
     dom.reference_style = style()
-    # parse bibliography header
-    header = getattr(app.config, "bibtex_footbibliography_header")
-    if header:
-        dom.data["bibliography_header"] = docutils.nodes.container()
-        dom.data["bibliography_header"] += parse_header(
-            header, "foot_bibliography_header"
-        )
 
 
 def setup(app: Sphinx) -> Dict[str, Any]:

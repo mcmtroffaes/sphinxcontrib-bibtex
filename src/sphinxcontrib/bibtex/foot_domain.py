@@ -31,9 +31,6 @@ class BibtexFootDomain(Domain):
     name = "footcite"
     label = "BibTeX Footnote Citations"
     data_version = 0
-    initial_data = {
-        "bibliography_header": docutils.nodes.container(),
-    }
     reference_style: BaseReferenceStyle
     _role_names: Sequence[str] = [
         "p",
@@ -45,10 +42,6 @@ class BibtexFootDomain(Domain):
     ]
     object_types = {"citation": ObjType(_("citation"), *_role_names, searchprio=-1)}
     roles = {role_name: FootCiteRole() for role_name in _role_names}
-
-    @property
-    def bibliography_header(self) -> docutils.nodes.Element:
-        return self.data["bibliography_header"]
 
     def merge_domaindata(
         self, docnames: AbstractSet[str], otherdata: Dict[str, Any]

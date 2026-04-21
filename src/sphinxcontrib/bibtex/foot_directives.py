@@ -6,7 +6,9 @@
 
 from typing import TYPE_CHECKING, cast
 
+import docutils.nodes
 from docutils.parsers.rst import Directive
+from docutils.statemachine import StringList
 
 from .bibfile import _make_ids
 
@@ -14,7 +16,6 @@ if TYPE_CHECKING:
     from sphinx.environment import BuildEnvironment
 
     from .domain import BibtexDomain
-    from .foot_domain import BibtexFootDomain
 
 
 class FootBibliographyDirective(Directive):
@@ -37,13 +38,20 @@ class FootBibliographyDirective(Directive):
         if not foot_new_refs:
             return []
         else:
+            # header
+            header = getattr(env.config, "bibtex_footbibliography_header")
+            if header:
+                content = StringList(
+                    header.splitlines(),
+                    source="conf.py:bibtex_footbibliography_header",
+                )
+                self.state.nested_parse(content, self.content_offset)
             foot_old_refs |= foot_new_refs
             foot_new_refs.clear()
             # bibliography stored in env.temp_data["bibtex_foot_bibliography"]
-            foot_domain = cast("BibtexFootDomain", env.get_domain("footcite"))
             foot_bibliography, env.temp_data["bibtex_foot_bibliography"] = (
                 env.temp_data["bibtex_foot_bibliography"],
-                foot_domain.bibliography_header.deepcopy(),
+                docutils.nodes.container(),
             )
             domain = cast("BibtexDomain", env.get_domain("cite"))
             for bibfile in domain.bibdata.bibfiles:

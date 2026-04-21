@@ -47,7 +47,7 @@ class FootCiteRole(SphinxRole):
             foot_bibliography = self.env.temp_data["bibtex_foot_bibliography"]
         except KeyError:
             self.env.temp_data["bibtex_foot_bibliography"] = foot_bibliography = (
-                foot_domain.bibliography_header.deepcopy()
+                docutils.nodes.container()
             )
         foot_old_refs: set[str] = self.env.temp_data.setdefault(  # type: ignore
             "bibtex_foot_old_refs", set()

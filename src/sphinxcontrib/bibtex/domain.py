@@ -222,19 +222,6 @@ class Citation(NamedTuple):
     tooltip_entry: Optional["FormattedEntry"]  #: Formatted entry for tooltip.
 
 
-def parse_header(header: str, source_path: str):
-    parser = docutils.parsers.rst.Parser()
-    # note: types stub for docutils doesn't know about components argument
-    # TODO use self.state.nested_parse(self.content, self.content_offset, node)
-    # TODO directly from within the directive
-    settings = docutils.frontend.OptionParser(
-        components=(docutils.parsers.rst.Parser,)  # type: ignore
-    ).get_default_values()
-    document = docutils.utils.new_document(source_path, settings)
-    parser.parse(header, document)
-    return document[0]
-
-
 class BibtexDomain(Domain):
     """Sphinx domain for the bibtex extension."""
 
