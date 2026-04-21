@@ -32,6 +32,10 @@ jobs:
           - python-version: '3.12'
             pip-sphinx: '"sphinx<8"'
             pytest-options: ''
+          # latest of sphinx 8.x series
+          - python-version: '3.13'
+            pip-sphinx: '"sphinx<9"'
+            pytest-options: ''
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
