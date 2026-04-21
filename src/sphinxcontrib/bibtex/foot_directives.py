@@ -4,6 +4,7 @@
     .. automethod:: run
 """
 
+from collections.abc import Sequence
 from typing import TYPE_CHECKING, cast
 
 import docutils.nodes
@@ -25,7 +26,7 @@ class FootBibliographyDirective(Directive):
     optional_arguments = 0
     has_content = False
 
-    def run(self):
+    def run(self) -> Sequence[docutils.nodes.Node]:
         """Set file dependencies, and insert the footnotes that were created
         earlier by :meth:`.foot_roles.FootCiteRole.run`.
         """
@@ -33,7 +34,7 @@ class FootBibliographyDirective(Directive):
         foot_old_refs = env.temp_data.setdefault("bibtex_foot_old_refs", set())
         foot_new_refs = env.temp_data.setdefault("bibtex_foot_new_refs", set())
         footbibliography_count = env.temp_data["bibtex_footbibliography_count"] = (
-            env.temp_data.get("bibtex_footbibliography_count", 0) + 1
+            cast(int, env.temp_data.get("bibtex_footbibliography_count", 0)) + 1
         )
         if not foot_new_refs:
             return []
