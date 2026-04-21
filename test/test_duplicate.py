@@ -33,7 +33,7 @@ def test_duplicate_citation(app, warning) -> None:
     warning.seek(0)
     warnings = list(warning.readlines())
     assert len(warnings) == 1
-    assert 'duplicate citation for key "Test"' in warnings[0]
+    assert 'duplicate local citation for key "Test"' in warnings[0]
     # assure distinct citation ids
     output = (app.outdir / "index.html").read_text()
     ids = [match.group("id_") for match in html_citations().finditer(output)]
