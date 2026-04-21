@@ -26,6 +26,8 @@
 
 * Dropped Python 3.9 support (EOL), added Python 3.14 support.
 
+* Fixed various deprecation warnings in Sphinx and docutils.
+
 2.6.5 (27 June 2025)
 --------------------
 
