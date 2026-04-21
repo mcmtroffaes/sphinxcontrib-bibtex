@@ -39,8 +39,7 @@ or potentially multiple bibliographies per page?
 
 - Potentially multiple bibliographies within each document.
 
-  1. Use :rst:dir:`footbibliography` directives at any point in any of your documents to insert citations as footnotes for everything you have cited in this document so far. Use :rst:role:`footcite:p`, :rst:role:`footcite:t`, etc. This is the recommended and by far easiest solution,
-   and also recommended if you need LaTeX.
+  1. Use :rst:dir:`footbibliography` directives at any point in any of your documents to insert citations as footnotes for everything you have cited in this document so far. Use :rst:role:`footcite:p`, :rst:role:`footcite:t`, etc. This is the recommended and by far easiest solution, and also recommended if you need LaTeX.
 
   2. Use :rst:dir:`bibliography` directives at any point in any of your documents, using key prefixing (see :ref:`section-key-prefixing`) and/or filtering (see :ref:`section-filtering`) to carefully control citations and ensure that you have no duplicate citations anywhere.
     Optionally, suppress the ``bibtex.duplicate_citation`` warning in your ``conf.py`` if you are ok with having duplicate citations across documents.
