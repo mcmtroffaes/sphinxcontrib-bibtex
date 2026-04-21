@@ -1,15 +1,24 @@
-2.6.6 (in development)
+2.7.0 (in development)
 ----------------------
+
+* **BACKWARD INCOMPATIBLE**
+  A new warning category, ``duplicate_local_citation``, has been introduced.
+  It is triggered when a duplicate citation appears within the same document.
+  The existing ``duplicate_citation`` warning continues to report duplicates but now only across different documents.
+
+  In many cases, users maintain a separate bibliography for each document (often using a ``docname in docnames`` filter).
+  In such setups, duplicate citations across documents are usually acceptable, while duplicates within a single document are not.
+  This distinction allows users to suppress ``duplicate_citation`` warnings while still receiving ``duplicate_local_citation`` warnings.
+
+* When there are duplicate citations,
+  resolve locally first
+  (reported by drbenvincent, see issue #385).
 
 * Increase required pybtex-docutils version to 1.0.2
   (reported by ego-thales).
 
 * Fix test suite for docutils 0.22
   (fixed by mitya57, see pull request #377).
-
-* When there are duplicate citations,
-  resolve locally first
-  (reported by drbenvincent, see issue #385).
 
 * Dropped Python 3.9 support (EOL), added Python 3.14 support.
 
