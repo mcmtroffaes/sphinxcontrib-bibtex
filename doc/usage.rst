@@ -785,7 +785,7 @@ you can:
   need the same citation repeated in the same document
   across multiple bibliographies,
   and/or you want full control about which bibliography
-  each citations links to.
+  each citation links to.
 
 To create a bibliography that includes only citations that were cited
 in the current document, use the following filter:
