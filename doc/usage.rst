@@ -37,7 +37,7 @@ or potentially multiple bibliographies per page?
      Suppressing this warning basically flags that you are happy to have the same citation happen
      in different documents. You will still get warnings about duplicate local citations if, by accident, you have multiple :rst:dir:`bibliography` directives in some document.
 
-- Potentially multiple bibliographies within each document.
+- Potentially multiple bibliographies within each document. You have two options:
 
   1. Use :rst:dir:`footbibliography` directives at any point in any of your documents to insert citations as footnotes for everything you have cited in this document so far. Use :rst:role:`footcite:p`, :rst:role:`footcite:t`, etc. This is the recommended and by far easiest solution, and also recommended if you need LaTeX.
 
