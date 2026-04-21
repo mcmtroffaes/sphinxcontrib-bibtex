@@ -39,12 +39,10 @@ from pybtex.richtext import Tag
 from pybtex.style import FormattedEntry
 from pybtex.style.template import FieldIsMissing
 from sphinx.domains import Domain, ObjType
-from sphinx.errors import ExtensionError
 from sphinx.locale import _
 
-import sphinxcontrib.bibtex.plugin
 
-from .bibfile import BibData, process_bibdata
+from .bibfile import BibData
 from .citation_target import CitationTarget, parse_citation_targets
 from .roles import CiteRole
 from .style.referencing import BaseReferenceStyle, format_references

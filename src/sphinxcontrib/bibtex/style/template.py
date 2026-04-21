@@ -154,9 +154,9 @@ class SphinxReferenceText(BaseReferenceText[SphinxReferenceInfo]):
     """
 
     def render(self, backend: "BaseBackend") -> List[docutils.nodes.Element]:
-        assert isinstance(
-            backend, pybtex_docutils.Backend
-        ), "SphinxReferenceText only supports the docutils backend"
+        assert isinstance(backend, pybtex_docutils.Backend), (
+            "SphinxReferenceText only supports the docutils backend"
+        )
         info = self.info[0]
         if info.builder.name == "latex":
             key = f"cite.{info.todocname}:{info.citation_id}"
@@ -236,9 +236,9 @@ class FootReferenceText(BaseReferenceText[FootReferenceInfo]):
     """
 
     def render(self, backend: "BaseBackend"):
-        assert isinstance(
-            backend, pybtex_docutils.Backend
-        ), "FootReferenceText only supports the docutils backend"
+        assert isinstance(backend, pybtex_docutils.Backend), (
+            "FootReferenceText only supports the docutils backend"
+        )
         info = self.info[0]
         # see docutils.parsers.rst.states.Body.footnote_reference()
         refnode = docutils.nodes.footnote_reference(

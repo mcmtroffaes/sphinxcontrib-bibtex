@@ -5,7 +5,6 @@ from pathlib import Path
 from test.common import html_citations
 
 import pytest
-from pybtex.exceptions import PybtexError
 from sphinx.errors import ExtensionError
 
 status_up_to_date = "checking bibtex cache.*up to date"

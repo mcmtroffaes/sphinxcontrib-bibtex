@@ -152,8 +152,9 @@ class BibliographyDirective(Directive):
                 bibfile = Path(env.relfn2path(bibfile_str)[1]).resolve()
                 if bibfile not in domain.bibdata.bibfiles:
                     logger.warning(
-                        "{0} not found or not configured"
-                        " in bibtex_bibfiles".format(bibfile_str),
+                        "{0} not found or not configured in bibtex_bibfiles".format(
+                            bibfile_str
+                        ),
                         location=(env.docname, self.lineno),
                         type="bibtex",
                         subtype="bibfile_error",
@@ -202,8 +203,7 @@ class BibliographyDirective(Directive):
         # but we need to know their ids before resolve stage
         # so for now we generate a node, and thus, an id, for every entry
         citation_nodes: Dict[str, docutils.nodes.Element] = {
-            keyprefix
-            + entry.key: citation_node_class(
+            keyprefix + entry.key: citation_node_class(
                 ids=_make_ids(
                     docname=env.docname,
                     lineno=self.lineno,

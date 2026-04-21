@@ -42,8 +42,7 @@ def builder_inited_cite(app: Sphinx) -> None:
         raise ExtensionError("You must configure the bibtex_bibfiles setting")
     # canonicalize bibfile paths relative to confdir
     bibfiles = [
-        (Path(app.confdir) / file).resolve()
-        for file in app.config.bibtex_bibfiles
+        (Path(app.confdir) / file).resolve() for file in app.config.bibtex_bibfiles
     ]
     # update bib file information in the cache
     dom.data["bibdata"] = process_bibdata(
