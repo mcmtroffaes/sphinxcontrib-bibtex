@@ -29,7 +29,7 @@ def env_updated(app: Sphinx, env: BuildEnvironment) -> Iterable[str]:
     return dom.env_updated()
 
 
-def builder_inited(app: Sphinx) -> None:
+def builder_inited_cite(app: Sphinx) -> None:
     dom = cast(BibtexDomain, app.env.get_domain("cite"))
     # set up referencing style
     style = find_plugin(
@@ -42,8 +42,8 @@ def builder_inited(app: Sphinx) -> None:
         raise ExtensionError("You must configure the bibtex_bibfiles setting")
     # canonicalize bibfile paths relative to confdir
     bibfiles = [
-        (Path(app.confdir) / bibfile).resolve()
-        for bibfile in app.config.bibtex_bibfiles
+        (Path(app.confdir) / file).resolve()
+        for file in app.config.bibtex_bibfiles
     ]
     # update bib file information in the cache
     dom.data["bibdata"] = process_bibdata(
@@ -54,6 +54,23 @@ def builder_inited(app: Sphinx) -> None:
     if header:
         dom.data["bibliography_header"] = docutils.nodes.container()
         dom.data["bibliography_header"] += parse_header(header, "bibliography_header")
+
+
+def builder_inited_footcite(app: Sphinx) -> None:
+    dom = cast(BibtexDomain, app.env.get_domain("footcite"))
+    # set up referencing style
+    style = find_plugin(
+        "sphinxcontrib.bibtex.style.referencing",
+        app.config.bibtex_foot_reference_style,
+    )
+    dom.reference_style = style()
+    # parse bibliography header
+    header = getattr(app.config, "bibtex_footbibliography_header")
+    if header:
+        dom.data["bibliography_header"] = docutils.nodes.container()
+        dom.data["bibliography_header"] += parse_header(
+            header, "foot_bibliography_header"
+        )
 
 
 def setup(app: Sphinx) -> Dict[str, Any]:
@@ -88,7 +105,8 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_domain(BibtexFootDomain)
     app.add_directive("footbibliography", FootBibliographyDirective)
     app.add_role("footcite", FootCiteRole())
-    app.connect("builder-inited", builder_inited)
+    app.connect("builder-inited", builder_inited_cite)
+    app.connect("builder-inited", builder_inited_footcite)
     app.connect("env-updated", env_updated)
     return {
         "version": version("sphinxcontrib-bibtex"),

@@ -53,23 +53,6 @@ class BibtexFootDomain(Domain):
     def bibliography_header(self) -> docutils.nodes.Element:
         return self.data["bibliography_header"]
 
-    def __init__(self, env: "BuildEnvironment"):
-        # initialize the domain
-        super().__init__(env)
-        # set up referencing style
-        style = sphinxcontrib.bibtex.plugin.find_plugin(
-            "sphinxcontrib.bibtex.style.referencing",
-            env.app.config.bibtex_foot_reference_style,
-        )
-        self.reference_style = style()
-        # parse bibliography header
-        header = getattr(env.app.config, "bibtex_footbibliography_header")
-        if header:
-            self.data["bibliography_header"] = docutils.nodes.container()
-            self.data["bibliography_header"] += parse_header(
-                header, "foot_bibliography_header"
-            )
-
     def merge_domaindata(
         self, docnames: AbstractSet[str], otherdata: Dict[str, Any]
     ) -> None:
