@@ -10,6 +10,7 @@ from pybtex.style.template import FieldIsMissing, Node, _format_list
 from sphinxcontrib.bibtex.richtext import BaseReferenceText
 from sphinxcontrib.bibtex.style.names.last import LastNameStyle
 from sphinxcontrib.bibtex.style.referencing import BaseReferenceStyle, format_references
+from sphinxcontrib.bibtex.style.referencing.author_year import AuthorYearReferenceStyle
 from sphinxcontrib.bibtex.style.referencing.basic_author_year import (
     BasicAuthorYearTextualReferenceStyle,
 )
@@ -116,3 +117,28 @@ def test_simple_reference_style() -> None:
 def test_super_coverage() -> None:
     BasicSuperParentheticalReferenceStyle()
     BasicSuperTextualReferenceStyle()
+
+
+# for 100% coverage
+def test_role_names() -> None:
+    assert {
+        "p",
+        "ps",
+        "alp",
+        "alps",
+        "t",
+        "ts",
+        "ct",
+        "cts",
+        "authorpar",
+        "authorpars",
+        "author",
+        "authors",
+        "cauthor",
+        "cauthors",
+        "label",
+        "labelpar",
+        "year",
+        "yearpar",
+        "empty",
+    } == AuthorYearReferenceStyle().role_names()
