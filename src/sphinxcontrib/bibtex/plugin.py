@@ -1,9 +1,4 @@
-import sys
-
-if sys.version_info >= (3, 10):
-    from importlib.metadata import EntryPoint, entry_points
-else:
-    from importlib_metadata import entry_points, EntryPoint
+from importlib.metadata import EntryPoint, entry_points
 
 from typing import Any, Dict, List, Type
 
