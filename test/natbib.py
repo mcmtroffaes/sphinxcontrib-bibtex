@@ -9,7 +9,7 @@
 #   * use XRefRole.result_nodes instead of XRefRole.__call__
 #   * use dictionary as ordered set (assuming Python 3.6+)
 
-from typing import List, Tuple, cast
+from typing import List, Tuple, cast, TypedDict
 
 import docutils.parsers.rst.directives as directives
 import pybtex.backends.plaintext
@@ -28,7 +28,15 @@ from sphinx.util import logging
 
 logger = logging.getLogger(__name__)
 
-DEFAULT_CONF = {
+class ConfType(TypedDict):
+    file: str
+    brackets: str
+    separator: str
+    style: str
+    sort: bool
+    sort_compress: bool
+
+DEFAULT_CONF: ConfType = {
     "file": "",
     "brackets": "()",
     "separator": ";",
@@ -100,7 +108,6 @@ class Citations:
         self.file_name = None
         self.parser = None
         self.data = None
-        self.ref_map = {}
         self.file_name = app.env.relfn2path(self.conf["file"], app.config.master_doc)[1]
         self.parser = bibtex.Parser()
         self.data = self.parser.parse_file(self.file_name)
@@ -280,7 +287,7 @@ class CitationXRefRole(XRefRole):
         for opt in ["style", "brackets", "separator", "sort", "sort_compress"]:
             config[opt] = env.temp_data.get(
                 "cite_%s" % opt,
-                env.domaindata["cite"]["conf"].get(opt, DEFAULT_CONF[opt]),
+                env.domaindata["cite"]["conf"].get(opt, DEFAULT_CONF.get(opt)),
             )
 
         if self.name == "cite:text":
@@ -501,6 +508,7 @@ class CitationDomain(Domain):
 
     directives = {"conf": CitationConfDirective, "refs": CitationReferencesDirective}
     roles = dict([(r, CitationXRefRole()) for r in ROLES])
+    citations: Citations  # set in builder-inited
 
     initial_data = {
         "keys": {},  # cite-keys in order of reference using dict as sorted set
