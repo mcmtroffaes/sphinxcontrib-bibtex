@@ -11,6 +11,7 @@ outside the doctree.
 
 import ast
 import re
+from collections import defaultdict
 from collections.abc import Sequence
 from pathlib import Path
 from typing import (
@@ -372,6 +373,7 @@ class BibtexDomain(Domain):
         docnames = list(get_docnames(self.env))
         # we keep track of this to quickly check for duplicates
         used_keys: Set[str] = set()
+        used_keys_per_doc: defaultdict[str, Set[str]] = defaultdict(set)
         used_labels: Dict[str, str] = {}
         for bibliography_key, bibliography in self.bibliographies.items():
             for entry, formatted_entry, tooltip_entry in self.get_formatted_entries(
@@ -381,13 +383,6 @@ class BibtexDomain(Domain):
                 self.env.config.bibtex_tooltips_style,
             ):
                 key = bibliography.keyprefix + formatted_entry.key
-                if bibliography.list_ == "citation" and key in used_keys:
-                    logger.warning(
-                        'duplicate citation for key "%s"' % key,
-                        location=(bibliography_key.docname, bibliography.line),
-                        type="bibtex",
-                        subtype="duplicate_citation",
-                    )
                 self.citations.append(
                     Citation(
                         citation_id=bibliography.citation_nodes[key]["ids"][0],
@@ -399,7 +394,22 @@ class BibtexDomain(Domain):
                     )
                 )
                 if bibliography.list_ == "citation":
+                    if key in used_keys_per_doc[bibliography_key.docname]:
+                        logger.warning(
+                            'duplicate local citation for key "%s"' % key,
+                            location=(bibliography_key.docname, bibliography.line),
+                            type="bibtex",
+                            subtype="duplicate_local_citation",
+                        )
+                    elif key in used_keys:
+                        logger.warning(
+                            'duplicate citation for key "%s"' % key,
+                            location=(bibliography_key.docname, bibliography.line),
+                            type="bibtex",
+                            subtype="duplicate_citation",
+                        )
                     used_keys.add(key)
+                    used_keys_per_doc[bibliography_key.docname].add(key)
                     if formatted_entry.label not in used_labels:
                         used_labels[formatted_entry.label] = formatted_entry.key
                     elif used_labels[formatted_entry.label] != formatted_entry.key:
