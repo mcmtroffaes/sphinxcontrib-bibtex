@@ -7,6 +7,10 @@
 * Fix test suite for docutils 0.22
   (fixed by mitya57, see pull request #377).
 
+* When there are duplicate citations,
+  resolve locally first
+  (reported by drbenvincent, see issue #385).
+
 2.6.5 (27 June 2025)
 --------------------
 
