@@ -32,7 +32,7 @@ classifiers = [
     "Topic :: Utilities",
 ]
 dependencies = [
-    "Sphinx>=4.0",
+    "Sphinx>=7.4",
     "docutils>=0.8,!=0.18.*,!=0.19.*",
     "pybtex>=0.25",
     "pybtex-docutils>=1.0.2",
