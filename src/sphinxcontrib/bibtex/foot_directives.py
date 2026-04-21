@@ -8,8 +8,7 @@ from collections.abc import Sequence
 from typing import TYPE_CHECKING, cast
 
 import docutils.nodes
-from docutils.parsers.rst import Directive
-from docutils.statemachine import StringList
+from sphinx.util.docutils import SphinxDirective
 
 from .bibfile import _make_ids
 
@@ -19,7 +18,7 @@ if TYPE_CHECKING:
     from .domain import BibtexDomain
 
 
-class FootBibliographyDirective(Directive):
+class FootBibliographyDirective(SphinxDirective):
     """Class for processing the :rst:dir:`footbibliography` directive."""
 
     required_arguments = 0
@@ -41,12 +40,9 @@ class FootBibliographyDirective(Directive):
         else:
             # header
             header = getattr(env.config, "bibtex_footbibliography_header")
-            if header:
-                content = StringList(
-                    header.splitlines(),
-                    source="conf.py:bibtex_footbibliography_header",
-                )
-                self.state.nested_parse(content, self.content_offset)
+            header_nodes: list[docutils.nodes.Node] = (
+                self.parse_text_to_nodes(header) if header else []
+            )
             foot_old_refs |= foot_new_refs
             foot_new_refs.clear()
             # bibliography stored in env.temp_data["bibtex_foot_bibliography"]
@@ -68,4 +64,4 @@ class FootBibliographyDirective(Directive):
             self.state.document.note_explicit_target(
                 foot_bibliography, foot_bibliography
             )
-            return [foot_bibliography]
+            return header_nodes + [foot_bibliography]

@@ -17,8 +17,7 @@ from typing import TYPE_CHECKING, Dict, List, NamedTuple, Sequence, cast
 import docutils.nodes
 import docutils.parsers.rst.directives as directives
 import sphinx.util
-from docutils.parsers.rst import Directive
-from docutils.statemachine import StringList
+from sphinx.util.docutils import SphinxDirective
 
 from .bibfile import _make_ids
 from .nodes import bibliography as bibliography_node
@@ -55,7 +54,7 @@ class BibliographyValue(NamedTuple):
     keys: List[str]  #: Keys listed as content of the directive.
 
 
-class BibliographyDirective(Directive):
+class BibliographyDirective(SphinxDirective):
     """Class for processing the :rst:dir:`bibliography` directive.
 
     Produces a
@@ -232,12 +231,9 @@ class BibliographyDirective(Directive):
                 keys.append(key)
         # header
         header = getattr(env.config, "bibtex_bibliography_header")
-        if header:
-            content = StringList(
-                header.splitlines(),
-                source="conf.py:bibtex_bibliography_header",
-            )
-            self.state.nested_parse(content, self.content_offset)
+        header_nodes: list[docutils.nodes.Node] = (
+            self.parse_text_to_nodes(header) if header else []
+        )
         # create bibliography object
         bibliography = BibliographyValue(
             line=self.lineno,
@@ -255,4 +251,4 @@ class BibliographyDirective(Directive):
         bib_key = BibliographyKey(docname=env.docname, id_=node["ids"][0])
         assert bib_key not in domain.bibliographies
         domain.bibliographies[bib_key] = bibliography
-        return [node]
+        return header_nodes + [node]
