@@ -39,9 +39,9 @@ def test_natbib_norefs(app, warning) -> None:
 
 
 def test_natbib_citation_transform_str_repr() -> None:
-    from test.natbib import DEFAULT_CONF, CitationTransform
-
     from pybtex.database import Entry
+
+    from test.natbib import DEFAULT_CONF, CitationTransform
 
     ref = Entry(type_="misc")
     ref.key = "somekey"

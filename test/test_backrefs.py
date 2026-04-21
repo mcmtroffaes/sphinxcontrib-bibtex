@@ -1,8 +1,8 @@
 """Test back references."""
 
-from test.common import html_citations
-
 import pytest
+
+from test.common import html_citations
 
 
 @pytest.mark.sphinx("html", testroot="backrefs")

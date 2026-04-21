@@ -40,11 +40,11 @@ def test_style_names_last() -> None:
 
 def test_style_names() -> None:
     auth = Person("First Last")
-    fields = dict(title="The Book", year="2000", publisher="Santa")
-    entry = Entry(type_="book", fields=fields, persons=dict(author=[auth]))
+    fields = {"title": "The Book", "year": "2000", "publisher": "Santa"}
+    entry = Entry(type_="book", fields=fields, persons={"author": [auth]})
     style = BasicAuthorYearTextualReferenceStyle()
     rich_name = style.person.names("author", full=True).format_data(
-        dict(entry=entry, style=style)
+        {"entry": entry, "style": style}
     )
     assert rich_name.render_as("text") == "Last"
 
@@ -52,7 +52,7 @@ def test_style_names() -> None:
 def test_style_names_no_author() -> None:
     entry = Entry(type_="book")
     with pytest.raises(FieldIsMissing):
-        names("author").format_data(dict(entry=entry))
+        names("author").format_data({"entry": entry})
 
 
 class SimpleReferenceText(BaseReferenceText[str]):
@@ -96,10 +96,10 @@ def test_simple_reference_style() -> None:
     auth1 = Person("First Last")
     auth2 = Person("Ein Zwei")
     auth3 = Person("Primo Secundo")
-    fields1 = dict(title="The Book", year="2000", publisher="Santa")
-    entry1 = Entry(type_="book", fields=fields1, persons=dict(author=[auth1]))
-    entry2 = Entry(type_="book", fields=fields1, persons=dict(author=[auth2]))
-    entry3 = Entry(type_="book", fields=fields1, persons=dict(author=[auth3]))
+    fields1 = {"title": "The Book", "year": "2000", "publisher": "Santa"}
+    entry1 = Entry(type_="book", fields=fields1, persons={"author": [auth1]})
+    entry2 = Entry(type_="book", fields=fields1, persons={"author": [auth2]})
+    entry3 = Entry(type_="book", fields=fields1, persons={"author": [auth3]})
     entries = [entry1, entry2, entry3]
     formatted_entries = list(cit_style.format_entries(entries))
     infos = ["#id1", "#id2", "#id3"]

@@ -1,8 +1,8 @@
 """Test warnings on duplicate labels/keys."""
 
-from test.common import html_citation_refs, html_citations
-
 import pytest
+
+from test.common import html_citation_refs, html_citations
 
 
 @pytest.mark.sphinx("html", testroot="duplicate_label")

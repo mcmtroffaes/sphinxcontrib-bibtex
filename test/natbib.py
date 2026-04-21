@@ -265,7 +265,7 @@ def sort_references(refs, citations):
         return titlesort.upper()
 
     sortedrefs = sorted(refs, key=sortkey)
-    return {ref: None for ref in sortedrefs}
+    return dict.fromkeys(sortedrefs)
 
 
 class CitationXRefRole(XRefRole):
@@ -509,7 +509,7 @@ class CitationDomain(Domain):
     }
 
     directives = {"conf": CitationConfDirective, "refs": CitationReferencesDirective}
-    roles = dict([(r, CitationXRefRole()) for r in ROLES])
+    roles = {r: CitationXRefRole() for r in ROLES}
     citations: Citations  # set in builder-inited
 
     initial_data = {

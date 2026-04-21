@@ -14,7 +14,6 @@ import sphinx.util
 from sphinx.domains import Domain, ObjType
 from sphinx.locale import _
 
-
 from .foot_roles import FootCiteRole
 from .style.referencing import BaseReferenceStyle
 
@@ -32,9 +31,9 @@ class BibtexFootDomain(Domain):
     name = "footcite"
     label = "BibTeX Footnote Citations"
     data_version = 0
-    initial_data = dict(
-        bibliography_header=docutils.nodes.container(),
-    )
+    initial_data = {
+        "bibliography_header": docutils.nodes.container(),
+    }
     reference_style: BaseReferenceStyle
     _role_names: Sequence[str] = [
         "p",

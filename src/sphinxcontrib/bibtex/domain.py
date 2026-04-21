@@ -41,7 +41,6 @@ from pybtex.style.template import FieldIsMissing
 from sphinx.domains import Domain, ObjType
 from sphinx.locale import _
 
-
 from .bibfile import BibData
 from .citation_target import CitationTarget, parse_citation_targets
 from .roles import CiteRole
@@ -238,15 +237,15 @@ class BibtexDomain(Domain):
     name = "cite"
     label = "BibTeX Citations"
     data_version = 4
-    initial_data = dict(
-        bibdata=BibData(
+    initial_data = {
+        "bibdata": BibData(
             encoding="", bibfiles={}, data=pybtex.database.BibliographyData()
         ),
-        bibliography_header=docutils.nodes.container(),
-        bibliographies={},
-        citations=[],
-        citation_refs=[],
-    )
+        "bibliography_header": docutils.nodes.container(),
+        "bibliographies": {},
+        "citations": [],
+        "citation_refs": [],
+    }
     backend = pybtex_docutils.Backend()
     reference_style: BaseReferenceStyle
     _role_names: Sequence[str] = [

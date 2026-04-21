@@ -5,15 +5,15 @@ test_autodoc
 Test with autodoc.
 """
 
+import pytest
+import sphinx
+
 from test.common import (
     html_citation_refs_single,
     html_citations,
     html_footnote_refs,
     html_footnotes,
 )
-
-import pytest
-import sphinx
 
 
 @pytest.mark.skipif(

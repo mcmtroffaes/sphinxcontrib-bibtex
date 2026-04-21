@@ -1,6 +1,5 @@
 import re
 from dataclasses import dataclass, field
-from test.common import html_citation_refs, html_citations, html_docutils_citation_refs
 from typing import cast
 
 import pybtex.plugin
@@ -13,6 +12,7 @@ import sphinxcontrib.bibtex.plugin
 from sphinxcontrib.bibtex.domain import BibtexDomain
 from sphinxcontrib.bibtex.style.referencing import BracketStyle, PersonStyle
 from sphinxcontrib.bibtex.style.referencing.author_year import AuthorYearReferenceStyle
+from test.common import html_citation_refs, html_citations, html_docutils_citation_refs
 
 
 @pytest.mark.sphinx("html", testroot="citation_not_found")

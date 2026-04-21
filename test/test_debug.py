@@ -78,7 +78,7 @@ def test_debug_minimal_example(app, warning) -> None:
     assert not warning.getvalue()
     output = (app.outdir / "index.pseudoxml").read_text()
     docutils_0_22 = docutils.__version_info__ >= (0, 22)
-    assert [line for line in output.split("\n")][1:] == [
+    assert list(output.split("\n"))[1:] == [
         "    <paragraph>",
         "        See ",
         '        <inline classes="bibtex-citation" ids="id1">',

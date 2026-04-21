@@ -53,3 +53,9 @@ author_year = "sphinxcontrib.bibtex.style.referencing.author_year:AuthorYearRefe
 foot = "sphinxcontrib.bibtex.style.referencing.foot:FootReferenceStyle"
 label = "sphinxcontrib.bibtex.style.referencing.label:LabelReferenceStyle"
 super = "sphinxcontrib.bibtex.style.referencing.super_:SuperReferenceStyle"
+
+[tool.ruff]
+output-format = "concise"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "C"]

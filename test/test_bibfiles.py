@@ -2,10 +2,11 @@ import re
 import shutil
 import time
 from pathlib import Path
-from test.common import html_citations
 
 import pytest
 from sphinx.errors import ExtensionError
+
+from test.common import html_citations
 
 status_up_to_date = "checking bibtex cache.*up to date"
 status_out_of_date = "checking bibtex cache.*out of date"

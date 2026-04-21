@@ -5,6 +5,8 @@ test_autodoc
 Test with autodoc.
 """
 
+import pytest
+
 import test.some_module.cite
 import test.some_module.footcite
 from test.common import (
@@ -13,8 +15,6 @@ from test.common import (
     html_footnote_refs,
     html_footnotes,
 )
-
-import pytest
 
 
 # for coverage

@@ -66,12 +66,12 @@ def format_references(
     """
     children = [
         style.inner(role_name).format_data(
-            data=dict(
-                entry=entry,
-                formatted_entry=formatted_entry,
-                reference_info=info,
-                style=style,
-            )
+            data={
+                "entry": entry,
+                "formatted_entry": formatted_entry,
+                "reference_info": info,
+                "style": style,
+            }
         )
         for entry, formatted_entry, info in references
     ]

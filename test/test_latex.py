@@ -1,6 +1,6 @@
-from test.common import latex_citation_refs, latex_citations
-
 import pytest
+
+from test.common import latex_citation_refs, latex_citations
 
 
 @pytest.mark.sphinx("latex", testroot="latex_refs")
