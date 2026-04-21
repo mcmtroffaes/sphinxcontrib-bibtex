@@ -18,6 +18,7 @@ import docutils.nodes
 import docutils.parsers.rst.directives as directives
 import sphinx.util
 from docutils.parsers.rst import Directive
+from docutils.statemachine import StringList
 
 from .bibfile import _make_ids
 from .nodes import bibliography as bibliography_node
@@ -176,11 +177,11 @@ class BibliographyDirective(Directive):
                 subtype="list_type_error",
             )
             list_ = "citation"
-        citation_node_class: type[docutils.nodes.Element]
-        if list_ in {"bullet", "enumerated"}:
-            citation_node_class = docutils.nodes.list_item
-        else:
-            citation_node_class = docutils.nodes.citation
+        citation_node_class: type[docutils.nodes.Element] = (
+            docutils.nodes.list_item
+            if list_ in {"bullet", "enumerated"}
+            else docutils.nodes.citation
+        )
         env.temp_data["bibtex_bibliography_count"] = (
             env.temp_data.get("bibtex_bibliography_count", 0) + 1  # type: ignore
         )
@@ -229,6 +230,14 @@ class BibliographyDirective(Directive):
                 )
             else:
                 keys.append(key)
+        # header
+        header = getattr(env.config, "bibtex_bibliography_header")
+        if header:
+            content = StringList(
+                header.splitlines(),
+                source="conf.py:bibtex_bibliography_header",
+            )
+            self.state.nested_parse(content, self.content_offset)
         # create bibliography object
         bibliography = BibliographyValue(
             line=self.lineno,

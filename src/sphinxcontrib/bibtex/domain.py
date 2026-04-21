@@ -245,7 +245,6 @@ class BibtexDomain(Domain):
         "bibdata": BibData(
             encoding="", bibfiles={}, data=pybtex.database.BibliographyData()
         ),
-        "bibliography_header": docutils.nodes.container(),
         "bibliographies": {},
         "citations": [],
         "citation_refs": [],
@@ -280,10 +279,6 @@ class BibtexDomain(Domain):
     def bibdata(self) -> BibData:
         """Information about the bibliography files."""
         return self.data["bibdata"]
-
-    @property
-    def bibliography_header(self) -> docutils.nodes.Element:
-        return self.data["bibliography_header"]
 
     @property
     def bibliographies(self) -> Dict["BibliographyKey", "BibliographyValue"]:

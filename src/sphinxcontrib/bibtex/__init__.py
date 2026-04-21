@@ -48,11 +48,6 @@ def builder_inited_cite(app: Sphinx) -> None:
     dom.data["bibdata"] = process_bibdata(
         dom.bibdata, bibfiles, app.config.bibtex_encoding
     )
-    # parse bibliography header
-    header = getattr(app.config, "bibtex_bibliography_header")
-    if header:
-        dom.data["bibliography_header"] = docutils.nodes.container()
-        dom.data["bibliography_header"] += parse_header(header, "bibliography_header")
 
 
 def builder_inited_footcite(app: Sphinx) -> None:

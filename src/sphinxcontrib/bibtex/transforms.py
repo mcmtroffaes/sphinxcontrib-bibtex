@@ -14,7 +14,7 @@ from pybtex.plugin import find_plugin
 from sphinx.transforms.post_transforms import SphinxPostTransform
 from sphinx.util.logging import getLogger
 
-from .directives import BibliographyKey
+from .directives import BibliographyKey, BibliographyValue
 from .nodes import bibliography as bibliography_node
 
 if TYPE_CHECKING:
@@ -62,7 +62,7 @@ class BibliographyTransform(SphinxPostTransform):
             # reminder: env.docname may be equal to 'index' instead of
             # bibnode['docname'] in post-transform phase (e.g. latex builder)
             bib_key = BibliographyKey(docname=bibnode["docname"], id_=bibnode["ids"][0])
-            bibliography = domain.bibliographies[bib_key]
+            bibliography: BibliographyValue = domain.bibliographies[bib_key]
             citations = [
                 citation
                 for citation in domain.citations
@@ -106,7 +106,7 @@ class BibliographyTransform(SphinxPostTransform):
                 if bibliography.list_ == "enumerated":
                     env.temp_data["bibtex_enum_count"] += 1
             if citations:
-                final_node = domain.bibliography_header.deepcopy()
+                final_node = docutils.nodes.container()
                 final_node += nodes
                 bibnode.replace_self(final_node)
             else:
