@@ -226,11 +226,6 @@ class Citation(NamedTuple):
     tooltip_entry: Optional["FormattedEntry"]  #: Formatted entry for tooltip.
 
 
-def env_updated(app: "Sphinx", env: "BuildEnvironment") -> Iterable[str]:
-    domain = cast(BibtexDomain, env.get_domain("cite"))
-    return domain.env_updated()
-
-
 def parse_header(header: str, source_path: str):
     parser = docutils.parsers.rst.Parser()
     # note: types stub for docutils doesn't know about components argument
@@ -316,8 +311,6 @@ class BibtexDomain(Domain):
             env.app.config.bibtex_reference_style,
         )
         self.reference_style = style()
-        # connect env-updated
-        env.app.connect("env-updated", env_updated)
         # check config
         if env.app.config.bibtex_bibfiles is None:
             raise ExtensionError("You must configure the bibtex_bibfiles setting")

@@ -2,11 +2,12 @@
 .. autofunction:: setup
 """
 
-from typing import Any, Dict
-
+from collections.abc import Iterable
 from importlib.metadata import version
+from typing import Any, Dict, cast
 
 from sphinx.application import Sphinx
+from sphinx.environment import BuildEnvironment
 
 from .directives import BibliographyDirective
 from .domain import BibtexDomain
@@ -16,6 +17,11 @@ from .foot_roles import FootCiteRole
 from .nodes import bibliography, depart_raw_latex, raw_latex, visit_raw_latex
 from .roles import CiteRole
 from .transforms import BibliographyTransform
+
+
+def env_updated(app: Sphinx, env: BuildEnvironment) -> Iterable[str]:
+    dom = cast(BibtexDomain, env.get_domain("cite"))
+    return dom.env_updated()
 
 
 def setup(app: Sphinx) -> Dict[str, Any]:
@@ -50,6 +56,7 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.add_domain(BibtexFootDomain)
     app.add_directive("footbibliography", FootBibliographyDirective)
     app.add_role("footcite", FootCiteRole())
+    app.connect("env-updated", env_updated)
     return {
         "version": version("sphinxcontrib-bibtex"),
         "env_version": 9,

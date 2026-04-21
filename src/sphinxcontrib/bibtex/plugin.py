@@ -1,5 +1,4 @@
 from importlib.metadata import EntryPoint, entry_points
-
 from typing import Any, Dict, List, Type
 
 _runtime_plugins: Dict[str, Dict[str, Type]] = {
