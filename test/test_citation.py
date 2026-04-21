@@ -537,11 +537,7 @@ def test_citation_label_special_chars(app, warning) -> None:
     assert len(html_citations(label="SBV09").findall(output)) == 1
 
 
-@pytest.mark.sphinx(
-    "html",
-    testroot="citation_prefer_local",
-    confoverrides={"suppress_warnings": "bibtex.duplicate_citation"},
-)
+@pytest.mark.sphinx("html", testroot="citation_prefer_local")
 def test_citation_prefer_local(app, warning) -> None:
 
     def _check(source: str, refdoc: str | None) -> None:
