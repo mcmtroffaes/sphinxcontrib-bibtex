@@ -9,7 +9,7 @@
 #   * use XRefRole.result_nodes instead of XRefRole.__call__
 #   * use dictionary as ordered set (assuming Python 3.6+)
 
-from typing import List, Tuple, cast, TypedDict
+from typing import List, Tuple, TypedDict, cast
 
 import docutils.parsers.rst.directives as directives
 import pybtex.backends.plaintext
@@ -28,6 +28,7 @@ from sphinx.util import logging
 
 logger = logging.getLogger(__name__)
 
+
 class ConfType(TypedDict):
     file: str
     brackets: str
@@ -35,6 +36,7 @@ class ConfType(TypedDict):
     style: str
     sort: bool
     sort_compress: bool
+
 
 DEFAULT_CONF: ConfType = {
     "file": "",
