@@ -225,6 +225,8 @@ class Citation(NamedTuple):
 def parse_header(header: str, source_path: str):
     parser = docutils.parsers.rst.Parser()
     # note: types stub for docutils doesn't know about components argument
+    # TODO use self.state.nested_parse(self.content, self.content_offset, node)
+    # TODO directly from within the directive
     settings = docutils.frontend.OptionParser(
         components=(docutils.parsers.rst.Parser,)  # type: ignore
     ).get_default_values()
