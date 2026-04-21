@@ -19,6 +19,7 @@ from docutils import nodes
 from docutils.parsers.rst import Directive
 from pybtex.database.input import bibtex
 from sphinx import addnodes
+from sphinx.application import Sphinx
 from sphinx.domains import Domain, ObjType
 from sphinx.environment import BuildEnvironment
 from sphinx.locale import _
@@ -509,10 +510,6 @@ class CitationDomain(Domain):
 
     def __init__(self, env):
         super().__init__(env)
-
-        # Update conf
-        self.data["conf"].update(env.app.config.natbib)
-
         # TODO: warn if citations can't parse bibtex file
         self.citations = Citations(env)
 
@@ -543,6 +540,11 @@ class CitationDomain(Domain):
         return node
 
 
+def builder_inited(app: Sphinx) -> None:
+    app.env.domaindata["cite"]["conf"].update(app.config.natbib)
+
+
 def setup(app):
     app.add_config_value("natbib", DEFAULT_CONF, "env")
     app.add_domain(CitationDomain)
+    app.connect("builder-inited", builder_inited)
