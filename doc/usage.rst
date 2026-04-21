@@ -764,11 +764,28 @@ to achieve local bibliographies
 with :rst:role:`cite` and :rst:dir:`bibliography`.
 
 The ``filter`` system for local bibliographies
-can only be used if no citation key is used in more than one
-document. This is not always satisfied. If you need to cite the same
-reference in multiple documents with references to multiple local
-bibliographies, use the ``keyprefix`` system; see
-:ref:`section-key-prefixing`.
+will lead to duplicate citations if any citation key is used in more than one
+document.
+If you need to cite the same
+reference in multiple documents with references to multiple bibliographies,
+you can:
+
+* Suppress the ``bibtex.duplicate_citation`` warning;
+  see :ref:`section-suppressing-warnings`.
+  This is suitable for use cases where you
+  have a single bibliography directive in each document,
+  typically with a ``docname in docnames`` filter.
+  Note that
+  you will still get ``duplicate_local_citation`` warnings
+  for duplicate citations within the same document.
+
+* Alternatively, you can use the ``keyprefix`` system; see
+  :ref:`section-key-prefixing`.
+  This is suitable for advanced use cases where you
+  need the same citation repeated in the same document
+  across multiple bibliographies,
+  and/or you want full control about which bibliography
+  each citations links to.
 
 To create a bibliography that includes only citations that were cited
 in the current document, use the following filter:
@@ -983,6 +1000,8 @@ have:
 
 This adds a rubric title to every bibliography.
 
+.. _section-suppressing-warnings:
+
 Suppressing Warnings
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -1009,6 +1028,7 @@ The complete list of warning subtypes that can be suppressed is::
     bibtex.duplicate_citation
     bibtex.duplicate_id
     bibtex.duplicate_label
+    bibtex.duplicate_local_citation
     bibtex.filter_overrides
     bibtex.filter_syntax_error
     bibtex.key_not_found
