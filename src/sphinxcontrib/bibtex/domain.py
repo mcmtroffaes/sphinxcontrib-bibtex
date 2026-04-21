@@ -225,7 +225,9 @@ class Citation(NamedTuple):
 def parse_header(header: str, source_path: str):
     parser = docutils.parsers.rst.Parser()
     # note: types stub for docutils doesn't know about components argument
-    settings = docutils.frontend.get_default_settings(docutils.parsers.rst.Parser)  # type: ignore[arg-type]
+    settings = docutils.frontend.OptionParser(
+        components=(docutils.parsers.rst.Parser,)  # type: ignore
+    ).get_default_values()
     document = docutils.utils.new_document(source_path, settings)
     parser.parse(header, document)
     return document[0]
