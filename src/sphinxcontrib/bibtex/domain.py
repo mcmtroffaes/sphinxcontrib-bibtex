@@ -301,35 +301,6 @@ class BibtexDomain(Domain):
         """Citation reference data."""
         return self.data["citation_refs"]
 
-    def __init__(self, env: "BuildEnvironment"):
-        # initialize the domain
-        super().__init__(env)
-        # set up referencing style
-        style = sphinxcontrib.bibtex.plugin.find_plugin(
-            "sphinxcontrib.bibtex.style.referencing",
-            env.app.config.bibtex_reference_style,
-        )
-        self.reference_style = style()
-        # check config
-        if env.app.config.bibtex_bibfiles is None:
-            raise ExtensionError("You must configure the bibtex_bibfiles setting")
-        # canonicalize bibfile paths relative to confdir
-        bibfiles = [
-            (Path(env.app.confdir) / bibfile).resolve()
-            for bibfile in env.app.config.bibtex_bibfiles
-        ]
-        # update bib file information in the cache
-        self.data["bibdata"] = process_bibdata(
-            self.bibdata, bibfiles, env.app.config.bibtex_encoding
-        )
-        # parse bibliography header
-        header = getattr(env.app.config, "bibtex_bibliography_header")
-        if header:
-            self.data["bibliography_header"] = docutils.nodes.container()
-            self.data["bibliography_header"] += parse_header(
-                header, "bibliography_header"
-            )
-
     def clear_doc(self, docname: str) -> None:
         self.data["citations"] = [
             citation

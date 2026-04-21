@@ -7,6 +7,7 @@ import pybtex.plugin
 import pytest
 from pybtex.style.formatting.unsrt import Style as UnsrtStyle
 from pybtex.style.template import words
+from sphinx.errors import ExtensionError
 
 import sphinxcontrib.bibtex.plugin
 from sphinxcontrib.bibtex.domain import BibtexDomain
@@ -347,7 +348,7 @@ def test_citation_roles_super(app, warning) -> None:
 )
 def test_citation_style_invalid(make_app, app_params) -> None:
     args, kwargs = app_params
-    with pytest.raises(ImportError, match="plugin .*non_existing not found"):
+    with pytest.raises(ExtensionError, match="plugin .*non_existing not found"):
         make_app(*args, **kwargs)
 
 
