@@ -74,4 +74,6 @@ jobs:
     - name: Test with pytest
       run: |
         coverage run -m pytest ${{ matrix.pytest-options }}
-        codecov
+    - uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
