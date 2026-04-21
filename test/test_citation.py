@@ -535,3 +535,27 @@ def test_citation_label_special_chars(app, warning) -> None:
     assert not warning.getvalue()
     output = (app.outdir / "index.html").read_text(encoding="utf-8-sig")
     assert len(html_citations(label="SBV09").findall(output)) == 1
+
+
+@pytest.mark.sphinx(
+    "html",
+    testroot="citation_prefer_local",
+    confoverrides={"suppress_warnings": "bibtex.duplicate_citation"},
+)
+def test_citation_prefer_local(app, warning) -> None:
+
+    def _check(source: str, refdoc: str | None) -> None:
+        pattern = html_citation_refs()
+        matches = list(pattern.finditer(source))
+        assert len(matches) == 1
+        assert matches[0].group("label") == "Mou"
+        assert matches[0].group("refdoc") == refdoc
+
+    app.build()
+    assert not warning.getvalue()
+    index = (app.outdir / "index.html").read_text(encoding="utf-8-sig")
+    doc1 = (app.outdir / "doc1.html").read_text(encoding="utf-8-sig")
+    doc2 = (app.outdir / "doc2.html").read_text(encoding="utf-8-sig")
+    _check(index, None)
+    _check(doc1, None)
+    _check(doc2, None)

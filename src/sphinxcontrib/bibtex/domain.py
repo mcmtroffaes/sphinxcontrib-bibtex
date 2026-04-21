@@ -434,11 +434,24 @@ class BibtexDomain(Domain):
         """Replace node by list of citation references (one for each key)."""
         targets = parse_citation_targets(target)
         keys: Dict[str, CitationTarget] = {target2.key: target2 for target2 in targets}
-        citations: Dict[str, Citation] = {
+
+        def _citations() -> Iterable[Citation]:
+            return (
+                cit
+                for cit in self.citations
+                if cit.key in keys
+                and self.bibliographies[cit.bibliography_key].list_ == "citation"
+            )
+
+        # resolve citations locally first (same docname)
+        citations_local: Dict[str, Citation] = {
             cit.key: cit
-            for cit in self.citations
-            if cit.key in keys
-            and self.bibliographies[cit.bibliography_key].list_ == "citation"
+            for cit in _citations()
+            if cit.bibliography_key.docname == fromdocname
+        }
+        # then resolve globally
+        citations: Dict[str, Citation] = citations_local | {
+            cit.key: cit for cit in _citations() if cit.key not in citations_local
         }
         for key in keys:
             if key not in citations:
