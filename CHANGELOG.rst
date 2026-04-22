@@ -28,6 +28,12 @@
 
 * Fixed various deprecation warnings in Sphinx and docutils.
 
+* Improved header parsing.
+
+* Minimum required Sphinx version increased to 7.4.
+
+* Minimum required Docutils version increased to 0.20.
+
 2.6.5 (27 June 2025)
 --------------------
 
