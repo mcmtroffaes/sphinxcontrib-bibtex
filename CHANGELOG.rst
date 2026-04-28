@@ -127,7 +127,7 @@
 
 * Migrate from ``pkg_resources`` to ``importlib.metadata``. A side effect of
   this migration is that
-  **plugins registered at runtime are longer exposed as entry points**.
+  **plugins registered at runtime are no longer exposed as entry points**.
   This is because ``importlib`` does not allow runtime modification of
   entry points.
 
