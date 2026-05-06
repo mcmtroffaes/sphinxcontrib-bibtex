@@ -1,5 +1,5 @@
-2.7.0 (in development)
-----------------------
+2.7.0 (6 May 2026)
+------------------
 
 * **BACKWARD INCOMPATIBLE**
   A new warning category, ``duplicate_local_citation``, has been introduced.
