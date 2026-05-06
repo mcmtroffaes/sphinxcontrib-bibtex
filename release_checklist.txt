@@ -15,20 +15,21 @@
   - coverage at 100%
   - on github, merge release/x.x.x into develop and delete the release branch
   - git remote update --prune && git checkout develop && git merge --ff-only origin/develop
-* push release
+* tag and push release to master
   - git checkout master && git merge --ff-only develop
   - git tag -a -m "Tagging version x.x.x" x.x.x
   - git push origin master
   - git push --tags
   - git checkout develop
   - git branch -D release/x.x.x
+* approve release to pypi on github (only tagged builds get to pypi)
 * check source zip is on pypi
 * test upload
   - pip uninstall sphinxcontrib-bibtex
   - pip install --user -U sphinxcontrib-bibtex
   - cd sphinxcontrib-bibtex/test
   - pytest
-* activate new version on readthedocs.org
+* activate new version on readthedocs.org (may need to resync versions)
 * prep for next cycle
   - git checkout develop
   - pyproject.toml: bump to x.x.xa0
