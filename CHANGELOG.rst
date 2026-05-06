@@ -1,5 +1,5 @@
-2.7.0 (in development)
-----------------------
+2.7.0 (6 May 2026)
+------------------
 
 * **BACKWARD INCOMPATIBLE**
   A new warning category, ``duplicate_local_citation``, has been introduced.
@@ -13,6 +13,9 @@
 * When there are duplicate citations,
   resolve locally first
   (reported by drbenvincent, see issue #385).
+
+* The usage section of the documentation now starts with in-depth general considerations
+  to guide users towards best practice for the most common use cases.
 
 * Citation reference wrapper nodes now have a ``bibtex-citation`` CSS class,
   to enable Sphinx themes to style citation elements separately from other content
