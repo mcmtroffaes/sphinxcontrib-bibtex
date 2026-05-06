@@ -17,11 +17,11 @@
   - git remote update --prune && git checkout develop && git merge --ff-only origin/develop
 * push release
   - git checkout master && git merge --ff-only develop
-  - git tag -a -m "Tagging version `cat VERSION`" `cat VERSION`
+  - git tag -a -m "Tagging version x.x.x" x.x.x
   - git push origin master
   - git push --tags
   - git checkout develop
-  - git branch -d release/x.x.x
+  - git branch -D release/x.x.x
 * check source zip is on pypi
 * test upload
   - pip uninstall sphinxcontrib-bibtex
