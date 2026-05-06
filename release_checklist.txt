@@ -11,19 +11,10 @@
   - git clean -xfd
   - python setup.py install --user && cd doc && make html && make linkcheck
 * make pull request on github
-  - travis build passes
+  - build & release checks pass
   - coverage at 100%
   - on github, merge release/x.x.x into develop and delete the release branch
   - git remote update --prune && git checkout develop && git merge --ff-only origin/develop
-* create and register source zip
-  - git clean -xfd
-  - python3 setup.py sdist bdist_wheel
-  - twine upload dist/*
-* test upload
-  - pip uninstall sphinxcontrib-bibtex
-  - pip install --user -U sphinxcontrib-bibtex
-  - cd sphinxcontrib-bibtex/test
-  - nosetests
 * push release
   - git checkout master && git merge --ff-only develop
   - git tag -a -m "Tagging version `cat VERSION`" `cat VERSION`
@@ -31,10 +22,16 @@
   - git push --tags
   - git checkout develop
   - git branch -d release/x.x.x
+* check source zip is on pypi
+* test upload
+  - pip uninstall sphinxcontrib-bibtex
+  - pip install --user -U sphinxcontrib-bibtex
+  - cd sphinxcontrib-bibtex/test
+  - pytest
 * activate new version on readthedocs.org
 * prep for next cycle
   - git checkout develop
-  - sphinxcontrib/bibtex/__init__.py: bump to x.x.xa0
+  - pyproject.toml: bump to x.x.xa0
   - CHANGELOG.rst: bump to x.x.x (in development)
   - git commit -a -m "Version bump. [skip ci]"
   - git push origin develop
