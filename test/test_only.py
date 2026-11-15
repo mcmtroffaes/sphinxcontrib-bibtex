@@ -2,6 +2,7 @@ import os
 import re
 import subprocess
 import sys
+from io import StringIO
 
 import pytest
 
@@ -197,6 +198,51 @@ def test_invalid_only_expression_keeps_warning(tmp_path):
     ):
         build(srcdir, outdir, [])
     output = (outdir / "index.html").read_text(encoding="utf-8")
+    cited = re.search(r'<section id="cited">(.*?)</section>', output, re.S)[1]
+    assert "Conditional Entry" in cited
+
+
+@pytest.mark.parametrize("cross_document", [False, True])
+@pytest.mark.parametrize("tags", [[], ["alpha"], ["beta"], ["alpha", "beta"]])
+def test_only_citations_in_process(tmp_path, make_app, cross_document, tags):
+    srcdir = tmp_path / "source"
+    make_source(srcdir, cross_document)
+    index = srcdir / "index.rst"
+    index.write_text(
+        index.read_text(encoding="utf-8").replace("`unused`", "`missing`")
+        + "\n.. _only-test-target:\n\nReference target\n----------------\n\n"
+        "See :ref:`only-test-target`.\n",
+        encoding="utf-8",
+    )
+    warning = StringIO()
+    app = make_app(
+        "html", srcdir=srcdir, builddir=tmp_path / "build", tags=tags, warning=warning
+    )
+    app.build(force_all=True)
+    check_output(app.outdir, cross_document, tags)
+    assert not warning.getvalue()
+    output = (app.outdir / "index.html").read_text(encoding="utf-8")
+    assert 'href="#only-test-target"' in output
+
+
+def test_invalid_only_expression_in_process(tmp_path, make_app):
+    srcdir = tmp_path / "source"
+    make_source(srcdir, False)
+    index = srcdir / "index.rst"
+    index.write_text(
+        index.read_text(encoding="utf-8").replace(
+            ".. only:: alpha\n", ".. only:: alpha +\n", 1
+        ),
+        encoding="utf-8",
+    )
+    warning = StringIO()
+    app = make_app("html", srcdir=srcdir, builddir=tmp_path / "build", warning=warning)
+    app.build(force_all=True)
+    assert warning.getvalue().count(
+        "exception while evaluating only directive expression"
+    ) == 1
+    assert "key_not_found" not in warning.getvalue()
+    output = (app.outdir / "index.html").read_text(encoding="utf-8")
     cited = re.search(r'<section id="cited">(.*?)</section>', output, re.S)[1]
     assert "Conditional Entry" in cited
 
