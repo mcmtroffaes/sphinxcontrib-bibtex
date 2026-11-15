@@ -1,6 +1,9 @@
 2.7.1a0 (in development)
 ------------------------
 
+* Exclude citations in inactive ``only`` blocks from bibliography filtering,
+  citation ordering and back references, including across documents (issue #349).
+
 2.7.0 (6 May 2026)
 ------------------
 

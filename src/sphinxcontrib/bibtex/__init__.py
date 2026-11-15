@@ -19,7 +19,7 @@ from .foot_domain import BibtexFootDomain
 from .foot_roles import FootCiteRole
 from .nodes import bibliography, depart_raw_latex, raw_latex, visit_raw_latex
 from .plugin import find_plugin
-from .roles import CiteRole
+from .roles import CiteRole, process_citation_refs
 from .transforms import BibliographyTransform
 
 
@@ -36,6 +36,7 @@ def builder_inited_cite(app: Sphinx) -> None:
         app.config.bibtex_reference_style,
     )
     dom.reference_style = style()
+    dom.tags = app.tags
     # check config
     if app.config.bibtex_bibfiles is None:
         raise ExtensionError("You must configure the bibtex_bibfiles setting")
@@ -94,9 +95,10 @@ def setup(app: Sphinx) -> Dict[str, Any]:
     app.connect("builder-inited", builder_inited_cite)
     app.connect("builder-inited", builder_inited_footcite)
     app.connect("env-updated", env_updated)
+    app.connect("doctree-read", process_citation_refs)
     return {
         "version": version("sphinxcontrib-bibtex"),
-        "env_version": 9,
+        "env_version": 10,
         "parallel_read_safe": True,
         "parallel_write_safe": True,
     }

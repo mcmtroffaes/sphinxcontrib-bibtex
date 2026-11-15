@@ -43,7 +43,7 @@ from sphinx.locale import _
 
 from .bibfile import BibData
 from .citation_target import CitationTarget, parse_citation_targets
-from .roles import CiteRole
+from .roles import CiteRole, is_active_only
 from .style.referencing import BaseReferenceStyle, format_references
 from .style.template import SphinxReferenceInfo
 
@@ -53,6 +53,7 @@ if TYPE_CHECKING:
     from sphinx.addnodes import pending_xref
     from sphinx.builders import Builder
     from sphinx.environment import BuildEnvironment
+    from sphinx.util.tags import Tags
 
     from .directives import BibliographyKey, BibliographyValue
     from .roles import CitationRef
@@ -227,7 +228,7 @@ class BibtexDomain(Domain):
 
     name = "cite"
     label = "BibTeX Citations"
-    data_version = 4
+    data_version = 5
     initial_data = {
         "bibdata": BibData(
             encoding="", bibfiles={}, data=pybtex.database.BibliographyData()
@@ -238,6 +239,7 @@ class BibtexDomain(Domain):
     }
     backend = pybtex_docutils.Backend()
     reference_style: BaseReferenceStyle
+    tags: "Tags"
     _role_names: Sequence[str] = [
         "p",
         "ps",
@@ -281,6 +283,15 @@ class BibtexDomain(Domain):
     def citation_refs(self) -> List["CitationRef"]:
         """Citation reference data."""
         return self.data["citation_refs"]
+
+    @property
+    def active_citation_refs(self) -> List["CitationRef"]:
+        """References retained by the current builder's only conditions."""
+        return [
+            ref
+            for ref in self.citation_refs
+            if is_active_only(ref.only_conditions, self.tags)
+        ]
 
     def clear_doc(self, docname: str) -> None:
         self.data["citations"] = [
@@ -386,6 +397,8 @@ class BibtexDomain(Domain):
         # TODO: for now we ignore this type error, seems to work 🤞
         # TODO: create pending_xref for each citation target instead, in CiteRole?
         """Replace node by list of citation references (one for each key)."""
+        if not is_active_only(node.get("bibtex_only_conditions", ()), builder.tags):
+            return docutils.nodes.inline()
         targets = parse_citation_targets(target)
         keys: Dict[str, CitationTarget] = {target2.key: target2 for target2 in targets}
 
@@ -479,7 +492,7 @@ class BibtexDomain(Domain):
         ordered by citation order.
         """
         for citation_ref in sorted(
-            self.citation_refs, key=lambda c: docnames.index(c.docname)
+            self.active_citation_refs, key=lambda c: docnames.index(c.docname)
         ):
             for target in citation_ref.targets:
                 yield target.key
@@ -503,7 +516,7 @@ class BibtexDomain(Domain):
             key = bibliography.keyprefix + entry.key
             cited_docnames = {
                 citation_ref.docname
-                for citation_ref in self.citation_refs
+                for citation_ref in self.active_citation_refs
                 if key in {target.key for target in citation_ref.targets}
             }
             visitor = _FilterVisitor(

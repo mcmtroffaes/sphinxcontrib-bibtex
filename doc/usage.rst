@@ -716,6 +716,12 @@ Filtering
 
 .. versionadded:: 0.2.7
 
+Citations made with the ``cite`` roles inside an ``only`` directive count as
+cited only when that directive's tag expression is active for the current
+builder. Nested ``only`` directives must all be active. This also applies
+when the bibliography is in a different document. Inactive citations remain
+eligible for ``:notcited:`` bibliographies; ``:all:`` still includes every entry.
+
 Whilst the ``cited``, ``all``, and ``notcited`` options
 along with :ref:`section-listing-citation-keys`
 will cover many use cases,
