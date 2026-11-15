@@ -125,3 +125,10 @@ at the bottom of each document that has footnote citations.
 Advanced use cases with multiple ``footbibliography`` directives
 per document are also supported. Since everything is local,
 there is no concern with duplicate citations when using footnotes.
+
+Contributing
+------------
+
+If you find a bug, or even better, have fixed one, please visit the issue tracker at https://github.com/mcmtroffaes/sphinxcontrib-bibtex/issues
+
+IMPORTANT: Only human written issues and pull requests are accepted; text or code written by AI tools will not be accepted.
